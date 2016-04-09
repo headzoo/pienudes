@@ -451,7 +451,6 @@ function scrollQueue() {
 
 function makeQueueEntry(item, addbtns) {
     var video = item.media;
-    console.log(item);
     var li = $("<li/>");
     li.addClass("queue_entry");
     li.addClass("pluid-" + item.uid);
@@ -465,7 +464,7 @@ function makeQueueEntry(item, addbtns) {
             .appendTo(li);
     }
     var title = $("<a/>").addClass("qe_title").appendTo(li)
-        .text(video.title + ": Queued by " + item.queuedby)
+        .text(video.title + ": Queued by " + item.queueby)
         .attr("href", formatURL(video))
         .attr("target", "_blank");
     var time = $("<span/>").addClass("qe_time").appendTo(li);
