@@ -904,14 +904,6 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
         }
     }
 
-    /* Warn about blocked countries */
-    if (media.meta.restricted) {
-        user.socket.emit("queueWarn", {
-            msg: "Video is blocked in the following countries: " + media.meta.restricted,
-            link: data.link
-        });
-    }
-
     /* Warn about high bitrate for raw files */
     if (media.type === "fi" && media.meta.bitrate > 1000) {
         user.socket.emit("queueWarn", {
