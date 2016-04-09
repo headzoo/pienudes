@@ -399,6 +399,7 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
 
 .option {
     margin-top: 5px;
+    word-wrap: break-word;
 }
 
 .option-selected {
