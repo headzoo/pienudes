@@ -464,7 +464,7 @@ function makeQueueEntry(item, addbtns) {
             .appendTo(li);
     }
     var title = $("<a/>").addClass("qe_title").appendTo(li)
-        .text(video.title)
+        .text(video.title + ": Queued by " + item.queuedby)
         .attr("href", formatURL(video))
         .attr("target", "_blank");
     var time = $("<span/>").addClass("qe_time").appendTo(li);
