@@ -451,6 +451,7 @@ function scrollQueue() {
 
 function makeQueueEntry(item, addbtns) {
     var video = item.media;
+    console.log(item);
     var li = $("<li/>");
     li.addClass("queue_entry");
     li.addClass("pluid-" + item.uid);
