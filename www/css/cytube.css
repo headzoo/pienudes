@@ -29,12 +29,12 @@
 }
 
 #userlist {
-    width: 120px;
+    width: 155px;
+    padding: 5px;
     float: left;
     border-right: 0;
     font-size: 9pt;
     list-style: none outside none;
-    padding: 0;
 }
 
 #messagebuffer, #userlist {
@@ -273,8 +273,12 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
 }
 
 .userlist_siteadmin {
-    color: #cc0000!important;
+    color: #CC4F4F!important;
     font-weight: bold!important;
+}
+
+.userlist_afk .glyphicon-time {
+    padding-right: 2px;
 }
 
 .userlist_owner {
@@ -584,6 +588,7 @@ table td {
 
 #userlisttoggle {
     padding-top: 2px;
+    padding-right: 5px;
 }
 
 .queue_entry {
