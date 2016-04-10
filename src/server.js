@@ -51,7 +51,7 @@ import { LegacyModule } from './legacymodule';
 
 var Server = function () {
     var self = this;
-    self.channels = [],
+    self.channels = [];
     self.express = null;
     self.db = null;
     self.api = null;
