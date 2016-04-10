@@ -1,9 +1,3 @@
-Read before submitting an issue: https://github.com/calzoneman/sync/wiki/Reporting-an-Issue
-===========================================================================================
-
-calzoneman/sync
-===============
-
 About
 -----
 
