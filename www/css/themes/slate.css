@@ -7458,10 +7458,10 @@ button.close {
 }
 
 .btn-success {
-  background-image: -webkit-linear-gradient(#78cc78, #62c462 60%, #53be53);
-  background-image: -o-linear-gradient(#78cc78, #62c462 60%, #53be53);
+  background-image: -webkit-linear-gradient(#398839, #5C9A5C 60%, #5EA05E);
+  background-image: -o-linear-gradient(#398839, #5C9A5C 60%, #5EA05E);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#78cc78), color-stop(60%, #62c462), to(#53be53));
-  background-image: linear-gradient(#78cc78, #62c462 60%, #53be53);
+  background-image: linear-gradient(#398839, #5C9A5C 60%, #5EA05E);
   background-repeat: no-repeat;
   -webkit-filter: none;
   filter: none
