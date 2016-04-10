@@ -81,6 +81,10 @@ function handleUserAgreement(req, res) {
     });
 }
 
+function handleHelp(req, res) {
+    sendJade(res, 'help', {});
+}
+
 function initializeErrorHandlers(app) {
     app.use((req, res, next) => {
         return next(new HTTPError(`No route for ${req.path}`, {
@@ -172,6 +176,7 @@ module.exports = {
         app.get('/sioconfig(.json)?', handleLegacySocketConfig);
         require('./routes/socketconfig')(app, clusterClient);
         app.get('/useragreement', handleUserAgreement);
+        app.get('/help', handleHelp);
         require('./routes/contact')(app, webConfig);
         require('./auth').init(app);
         require('./account').init(app);
