@@ -1,0 +1,58 @@
+doctype html
+html(lang="en")
+    head
+        include head
+        mixin head()
+    body
+        #wrap
+            nav.navbar.navbar-inverse.navbar-fixed-top(role="navigation")
+                include nav
+                mixin navheader()
+                #nav-collapsible.collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        mixin navdefaultlinks("/help")
+                    mixin navloginlogout("/help")
+            section#mainpage
+                .container
+                    .col-lg-9.col-md-9
+                        h3 Help
+                        h4 Formatting
+                        ul
+                            li _message_ - <i>message</i>
+                            li *message* - <strong>message</strong>
+                            li `message` - <code>message</code>
+                            li ~~message~~ - <del>message</del>
+                            
+                        h4 Standard Commands
+                        ul
+                            li <code>/me &lt;message&gt;</code> - Sends a message as an action, for example headzoo gets a snack.
+                            li <code>/sp &lt;message&gt;</code> - Hides a message in a hover-to-expose spoiler box.
+                            li <code>/afk</code> - Toggles your AFK status. You will automatically be marked not AFK after sending a chat message or voteskipping the video.
+                            
+                        h4 Moderator commands
+                        ul
+                            li <code>/say &lt;message&gt;</code> - Sends a message in big red text.
+                            li <code>/poll &lt;title&gt;,&lt;option1&gt;,&lt;option2&gt;,...</code> - Opens a new poll (this is from before the New Poll button was added).
+                            li <code>/hpoll &lt;title&gt;,&lt;option1&gt;,&lt;option2&gt;,...</code> - Same as above, but hides poll results.
+                            li <code>/mute &lt;user&gt;</code> - Mutes a user from sending chat messages.
+                            li <code>/smute &lt;user&gt;</code> - Shadow mutes a user. They will still receive their own chat messages, but nobody else will and they will not appear muted except to moderators.
+                            li <code>/unmute &lt;user&gt;</code> - Unmutes a user. This will unmute both muted and smuted users.
+                            li <code>/kick &lt;user&gt; [&lt;reason&gt;]</code> - Kicks a user, optionally providing a kick reason
+                            li <code>/kickanons</code> - Kicks all anonymous users from the channel
+                            li <code>/ban &lt;user&gt; [&lt;reason&gt;]</code> - Bans a user by name, optionall providing a ban reason
+                            li <code>/ipban &lt;user&gt; [&lt;reason&gt;]</code> - Bans a user and all IP addresses they've used in the past month, optionally providing a ban reason.
+                            li <code>/ipban &lt;user&gt; range [&lt;reason&gt;]</code> - Bans an IP range (/24 block for IPv4 or /64 block for IPv6)
+                            li <code>/ipban &lt;user&gt; wrange [&lt;reason&gt;]</code> - Bans a wider IP range (/16 block for IPv4, /48 block for IPv6)
+                            li <code>/clear</code> - Clears the chat buffer.
+                            li <code>/clean &lt;user&gt;</code> - Removes all playlist entries from the given user.
+                            li <code>/cleantitle &lt;title&gt;</code> - Removes all playlist entries that match the given title.
+                            li <code>/d &lt;message&gt;</code> - Calls a drink with the given message
+                            li <code>/d# [&lt;message&gt;]</code> - Calls # drinks, optionally with a message. # can be positive or negative.
+        include footer
+        mixin footer()
+        script(type="text/javascript").
+            $("#channelname").keydown(function (ev) {
+                if (ev.keyCode === 13) {
+                    location.href = "/r/" + $("#channelname").val();
+                }
+            });
