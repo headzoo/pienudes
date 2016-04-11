@@ -10,7 +10,7 @@ export default function initialize(app, channelIndex) {
 
                 return b.usercount - a.usercount;
             });
-            console.log(channels);
+            
             sendTemplate(res, 'home/index', {
                 channels: channels
             });
