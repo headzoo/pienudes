@@ -1,5 +1,6 @@
 "use strict";
 import template from '../template';
+import Config from '../../config';
 
 function handleUserAgreement(req, res) {
     template.send(res, 'home/tos', {
