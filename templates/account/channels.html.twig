@@ -1,22 +1,15 @@
+{% import "alerts.html.twig" as alerts %}
 {% extends "layout.html.twig" %}
 {% block content %}
     {% if not loggedIn %}
         <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
-            <div class="alert alert-danger messagebox center">
-                <strong>Authorization Required</strong>
-                <p>
-                    You must be <a href="/login">logged in</a> to view this page.
-                </p>
-            </div>
+            {{ alerts.danger("Authorization Required", 'You must be logged in to view this page.') }}
         </div>
     {% else %}
         <div class="col-lg-6 col-md-6">
             <h3>My Channels</h3>
             {% if deleteChannelError %}
-                <div class="alert alert-danger center messagebox">
-                    <strong>Channel Deletion Failed</strong>
-                    <p>{{ deleteChannelError }}</p>
-                </div>
+                {{ alerts.danger("Channel Deletion Failed", deleteChannelError) }}
             {% endif %}
             {% if channels.length == 0 %}
                 <div class="center">
@@ -54,10 +47,7 @@
         <div class="col-lg-6 col-md-6">
             <h3>Register a new channel</h3>
             {% if newChannelError %}
-                <div class="alert alert-danger center messagebox">
-                    <strong>Channel Registration Failed</strong>
-                    <p>{{ newChannelError }}</p>
-                </div>
+                {{ alerts.danger("Channel Registration Failed", newChannelError) }}
             {% endif %}
             <form method="post" action="/account/channels">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />

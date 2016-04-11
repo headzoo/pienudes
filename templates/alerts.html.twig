@@ -1,0 +1,33 @@
+{#
+    Possible values for status:
+    success
+    danger
+    warning
+    info
+#}
+{% macro base(status, title='', message='') %}
+    <div class="alert alert-{{ status }} messagebox center">
+        {% if title != '' %}
+            <strong>{{ title }}</strong>
+        {% endif %}
+        {% if message != '' %}
+            <p>{{ message }}</p>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro success(title='', message='') %}
+    {{ base('success', title, message) }}
+{% endmacro %}
+
+{% macro danger(title='', message='') %}
+    {{ base('danger', title, message) }}
+{% endmacro %}
+
+{% macro warning(title='', message='') %}
+    {{ base('warning', title, message) }}
+{% endmacro %}
+
+{% macro info(title='', message='') %}
+    {{ base('info', title, message) }}
+{% endmacro %}

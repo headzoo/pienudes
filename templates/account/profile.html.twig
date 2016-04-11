@@ -1,20 +1,13 @@
+{% import "alerts.html.twig" as alerts %}
 {% extends "layout.html.twig" %}
 {% block content %}
     <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
         {% if not loggedIn %}
-            <div class="alert alert-danger messagebox center">
-                <strong>Authorization Required</strong>
-                <p>
-                    You must be <a href="/login">logged in</a> to view this page.
-                </p>
-            </div>
+            {{ alerts.danger("Authorization Required", "You must be logged in to view this page.") }}
         {% else %}
             <h3>Profile</h3>
             {% if profileError %}
-                <div class="alert alert-danger messagebox center">
-                    <strong>Profile Error</strong>
-                    <p>{{ profileError }}</p>
-                </div>
+                {{ alerts.danger("Profile Error", profileError) }}
             {% endif %}
             
             <div class="profile-box linewrap" style="position: inherit; z-index: auto;">

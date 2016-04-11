@@ -1,20 +1,12 @@
+{% import "alerts.html.twig" as alerts %}
 {% extends "layout.html.twig" %}
 {% block content %}
     <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
         {% if loggedIn %}
-            <div class="alert alert-danger messagebox center">
-                <strong>Already logged in</strong>
-                <p>
-                    You are already logged in. If you intend to register a new account, please
-                    <a href="/logout?redirect=/register">Logout</a> first.
-                </p>
-            </div>
+            {{ alerts.danger("Already Logged In", "You are already logged in.") }}
         {% elif not registered %}
             {% if registerError %}
-                <div class="alert alert-danger messagebox center">
-                    <strong>Registration Failed</strong>
-                    <p>{{ registerError }}</p>
-                </div>
+                {{ alerts.danger("Registration Failed", registerError) }}
             {% endif %}
             
             <h2>Register</h2>
@@ -43,13 +35,7 @@
                 <button id="register" class="btn btn-success btn-block" type="submit">Register</button>
             </form>
         {% else %}
-            <div class="alert alert-success messagebox center">
-                <strong>Registration Successful</strong>
-                <p>
-                    Thanks for registering, {{ registerName }}!
-                    Now you can <a href="/login">Login</a> to use your account.
-                </p>
-            </div>
+            {{ alerts("Registration Successful", "Thank you for registering. You can log in now.") }}
         {% endif %}
     </div>
     <script>
