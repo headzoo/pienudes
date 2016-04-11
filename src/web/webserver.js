@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import net from 'net';
 import express from 'express';
-import { sendJade } from './jade';
+import { sendTemplate } from './template';
 import Logger from '../logger';
 import Config from '../config';
 import bodyParser from 'body-parser';
@@ -76,13 +76,13 @@ function handleLegacySocketConfig(req, res) {
 }
 
 function handleUserAgreement(req, res) {
-    sendJade(res, 'tos', {
+    sendTemplate(res, 'tos', {
         domain: Config.get('http.domain')
     });
 }
 
 function handleHelp(req, res) {
-    sendJade(res, 'help', {});
+    sendTemplate(res, 'help', {});
 }
 
 function initializeErrorHandlers(app) {
@@ -96,7 +96,7 @@ function initializeErrorHandlers(app) {
         if (err) {
             if (err instanceof CSRFError) {
                 res.status(HTTPStatus.FORBIDDEN);
-                return sendJade(res, 'csrferror', {
+                return sendTemplate(res, 'csrferror', {
                     path: req.path,
                     referer: req.header('referer')
                 });
@@ -108,7 +108,7 @@ function initializeErrorHandlers(app) {
             }
             if (!message) {
                 message = 'An unknown error occurred.';
-            } else if (/\.(jade|js)/.test(message)) {
+            } else if (/\.(twig|js)/.test(message)) {
                 // Prevent leakage of stack traces
                 message = 'An internal error occurred.';
             }
@@ -119,7 +119,7 @@ function initializeErrorHandlers(app) {
             }
 
             res.status(status);
-            return sendJade(res, 'httperror', {
+            return sendTemplate(res, 'httperror', {
                 path: req.path,
                 status: status,
                 message: message

@@ -1,10 +1,10 @@
-var path = require("path");
-var fs = require("fs");
-var webserver = require("./webserver");
-var sendJade = require("./jade").sendJade;
-var Logger = require("../logger");
-var db = require("../database");
-var Config = require("../config");
+var path         = require("path");
+var fs           = require("fs");
+var webserver    = require("./webserver");
+var sendTemplate = require("./template").sendTemplate;
+var Logger       = require("../logger");
+var db           = require("../database");
+var Config       = require("../config");
 
 function checkAdmin(cb) {
     return function (req, res) {
@@ -35,7 +35,7 @@ function handleAcp(req, res, user) {
     }
     sio += "/socket.io/socket.io.js";
 
-    sendJade(res, "acp", {
+    sendTemplate(res, "acp", {
         sioSource: sio
     });
 }

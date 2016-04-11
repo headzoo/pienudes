@@ -1,5 +1,5 @@
 import CyTubeUtil from '../../utilities';
-import { sendJade } from '../jade';
+import { sendTemplate } from '../template';
 
 export default function initialize(app, webConfig) {
     app.get('/contact', (req, res) => {
@@ -19,7 +19,7 @@ export default function initialize(app, webConfig) {
             return contact;
         });
 
-        return sendJade(res, 'contact', {
+        return sendTemplate(res, 'contact', {
             contacts: contacts
         });
     });

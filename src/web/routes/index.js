@@ -1,4 +1,4 @@
-import { sendJade } from '../jade';
+import { sendTemplate } from '../template';
 
 export default function initialize(app, channelIndex) {
     app.get('/', (req, res) => {
@@ -10,8 +10,8 @@ export default function initialize(app, channelIndex) {
 
                 return b.usercount - a.usercount;
             });
-
-            sendJade(res, 'index', {
+    
+            sendTemplate(res, 'index', {
                 channels: channels
             });
         });
