@@ -112,6 +112,19 @@ const TBL_CHANNEL_DATA = "" +
     "PRIMARY KEY (`channel_id`, `key`)," +
     "FOREIGN KEY (`channel_id`) REFERENCES `channels`(`id`) ON DELETE CASCADE" +
     ") CHARACTER SET utf8";
+    
+const TBL_PLAYLIST_HISTORY = "" +
+    "CREATE TABLE IF NOT EXISTS `playlist_history` (" +
+        "`id` BIGINT NOT NULL AUTO_INCREMENT," +
+        "`uid` VARCHAR(40) NOT NULL," +
+        "`title` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL," +
+        "`seconds` INT NOT NULL," +
+        "`type` VARCHAR(2) NOT NULL," +
+        "`channel` VARCHAR(30) NOT NULL," +
+        "`user` VARCHAR(20) NOT NULL," +
+        "`time` BIGINT NOT NULL," +
+    "PRIMARY KEY (`id`)" +
+    ") CHARACTER SET utf8";
 
 module.exports.init = function (queryfn, cb) {
     var tables = {
@@ -126,7 +139,8 @@ module.exports.init = function (queryfn, cb) {
         aliases: TBL_ALIASES,
         stats: TBL_STATS,
         meta: TBL_META,
-        channel_data: TBL_CHANNEL_DATA
+        channel_data: TBL_CHANNEL_DATA,
+        playlist_history: TBL_PLAYLIST_HISTORY
     };
 
     var AsyncQueue = require("../asyncqueue");

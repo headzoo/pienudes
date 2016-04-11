@@ -6,6 +6,7 @@ var InfoGetter = require("../get-info");
 var Config = require("../config");
 var Flags = require("../flags");
 var db = require("../database");
+var db_playlist = require('../database/playlist');
 var Logger = require("../logger");
 var CustomEmbedFilter = require("../customembed").filter;
 var XSS = require("../xss");
@@ -968,7 +969,8 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
             self.current = item;
             self.startPlayback();
         }
-
+        db_playlist.insertPlaylistHistory(media, self.channel.name, data.queueby);
+        
         if (cb) {
             cb();
         }
