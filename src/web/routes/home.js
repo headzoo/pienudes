@@ -35,7 +35,7 @@ module.exports = {
                 
                     return b.usercount - a.usercount;
                 });
-            
+                
                 template.send(res, 'home/index', {
                     channels: channels
                 });

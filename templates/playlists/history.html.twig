@@ -1,0 +1,49 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+        <h3>Playlist History</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Queued By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in media %}
+                    <tr>
+                        <td>
+                            {{ m.title }}
+                        </td>
+                        <td>
+                            {{ m.user }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <nav>
+            <ul class="pager">
+                {% if page == 1 %}
+                    <li class="previous disabled">
+                        <a href="#"><span aria-hidden="true">&larr;</span> Older</a>
+                    </li>
+                {% else %}
+                    <li class="previous">
+                        <a href="/playlists/history/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Older</a>
+                    </li>
+                {% endif %}
+                {% if page == pages %}
+                    <li class="next disabled">
+                        <a href="#">Newer <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                {% else %}
+                    <li class="next">
+                        <a href="/playlists/history/{{ page + 1 }}">Newer <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

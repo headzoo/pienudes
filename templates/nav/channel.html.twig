@@ -6,7 +6,7 @@
                 <a href="/">Home</a>
             </li>
             <li>
-                <a href="/help">Help</a>
+                <a href="/help" target="_blank">Help</a>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -16,22 +16,33 @@
                 <ul class="dropdown-menu">
                     {% if loggedIn %}
                         <li>
-                            <a href="{{ loginDomain }}/account/channels">Channels</a>
+                            <a href="{{ loginDomain }}/account/channels" target="_blank">Channels</a>
                         </li>
                         <li>
-                            <a href="{{ loginDomain }}/account/profile">Profile</a>
+                            <a href="{{ loginDomain }}/account/profile" target="_blank">Profile</a>
                         </li>
                         <li>
-                            <a href="{{ loginDomain }}/account/edit">Password/Email</a>
+                            <a href="{{ loginDomain }}/account/edit" target="_blank">Password/Email</a>
                         </li>
                     {% else %}
                         <li>
-                            <a href="{{ loginDomain }}/login?dest={{ baseUrl|urlencode }}{{ page|urlencode }}">Login</a>
+                            <a href="{{ loginDomain }}/login?dest={{ baseUrl|urlencode }}{{ page|urlencode }}" target="_blank">Login</a>
                         </li>
                         <li>
-                            <a href="{{ loginDomain }}/register">Register</a>
+                            <a href="{{ loginDomain }}/register" target="_blank">Register</a>
                         </li>
                     {% endif %}
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Playlists
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/playlists/history" target="_blank">History</a>
+                    </li>
                 </ul>
             </li>
             <li>

@@ -25,5 +25,41 @@ module.exports = {
             
                 callback(err, res);
             });
+    },
+    
+    /**
+     * Returns rows from the playlist history
+     */
+    fetchPlaylistHistory(limit, offset, callback) {
+        limit  = limit || 20;
+        offset = offset || 0;
+        if (typeof callback !== "function") {
+            callback = blackHole;
+        }
+        
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 20;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+        
+        var sql = "SELECT * FROM `playlist_history` ORDER BY `id` DESC LIMIT " + offset + ", " + limit;
+        db.query(sql, [], callback);
+    },
+    
+    /**
+     * Returns the number of rows in the playlist_history table
+     */
+    countPlaylistHistory(callback) {
+        db.query("SELECT COUNT(*) AS `c` FROM `playlist_history`", [], function(err, rows) {
+            if (err) {
+                callback(err, []);
+                return;
+            }
+            callback(null, rows[0]["c"]);
+        });
     }
 };

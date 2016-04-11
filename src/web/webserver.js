@@ -167,6 +167,7 @@ module.exports = {
         require('./routes/contact')(app, webConfig);
         require('./routes/auth').init(app);
         require('./routes/account').init(app);
+        require('./routes/playlists').init(app);
         require('./routes/acp').init(app);
         
         require('../google2vtt').attach(app);
