@@ -1,0 +1,58 @@
+<div id="channeloptions" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>Channel Settings</h4>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#cs-miscoptions" data-toggle="tab">General Settings</a>
+                    </li>
+                    <li>
+                        <a href="#cs-adminoptions" data-toggle="tab">Admin Settings</a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="cs-edit-dd-toggle" href="#" data-toggle="dropdown">Edit <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#cs-chatfilters" data-toggle="tab" onclick="javascript:socket.emit('requestChatFilters')">Chat Filters</a>
+                            </li>
+                            <li>
+                                <a href="#cs-emotes" data-toggle="tab">Emotes</a>
+                            </li>
+                            <li>
+                                <a href="#cs-motdeditor" data-toggle="tab" tabindex="-1">MOTD</a>
+                            </li>
+                            <li>
+                                <a href="#cs-csseditor" data-toggle="tab" tabindex="-1">CSS</a>
+                            </li>
+                            <li>
+                                <a href="#cs-jseditor" data-toggle="tab" tabindex="-1">Javascript</a>
+                            </li>
+                            <li>
+                                <a href="#cs-permedit" data-toggle="tab" tabindex="-1">Permissions</a>
+                            </li>
+                            <li>
+                                <a href="#cs-chanranks" data-toggle="tab" tabindex="-1" onclick="javascript:socket.emit('requestChannelRanks')">Moderators</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#cs-banlist" data-toggle="tab" tabindex="-1" onclick="javascript:socket.emit('requestBanlist')">Ban List</a>
+                    </li>
+                    <li>
+                        <a href="#cs-chanlog" data-toggle="tab" onclick="javascript:socket.emit('readChanLog')">Log</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                    {# channeloptions #}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

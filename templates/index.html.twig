@@ -1,0 +1,44 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="col-lg-9 col-md-9">
+        <h3>Welcome</h3>
+        <p>
+            Join us on Reddit at <a href="https://www.reddit.com/r/pienudes" target="_blank">/r/pienudes</a>
+            for more discussion.
+        </p>
+        
+        <h3>Channels</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Channel</th>
+                    <th># Connected</th>
+                    <th>Now Playing</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for chan in channels %}
+                    <tr>
+                        <td>
+                            <a href="/r/{{ chan.name }}">{{ chan.pageTitle }} ({{ chan.name }}</a>
+                        </td>
+                        <td>
+                            {{ chan.usercount }}
+                        </td>
+                        <td>
+                            {{ chan.mediatitle }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="col-lg-3 col-md-3">
+        <h3>Enter Channel</h3>
+        <input id="channelname" class="form-control" type="text" placeholder="Channel Name" />
+        <p class="text-muted">
+            New channels can be registered from the <a href="/account/channels">My Channels</a> page.
+        </p>
+    </div>
+{% endblock %}

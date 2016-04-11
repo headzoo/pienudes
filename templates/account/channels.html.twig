@@ -1,0 +1,73 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    {% if not loggedIn %}
+        <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
+            <div class="alert alert-danger messagebox center">
+                <strong>Authorization Required</strong>
+                <p>
+                    You must be <a href="/login">logged in</a> to view this page.
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-lg-6 col-md-6">
+            <h3>My Channels</h3>
+            {% if deleteChannelError %}
+                <div class="alert alert-danger center messagebox">
+                    <strong>Channel Deletion Failed</strong>
+                    <p>{{ deleteChannelError }}</p>
+                </div>
+            {% endif %}
+            {% if channels.length == 0 %}
+                <div class="center">
+                    You haven't registered any channels.
+                </div>
+            {% else %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in channels %}
+                            <tr>
+                                <td>
+                                    <form class="form-inline pull-right" action="/account/channels" method="post" onsubmit="return confirm('Are you sure you want to delete {{ c.name }}?  This cannot be undone');">
+                                        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                                        <input type="hidden" name="action" value="delete_channel" />
+                                        <input type="hidden" name="name" value="{{ c.name }}" />
+                                        <button class="btn btn-xs btn-danger" type="submit">
+                                            Delete
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </form>
+                                    <a href="/r/{{ c.name }}" style="margin-left: 5px">{{ c.name }}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-6 col-md-6">
+            <h3>Register a new channel</h3>
+            {% if newChannelError %}
+                <div class="alert alert-danger center messagebox">
+                    <strong>Channel Registration Failed</strong>
+                    <p>{{ newChannelError }}</p>
+                </div>
+            {% endif %}
+            <form method="post" action="/account/channels">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                <input type="hidden" name="action" value="new_channel" />
+                <div class="form-group">
+                    <label for="channelname">Channel Name</label>
+                    <input type="text" id="channelname" name="name" class="form-control" />
+                </div>
+                <button class="btn btn-primary btn-block" type="submit">Register</button>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

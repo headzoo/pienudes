@@ -1,0 +1,201 @@
+{% extends "layout_channel.html.twig" %}
+{% block content %}
+    <div id="wrap">
+        {% include "nav/channel.html.twig" %}
+        <section id="mainpage">
+            <div class="container">
+                <div id="motdrow" class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <div id="motdwrap" class="well">
+                            <button id="togglemotd" class="close pull-right" type="button">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                            <div id="motd"></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="announcements" class="row"></div>
+                <div id="drinkbarwrap" class="row">
+                    <div id="drinkbar" class="col-lg-12 col-md-12">
+                        <h1 id="drinkcount"></h1>
+                    </div> 
+                </div>
+                
+                <div id="main" class="row">
+                    <div id="chatwrap" class="col-lg-7 col-md-7">
+                        <div id="chatheader">
+                            <i id="userlisttoggle" class="glyphicon glyphicon-chevron-down pull-left.pointer" title="Show/Hide Userlist"></i>
+                            <span id="usercount" class="pointer">Not Connected</span>
+                            <span id="modflair" class="label label-default pull-right pointer">Name Color</span>
+                        </div>
+                        <div id="userlist"></div>
+                        <div id="messagebuffer" class="linewrap"></div>
+                        <input id="chatline" class="form-control" type="text" maxlength="240" style="display: none" />
+                        <div id="guestlogin" class="input-group">
+                            <span class="input-group-addon">Guest Login</span>
+                            <input id="guestname" class="form-control" type="text" placeholder="Name" />
+                        </div>
+                    </div>
+                    <div id="videowrap" class="col-lg-5 col-md-5">
+                        <p id="currenttitle">Nothing Playing</p>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <div id="ytapiplayer" class="embed-responsive-item"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="controlsrow" class="row">
+                    <div id="leftcontrols" class="col-lg-7 col-md-7">
+                        <button id="newpollbtn" class="btn btn-sm btn-default">New Poll</button>
+                        <button id="emotelistbtn" class="btn btn-sm btn-default">Emote List</button>
+                    </div>
+                    <div id="rightcontrols" class="col-lg-5 col-md-5">
+                        <div id="plcontrol" class="btn-group">
+                            <button id="showsearch" class="btn btn-sm btn-default" title="Search for a video" data-toggle="collapse" data-target="#searchcontrol">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                            <button id="showmediaurl" class="btn btn-sm btn-default" title="Add video from URL" data-toggle="collapse" data-target="#addfromurl">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button id="showcustomembed" class="btn btn-sm btn-default" title="Embed a custom frame" data-toggle="collapse" data-target="#playlistmanager">
+                                <span class="glyphicon glyphicon-th-large"></span>
+                            </button>
+                            <button id="showplaylistmanager" class="btn btn-sm btn-default" title="Manage playlists" data-toggle="collapse" data-target="#playlistmanager">
+                                <span class="glyphicon glyphicon-list"></span>
+                            </button>
+                            <button id="clearplaylist" class="btn btn-sm btn-default" title="Clear the playlist">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                            <button id="shuffleplaylist" class="btn btn-sm btn-default" title="Shuffle the playlist">
+                                <span class="glyphicon glyphicon-sort"></span>
+                            </button>
+                            <button id="qlockbtn" class="btn btn-sm btn-default" title="Playlist locked">
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </button>
+                        </div>
+                        <div id="videocontrols" class="btn-group pull-right">
+                            <button id="mediarefresh" class="btn btn-sm btn-default" title="Reload the video player">
+                                <span class="glyphicon glyphicon-retweet"></span>
+                            </button>
+                            <button id="fullscreenbtn" class="btn btn-sm btn-default" title="Make the video player fullscreen">
+                                <span class="glyphicon glyphicon-fullscreen"></span>
+                            </button>
+                            <button id="getplaylist" class="btn btn-sm btn-default" title="Retrieve playlist links">
+                                <span class="glyphicon glyphicon-link"></span>
+                            </button>
+                            <button id="voteskip" class="btn btn-sm btn-default" title="Voteskip">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="playlistrow" class="row">
+                    <div id="leftpane" class="col-lg-7 col-md-7">
+                        <div id="leftpane-inner" class="row">
+                            <div id="pollwrap" class="col-lg-12 col-md-12"></div>
+                            <div id="playlistmanagerwrap" class="col-lg-12 col-md-12"></div>
+                        </div>
+                    </div>
+                    <div id="rightpane" class="col-lg-5 col-md-5">
+                        <div id="rightpane-inner" class="row">
+                            <div id="searchcontrol" class="collapse plcontrol-collapse col-lg-12 col-md-12">
+                                <div class="vertical-spacer"></div>
+                                <div class="input-group">
+                                    <input id="library_query" class="form-control" type="text" placeholder="Search Query" />
+                                    <span class="input-group-btn">
+                                        <button id="library_search" class="btn btn-default">Library</button>
+                                    </span>
+                                    <span class="input-group-btn">
+                                        <button id="youtube_search" class="btn btn-default">Youtube</button>
+                                    </span>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input class="add-temp" type="checkbox" />
+                                        Add as temporary
+                                    </label>
+                                </div>
+                                <ul id="library" class="videolist col-lg-12 col-md-12"></ul>
+                            </div>
+                            <div id="addfromurl" class="collapse plcontrol-collapse col-lg-12 col-md-12">
+                                <div class="vertical-spacer"></div>
+                                <div class="input-group">
+                                    <input id="mediaurl" class="form-control" type="text" placeholder="Media URL" />
+                                    <span class="input-group-btn">
+                                        <button id="queue_next" class="btn btn-default">Next</button>
+                                    </span>
+                                    <span class="input-group-btn">
+                                        <button id="queue_end" class="btn btn-default">At End</button>
+                                    </span>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input class="add-temp" type="checkbox" />
+                                        Add as temporary
+                                    </label>
+                                </div>
+                                <div id="addfromurl-queue"></div>
+                            </div>
+                            <div id="customembed" class="collapse plcontrol-collapse col-lg-12 col-md-12">
+                                <div class="vertical-spacer"></div>
+                                <div class="input-group">
+                                    <input id="customembed-title" class="form-control" type="text" placeholder="Title (optional)" />
+                                    <span class="input-group-btn">
+                                        <button id="ce_queue_next" class="btn btn-default">Next</button>
+                                    </span>
+                                    <span class="input-group-btn">
+                                        <button id="ce_queue_end" class="btn btn-default">At End</button>
+                                    </span>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input class="add-temp" type="checkbox" />
+                                        Add as temporary
+                                        Paste the embed code below and click Next or At End.
+                                        Acceptable embed codes are <code>&lt;iframe&gt;</code> and <code>&lt;object&gt;</code> tags.
+                                        <strong>CUSTOM EMBEDS CANNOT BE SYNCHRONIZED.</strong>
+                                    </label>
+                                </div>
+                                <textarea id="customembed-content" class="input-block-level form-control" rows="3"></textarea>
+                            </div>
+                            <div id="playlistmanager" class="collpse plcontrol-collapse col-lg-12 col-md-12">
+                                <div class="vertical-spacer"></div>
+                                <div class="input-group">
+                                    <input id="userpl_name" class="form-control" type="text" placeholder="Playlist Name" />
+                                    <span class="input-group-btn">
+                                        <button id="userpl_save" class="btn btn-default">Save</button>
+                                    </span>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input class="add-temp" type="checkbox" />
+                                        Add as temporary
+                                    </label>
+                                </div>
+                                <ul id="userpl_list" class="videolist"></ul>
+                            </div>
+                            <div id="queuefail" class="col-lg-12 col-md-12">
+                                <div class="vertical-spacer"></div>
+                            </div>
+                            <div class="col-lg-12 col-md-12">
+                                <ul id="queue" class="videolist"></ul>
+                                <div id="plmeta">
+                                    <span id="plcount">0 items</span>
+                                    <span id="pllength">00:00:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="resizewrap" class="row">
+                    <div class="col-lg-5 col-md-5"></div>
+                    <div id="videowidth" class="col-lg-7 col-md-7"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% include "channel/emotes.html.twig" %}
+    {% include "channel/user_options.html.twig" %}
+    {% include "channel/channel_options.html.twig" %}
+    <div id="pmbar"></div>
+{% endblock %}

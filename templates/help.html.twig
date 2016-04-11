@@ -1,0 +1,82 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="col-lg-10 col-md-10">
+        <h3>Help</h3>
+        
+        <h4>Formatting</h4>
+        <ul>
+            <li>li _message_ - <i>message</i></li>
+            <li>li *message* - <strong>message</strong></li>
+            <li>li `message` - <code>message</code></li>
+            <li>li ~~message~~ - <del>message</del></li>
+        </ul>
+
+        <h4>Standard Commands</h4>
+        <ul>
+            <li>
+                <code>/me &lt;message&gt;</code> - Sends a message as an action, for example headzoo gets a snack.
+            </li>
+            <li>
+                <code>/sp &lt;message&gt;</code> - Hides a message in a hover-to-expose spoiler box.
+            </li>
+            <li>
+                <code>/afk</code> - Toggles your AFK status. You will automatically be marked not AFK after sending a chat message or voteskipping the video.
+            </li>
+        </ul>
+        
+        <h4>Moderator commands</h4>
+        <ul>
+            <li>
+                <code>/say &lt;message&gt;</code> - Sends a message in big red text.
+            </li>
+            <li>
+                <code>/poll &lt;title&gt;,&lt;option1&gt;,&lt;option2&gt;,...</code> - Opens a new poll (this is from before the New Poll button was added).
+            </li>
+            <li>
+                <code>/hpoll &lt;title&gt;,&lt;option1&gt;,&lt;option2&gt;,...</code> - Same as above, but hides poll results.
+            </li>
+            <li>
+                <code>/mute &lt;user&gt;</code> - Mutes a user from sending chat messages.
+            </li>
+            <li>
+                <code>/smute &lt;user&gt;</code> - Shadow mutes a user. They will still receive their own chat messages, but nobody else will and they will not appear muted except to moderators.
+            </li>
+            <li>
+                <code>/unmute &lt;user&gt;</code> - Unmutes a user. This will unmute both muted and smuted users.
+            </li>
+            <li>
+                <code>/kick &lt;user&gt; [&lt;reason&gt;]</code> - Kicks a user, optionally providing a kick reason
+            </li>
+            <li>
+                <code>/kickanons</code> - Kicks all anonymous users from the channel
+            </li>
+            <li>
+                <code>/ban &lt;user&gt; [&lt;reason&gt;]</code> - Bans a user by name, optionall providing a ban reason
+            </li>
+            <li>
+                <code>/ipban &lt;user&gt; [&lt;reason&gt;]</code> - Bans a user and all IP addresses they've used in the past month, optionally providing a ban reason.
+            </li>
+            <li>
+                <code>/ipban &lt;user&gt; range [&lt;reason&gt;]</code> - Bans an IP range (/24 block for IPv4 or /64 block for IPv6)
+            </li>
+            <li>
+                <code>/ipban &lt;user&gt; wrange [&lt;reason&gt;]</code> - Bans a wider IP range (/16 block for IPv4, /48 block for IPv6)
+            </li>
+            <li>
+                <code>/clear</code> - Clears the chat buffer.
+            </li>
+            <li>
+                <code>/clean &lt;user&gt;</code> - Removes all playlist entries from the given user.
+            </li>
+            <li>
+                <code>/cleantitle &lt;title&gt;</code> - Removes all playlist entries that match the given title.
+            </li>
+            <li>
+                <code>/d &lt;message&gt;</code> - Calls a drink with the given message
+            </li>
+            <li>
+                <code>/d# [&lt;message&gt;]</code> - Calls # drinks, optionally with a message. # can be positive or negative.
+            </li>
+        </ul>
+    </div>
+{% endblock %}

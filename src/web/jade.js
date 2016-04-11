@@ -1,9 +1,12 @@
 var jade = require("jade");
+var nunjucks = require('nunjucks');
 var fs = require("fs");
 var path = require("path");
 var Config = require("../config");
 var templates = path.join(__dirname, "..", "..", "templates");
 var cache = {};
+
+nunjucks.configure(templates, { autoescape: true });
 
 /**
  * Merges locals with globals for jade rendering
@@ -12,7 +15,7 @@ function merge(locals, res) {
     var _locals = {
         siteTitle: Config.get("html-template.title"),
         siteDescription: Config.get("html-template.description"),
-        siteAuthor: "Calvin 'calzoneman' 'cyzon' Montgomery",
+        siteAuthor: "",
         loginDomain: Config.get("https.enabled") ? Config.get("https.full-address")
                                                  : Config.get("http.full-address"),
         csrfToken: typeof res.req.csrfToken === 'function' ? res.req.csrfToken() : '',
@@ -36,17 +39,10 @@ function getBaseUrl(res) {
  * Renders and serves a jade template
  */
 function sendJade(res, view, locals) {
-    locals.loggedIn = locals.loggedIn || !!res.user;
+    locals.loggedIn  = locals.loggedIn || !!res.user;
     locals.loginName = locals.loginName || res.user ? res.user.name : false;
-    if (!(view in cache) || Config.get("debug")) {
-        var file = path.join(templates, view + ".jade");
-        var fn = jade.compile(fs.readFileSync(file), {
-            filename: file,
-            pretty: !Config.get("http.minify")
-        });
-        cache[view] = fn;
-    }
-    var html = cache[view](merge(locals, res));
+    var file = view + ".html.twig";
+    var html = nunjucks.render(file, merge(locals, res));
     res.send(html);
 }
 

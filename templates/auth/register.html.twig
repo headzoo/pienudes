@@ -1,0 +1,115 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
+        {% if loggedIn %}
+            <div class="alert alert-danger messagebox center">
+                <strong>Already logged in</strong>
+                <p>
+                    You are already logged in. If you intend to register a new account, please
+                    <a href="/logout?redirect=/register">Logout</a> first.
+                </p>
+            </div>
+        {% elif not registered %}
+            {% if registerError %}
+                <div class="alert alert-danger messagebox center">
+                    <strong>Registration Failed</strong>
+                    <p>{{ registerError }}</p>
+                </div>
+            {% endif %}
+            
+            <h2>Register</h2>
+            <form method="post" action="/register" role="form" onsubmit="return verify()">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" onkeyup="checkPasswords()" />
+                </div>
+                <div class="form-group">
+                    <label for="password_confirm">Confirm Password</label>
+                    <input type="password" id="password_confirm" name="password_confirm" class="form-control" onkeyup="checkPasswords()" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email (optional)</label>
+                    <input type="text" id="email" name="email" class="form-control" />
+                    <p>
+                        Providing an email address is optional and will allow you to recover your account via email
+                        if you forget your password. Your address will not be shared with anyone.
+                    </p>
+                </div>
+                <button id="register" class="btn btn-success btn-block" type="submit">Register</button>
+            </form>
+        {% else %}
+            <div class="alert alert-success messagebox center">
+                <strong>Registration Successful</strong>
+                <p>
+                    Thanks for registering, {{ registerName }}!
+                    Now you can <a href="/login">Login</a> to use your account.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        function verify() {
+            var valid = checkUsername();
+            valid = checkPasswords() && valid;
+            return valid;
+        }
+        
+        function checkUsername() {
+            var name = $("#username").val();
+            $("#usernameerror").remove();
+            if (name === "") {
+                $("#username").parent().addClass("has-error");
+                $("<p/>").addClass("text-danger")
+                        .attr("id", "usernameerror")
+                        .text("Username must not be empty")
+                        .insertAfter($("#username"));
+                return false;
+            } else if (!(/^[-\w\u00c0-\u00ff]{1,20}$/).test(name)) {
+                $("#username").parent().addClass("has-error");
+                $("<p/>").addClass("text-danger")
+                        .attr("id", "usernameerror")
+                        .text("Username must consist of 1-20 characters a-Z, A-Z, 0-9 " +
+                        ", -, or _.")
+                        .insertAfter($("#username"));
+                return false;
+            } else {
+                $("#username").parent().removeClass("has-error")
+                        .addClass("has-success");
+            }
+        }
+        
+        function checkPasswords() {
+            var pw = $("#password").val();
+            var pwc = $("#password_confirm").val();
+            $("#passwordempty").remove();
+            $("#passwordmismatch").remove();
+            if (pw === "") {
+                $("#password").parent().addClass("has-error");
+                $("<p/>").addClass("text-danger")
+                        .attr("id", "passwordempty")
+                        .text("Password must not be empty")
+                        .insertAfter($("#password"));
+                return false;
+            } else {
+                $("#password").parent().removeClass("has-error")
+                        .addClass("has-success");
+                if (pw !== pwc) {
+                    $("#password_confirm").parent().addClass("has-error");
+                    $("<p/>").addClass("text-danger")
+                            .attr("id", "passwordmismatch")
+                            .text("Passwords do not match")
+                            .insertAfter($("#password_confirm"));
+                    return false;
+                } else {
+                    $("#password_confirm").parent().removeClass("has-error")
+                            .addClass("has-success");
+                }
+            }
+        }
+    </script>
+{% endblock %}
