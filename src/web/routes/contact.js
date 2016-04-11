@@ -1,5 +1,5 @@
 import CyTubeUtil from '../../utilities';
-import { sendTemplate } from '../template';
+import template from '../template';
 
 export default function initialize(app, webConfig) {
     app.get('/contact', (req, res) => {
@@ -19,7 +19,7 @@ export default function initialize(app, webConfig) {
             return contact;
         });
 
-        return sendTemplate(res, 'contact/index', {
+        return template.send(res, 'contact/index', {
             contacts: contacts
         });
     });

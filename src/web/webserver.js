@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import net from 'net';
 import express from 'express';
-import { sendTemplate } from './template';
+import template from './template';
 import Logger from '../logger';
 import Config from '../config';
 import bodyParser from 'body-parser';
@@ -75,22 +75,6 @@ function handleLegacySocketConfig(req, res) {
     res.send(sioconfig);
 }
 
-function handleUserAgreement(req, res) {
-    sendTemplate(res, 'home/tos', {
-        domain: Config.get('http.domain')
-    });
-}
-
-function handlePrivacyPolicy(req, res) {
-    sendTemplate(res, 'home/privacy', {
-        domain: Config.get('http.domain')
-    });
-}
-
-function handleHelp(req, res) {
-    sendTemplate(res, 'home/help', {});
-}
-
 function initializeErrorHandlers(app) {
     app.use((req, res, next) => {
         return next(new HTTPError(`No route for ${req.path}`, {
@@ -102,7 +86,7 @@ function initializeErrorHandlers(app) {
         if (err) {
             if (err instanceof CSRFError) {
                 res.status(HTTPStatus.FORBIDDEN);
-                return sendTemplate(res, 'error/csrf', {
+                return template.send(res, 'error/csrf', {
                     path: req.path,
                     referer: req.header('referer')
                 });
@@ -125,7 +109,7 @@ function initializeErrorHandlers(app) {
             }
 
             res.status(status);
-            return sendTemplate(res, 'error/http', {
+            return template.send(res, 'error/http', {
                 path: req.path,
                 status: status,
                 message: message
@@ -176,19 +160,17 @@ module.exports = {
             }));
             Logger.syslog.log('Enabled express-minify for CSS and JS');
         }
-
+        
         require('./routes/channel')(app, ioConfig);
         require('./routes/index')(app, channelIndex);
-        app.get('/sioconfig(.json)?', handleLegacySocketConfig);
         require('./routes/socketconfig')(app, clusterClient);
-        app.get('/terms', handleUserAgreement);
-        app.get('/privacy', handlePrivacyPolicy);
-        app.get('/help', handleHelp);
+        require('./routes/home').init(app);
         require('./routes/contact')(app, webConfig);
-        require('./auth').init(app);
-        require('./account').init(app);
-        require('./acp').init(app);
+        require('./routes/auth').init(app);
+        require('./routes/account').init(app);
+        require('./routes/acp').init(app);
         require('../google2vtt').attach(app);
+        app.get('/sioconfig(.json)?', handleLegacySocketConfig);
         app.use(serveStatic(path.join(__dirname, '..', '..', 'www'), {
             maxAge: webConfig.getCacheTTL()
         }));

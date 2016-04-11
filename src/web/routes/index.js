@@ -1,4 +1,4 @@
-import { sendTemplate } from '../template';
+import template from '../template';
 
 export default function initialize(app, channelIndex) {
     app.get('/', (req, res) => {
@@ -11,7 +11,7 @@ export default function initialize(app, channelIndex) {
                 return b.usercount - a.usercount;
             });
             
-            sendTemplate(res, 'home/index', {
+            template.send(res, 'home/index', {
                 channels: channels
             });
         });

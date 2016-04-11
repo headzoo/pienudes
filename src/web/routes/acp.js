@@ -1,10 +1,10 @@
 var path         = require("path");
 var fs           = require("fs");
-var webserver    = require("./webserver");
-var sendTemplate = require("./template").sendTemplate;
-var Logger       = require("../logger");
-var db           = require("../database");
-var Config       = require("../config");
+var webserver    = require("../webserver");
+var template     = require("../template");
+var Logger       = require("../../logger");
+var db           = require("../../database");
+var Config       = require("../../config");
 
 function checkAdmin(cb) {
     return function (req, res) {
@@ -35,7 +35,7 @@ function handleAcp(req, res, user) {
     }
     sio += "/socket.io/socket.io.js";
 
-    sendTemplate(res, "acp/index", {
+    template.send(res, "acp/index", {
         sioSource: sio
     });
 }

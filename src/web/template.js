@@ -40,7 +40,7 @@ function getBaseUrl(res) {
 /**
  * Renders and serves a template
  */
-function sendTemplate(res, view, locals) {
+function send(res, view, locals) {
     locals.loggedIn  = locals.loggedIn || !!res.user;
     locals.loginName = locals.loginName || res.user ? res.user.name : false;
     var file = view + ".html.twig";
@@ -49,5 +49,5 @@ function sendTemplate(res, view, locals) {
 }
 
 module.exports = {
-    sendTemplate: sendTemplate
+    send: send
 };

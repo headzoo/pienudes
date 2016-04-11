@@ -4,16 +4,16 @@
  * @author Calvin Montgomery <cyzon@cyzon.us>
  */
 var path         = require("path");
-var webserver    = require("./webserver");
+var webserver    = require("../webserver");
 var cookieall    = webserver.cookieall;
-var sendTemplate = require("./template").sendTemplate;
-var Logger       = require("../logger");
-var $util        = require("../utilities");
-var db           = require("../database");
-var Config       = require("../config");
+var template     = require("../template");
+var Logger       = require("../../logger");
+var $util        = require("../../utilities");
+var db           = require("../../database");
+var Config       = require("../../config");
 var url          = require("url");
-var session      = require("../session");
-var csrf         = require("./csrf");
+var session      = require("../../session");
+var csrf         = require("../csrf");
 
 /**
  * Processes a login request.  Sets a cookie upon successful authentication
@@ -54,7 +54,7 @@ function handleLogin(req, res) {
                 Logger.eventlog.log("[loginfail] Login failed (bad password): " + name
                                   + "@" + req.realIP);
             }
-            sendTemplate(res, "auth/login", {
+            template.send(res, "auth/login", {
                 loggedIn: false,
                 loginError: err
             });
@@ -63,7 +63,7 @@ function handleLogin(req, res) {
 
         session.genSession(user, expiration, function (err, auth) {
             if (err) {
-                sendTemplate(res, "auth/login", {
+                template.send(res, "auth/login", {
                     loggedIn: false,
                     loginError: err
                 });
@@ -91,7 +91,7 @@ function handleLogin(req, res) {
                 res.redirect(dest);
             } else {
                 res.user = user;
-                sendTemplate(res, "auth/login", {});
+                template.send(res, "auth/login", {});
             }
         });
     });
@@ -106,12 +106,12 @@ function handleLoginPage(req, res) {
     }
 
     if (req.user) {
-        return sendTemplate(res, "auth/login", {
+        return template.send(res, "auth/login", {
             wasAlreadyLoggedIn: true
         });
     }
-
-    sendTemplate(res, "auth/login", {
+    
+    template.send(res, "auth/login", {
         redirect: req.query.dest || req.header("referer")
     });
 }
@@ -136,7 +136,7 @@ function handleLogout(req, res) {
     if (dest) {
         res.redirect(dest);
     } else {
-        sendTemplate(res, "auth/logout", {});
+        template.send(res, "auth/logout", {});
     }
 }
 
@@ -149,11 +149,11 @@ function handleRegisterPage(req, res) {
     }
 
     if (req.user) {
-        sendTemplate(res, "auth/register", {});
+        template.send(res, "auth/register", {});
         return;
     }
-
-    sendTemplate(res, "auth/register", {
+    
+    template.send(res, "auth/register", {
         registered: false,
         registerError: false
     });
@@ -179,21 +179,21 @@ function handleRegister(req, res) {
     }
 
     if (name.length === 0) {
-        sendTemplate(res, "auth/register", {
+        template.send(res, "auth/register", {
             registerError: "Username must not be empty"
         });
         return;
     }
 
     if (name.match(Config.get("reserved-names.usernames"))) {
-        sendTemplate(res, "auth/register", {
+        template.send(res, "auth/register", {
             registerError: "That username is reserved"
         });
         return;
     }
 
     if (password.length === 0) {
-        sendTemplate(res, "auth/register", {
+        template.send(res, "auth/register", {
             registerError: "Password must not be empty"
         });
         return;
@@ -202,7 +202,7 @@ function handleRegister(req, res) {
     password = password.substring(0, 100);
 
     if (email.length > 0 && !$util.isValidEmail(email)) {
-        sendTemplate(res, "auth/register", {
+        template.send(res, "auth/register", {
             registerError: "Invalid email address"
         });
         return;
@@ -210,13 +210,13 @@ function handleRegister(req, res) {
 
     db.users.register(name, password, email, ip, function (err) {
         if (err) {
-            sendTemplate(res, "auth/register", {
+            template.send(res, "auth/register", {
                 registerError: err
             });
         } else {
             Logger.eventlog.log("[register] " + ip + " registered account: " + name +
                              (email.length > 0 ? " <" + email + ">" : ""));
-            sendTemplate(res, "auth/register", {
+            template.send(res, "auth/register", {
                 registered: true,
                 registerName: name,
                 redirect: req.body.redirect
