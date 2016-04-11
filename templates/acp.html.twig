@@ -1,0 +1,171 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="row">
+        <div id="acp-logview" class="acp-panel col-md-12">
+            <h3>Log Viewer</h3>
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button id="acp-syslog-btn" class="btn btn-default">Syslog</button>
+                    <button id="acp-errlog-btn" class="btn btn-default">Error Log</button>
+                    <button id="acp-httplog-btn" class="btn btn-default">HTTP Log</button>
+                </div>
+                <input id="acp-chanlog-name" class="form-control" type="text" placeholder="Channel Name" />
+            </div>
+            <pre id="acp-log"></pre>
+        </div>
+        
+        <div id="acp-announcements" class="acp-panel col-md-6 col-md-offset-3">
+            <h3>Announcements</h3>
+            <div></div>
+            
+            <h3>New Announcement</h3>
+            <div>
+                <form class="form-horizontal" action="javascript:void(0)" role="form">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="acp-announce-title">Title</label>
+                        <div class="col-sm-10">
+                            <input id="acp-announce-title" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="acp-announce-content">Text</label>
+                        <div class="col-sm-10">
+                            <textarea id="acp-announce-content" class="form-control" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <button id="acp-announce-submit" class="btn btn-primary">Announce</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="acp-global-bans" class="acp-panel col-md-12">
+            <h3>Global Bans</h3>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>IP Address</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+            </table>
+            
+            <h3>New Global Ban</h3>
+            <div style="max-width: 50%">
+                <form class="form-horizontal" action="javascript:void(0)" role="form">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="acp-gban-ip">IP Address</label>
+                        <div class="col-sm-9">
+                            <input id="acp-gban-ip" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="acp-gban-note">Note</label>
+                        <div class="col-sm-9">
+                            <input id="acp-gban-note" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-3">
+                            <button id="acp-gban-submit" class="btn btn-danger">Add Ban</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="acp-user-lookup" class="acp-panel col-md-12">
+            <h3>Users</h3>
+            <div class="input-group" style="max-width: 25%">
+                <input id="acp-ulookup-name" class="form-control" type="text" />
+                <span class="input-group-btn">
+                    <button id="acp-ulookup-btn" class="btn btn-default">Search</button>
+                </span>
+            </div>
+            <table class="table table-bordered table-striped" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th class="sort" data-key="id">ID</th>
+                        <th class="sort" data-key="name">Name</th>
+                        <th class="sort" data-key="global_rank">Rank</th>
+                        <th class="sort" data-key="email">Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        
+        <div id="acp-channel-lookup" class="acp-panel col-md-12">
+            <h3>Channels</h3>
+            <form class="form-inline" action="javascript:void(0)" role="form">
+                <div class="form-group">
+                    <input id="acp-clookup-value" class="form-control" type="text" placeholder="Name" />
+                </div>
+                <div class="form-group">
+                    <select id="acp-clookup-field" class="form-control">
+                        <option value="name">Channel Name</option>
+                        <option value="owner">Channel Owner</option>
+                    </select>
+                </div>
+                <button id="acp-clookup-submit" class="btn btn-default">Search</button>
+            </form>
+            <table class="table table-bordered table-striped" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th class="sort" data-key="id">ID</th>
+                        <th class="sort" data-key="name">Name</th>
+                        <th class="sort" data-key="owner">Owner</th>
+                        <th>Control</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        
+        <div id="acp-loaded-channels" class="acp-panel col-md-12">
+            <h3>Loaded Channels</h3>
+            <button id="acp-lchannels-refresh" class="btn btn-default">Refresh</button>
+            <table class="table table-bordered table-striped" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Usercount</th>
+                        <th>Now Playing</th>
+                        <th>Registered</th>
+                        <th>Public</th>
+                        <th>Control</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        
+        <div id="acp-eventlog" class="acp-panel col-md-12">
+            <h3>Event Log</h3>
+            <strong>Filter event types</strong>
+            <select id="acp-eventlog-filter" class="form-control" multiple="multiple" style="max-width: 25%">
+                
+            </select>
+            <button id="acp-eventlog-refresh" class="btn btn-default">Refresh</button>
+            <pre id="acp-eventlog-text"></pre>
+        </div>
+        
+        <div id="acp-stats" class="acp-panel col-md-12">
+            <h3>User Count</h3>
+            <canvas id="stat_users" width="1140" height="400"></canvas>
+            
+            <h3>Channel Count</h3>
+            <canvas id="stat_channels" width="1140" height="400"></canvas>
+            
+            <h3>Memory Usage</h3>
+            <canvas id="stat_mem" width="1140" height="400"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        var USEROPTS = { secure_connection: true };
+    </script>
+    {% include "scripts.html.twig" %}
+{% endblock %}
