@@ -162,13 +162,13 @@ module.exports = {
         }
         
         require('./routes/channel')(app, ioConfig);
-        require('./routes/index')(app, channelIndex);
         require('./routes/socketconfig')(app, clusterClient);
-        require('./routes/home').init(app);
+        require('./routes/home').init(app, channelIndex);
         require('./routes/contact')(app, webConfig);
         require('./routes/auth').init(app);
         require('./routes/account').init(app);
         require('./routes/acp').init(app);
+        
         require('../google2vtt').attach(app);
         app.get('/sioconfig(.json)?', handleLegacySocketConfig);
         app.use(serveStatic(path.join(__dirname, '..', '..', 'www'), {

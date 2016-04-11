@@ -21,9 +21,24 @@ module.exports = {
     /**
      * Initializes auth callbacks
      */
-    init: function (app) {
+    init: function (app, channelIndex) {
         app.get('/terms', handleUserAgreement);
         app.get('/privacy', handlePrivacyPolicy);
         app.get('/help', handleHelp);
+        app.get('/', (req, res) => {
+            channelIndex.listPublicChannels().then((channels) => {
+                channels.sort((a, b) => {
+                    if (a.usercount === b.usercount) {
+                        return a.uniqueName > b.uniqueName ? -1 : 1;
+                    }
+                
+                    return b.usercount - a.usercount;
+                });
+            
+                template.send(res, 'home/index', {
+                    channels: channels
+                });
+            });
+        });
     }
 };
