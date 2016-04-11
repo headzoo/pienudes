@@ -35,7 +35,7 @@ function handleAcp(req, res, user) {
     }
     sio += "/socket.io/socket.io.js";
 
-    sendTemplate(res, "acp", {
+    sendTemplate(res, "acp/index", {
         sioSource: sio
     });
 }

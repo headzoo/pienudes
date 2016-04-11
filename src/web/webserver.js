@@ -76,13 +76,19 @@ function handleLegacySocketConfig(req, res) {
 }
 
 function handleUserAgreement(req, res) {
-    sendTemplate(res, 'tos', {
+    sendTemplate(res, 'home/tos', {
+        domain: Config.get('http.domain')
+    });
+}
+
+function handlePrivacyPolicy(req, res) {
+    sendTemplate(res, 'home/privacy', {
         domain: Config.get('http.domain')
     });
 }
 
 function handleHelp(req, res) {
-    sendTemplate(res, 'help', {});
+    sendTemplate(res, 'home/help', {});
 }
 
 function initializeErrorHandlers(app) {
@@ -96,7 +102,7 @@ function initializeErrorHandlers(app) {
         if (err) {
             if (err instanceof CSRFError) {
                 res.status(HTTPStatus.FORBIDDEN);
-                return sendTemplate(res, 'csrferror', {
+                return sendTemplate(res, 'error/csrf', {
                     path: req.path,
                     referer: req.header('referer')
                 });
@@ -119,7 +125,7 @@ function initializeErrorHandlers(app) {
             }
 
             res.status(status);
-            return sendTemplate(res, 'httperror', {
+            return sendTemplate(res, 'error/http', {
                 path: req.path,
                 status: status,
                 message: message
@@ -175,7 +181,8 @@ module.exports = {
         require('./routes/index')(app, channelIndex);
         app.get('/sioconfig(.json)?', handleLegacySocketConfig);
         require('./routes/socketconfig')(app, clusterClient);
-        app.get('/useragreement', handleUserAgreement);
+        app.get('/terms', handleUserAgreement);
+        app.get('/privacy', handlePrivacyPolicy);
         app.get('/help', handleHelp);
         require('./routes/contact')(app, webConfig);
         require('./auth').init(app);

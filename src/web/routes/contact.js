@@ -19,7 +19,7 @@ export default function initialize(app, webConfig) {
             return contact;
         });
 
-        return sendTemplate(res, 'contact', {
+        return sendTemplate(res, 'contact/index', {
             contacts: contacts
         });
     });
