@@ -22,7 +22,9 @@ function handleAccountEditPage(req, res) {
         return;
     }
 
-    template.send(res, "account/edit", {});
+    template.send(res, "account/edit", {
+        pageTitle: "Account"
+    });
 }
 
 /**
@@ -62,6 +64,7 @@ function handleChangePassword(req, res) {
 
     if (newpassword.length === 0) {
         template.send(res, "account/edit", {
+            pageTitle: "Account",
             errorMessage: "New password must not be empty"
         });
         return;
@@ -69,6 +72,7 @@ function handleChangePassword(req, res) {
 
     if (!req.user) {
         template.send(res, "account/edit", {
+            pageTitle: "Account",
             errorMessage: "You must be logged in to change your password"
         });
         return;
@@ -79,6 +83,7 @@ function handleChangePassword(req, res) {
     db.users.verifyLogin(name, oldpassword, function (err, user) {
         if (err) {
             template.send(res, "account-edit", {
+                pageTitle: "Account",
                 errorMessage: err
             });
             return;
@@ -87,6 +92,7 @@ function handleChangePassword(req, res) {
         db.users.setPassword(name, newpassword, function (err, dbres) {
             if (err) {
                 template.send(res, "account-edit", {
+                    pageTitle: "Account",
                     errorMessage: err
                 });
                 return;
@@ -98,6 +104,7 @@ function handleChangePassword(req, res) {
             db.users.getUser(name, function (err, user) {
                 if (err) {
                     return template.send(res, "account-edit", {
+                        pageTitle: "Account",
                         errorMessage: err
                     });
                 }
@@ -107,6 +114,7 @@ function handleChangePassword(req, res) {
                 session.genSession(user, expiration, function (err, auth) {
                     if (err) {
                         return template.send(res, "account-edit", {
+                            pageTitle: "Account",
                             errorMessage: err
                         });
                     }
@@ -127,6 +135,7 @@ function handleChangePassword(req, res) {
                     }
 
                     template.send(res, "account-edit", {
+                        pageTitle: "Account",
                         successMessage: "Password changed."
                     });
                 });
@@ -152,6 +161,7 @@ function handleChangeEmail(req, res) {
 
     if (!$util.isValidEmail(email) && email !== "") {
         template.send(res, "account/edit", {
+            pageTitle: "Account",
             errorMessage: "Invalid email address"
         });
         return;
@@ -160,6 +170,7 @@ function handleChangeEmail(req, res) {
     db.users.verifyLogin(name, password, function (err, user) {
         if (err) {
             template.send(res, "account/edit", {
+                pageTitle: "Account",
                 errorMessage: err
             });
             return;
@@ -168,6 +179,7 @@ function handleChangeEmail(req, res) {
         db.users.setEmail(name, email, function (err, dbres) {
             if (err) {
                 template.send(res, "account/edit", {
+                    pageTitle: "Account",
                     errorMessage: err
                 });
                 return;
@@ -176,6 +188,7 @@ function handleChangeEmail(req, res) {
                                 " changed email for " + name +
                                 " to " + email);
             template.send(res, "account/edit", {
+                pageTitle: "Account",
                 successMessage: "Email address changed."
             });
         });
@@ -192,12 +205,14 @@ function handleAccountChannelPage(req, res) {
 
     if (!req.user) {
         return template.send(res, "account/channels", {
+            pageTitle: "Channels",
             channels: []
         });
     }
 
     db.channels.listUserChannels(req.user.name, function (err, channels) {
         template.send(res, "account/channels", {
+            pageTitle: "Channels",
             channels: channels
         });
     });
@@ -236,6 +251,7 @@ function handleNewChannel(req, res) {
 
     if (!req.user) {
         return template.send(res, "account/channels", {
+            pageTitle: "New Channel",
             channels: []
         });
     }
@@ -243,6 +259,7 @@ function handleNewChannel(req, res) {
     db.channels.listUserChannels(req.user.name, function (err, channels) {
         if (err) {
             template.send(res, "account/channels", {
+                pageTitle: "New Channel",
                 channels: [],
                 newChannelError: err
             });
@@ -251,6 +268,7 @@ function handleNewChannel(req, res) {
 
         if (name.match(Config.get("reserved-names.channels"))) {
             template.send(res, "account/channels", {
+                pageTitle: "New Channel",
                 channels: channels,
                 newChannelError: "That channel name is reserved"
             });
@@ -260,6 +278,7 @@ function handleNewChannel(req, res) {
         if (channels.length >= Config.get("max-channels-per-user") &&
                 req.user.global_rank < 255) {
             template.send(res, "account/channels", {
+                pageTitle: "New Channel",
                 channels: channels,
                 newChannelError: "You are not allowed to register more than " +
                                  Config.get("max-channels-per-user") + " channels."
@@ -291,6 +310,7 @@ function handleNewChannel(req, res) {
 
 
             template.send(res, "account/channels", {
+                pageTitle: "New Channel",
                 channels: channels,
                 newChannelError: err ? err : undefined
             });
@@ -373,6 +393,7 @@ function handleAccountProfilePage(req, res) {
 
     if (!req.user) {
         return template.send(res, "account/profile", {
+            pageTitle: "Profile",
             profileImage: "",
             profileText: ""
         });
@@ -381,6 +402,7 @@ function handleAccountProfilePage(req, res) {
     db.users.getProfile(req.user.name, function (err, profile) {
         if (err) {
             template.send(res, "account/profile", {
+                pageTitle: "Profile",
                 profileError: err,
                 profileImage: "",
                 profileText: ""
@@ -389,6 +411,7 @@ function handleAccountProfilePage(req, res) {
         }
 
         template.send(res, "account/profile", {
+            pageTitle: "Profile",
             profileImage: profile.image,
             profileText: profile.text,
             profileError: false
@@ -404,6 +427,7 @@ function handleAccountProfile(req, res) {
 
     if (!req.user) {
         return template.send(res, "account/profile", {
+            pageTitle: "Profile",
             profileImage: "",
             profileText: "",
             profileError: "You must be logged in to edit your profile",
@@ -416,6 +440,7 @@ function handleAccountProfile(req, res) {
     db.users.setProfile(req.user.name, { image: image, text: text }, function (err) {
         if (err) {
             template.send(res, "account/profile", {
+                pageTitle: "Profile",
                 profileImage: "",
                 profileText: "",
                 profileError: err
@@ -424,6 +449,7 @@ function handleAccountProfile(req, res) {
         }
 
         template.send(res, "account/profile", {
+            pageTitle: "Profile",
             profileImage: image,
             profileText: text,
             profileError: false
@@ -440,6 +466,7 @@ function handlePasswordResetPage(req, res) {
     }
 
     template.send(res, "account/password-reset", {
+        pageTitle: "Password Reset",
         reset: false,
         resetEmail: "",
         resetErr: false
@@ -462,6 +489,7 @@ function handlePasswordReset(req, res) {
 
     if (!$util.isValidUserName(name)) {
         template.send(res, "account/password-reset", {
+            pageTitle: "Password Reset",
             reset: false,
             resetEmail: "",
             resetErr: "Invalid username '" + name + "'"
@@ -472,6 +500,7 @@ function handlePasswordReset(req, res) {
     db.users.getEmail(name, function (err, actualEmail) {
         if (err) {
             template.send(res, "account/password-reset", {
+                pageTitle: "Password Reset",
                 reset: false,
                 resetEmail: "",
                 resetErr: err
@@ -481,6 +510,7 @@ function handlePasswordReset(req, res) {
 
         if (actualEmail !== email.trim()) {
             template.send(res, "account/password-reset", {
+                pageTitle: "Password Reset",
                 reset: false,
                 resetEmail: "",
                 resetErr: "Provided email does not match the email address on record for " + name
@@ -488,6 +518,7 @@ function handlePasswordReset(req, res) {
             return;
         } else if (actualEmail === "") {
             template.send(res, "account/password-reset", {
+                pageTitle: "Password Reset",
                 reset: false,
                 resetEmail: "",
                 resetErr: name + " doesn't have an email address on record.  Please contact an " +
@@ -510,6 +541,7 @@ function handlePasswordReset(req, res) {
         }, function (err, dbres) {
             if (err) {
                 template.send(res, "account/password-reset", {
+                    pageTitle: "Password Reset",
                     reset: false,
                     resetEmail: "",
                     resetErr: err
@@ -522,6 +554,7 @@ function handlePasswordReset(req, res) {
 
             if (!Config.get("mail.enabled")) {
                 template.send(res, "account/password-reset", {
+                    pageTitle: "Password Reset",
                     reset: false,
                     resetEmail: email,
                     resetErr: "This server does not have mail support enabled.  Please " +
@@ -549,6 +582,7 @@ function handlePasswordReset(req, res) {
                 if (err) {
                     Logger.errlog.log("mail fail: " + err);
                     template.send(res, "account/password-reset", {
+                        pageTitle: "Password Reset",
                         reset: false,
                         resetEmail: email,
                         resetErr: "Sending reset email failed.  Please contact an " +
@@ -556,6 +590,7 @@ function handlePasswordReset(req, res) {
                     });
                 } else {
                     template.send(res, "account/password-reset", {
+                        pageTitle: "Password Reset",
                         reset: true,
                         resetEmail: email,
                         resetErr: false
@@ -581,6 +616,7 @@ function handlePasswordRecover(req, res) {
     db.lookupPasswordReset(hash, function (err, row) {
         if (err) {
             template.send(res, "account/password-recover", {
+                pageTitle: "Password Recover",
                 recovered: false,
                 recoverErr: err
             });
@@ -589,6 +625,7 @@ function handlePasswordRecover(req, res) {
 
         if (Date.now() >= row.expire) {
             template.send(res, "account/password-recover", {
+                pageTitle: "Password Recover",
                 recovered: false,
                 recoverErr: "This password recovery link has expired.  Password " +
                             "recovery links are valid only for 24 hours after " +
@@ -605,6 +642,7 @@ function handlePasswordRecover(req, res) {
         db.users.setPassword(row.name, newpw, function (err) {
             if (err) {
                 template.send(res, "account/password-recover", {
+                    pageTitle: "Password Recover",
                     recovered: false,
                     recoverErr: "Database error.  Please contact an administrator if " +
                                 "this persists."
@@ -617,6 +655,7 @@ function handlePasswordRecover(req, res) {
             Logger.eventlog.log("[account] " + ip + " recovered password for " + row.name);
 
             template.send(res, "account/password-recover", {
+                pageTitle: "Password Recover",
                 recovered: true,
                 recoverPw: newpw
             });

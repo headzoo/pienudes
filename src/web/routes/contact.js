@@ -20,6 +20,7 @@ export default function initialize(app, webConfig) {
         });
 
         return template.send(res, 'contact/index', {
+            pageTitle: "Contact",
             contacts: contacts
         });
     });

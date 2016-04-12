@@ -55,6 +55,7 @@ function handleLogin(req, res) {
                                   + "@" + req.realIP);
             }
             template.send(res, "auth/login", {
+                pageTitle: "Login",
                 loggedIn: false,
                 loginError: err
             });
@@ -64,6 +65,7 @@ function handleLogin(req, res) {
         session.genSession(user, expiration, function (err, auth) {
             if (err) {
                 template.send(res, "auth/login", {
+                    pageTitle: "Login",
                     loggedIn: false,
                     loginError: err
                 });
@@ -91,7 +93,7 @@ function handleLogin(req, res) {
                 res.redirect(dest);
             } else {
                 res.user = user;
-                template.send(res, "auth/login", {});
+                template.send(res, "auth/login", {pageTitle: "Login"});
             }
         });
     });
@@ -107,11 +109,13 @@ function handleLoginPage(req, res) {
 
     if (req.user) {
         return template.send(res, "auth/login", {
+            pageTitle: "Login",
             wasAlreadyLoggedIn: true
         });
     }
     
     template.send(res, "auth/login", {
+        pageTitle: "Login",
         redirect: req.query.dest || req.header("referer")
     });
 }
@@ -149,11 +153,14 @@ function handleRegisterPage(req, res) {
     }
 
     if (req.user) {
-        template.send(res, "auth/register", {});
+        template.send(res, "auth/register", {
+            pageTitle: "Register"
+        });
         return;
     }
     
     template.send(res, "auth/register", {
+        pageTitle: "Register",
         registered: false,
         registerError: false
     });
@@ -180,6 +187,7 @@ function handleRegister(req, res) {
 
     if (name.length === 0) {
         template.send(res, "auth/register", {
+            pageTitle: "Register",
             registerError: "Username must not be empty"
         });
         return;
@@ -187,6 +195,7 @@ function handleRegister(req, res) {
 
     if (name.match(Config.get("reserved-names.usernames"))) {
         template.send(res, "auth/register", {
+            pageTitle: "Register",
             registerError: "That username is reserved"
         });
         return;
@@ -194,6 +203,7 @@ function handleRegister(req, res) {
 
     if (password.length === 0) {
         template.send(res, "auth/register", {
+            pageTitle: "Register",
             registerError: "Password must not be empty"
         });
         return;
@@ -203,6 +213,7 @@ function handleRegister(req, res) {
 
     if (email.length > 0 && !$util.isValidEmail(email)) {
         template.send(res, "auth/register", {
+            pageTitle: "Register",
             registerError: "Invalid email address"
         });
         return;
@@ -211,12 +222,14 @@ function handleRegister(req, res) {
     db.users.register(name, password, email, ip, function (err) {
         if (err) {
             template.send(res, "auth/register", {
+                pageTitle: "Register",
                 registerError: err
             });
         } else {
             Logger.eventlog.log("[register] " + ip + " registered account: " + name +
                              (email.length > 0 ? " <" + email + ">" : ""));
             template.send(res, "auth/register", {
+                pageTitle: "Register",
                 registered: true,
                 registerName: name,
                 redirect: req.body.redirect

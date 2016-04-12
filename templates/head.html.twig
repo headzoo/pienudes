@@ -1,7 +1,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="{{ siteDescription }}">
-<title>{{ siteTitle }}</title>
+{% if not pageTitle %}
+    {% set pageTitle = siteTitle %}
+{% endif %}
+<title>{{ pageTitle }}</title>
 
 <link href="/css/sticky-footer-navbar.css" rel="stylesheet">
 <link href="/css/cytube.css" rel="stylesheet">

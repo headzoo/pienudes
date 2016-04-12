@@ -22,6 +22,7 @@ function handleHistory(req, res) {
         
         playlists.fetchPlaylistHistory(limit, offset, function(err, rows) {
             template.send(res, 'playlists/history', {
+                pageTitle: "Playlist History",
                 media: rows,
                 page:  page,
                 pages: pages
@@ -33,6 +34,7 @@ function handleHistory(req, res) {
 function handleTop(req, res) {
     playlists.fetchMostWatched(25, function(err, rows) {
         template.send(res, 'playlists/top', {
+            pageTitle: "Top 25 Played Videos",
             media: rows,
             count: 25
         });

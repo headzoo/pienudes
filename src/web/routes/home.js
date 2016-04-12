@@ -4,18 +4,22 @@ import Config from '../../config';
 
 function handleUserAgreement(req, res) {
     template.send(res, 'home/tos', {
+        pageTitle: "Terms of Service",
         domain: Config.get('http.domain')
     });
 }
 
 function handlePrivacyPolicy(req, res) {
     template.send(res, 'home/privacy', {
+        pageTitle: "Privacy Policy",
         domain: Config.get('http.domain')
     });
 }
 
 function handleHelp(req, res) {
-    template.send(res, 'home/help', {});
+    template.send(res, 'home/help', {
+        pageTitle: "Help"
+    });
 }
 
 module.exports = {
