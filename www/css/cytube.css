@@ -701,3 +701,7 @@ textarea:focus, input:focus{
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
+
+#logo {
+    margin-top: -13px;
+}
