@@ -30,11 +30,21 @@ function handleHistory(req, res) {
     });
 }
 
+function handleTop(req, res) {
+    playlists.fetchMostWatched(25, function(err, rows) {
+        template.send(res, 'playlists/top', {
+            media: rows,
+            count: 25
+        });
+    });
+}
+
 module.exports = {
     /**
      * Initializes auth callbacks
      */
     init: function (app) {
         app.get('/playlists/history/:page?', handleHistory);
+        app.get('/playlists/top', handleTop);
     }
 };

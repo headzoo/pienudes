@@ -1,0 +1,28 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+        <h3>Top 25 Played Videos</h3>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th class="center">Plays</th>
+                <th>Title</th>
+                <th>First Queued By</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for m in media %}
+                <tr>
+                    <td class="center">{{ m.cnt }}</td>
+                    <td>
+                        {{ m.title }}
+                    </td>
+                    <td>
+                        {{ m.user }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

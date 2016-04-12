@@ -51,6 +51,19 @@ module.exports = {
     },
     
     /**
+     * Returns the most watch media
+     */
+    fetchMostWatched(limit, callback) {
+        limit = parseInt(limit);
+        if (isNaN(limit)) {
+            limit = 25;
+        }
+        
+        var sql = "SELECT *, COUNT(*) AS `cnt` FROM playlist_history GROUP BY `uid` ORDER BY `cnt` DESC, `time` ASC LIMIT " + limit;
+        db.query(sql, [], callback);
+    },
+    
+    /**
      * Returns the number of rows in the playlist_history table
      */
     countPlaylistHistory(callback) {
