@@ -690,3 +690,14 @@ input#logout[type="submit"]:hover {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.form-control:focus{
+    border-color: #4A4949 !important;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
