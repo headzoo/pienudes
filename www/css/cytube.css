@@ -210,14 +210,6 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
     font-family: Monospace;
 }
 
-.qe_user {
-    font-family: Monospace;
-    font-size: 13px;
-    position: absolute;
-    bottom: 0;
-    right: 2px;
-}
-
 .qe_clear {
     clear: both;
 }
