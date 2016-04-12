@@ -705,3 +705,17 @@ textarea:focus, input:focus{
 #logo {
     margin-top: -13px;
 }
+
+.sidebar-list {
+    padding: 0;
+    list-style-type: none;
+}
+
+.sidebar-list li {
+    padding: 4px 4px;
+    font-size: 12px;
+}
+
+.sidebar-list li:nth-child(odd) {
+    background-color: #2E3338;
+}

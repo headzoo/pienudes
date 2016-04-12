@@ -1,6 +1,7 @@
 "use strict";
 import template from '../template';
 import Config from '../../config';
+import playlists from '../../database/playlist';
 
 function handleUserAgreement(req, res) {
     template.send(res, 'home/tos', {
@@ -39,9 +40,12 @@ module.exports = {
                 
                     return b.usercount - a.usercount;
                 });
-                
-                template.send(res, 'home/index', {
-                    channels: channels
+    
+                playlists.fetchMostWatched(25, function(err, rows) {
+                    template.send(res, 'home/index', {
+                        top_media: rows,
+                        channels: channels
+                    });
                 });
             });
         });

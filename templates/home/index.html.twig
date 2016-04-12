@@ -42,11 +42,19 @@
     </div>
     
     <div class="col-lg-3 col-md-3">
-        <h3>Enter Channel</h3>
+        <h3 style="color: #FFF;">Enter Channel</h3>
         <input id="channelname" class="form-control" type="text" placeholder="Channel Name" />
         <p class="text-muted">
             New channels can be registered from the <a href="/account/channels">My Channels</a> page.
         </p>
-        <img src="https://s3.amazonaws.com/images.pienudes.com/sidebarimg.jpg" style="width: 100%" />
+        
+        <img src="https://s3.amazonaws.com/images.pienudes.com/sidebarimg.jpg" style="width: 100%; margin-top: 10px;" />
+
+        <h3 style="color: #FFF;">Most Played Videos</h3>
+        <ul class="sidebar-list">
+            {% for m in top_media %}
+                <li>{{ m.title|truncate(60) }}</li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}
