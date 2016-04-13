@@ -730,6 +730,10 @@ textarea:focus, input:focus{
     margin-bottom: 4px;
 }
 
+.thumbnail-channel a.thumbnail {
+    min-height: 316px;
+}
+
 .thumbnail-channel-title {
     font-weight: bold;
     font-size: 16px;
