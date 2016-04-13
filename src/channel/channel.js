@@ -659,9 +659,10 @@ Channel.prototype.packInfo = function (isAdmin) {
         name: this.name,
         usercount: this.users.length,
         users: [],
-        registered: this.is(Flags.C_REGISTERED)
+        registered: this.is(Flags.C_REGISTERED),
+        thumbnail: this.modules.options.get("thumbnail")
     };
-
+    
     for (var i = 0; i < this.users.length; i++) {
         if (this.users[i].name !== "") {
             var name = this.users[i].getName();
@@ -682,7 +683,7 @@ Channel.prototype.packInfo = function (isAdmin) {
     if (isAdmin) {
         data.activeLockCount = this.refCounter.refCount;
     }
-
+    
     var self = this;
     var keys = Object.keys(this.modules);
     keys.forEach(function (k) {

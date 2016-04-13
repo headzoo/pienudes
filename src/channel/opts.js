@@ -9,6 +9,7 @@ function OptionsModule(channel) {
         allow_voteskip: true,      // Allow users to voteskip
         voteskip_ratio: 0.5,       // Ratio of skip votes:non-afk users needed to skip the video
         afk_timeout: 600,          // Number of seconds before a user is automatically marked afk
+        thumbnail: "/img/logo.png",// Channel thumbnail displayed on the home page
         pagetitle: this.channel.name, // Title of the browser tab
         maxlength: 0,              // Maximum length (in seconds) of a video queued
         externalcss: "",           // Link to external stylesheet
@@ -123,6 +124,10 @@ OptionsModule.prototype.handleSetOptions = function (user, data) {
                 u.autoAFK();
             });
         }
+    }
+    
+    if ("thumbnail" in data) {
+        this.opts.thumbnail = data.thumbnail;
     }
 
     if ("pagetitle" in data && user.account.effectiveRank >= 3) {

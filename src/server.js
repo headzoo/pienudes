@@ -250,7 +250,8 @@ Server.prototype.packChannelList = function (publicOnly, isAdmin) {
         if (!publicOnly) {
             return true;
         }
-
+        
+        //console.log(c.modules.options);
         return c.modules.options && c.modules.options.get("show_public");
     });
 
