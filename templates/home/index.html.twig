@@ -1,7 +1,7 @@
 {% extends "layout.html.twig" %}
 {% block content %}
     <div class="col-lg-9 col-md-9">
-        <h3 style="color: #FFF;">Let's Get Naked!</h3>
+        <h3 style="color: #FFF;">Let's Get Nude!</h3>
         <p>
             We're fans of world pop music who can usually be found on this site and on reddit sharing our favorite
             songs. K-Pop, J-Pop, C-Pop, Hip-Hop, R&B, Metal, EDM, and much more.
@@ -35,20 +35,29 @@
         </div>
     </div>
     
-    <div class="col-lg-3 col-md-3">
-        <h3 style="color: #FFF;">Enter Channel</h3>
-        <input id="channelname" class="form-control" type="text" placeholder="Channel Name" />
-        <p>
-            New channels can be registered from the <a href="/account/channels">My Channels</a> page.
-        </p>
+    <div id="homepage-sidebar" class="col-lg-3 col-md-3">
+        <div class="sidebar-widget">
+            <h3>Enter Channel</h3>
+            <input id="channelname" class="form-control" type="text" placeholder="Channel Name" />
+            <p style="margin: 6px 0 0 0;">
+                New channels can be registered from the <a href="/account/channels">My Channels</a> page.
+            </p>
+        </div>
+
+        <div class="sidebar-widget">
+            <img src="https://s3.amazonaws.com/images.pienudes.com/sidebarimg.jpg" style="width: 100%;" />
+            <p style="margin: 6px 0 0 0;">
+                Join us on reddit at <a href="https://www.reddit.com/r/pienudes" target="_blank">/r/pienudes</a>.
+            </p>
+        </div>
         
-        <img src="https://s3.amazonaws.com/images.pienudes.com/sidebarimg.jpg" style="width: 100%; margin-top: 10px;" />
-        
-        <h3 style="color: #FFF;">Most Played</h3>
-        <ul class="sidebar-list">
-            {% for m in top_media %}
-                <li>{{ m.title|truncate(60) }}</li>
-            {% endfor %}
-        </ul>
+        <div class="sidebar-widget">
+            <h3>Most Played</h3>
+            <ul class="sidebar-list">
+                {% for m in top_media %}
+                    <li>{{ m.title|truncate(60) }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}
