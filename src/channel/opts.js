@@ -9,7 +9,7 @@ function OptionsModule(channel) {
         allow_voteskip: true,      // Allow users to voteskip
         voteskip_ratio: 0.5,       // Ratio of skip votes:non-afk users needed to skip the video
         afk_timeout: 600,          // Number of seconds before a user is automatically marked afk
-        thumbnail: "/img/logo.png",// Channel thumbnail displayed on the home page
+        thumbnail: "https://pienudes.com/img/logo.png",// Channel thumbnail displayed on the home page
         pagetitle: this.channel.name, // Title of the browser tab
         maxlength: 0,              // Maximum length (in seconds) of a video queued
         externalcss: "",           // Link to external stylesheet
@@ -127,7 +127,31 @@ OptionsModule.prototype.handleSetOptions = function (user, data) {
     }
     
     if ("thumbnail" in data) {
-        this.opts.thumbnail = data.thumbnail;
+        var link = (""+data.thumbnail).substring(0, 255);
+        if (!link) {
+            this.opts.thumbnail = "https://pienudes.com/img/logo.png";
+        } else {
+            try {
+                var d = url.parse(link);
+                if (!d.protocol || d.protocol != "https:") {
+                    throw "Channel thumbnail must start with https.";
+                } else if (!d.host) {
+                    throw "Channel thumbnail is missing host.";
+                } else if (!d.path.match(/\.(jpg|jpeg|gif|png)$/)) {
+                    throw "Channel thumbnail must be an image. Either jpg, gif, or png."
+                } else {
+                    link = d.href;
+                }
+            } catch (e) {
+                user.socket.emit("errorMsg", {
+                    msg: e,
+                    alert: true
+                });
+                return;
+            }
+    
+            this.opts.thumbnail = link;
+        }
     }
 
     if ("pagetitle" in data && user.account.effectiveRank >= 3) {
