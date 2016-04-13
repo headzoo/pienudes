@@ -741,7 +741,10 @@ textarea:focus, input:focus{
 }
 
 .thumbnail-channel-users {
-    float: right;
+    color: #949494;
+    position: absolute;
+    font-size: 12px;
+    right: 20px;
 }
 
 .thumbnail-channel-playing {
