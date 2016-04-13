@@ -468,7 +468,7 @@ function makeQueueEntry(item, addbtns) {
         .attr("href", formatURL(video))
         .attr("target", "_blank");
     var time = $("<span/>").addClass("qe_time").appendTo(li);
-    time.text(item.queueby + " - " + video.duration);
+    time.html(item.queueby + " &middot; " + video.duration);
     var clear = $("<div/>").addClass("qe_clear").appendTo(li);
     if(item.temp) {
         li.addClass("queue_temp");
