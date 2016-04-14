@@ -4961,7 +4961,7 @@ fieldset[disabled] .navbar-default .btn-link:hover {
 }
 
 .navbar-inverse {
-  background-color: #7a8288;
+  background-color: #302C42;
   border-color: #62686d
 }
 
@@ -7359,25 +7359,8 @@ button.close {
 }
 
 .navbar {
-  background-image: -webkit-linear-gradient(#484e55, #3a3f44 60%, #313539);
-  background-image: -o-linear-gradient(#484e55, #3a3f44 60%, #313539);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#484e55), color-stop(60%, #3a3f44), to(#313539));
-  background-image: linear-gradient(#484e55, #3a3f44 60%, #313539);
-  background-repeat: no-repeat;
-  -webkit-filter: none;
-  filter: none;
   border: 1px solid rgba(0, 0, 0, .6);
   text-shadow: 1px 1px 1px rgba(0, 0, 0, .3)
-}
-
-.navbar-inverse {
-  background-image: -webkit-linear-gradient(#8a9196, #7a8288 60%, #70787d);
-  background-image: -o-linear-gradient(#8a9196, #7a8288 60%, #70787d);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#8a9196), color-stop(60%, #7a8288), to(#70787d));
-  background-image: linear-gradient(#8a9196, #7a8288 60%, #70787d);
-  background-repeat: no-repeat;
-  -webkit-filter: none;
-  filter: none
 }
 
 .navbar-inverse .badge {
@@ -7904,11 +7887,6 @@ textarea.form-control {
   background-color: #70787d;
   background-image: url(/img/stripe-diagonal-black.png);
   background-repeat: repeat;
-}
-
-.navbar-inverse {
-  background-image: -webkit-linear-gradient(#484e55, #3a3f44 60%, #313539) !important;
-  background-image: linear-gradient(#484e55, #3a3f44 60%, #313539) !important;
 }
 
 .profile-box,

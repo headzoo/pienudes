@@ -761,7 +761,8 @@ textarea:focus, input:focus{
 }
 
 .thumbnail-channel a.thumbnail {
-    min-height: 318px;
+    height: 320px;
+    overflow: hidden;
 }
 
 .thumbnail-channel-title {
