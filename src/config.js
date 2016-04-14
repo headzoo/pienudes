@@ -62,6 +62,7 @@ var defaults = {
     },
     uploads: {
         bytes_per_channel: 1073741824,
+        bytes_per_file: 5242880,
         s3_bucket: "images.pienudes.com",
         uploads_url: "https://uploads.pienudes.com/"
     },

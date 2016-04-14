@@ -2563,6 +2563,8 @@ function formatUploadsList(first) {
     if (first) {
         var avail = $("#cs-uploads-available");
         avail.text(humanFileSize(avail.text()));
+        var max = $("#cs-uploads-bytes-per-file");
+        max.text(humanFileSize(max.text()));
     }
 }
 
