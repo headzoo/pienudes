@@ -55,7 +55,7 @@ UploadModule.prototype.handleUpload = function (user, data) {
     db_uploads.fetchBytesUsedByChannel(chname, function(err, bytes) {
         if (err) {
             user.socket.emit("errorMsg", {
-                msg: "Error uploading file.",
+                msg: "Error uploading file. #1",
                 alert: true
             });
         } else {
@@ -81,21 +81,21 @@ UploadModule.prototype.handleUpload = function (user, data) {
                 bucket.upload(params, function(err, res) {
                     if (err) {
                         user.socket.emit("errorMsg", {
-                            msg: "Error uploading file.",
+                            msg: "Error uploading file. #2",
                             alert: true
                         });
                     } else {
                         db_uploads.remove(chname, params.Key, function(err) {
                             if (err) {
                                 user.socket.emit("errorMsg", {
-                                    msg: "Error uploading file.",
+                                    msg: "Error uploading file. #3",
                                     alert: true
                                 });
                             } else {
                                 db_uploads.insert(chname, params.Key, data.data.length, function(err) {
                                     if (err) {
                                         user.socket.emit("errorMsg", {
-                                            msg: "Error uploading file.",
+                                            msg: "Error uploading file. #4",
                                             alert: true
                                         });
                                     } else {
