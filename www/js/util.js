@@ -2493,6 +2493,24 @@ function formatCSEmoteList() {
     });
 }
 
+function formatUploadsList() {
+    var tbl = $("#cs-uploadoptions table");
+    tbl.find("tbody").remove();
+    var entries = tbl.data("entries");
+    entries.forEach(function (f) {
+        var tr = $("<tr/>").appendTo(tbl);
+        var del = $("<button/>").addClass("btn btn-xs btn-danger")
+            .appendTo($("<td/>").appendTo(tr));
+        $("<span/>").addClass("glyphicon glyphicon-trash").appendTo(del);
+        del.click(function () {
+            socket.emit("removeUpload", f);
+        });
+    
+        var url = $("<code/>").text(f.url).addClass("linewrap")
+            .appendTo($("<td/>").appendTo(tr));
+    });
+}
+
 function formatTime(sec) {
     var h = Math.floor(sec / 3600) + "";
     var m = Math.floor((sec % 3600) / 60) + "";

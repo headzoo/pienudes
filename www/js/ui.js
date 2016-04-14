@@ -766,6 +766,24 @@ $("#cs-emotes-import").click(function () {
     socket.emit("importEmotes", data);
 });
 
+$("#cs-uploadoptions input[type=file]").on("change", function(e) {
+    if (this.files.length == 0) {
+    
+    }
+    
+    var file = this.files[0];
+    console.log(file);
+    var fr   = new FileReader();
+    fr.addEventListener("loadend", function() {
+        socket.emit("uploadFile", {
+            name: file.name,
+            type: file.type,
+            data: fr.result
+        });
+    });
+    fr.readAsArrayBuffer(file);
+});
+
 var toggleUserlist = function () {
     var direction = !USEROPTS.layout.match(/synchtube/) ? "glyphicon-chevron-right" : "glyphicon-chevron-left"
     if ($("#userlist").css("display") === "none") {

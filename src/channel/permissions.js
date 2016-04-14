@@ -36,6 +36,7 @@ const DEFAULT_PERMISSIONS = {
     filterimport: 3,          // Import chat filter list
     emoteedit: 3,             // Control emotes
     emoteimport: 3,           // Import emote list
+    upload: 3,                // Upload channel image
     playlistlock: 2,          // Lock/unlock the playlist
     leaderctl: 2,             // Give/take leader
     drink: 1.5,               // Use the /d command
@@ -289,6 +290,10 @@ PermissionsModule.prototype.canEditEmotes = function (actor) {
 
 PermissionsModule.prototype.canImportEmotes = function (actor) {
     return this.hasPermission(actor, "emoteimport");
+};
+
+PermissionsModule.prototype.canUpload = function(actor) {
+    return this.hasPermission(actor, "upload");
 };
 
 PermissionsModule.prototype.canCallDrink = function (actor) {

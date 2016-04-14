@@ -133,6 +133,7 @@ Channel.prototype.initModules = function () {
     const modules = {
         "./permissions"   : "permissions",
         "./emotes"        : "emotes",
+        "./uploads"       : "uploads",
         "./chat"          : "chat",
         "./drink"         : "drink",
         "./filters"       : "filters",

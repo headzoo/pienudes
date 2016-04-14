@@ -1054,6 +1054,26 @@ Callbacks = {
             CHANNEL.emotes.splice(i, 1);
         }
     },
+    
+    uploadList: function(data) {
+        var tbl = $("#cs-uploadoptions table");
+        //tbl.data("entries", data);
+    },
+    
+    uploadComplete: function(data) {
+        console.log(data);
+        var el = $("#cs-uploadoptions input[type=file]");
+        el.replaceWith(el.clone(true));
+        var tbl = $("#cs-uploadoptions table");
+        var entries = tbl.data("entries") || [];
+        entries.push(data);
+        tbl.data("entries", entries);
+        formatUploadsList();
+    },
+    
+    removeUpload: function(data) {
+    
+    },
 
     warnLargeChandump: function (data) {
         function toHumanReadable(size) {
