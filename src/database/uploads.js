@@ -21,6 +21,19 @@ module.exports = {
     },
     
     /**
+     * Returns the row with the given channel and path
+     */
+    fetchByChannelAndPath(channel, path, callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "SELECT * FROM `uploads` WHERE `channel` = ? AND `path` = ? LIMIT 1",
+            [channel, path],
+            callback
+        );
+    },
+    
+    /**
      * Returns the total number of bytes used by the given channel
      */
     fetchBytesUsedByChannel(channel, callback) {

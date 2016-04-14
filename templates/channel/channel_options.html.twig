@@ -186,9 +186,6 @@
                     <!-- Upload Settings -->
                     <div id="cs-uploadoptions" class="tab-pane">
                         <form class="form-horizontal" action="javascript:void(0)">
-                            <p>
-                                <span id="cs-uploads-used">0</span> of <span id="cs-uploads-available">{{ bytes_per_channel }}</span> used.
-                            </p>
                             <div class="form-group">
                                 <label class="control-label col-sm-4" for="cs-uploads-file">Select file</label>
                                 <div class="col-sm-8">
@@ -204,10 +201,14 @@
                             <thead>
                             <tr>
                                 <th>Actions</th>
+                                <th>Size</th>
                                 <th>URL</th>
                             </tr>
                             </thead>
                         </table>
+                        <p>
+                            <span id="cs-uploads-used">0</span> of <span id="cs-uploads-available">{{ bytes_per_channel }}</span> used.
+                        </p>
                     </div>
                     
                     <!-- MOTD -->

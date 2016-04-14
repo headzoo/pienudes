@@ -62,7 +62,8 @@ var defaults = {
     },
     uploads: {
         bytes_per_channel: 1073741824,
-        root_images_url: "https://images.pienudes.com/"
+        s3_bucket: "images.pienudes.com",
+        uploads_url: "https://uploads.pienudes.com/"
     },
     "youtube-v3-key": "",
     "channel-save-interval": 5,

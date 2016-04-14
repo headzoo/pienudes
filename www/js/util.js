@@ -2517,7 +2517,9 @@ function formatUploadsList(first) {
         $("<span/>").addClass("glyphicon glyphicon-trash")
             .appendTo(del);
         del.click(function () {
-            socket.emit("removeUpload", f);
+            if (confirm("Are you sure you want to delete this upload?")) {
+                socket.emit("removeUpload", f);
+            }
         });
     
         var open = $("<button/>")
@@ -2532,8 +2534,13 @@ function formatUploadsList(first) {
     
         td = $("<td/>");
         td.appendTo(tr);
-        var url = $("<code/>")
-            .text(f.url)
+        td.text(humanFileSize(f.size))
+            .addClass("linewrap")
+            .appendTo(td);
+    
+        td = $("<td/>");
+        td.appendTo(tr);
+        td.text(f.url)
             .addClass("linewrap")
             .appendTo(td);
     });

@@ -1066,14 +1066,33 @@ Callbacks = {
         el.replaceWith(el.clone(true));
         var tbl = $("#cs-uploadoptions table");
         var entries = tbl.data("entries") || [];
-        entries.push(data);
+        var found   = false;
+        entries.forEach(function(entry) {
+            if (entry.url == data.url) {
+                found = true;
+                return;
+            }
+        });
+        if (!found) {
+            entries.push(data);
+        }
+        
         tbl.data("entries", entries);
         formatUploadsList(false);
         $("#cs-uploadoptions label:first").text("Select file");
     },
     
     removeUpload: function(data) {
-    
+        var tbl     = $("#cs-uploadoptions table");
+        var entries = tbl.data("entries") || [];
+        var cleaned = [];
+        entries.forEach(function(entry) {
+            if (entry.url != data.url) {
+                cleaned.push(entry);
+            }
+        });
+        tbl.data("entries", cleaned);
+        formatUploadsList(false);
     },
 
     warnLargeChandump: function (data) {

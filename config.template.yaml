@@ -127,8 +127,10 @@ mail:
 uploads:
   # Max bytes of uploads allowed per channel.
   bytes_per_channel: 1073741824
+  # Name of the bucket where the files are stored.
+  s3_bucket: uploads.pienudes.com
   # Must contain a trailing slash.
-  root_images_url: 'https://images.pienudes.com/'
+  uploads_url: 'https://uploads.pienudes.com/'
 
 # YouTube v3 API key
 # See https://developers.google.com/youtube/registering_an_application
