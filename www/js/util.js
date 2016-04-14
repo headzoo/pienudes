@@ -1907,7 +1907,7 @@ function genPermissionsEditor() {
     makeOption("View hidden poll results", "viewhiddenpoll", standard, CHANNEL.perms.viewhiddenpoll+"");
     makeOption("Voteskip", "voteskip", standard, CHANNEL.perms.voteskip+"");
     makeOption("View voteskip results", "viewvoteskip", standard, CHANNEL.perms.viewvoteskip+"");
-
+    
     addDivider("Moderation");
     makeOption("Assign/Remove leader", "leaderctl", modplus, CHANNEL.perms.leaderctl+"");
     makeOption("Mute users", "mute", modleader, CHANNEL.perms.mute+"");
@@ -1917,6 +1917,7 @@ function genPermissionsEditor() {
     makeOption("Edit chat filters", "filteredit", modplus, CHANNEL.perms.filteredit+"");
     makeOption("Import chat filters", "filterimport", modplus, CHANNEL.perms.filterimport+"");
     makeOption("Edit chat emotes", "emoteedit", modplus, CHANNEL.perms.emoteedit+"");
+    makeOption("Upload files", "upload", modplus, CHANNEL.perms.upload+"");
     makeOption("Import chat emotes", "emoteimport", modplus, CHANNEL.perms.emoteimport+"");
 
     addDivider("Misc");
@@ -2493,22 +2494,55 @@ function formatCSEmoteList() {
     });
 }
 
-function formatUploadsList() {
+function formatUploadsList(first) {
     var tbl = $("#cs-uploadoptions table");
     tbl.find("tbody").remove();
+    
+    var size    = 0;
     var entries = tbl.data("entries");
     entries.forEach(function (f) {
-        var tr = $("<tr/>").appendTo(tbl);
-        var del = $("<button/>").addClass("btn btn-xs btn-danger")
-            .appendTo($("<td/>").appendTo(tr));
-        $("<span/>").addClass("glyphicon glyphicon-trash").appendTo(del);
+        size += f.size;
+        var tr = $("<tr/>")
+            .appendTo(tbl);
+        var td = $("<td/>");
+        td.appendTo(tr);
+        var group = $("<div/>")
+            .addClass("btn-group")
+            .appendTo(td);
+        
+        var del = $("<button/>")
+            .addClass("btn btn-xs btn-danger")
+            .attr("title", "Delete upload")
+            .appendTo(group);
+        $("<span/>").addClass("glyphicon glyphicon-trash")
+            .appendTo(del);
         del.click(function () {
             socket.emit("removeUpload", f);
         });
     
-        var url = $("<code/>").text(f.url).addClass("linewrap")
-            .appendTo($("<td/>").appendTo(tr));
+        var open = $("<button/>")
+            .addClass("btn btn-xs btn-default")
+            .attr("title", "Open upload")
+            .appendTo(group);
+        $("<span/>").addClass("glyphicon glyphicon-share-alt")
+            .appendTo(open);
+        open.click(function () {
+            window.open(f.url);
+        });
+    
+        td = $("<td/>");
+        td.appendTo(tr);
+        var url = $("<code/>")
+            .text(f.url)
+            .addClass("linewrap")
+            .appendTo(td);
     });
+    
+    $("#cs-uploads-used").text(humanFileSize(size));
+    if (first) {
+        var avail = $("#cs-uploads-available");
+        avail.text(humanFileSize(avail.text()));
+    }
 }
 
 function formatTime(sec) {
@@ -3052,4 +3086,18 @@ function showChannelSettings() {
     });
 
     $("#channeloptions").modal();
+}
+
+function humanFileSize(bytes) {
+    var thresh = 1024;
+    if(Math.abs(bytes) < thresh) {
+        return bytes + ' B';
+    }
+    var units = ['KB','MB','GB','TB','PB','EB','ZB','YB'];
+    var u = -1;
+    do {
+        bytes /= thresh;
+        ++u;
+    } while(Math.abs(bytes) >= thresh && u < units.length - 1);
+    return bytes.toFixed(1)+' '+units[u];
 }

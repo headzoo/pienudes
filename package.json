@@ -8,6 +8,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.3.3",
     "babel": "^5.8.23",
     "bcrypt": "^0.8.5",
     "bluebird": "^2.10.1",

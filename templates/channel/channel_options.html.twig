@@ -35,15 +35,6 @@
     </div>
 {% endmacro %}
 
-{% macro filebox(id, label) %}
-    <div class="form-group">
-        <label class="control-label col-sm-4" for="{{ id }}">{{ label }}</label>
-        <div class="col-sm-8">
-            <input class="form-control" id="{{ id }}" type="file" />
-        </div>
-    </div>
-{% endmacro %}
-
 {% macro lcheckboxauto(id, label) %}
     <div class="form-group">
         <label class="control-label col-sm-4" for="{{ id }}">
@@ -99,7 +90,7 @@
                         <a href="#cs-adminoptions" data-toggle="tab">Admin Settings</a>
                     </li>
                     <li>
-                        <a href="#cs-uploadoptions" data-toggle="tab">Image Uploads</a>
+                        <a href="#cs-uploadoptions" data-toggle="tab">Uploads</a>
                     </li>
                     <li class="dropdown">
                         <a id="cs-edit-dd-toggle" href="#" data-toggle="dropdown">Edit <span class="caret"></span></a>
@@ -194,14 +185,25 @@
                     
                     <!-- Upload Settings -->
                     <div id="cs-uploadoptions" class="tab-pane">
-                        <h4>Image Uploads</h4>
                         <form class="form-horizontal" action="javascript:void(0)">
-                            {{ filebox("cs-uploads-file", "Select file") }}
+                            <p>
+                                <span id="cs-uploads-used">0</span> of <span id="cs-uploads-available">{{ bytes_per_channel }}</span> used.
+                            </p>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4" for="cs-uploads-file">Select file</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" id="cs-uploads-file" type="file" accept="image/*" />
+                                    <p class="text-muted">
+                                        Select file to begin uploading. File types: jpg, gif, png.
+                                    </p>
+                                </div>
+                                
+                            </div>
                         </form>
                         <table class="table table-striped table-condensed">
                             <thead>
                             <tr>
-                                <th>Delete</th>
+                                <th>Actions</th>
                                 <th>URL</th>
                             </tr>
                             </thead>

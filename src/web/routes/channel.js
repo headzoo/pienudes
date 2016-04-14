@@ -1,5 +1,6 @@
 import CyTubeUtil from '../../utilities';
 import xss from '../../xss';
+import Config from '../../config';
 import template from '../template';
 import * as HTTPStatus from '../httpstatus';
 import { HTTPError } from '../../errors';
@@ -19,6 +20,7 @@ export default function initialize(app, ioConfig) {
     
         template.send(res, 'channel/index', {
             channelName: req.params.channel,
+            bytes_per_channel: Config.get("uploads.bytes_per_channel"),
             sioSource: `${socketBaseURL}/socket.io/socket.io.js`
         });
     });

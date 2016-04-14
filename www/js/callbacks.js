@@ -1057,18 +1057,19 @@ Callbacks = {
     
     uploadList: function(data) {
         var tbl = $("#cs-uploadoptions table");
-        //tbl.data("entries", data);
+        tbl.data("entries", data);
+        formatUploadsList(true);
     },
     
     uploadComplete: function(data) {
-        console.log(data);
         var el = $("#cs-uploadoptions input[type=file]");
         el.replaceWith(el.clone(true));
         var tbl = $("#cs-uploadoptions table");
         var entries = tbl.data("entries") || [];
         entries.push(data);
         tbl.data("entries", entries);
-        formatUploadsList();
+        formatUploadsList(false);
+        $("#cs-uploadoptions label:first").text("Select file");
     },
     
     removeUpload: function(data) {

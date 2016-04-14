@@ -766,13 +766,15 @@ $("#cs-emotes-import").click(function () {
     socket.emit("importEmotes", data);
 });
 
-$("#cs-uploadoptions input[type=file]").on("change", function(e) {
+var upload_file = $("#cs-uploadoptions input[type=file]");
+upload_file.on("change", function(e) {
     if (this.files.length == 0) {
-    
+        alert("No file selected.");
+        return;
     }
     
+    $("#cs-uploadoptions label:first").text("Uploading...");
     var file = this.files[0];
-    console.log(file);
     var fr   = new FileReader();
     fr.addEventListener("loadend", function() {
         socket.emit("uploadFile", {

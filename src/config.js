@@ -60,6 +60,10 @@ var defaults = {
         "from-address": "some.user@gmail.com",
         "from-name": "CyTube Services"
     },
+    uploads: {
+        bytes_per_channel: 1073741824,
+        root_images_url: "https://images.pienudes.com/"
+    },
     "youtube-v3-key": "",
     "channel-save-interval": 5,
     "max-channels-per-user": 5,

@@ -122,6 +122,13 @@ mail:
       pass: 'supersecretpassword'
   from-address: 'some.user@gmail.com'
   from-name: 'CyTube Services'
+  
+# File upload settings.
+uploads:
+  # Max bytes of uploads allowed per channel.
+  bytes_per_channel: 1073741824
+  # Must contain a trailing slash.
+  root_images_url: 'https://images.pienudes.com/'
 
 # YouTube v3 API key
 # See https://developers.google.com/youtube/registering_an_application

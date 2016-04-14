@@ -126,6 +126,16 @@ const TBL_PLAYLIST_HISTORY = "" +
     "PRIMARY KEY (`id`)" +
     ") CHARACTER SET utf8";
 
+const TBL_UPLOADS = "" +
+    "CREATE TABLE IF NOT EXISTS `uploads` (" +
+        "`id` INT NOT NULL AUTO_INCREMENT," +
+        "`channel` VARCHAR(30) NOT NULL," +
+        "`path` VARCHAR(255) NOT NULL," +
+        "`size` INT NOT NULL," +
+        "`time` BIGINT NOT NULL," +
+    "PRIMARY KEY (`id`)" +
+    ") CHARACTER SET utf8";
+
 module.exports.init = function (queryfn, cb) {
     var tables = {
         users: TBL_USERS,
@@ -140,7 +150,8 @@ module.exports.init = function (queryfn, cb) {
         stats: TBL_STATS,
         meta: TBL_META,
         channel_data: TBL_CHANNEL_DATA,
-        playlist_history: TBL_PLAYLIST_HISTORY
+        playlist_history: TBL_PLAYLIST_HISTORY,
+        uploads: TBL_UPLOADS
     };
 
     var AsyncQueue = require("../asyncqueue");
