@@ -80,6 +80,7 @@ UploadModule.prototype.handleUpload = function (user, data) {
     
                 bucket.upload(params, function(err, res) {
                     if (err) {
+                        console.log(err);
                         user.socket.emit("errorMsg", {
                             msg: "Error uploading file. #2",
                             alert: true
