@@ -2522,6 +2522,20 @@ function formatUploadsList(first) {
             }
         });
     
+        var emote = $("<button/>")
+            .addClass("btn btn-xs btn-default")
+            .attr("title", "Create emote")
+            .appendTo(group);
+        $("<span/>").addClass("glyphicon glyphicon-user")
+            .appendTo(emote);
+        emote.click(function () {
+            $("#cs-emotes-newimage").val(f.url);
+            $("#cs-emotes-link").click();
+            setTimeout(function() {
+                $("#cs-emotes-newname").focus();
+            }, 5);
+        });
+    
         var open = $("<button/>")
             .addClass("btn btn-xs btn-default")
             .attr("title", "Open upload")
