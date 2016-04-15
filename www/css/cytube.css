@@ -778,6 +778,13 @@ textarea:focus, input:focus{
     right: 20px;
 }
 
+.thumbnail-channel-users .glyphicon {
+    font-size: 10px;
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 1px;
+}
+
 .thumbnail-channel-playing {
     font-size: 12px;
 }
