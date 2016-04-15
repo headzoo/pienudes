@@ -36,7 +36,7 @@ const DEFAULT_PERMISSIONS = {
     filterimport: 3,          // Import chat filter list
     emoteedit: 3,             // Control emotes
     emoteimport: 3,           // Import emote list
-    upload: 3,                // Upload channel image
+    upload: 2,                // Upload channel image
     playlistlock: 2,          // Lock/unlock the playlist
     leaderctl: 2,             // Give/take leader
     drink: 1.5,               // Use the /d command
