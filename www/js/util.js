@@ -886,6 +886,7 @@ function handleModPermissions() {
     $("#cs-allow_voteskip").prop("checked", CHANNEL.opts.allow_voteskip);
     $("#cs-voteskip_ratio").val(CHANNEL.opts.voteskip_ratio);
     $("#cs-thumbnail").val(CHANNEL.opts.thumbnail);
+    $("#cs-join_msg").val(CHANNEL.opts.join_msg);
     $("#cs-allow_dupes").prop("checked", CHANNEL.opts.allow_dupes);
     $("#cs-torbanned").prop("checked", CHANNEL.opts.torbanned);
     $("#cs-allow_ascii_control").prop("checked", CHANNEL.opts.allow_ascii_control);
@@ -1401,7 +1402,7 @@ function formatChatMessage(data, last) {
         };
     }
     // Phase 1: Determine whether to show the username or not
-    var skip = data.username === last.name;
+    var skip = data.username === last.name || data.username === "chmod";
     if(data.meta.addClass === "server-whisper")
         skip = true;
     // Prevent impersonation by abuse of the bold filter
@@ -1422,7 +1423,7 @@ function formatChatMessage(data, last) {
     }
 
     // Add timestamps (unless disabled)
-    if (USEROPTS.show_timestamps) {
+    if (USEROPTS.show_timestamps && data.username !== "chmod") {
         var time = $("<span/>").addClass("timestamp").appendTo(div);
         var timestamp = new Date(data.time).toTimeString().split(" ")[0];
         time.text("["+timestamp+"] ");
@@ -1471,12 +1472,15 @@ function formatChatMessage(data, last) {
 }
 
 function addChatMessage(data) {
-    if(IGNORED.indexOf(data.username) !== -1) {
-        return;
+    if (data.username != "chmod") {
+        if (IGNORED.indexOf(data.username) !== -1) {
+            return;
+        }
+        if (data.meta.shadow && !USEROPTS.show_shadowchat) {
+            return;
+        }
     }
-    if (data.meta.shadow && !USEROPTS.show_shadowchat) {
-        return;
-    }
+    
     var div = formatChatMessage(data, LASTCHAT);
     var msgBuf = $("#messagebuffer");
     // Incoming: a bunch of crap for the feature where if you hover over

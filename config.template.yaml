@@ -192,6 +192,7 @@ reserved-names:
   usernames:
     - '^(.*?[-_])?admin(istrator)?([-_].*)?$'
     - '^(.*?[-_])?owner([-_].*)?$'
+    - '^chmod$'
   channels:
     - '^(.*?[-_])?admin(istrator)?([-_].*)?$'
     - '^(.*?[-_])?owner([-_].*)?$'

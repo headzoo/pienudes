@@ -339,7 +339,7 @@ Channel.prototype.joinUser = function (user, data) {
             } else if (self.dead) {
                 return;
             }
-
+            
             self.checkModules("onUserPreJoin", [user, data], function (err, result) {
                 if (result === ChannelModule.PASSTHROUGH) {
                     if (user.account.channelRank !== user.account.globalRank) {
@@ -407,6 +407,15 @@ Channel.prototype.acceptUser = function (user) {
     this.sendUsercount(this.users);
     if (!this.is(Flags.C_REGISTERED)) {
         user.socket.emit("channelNotRegistered");
+    }
+    
+    var join_msg = self.modules.options.get("join_msg").trim();
+    if (join_msg.length != 0) {
+        user.socket.emit("chatMsg", {
+            msg: join_msg,
+            time: Date.now(),
+            username: "chmod"
+        });
     }
 };
 
