@@ -7861,6 +7861,13 @@ a.list-group-item-danger.active:hover {
 footer {
   background-color: #161a20 !important;
 }
+footer.homepage-footer {
+  background-color: #000 !important;
+  color: #FFF;
+}
+footer.homepage-footer .text-muted {
+  color: #C3C3C3;
+}
 
 input.form-control[type="text"],
 input.form-control[type="password"],
