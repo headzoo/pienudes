@@ -32,6 +32,7 @@ const DEFAULT_PERMISSIONS = {
     kick: 1.5,                // Kick other users
     ban: 2,                   // Ban other users
     motdedit: 3,              // Edit the MOTD
+    bioedit: 3,               // Edit the bio
     filteredit: 3,            // Control chat filters
     filterimport: 3,          // Import chat filter list
     emoteedit: 3,             // Control emotes
@@ -274,6 +275,10 @@ PermissionsModule.prototype.canBan = function (actor) {
 
 PermissionsModule.prototype.canEditMotd = function (actor) {
     return this.hasPermission(actor, "motdedit");
+};
+
+PermissionsModule.prototype.canEditBio = function (actor) {
+    return this.hasPermission(actor, "bioedit");
 };
 
 PermissionsModule.prototype.canEditFilters = function (actor) {

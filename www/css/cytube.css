@@ -405,6 +405,10 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
     margin-top: 10px;
 }
 
+#bio {
+    margin-top: 10px;
+}
+
 .option {
     margin-top: 5px;
     word-wrap: break-word;
@@ -444,11 +448,11 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
     font-family: Monospace;
 }
 
-#cs-csstext, #cs-jstext, #cs-motdtext {
+#cs-csstext, #cs-jstext, #cs-motdtext, #cs-biotext {
     font-family: Monospace;
 }
 
-#cs-csssubmit, #cs-motdsubmit, #cs-jssubmit {
+#cs-csssubmit, #cs-motdsubmit, #cs-jssubmit, #cs-biosubmit {
     margin-top: 10px;
 }
 

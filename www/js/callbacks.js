@@ -191,6 +191,17 @@ Callbacks = {
             $("#motdwrap").hide();
         }
     },
+    
+    setBio: function(bio) {
+        CHANNEL.bio = bio;
+        $("#cs-biotext").html(bio);
+        $("#bio").html(bio);
+        if (bio.length == 0) {
+            $("#biobtn").hide();
+        } else {
+            $("#biobtn").show();
+        }
+    },
 
     chatFilters: function(entries) {
         var tbl = $("#cs-chatfilters table");

@@ -246,6 +246,8 @@ $("#chatline").keydown(function(ev) {
 /* poll controls */
 $("#newpollbtn").click(showPollMenu);
 
+$("#biobtn").click(showBio);
+
 /* search controls */
 $("#library_search").click(function() {
     if (!hasPermission("seeplaylist")) {
@@ -642,6 +644,12 @@ $("#cs-chanlog-filter").change(filterChannelLog);
 $("#cs-motdsubmit").click(function () {
     socket.emit("setMotd", {
         motd: $("#cs-motdtext").val()
+    });
+});
+
+$("#cs-biosubmit").click(function () {
+    socket.emit("setBio", {
+        bio: $("#cs-biotext").val()
     });
 });
 

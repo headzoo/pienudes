@@ -13,11 +13,16 @@ const TYPE_SETMOTD = {
     motd: "string"
 };
 
+const TYPE_SETBIO = {
+    bio: "string"
+};
+
 function CustomizationModule(channel) {
     ChannelModule.apply(this, arguments);
-    this.css = "";
-    this.js = "";
+    this.css  = "";
+    this.js   = "";
     this.motd = "";
+    this.bio  = "";
 }
 
 CustomizationModule.prototype = Object.create(ChannelModule.prototype);
@@ -26,11 +31,12 @@ CustomizationModule.prototype.load = function (data) {
     if ("css" in data) {
         this.css = data.css;
     }
-
     if ("js" in data) {
         this.js = data.js;
     }
-
+    if ("bio" in data) {
+        this.bio = XSS.sanitizeHTML(data.bio);
+    }
     if ("motd" in data) {
         if (typeof data.motd === "object" && data.motd.motd) {
             // Old style MOTD, convert to new
@@ -45,9 +51,10 @@ CustomizationModule.prototype.load = function (data) {
 };
 
 CustomizationModule.prototype.save = function (data) {
-    data.css = this.css;
-    data.js = this.js;
+    data.css  = this.css;
+    data.js   = this.js;
     data.motd = this.motd;
+    data.bio  = this.bio;
 };
 
 CustomizationModule.prototype.setMotd = function (motd) {
@@ -55,12 +62,19 @@ CustomizationModule.prototype.setMotd = function (motd) {
     this.sendMotd(this.channel.users);
 };
 
+CustomizationModule.prototype.setBio = function (bio) {
+    this.bio = XSS.sanitizeHTML(bio);
+    this.sendBio(this.channel.users);
+};
+
 CustomizationModule.prototype.onUserPostJoin = function (user) {
     this.sendCSSJS([user]);
     this.sendMotd([user]);
+    this.sendBio([user]);
     user.socket.typecheckedOn("setChannelCSS", TYPE_SETCSS, this.handleSetCSS.bind(this, user));
     user.socket.typecheckedOn("setChannelJS", TYPE_SETJS, this.handleSetJS.bind(this, user));
     user.socket.typecheckedOn("setMotd", TYPE_SETMOTD, this.handleSetMotd.bind(this, user));
+    user.socket.typecheckedOn("setBio", TYPE_SETBIO, this.handleSetBio.bind(this, user));
 };
 
 CustomizationModule.prototype.sendCSSJS = function (users) {
@@ -80,6 +94,13 @@ CustomizationModule.prototype.sendMotd = function (users) {
     });
 };
 
+CustomizationModule.prototype.sendBio = function (users) {
+    var data = this.bio;
+    users.forEach(function (u) {
+        u.socket.emit("setBio", data);
+    });
+};
+
 CustomizationModule.prototype.handleSetCSS = function (user, data) {
     if (!this.channel.modules.permissions.canSetCSS(user)) {
         user.kick("Attempted setChannelCSS as non-admin");
@@ -88,7 +109,6 @@ CustomizationModule.prototype.handleSetCSS = function (user, data) {
 
     this.css = data.css.substring(0, 20000);
     this.sendCSSJS(this.channel.users);
-
     this.channel.logger.log("[mod] " + user.getName() + " updated the channel CSS");
 };
 
@@ -100,7 +120,6 @@ CustomizationModule.prototype.handleSetJS = function (user, data) {
 
     this.js = data.js.substring(0, 20000);
     this.sendCSSJS(this.channel.users);
-
     this.channel.logger.log("[mod] " + user.getName() + " updated the channel JS");
 };
 
@@ -111,9 +130,19 @@ CustomizationModule.prototype.handleSetMotd = function (user, data) {
     }
 
     var motd = data.motd.substring(0, 20000);
-
     this.setMotd(motd);
     this.channel.logger.log("[mod] " + user.getName() + " updated the MOTD");
+};
+
+CustomizationModule.prototype.handleSetBio = function (user, data) {
+    if (!this.channel.modules.permissions.canEditBio(user)) {
+        user.kick("Attempted setBio with insufficient permission");
+        return;
+    }
+    
+    var bio = data.bio.substring(0, 20000);
+    this.setBio(bio);
+    this.channel.logger.log("[mod] " + user.getName() + " updated the BIO");
 };
 
 module.exports = CustomizationModule;

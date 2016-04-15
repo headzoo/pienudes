@@ -102,6 +102,9 @@
                                 <a href="#cs-emotes" id="cs-emotes-link" data-toggle="tab">Emotes</a>
                             </li>
                             <li>
+                                <a href="#cs-bioeditor" data-toggle="tab" tabindex="-1">Biography</a>
+                            </li>
+                            <li>
                                 <a href="#cs-motdeditor" data-toggle="tab" tabindex="-1">MOTD</a>
                             </li>
                             <li>
@@ -222,6 +225,18 @@
                         </p>
                         <textarea id="cs-motdtext" class="form-control" rows="10"></textarea>
                         <button id="cs-motdsubmit" class="btn btn-primary">Save</button>
+                    </div>
+
+                    <!-- Biography -->
+                    <div id="cs-bioeditor" class="tab-pane">
+                        <h4>Biography editor</h4>
+                        <p>
+                            The channel biography is shown when users click the <i>Information</i> button.
+                            It can be formatted using a subset of HTML. Tags which attempt to execute
+                            Javascript will be removed.
+                        </p>
+                        <textarea id="cs-biotext" class="form-control" rows="10"></textarea>
+                        <button id="cs-biosubmit" class="btn btn-primary">Save</button>
                     </div>
                     
                     <!-- CSS editor -->

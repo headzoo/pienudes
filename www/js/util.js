@@ -754,6 +754,15 @@ function applyOpts() {
     }
 }
 
+function showBio() {
+    var bio = $("#bio");
+    if (bio.is(":visible")) {
+        bio.hide();
+    } else {
+        bio.show();
+    }
+}
+
 function showPollMenu() {
     $("#pollwrap .poll-menu").remove();
     var menu = $("<div/>").addClass("well poll-menu")
@@ -1918,6 +1927,7 @@ function genPermissionsEditor() {
     makeOption("Kick users", "kick", modleader, CHANNEL.perms.kick+"");
     makeOption("Ban users", "ban", modplus, CHANNEL.perms.ban+"");
     makeOption("Edit MOTD", "motdedit", modplus, CHANNEL.perms.motdedit+"");
+    makeOption("Edit biography", "bioedit", modplus, CHANNEL.perms.bioedit+"");
     makeOption("Edit chat filters", "filteredit", modplus, CHANNEL.perms.filteredit+"");
     makeOption("Import chat filters", "filterimport", modplus, CHANNEL.perms.filterimport+"");
     makeOption("Edit chat emotes", "emoteedit", modplus, CHANNEL.perms.emoteedit+"");
