@@ -14,7 +14,7 @@ module.exports = {
         callback = callback || noop;
         
         db.query(
-            "SELECT * FROM `uploads` WHERE `channel` = ?",
+            "SELECT * FROM `uploads` WHERE `channel` = ? ORDER BY `id` DESC",
             [channel],
             callback
         );

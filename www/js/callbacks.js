@@ -1085,7 +1085,7 @@ Callbacks = {
             }
         });
         if (!found) {
-            entries.push(data);
+            entries.unshift(data);
         }
         
         tbl.data("entries", entries);
