@@ -43,7 +43,7 @@ module.exports = {
                 
                 playlists.fetchMostWatched(25, function(err, rows) {
                     template.send(res, 'home/index', {
-                        pageTitle: "Pienudes - Popular Music and Chat",
+                        pageTitle: "Pienudes - Music and Chat",
                         top_media: rows,
                         channels: channels
                     });
