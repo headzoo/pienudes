@@ -1,9 +1,3 @@
-Read before submitting an issue: https://github.com/calzoneman/sync/wiki/Reporting-an-Issue
-===========================================================================================
-
-calzoneman/sync
-===============
-
 About
 -----
 
@@ -31,14 +25,13 @@ Features
   - Vimeo
   - Dailymotion
   - Soundcloud
-  - Raw video/audio files (via JWPlayer)
+  - Raw video/audio files (via video.js)
 - Embedding of the following sources:
   - livestream.com
   - twitch.tv
   - justin.tv
   - ustream.tv
   - RTMP streams
-  - Icecast (via JWPlayer)
   - Custom `<iframe>` and `<object>` embeds
 - Channel customization
   - HTML Message of the Day
@@ -78,14 +71,8 @@ Features
 Installing
 ----------
 
-Installation instructions are available here: https://github.com/calzoneman/sync/wiki/Installing
+Installation instructions are available here: https://github.com/calzoneman/sync/wiki/CyTube-3.0-Installation-Guide
 
-Running
--------
-
-Start the server: `node index.js`
-You should now be able to connect via `yourhostname:port` where `port` is
-the port you defined in config.js
 
 Feedback
 --------
@@ -95,5 +82,4 @@ Please open a GitHub Issue.
 License
 -------
 
-Licensed under MIT
-See LICENSE for the full license text
+Licensed under MIT.  See LICENSE for the full license text.

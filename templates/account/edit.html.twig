@@ -1,0 +1,92 @@
+{% import "alerts.html.twig" as alerts %}
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
+        {% if not loggedIn %}
+            {{ alerts.danger("Authorization Required", "You must be logged in to view this page.") }}
+        {% else %}
+            {% if successMessage %}
+                {{ alerts.success('', successMessage) }}
+            {% elif errorMessage %}
+                {{ alerts.danger('', errorMessage) }}
+            {% endif %}
+            
+            <h3>Change Password</h3>
+            <form method="post" action="/account/edit" onsubmit="return validatePasswordChange()">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                <input type="hidden" name="action" value="change_password" />
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" name="name" value="{{ loginName }}" disabled />
+                </div>
+                <div class="form-group">
+                    <label for="oldpassword">Current Password</label>
+                    <input type="password" id="oldpassword" class="form-control" name="oldpassword" />
+                </div>
+                <div class="form-group">
+                    <label for="newpassword">New Password</label>
+                    <input type="password" id="newpassword" class="form-control" name="newpassword" />
+                </div>
+                <div class="form-group">
+                    <label for="newpassword_confirm">Confirm New Password</label>
+                    <input type="password" id="newpassword_confirm" class="form-control" name="newpassword_confirm" />
+                </div>
+                <button id="changepassbtn" class="btn btn-danger btn-block" type="submit">Change Password</button>
+            </form>
+            <hr />
+            
+            <form method="post" action="/account/edit" onsubmit="return submitEmail()">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                <input type="hidden" name="action" value="change_email" />
+                <div class="form-group">
+                    <label for="username2">Username</label>
+                    <input type="text" id="username2" class="form-control" name="name" value="{{ loginName }}" disabled />
+                </div>
+                <div class="form-group">
+                    <label for="password2">Password</label>
+                    <input type="password" id="password2" class="form-control" name="password" />
+                </div>
+                <div class="form-group">
+                    <label for="email">New Email</label>
+                    <input type="email" id="email" class="form-control" name="email" />
+                </div>
+                <button id="changeemailbtn" class="btn btn-danger btn-block" type="submit">Change Email</button>
+            </form>
+        {% endif %}
+    </div>
+    <script>
+        function validatePasswordChange() {
+            var pw = $("#newpassword").val();
+            var pwc = $("#newpassword_confirm").val();
+            $("#passwordempty").remove();
+            $("#passwordmismatch").remove();
+
+            if (pw === '') {
+                $("#newpassword").parent().addClass("has-error");
+                $("<p/>").addClass("text-danger")
+                        .attr("id", "passwordempty")
+                        .text("Password must not be empty")
+                        .insertAfter($("#newpassword"));
+                return false;
+            } else {
+                if (pw !== pwc) {
+                    $("#newpassword_confirm").parent().addClass("has-error");
+                    $("#newpassword").parent().addClass("has-error");
+                    $("<p/>").addClass("text-danger")
+                            .attr("id", "passwordmismatch")
+                            .text("Passwords do not match")
+                            .insertAfter($("#newpassword_confirm"));
+                    return false;
+                } else {
+                    $("#username").attr("disabled", false);
+                    return true;
+                }
+            }
+        }
+        
+        function submitEmail() {
+            $("#username2").attr("disabled", false);
+            return true;
+        }
+    </script>
+{% endblock %}

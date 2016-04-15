@@ -1,0 +1,380 @@
+{% macro lcheckbox(id, label) %}
+    <div class="form-group">
+        <label class="control-label col-sm-4" for="{{ id }}">{{ label }}</label>
+        <div class="col-sm-8">
+            <div class="checkbox">
+                <input type="checkbox" id="{{ id }}" />
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro rcheckbox(id, label) %}
+    <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-4">
+            <div class="checkbox">
+                <label for="{{ id }}">
+                    <input type="checkbox" id="{{ id }}" />
+                    {{ label }}
+                </label>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro textbox(id, label, placeholder) %}
+    <div class="form-group">
+        <label class="control-label col-sm-4" for="{{ id }}">{{ label }}</label>
+        <div class="col-sm-8">
+            {% if placeholder %}
+                <input class="form-control" id="{{ id }}" type="text" placeholder="{{ placeholder }}" />
+            {% else %}
+                <input class="form-control" id="{{ id }}" type="text" />
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro lcheckboxauto(id, label) %}
+    <div class="form-group">
+        <label class="control-label col-sm-4" for="{{ id }}">
+            {{ label }}
+            <div class="col-sm-8">
+                <div class="checkbox">
+                    <input class="cs-checkbox" type="checkbox" id="{{ id }}" />
+                </div>
+            </div>
+        </label>
+    </div>
+{% endmacro %}
+
+{% macro rcheckboxauto(id, label) %}
+    <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-4">
+            <div class="checkbox">
+                <label for="{{ id }}">
+                    <input class="cs-checkbox" type="checkbox" id="{{ id }}" />
+                    {{ label }}
+                </label>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro textboxauto(id, label, placeholder) %}
+    <div class="form-group">
+        <label class="control-label col-sm-4" for="{{ id }}">
+            {{ label }}
+        </label>
+        <div class="col-sm-8">
+            {% if placeholder %}
+                <input class="form-control cs-textbox" id="{{ id }}" type="text" placeholder="{{ placeholder }}" />
+            {% else %}
+                <input class="form-control cs-textbox" id="{{ id }}" type="text" />
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+<div id="channeloptions" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>Channel Settings</h4>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#cs-miscoptions" data-toggle="tab">General Settings</a>
+                    </li>
+                    <li>
+                        <a href="#cs-adminoptions" data-toggle="tab">Admin Settings</a>
+                    </li>
+                    <li>
+                        <a href="#cs-uploadoptions" data-toggle="tab">Uploads</a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="cs-edit-dd-toggle" href="#" data-toggle="dropdown">Edit <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#cs-chatfilters" data-toggle="tab" onclick="socket.emit('requestChatFilters')">Chat Filters</a>
+                            </li>
+                            <li>
+                                <a href="#cs-emotes" id="cs-emotes-link" data-toggle="tab">Emotes</a>
+                            </li>
+                            <li>
+                                <a href="#cs-motdeditor" data-toggle="tab" tabindex="-1">MOTD</a>
+                            </li>
+                            <li>
+                                <a href="#cs-csseditor" data-toggle="tab" tabindex="-1">CSS</a>
+                            </li>
+                            <li>
+                                <a href="#cs-jseditor" data-toggle="tab" tabindex="-1">Javascript</a>
+                            </li>
+                            <li>
+                                <a href="#cs-permedit" data-toggle="tab" tabindex="-1">Permissions</a>
+                            </li>
+                            <li>
+                                <a href="#cs-chanranks" data-toggle="tab" tabindex="-1" onclick="socket.emit('requestChannelRanks')">Moderators</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#cs-banlist" data-toggle="tab" tabindex="-1" onclick="socket.emit('requestBanlist')">Ban List</a>
+                    </li>
+                    <li>
+                        <a href="#cs-chanlog" data-toggle="tab" onclick="socket.emit('readChanLog')">Log</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                
+                    <!-- General Settings -->
+                    <div id="cs-miscoptions" class="tab-pane active">
+                        <h4>General Settings</h4>
+                        <form class="form-horizontal" action="javascript:void(0)">
+                            {{ rcheckboxauto("cs-allow_voteskip", "Allow voteskip") }}
+                            {{ rcheckboxauto("cs-allow_dupes", "Allow duplicate videos on the playlist") }}
+                            {{ textboxauto("cs-voteskip_ratio", "Voteskip ratio", "0.5") }}
+                            {{ textboxauto("cs-maxlength", "Max video length", "HH:MM:SS") }}
+                            {{ textboxauto("cs-afk_timeout", "Auto-AFK Delay", "0 (disabled)") }}
+                            {{ textboxauto("cs-thumbnail", "Thumbnail URL") }}
+                            {{ textboxauto("cs-join_msg", "Join Message") }}
+                            <div class="form-group">
+                                <div class="col-sm-offset-4"></div>
+                            </div>
+                        </form>
+                        
+                        <h4>Chat Settings</h4>
+                        <form class="form-horizontal" action="javascript:void(0)">
+                            {{ rcheckboxauto("cs-enable_link_regex", "Convert URLs in chat to links") }}
+                            {{ rcheckboxauto("cs-chat_antiflood", "Throttle chat") }}
+                            {{ textboxauto("cs-chat_antiflood_burst", "# of messages allowed before throttling") }}
+                            {{ textboxauto("cs-chat_antiflood_sustained", "# of messages (after burst) allowed per second") }}
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <span class="text-info">Changes are automatically saved.</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Admin Settings -->
+                    <div id="cs-adminoptions" class="tab-pane">
+                        <h4>Admin-Only Settings</h4>
+                        <form class="form-horizontal" action="javascript:void(0)">
+                            {{ textboxauto("cs-pagetitle", "Page title", "Pienudes - /r/" + channelName) }}
+                            {{ textboxauto("cs-password", "Password", "leave blank to disable") }}
+                            {{ textboxauto("cs-externalcss", "External CSS", "Stylesheet URL") }}
+                            {{ textboxauto("cs-externaljs", "External Javascript", "Script URL") }}
+                            {{ rcheckboxauto("cs-show_public", "List channel publicly") }}
+                            {{ rcheckboxauto("cs-torbanned", "Block connections from Tor") }}
+                            {{ rcheckboxauto("cs-allow_ascii_control", "Allow ASCII control characters (e.g. newlines)") }}
+                            {{ textboxauto("cs-playlist_max_per_user", "Maximum # of videos per user") }}
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <span class="text-info">Set to 0 for no limit</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <span class="text-info">Changes are automatically saved.</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Upload Settings -->
+                    <div id="cs-uploadoptions" class="tab-pane">
+                        <form class="form-horizontal" action="javascript:void(0)">
+                            <div class="form-group">
+                                <label class="control-label col-sm-4" for="cs-uploads-file">Select file</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" id="cs-uploads-file" type="file" accept="image/*" />
+                                    <p class="text-muted">
+                                        Select file to begin uploading. File types: jpg, gif, png.
+                                        <span id="cs-uploads-bytes-per-file">{{ bytes_per_file }}</span> max file size.
+                                    </p>
+                                </div>
+                                
+                            </div>
+                        </form>
+                        <table class="table table-striped table-condensed">
+                            <thead>
+                            <tr>
+                                <th>Actions</th>
+                                <th>Size</th>
+                                <th>URL</th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <p>
+                            <span id="cs-uploads-used">0</span> of <span id="cs-uploads-available">{{ bytes_per_channel }}</span> used.
+                        </p>
+                    </div>
+                    
+                    <!-- MOTD -->
+                    <div id="cs-motdeditor" class="tab-pane">
+                        <h4>MOTD editor</h4>
+                        <p>
+                            The MOTD can be formatted using a subset of HTML. Tags which attempt to execute
+                            Javascript will be removed.
+                        </p>
+                        <textarea id="cs-motdtext" class="form-control" rows="10"></textarea>
+                        <button id="cs-motdsubmit" class="btn btn-primary">Save</button>
+                    </div>
+                    
+                    <!-- CSS editor -->
+                    <div id="cs-csseditor" class="tab-pane">
+                        <h4>CSS editor</h4>
+                        <p>
+                            Maximum size 20KB.  If more space is required, use the External CSS option under General
+                            Settings to link to an externally hosted stylesheet.
+                        </p>
+                        <textarea id="cs-csstext" class="form-control" rows="10"></textarea>
+                        <button id="cs-csssubmit" class="btn btn-primary">Save</button>
+                    </div>
+                    
+                    <!-- Javascript editor -->
+                    <div id="cs-jseditor" class="tab-pane">
+                        <h4>Javascript editor</h4>
+                        <p>
+                            Maximum size 20KB.  If more space is required, use the External JS option under General
+                            Settings to link to an externally hosted stylesheet.
+                        </p>
+                        <textarea id="cs-jstext" class="form-control" rows="10"></textarea>
+                        <button id="cs-jssubmit" class="btn btn-primary">Save</button>
+                    </div>
+                    
+                    <!-- Ban list -->
+                    <div id="cs-banlist" class="tab-pane">
+                        <h4>Ban list</h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Unban</th>
+                                    <th>IP</th>
+                                    <th>Name</th>
+                                    <th>Banned by</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    
+                    <!-- Recent connections -->
+                    <div id="cs-recentjoins" class="tab-pane">
+                        <h4>Recent connections</h4>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Aliases</th>
+                                <th>Time</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    
+                    <!-- Moderator list -->
+                    <div id="cs-chanranks" class="tab-pane">
+                        <h4>Moderator List</h4>
+                        <form class="form-horizontal" action="javascript:void(0)">
+                            <div class="input-group">
+                                <input id="cs-chanranks-name" class="form-control" type="text" placeholder="Name" />
+                                <span class="input-group-btn">
+                                    <button id="cs-chanranks-mod" class="btn btn-success">+Mod</button>
+                                    <button id="cs-chanranks-adm" class="btn btn-info">+Admin</button>
+                                    <button id="cs-chanranks-owner" class="btn btn-info">+Owner</button>
+                                </span>
+                            </div>
+                        </form>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Rank</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    
+                    <!-- Chat filters -->
+                    <div id="cs-chatfilters" class="tab-pane">
+                        <h4>Chat Filters</h4>
+                        <form class="form-horizontal" action="javascript:void(0)">
+                            {{ textbox("cs-chatfilters-newname", "Filter name") }}
+                            {{ textbox("cs-chatfilters-newregex", "Filter regex") }}
+                            <div class="form-group">
+                                <label class="control-label col-sm-4" for="cs-chatfilters-newflags">Flags</label>
+                                <div class="col-sm-8">
+                                    <input id="cs-chatfilters-newflags" class="form-control cs-textbox" type="text" value="g" />
+                                </div>
+                            </div>
+                            {{ textbox("cs-chatfilters-newreplace", "Replacement") }}
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <button id="cs-chatfilters-newsubmit" class="btn btn-primary">Create Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Control</th>
+                                    <th>Name</th>
+                                    <th>Active</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        
+                        <button id="cs-chatfilters-export" class="btn btn-default">Export filter list</button>
+                        <button id="cs-chatfilters-import" class="btn btn-default">Import filter list</button>
+                        <textarea id="cs-chatfilters-exporttext" class="form-control" rows="5"></textarea>
+                    </div>
+                    
+                    <!-- Emotes -->
+                    <div id="cs-emotes" class="tab-pane">
+                        <h4>Emotes</h4>
+                        <form class="form-horizontal" action="javascript:void(0)">
+                            {{ textbox("cs-emotes-newname", "Emote name") }}
+                            {{ textbox("cs-emotes-newimage", "Emote image") }}
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <button id="cs-emotes-newsubmit" class="btn btn-primary">Create Emote</button>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Delete</th>
+                                    <th>Name</th>
+                                    <th>Image</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        
+                        <button id="cs-emotes-export" class="btn btn-default">Export emote list</button>
+                        <button id="cs-emotes-import" class="btn btn-default">Import emote list</button>
+                        <textarea id="cs-emotes-exportext" class="form-control" rows="5"></textarea>
+                    </div>
+                    
+                    <!-- Channel log -->
+                    <div id="cs-chanlog" class="tab-pane">
+                        <h4>Channel Log</h4>
+                        <strong>Filter Log:</strong>
+                        <select id="cs-chanlog-filter" class="form-control" multiple="multiple"></select>
+                        <pre id="cs-chanlog-text" style="margin-top: 12px;"></pre>
+                        <button id="cs-chanlog-refresh" class="btn btn-default">Refresh</button>
+                    </div>
+                    
+                    <!-- Permissions -->
+                    <div id="cs-permedit" class="tab-pane"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 *.swp
 cfg.json
+config.yaml
 chandump
 chanlogs
 *.log
@@ -7,3 +8,8 @@ node_modules
 *.crt
 *.cert
 *.key
+torlist
+www/cache
+google-drive-subtitles
+lib/
+.idea/

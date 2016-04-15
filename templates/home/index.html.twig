@@ -1,0 +1,76 @@
+{% extends "layout_home.html.twig" %}
+{% block content %}
+    <div class="col-lg-9 col-md-9">
+        <h3 style="color: #FFF;">Let's Get Nude!</h3>
+        <p>
+            We're fans of world pop music who can usually be found on this site and on reddit sharing our favorite
+            songs. K-Pop, J-Pop, C-Pop, Hip-Hop, R&B, Metal, EDM, and much more.
+        </p>
+        <p style="padding-top: 10px;">
+            <a href="https://twitter.com/pienudes" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @pienudes</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </p>
+        <h3 style="color: #FFF;">Channels</h3>
+        <p>
+            Channels are where we share music and chat. No registration required!
+        </p>
+        <div class="row">
+            {% for chan in channels %}
+                <div class="col-xs-3 col-md-4 thumbnail-channel">
+                    <a href="/r/{{ chan.name }}" class="thumbnail">
+                        <img src="{{ chan.thumbnail }}" alt="Thumbnail">
+                        <div class="thumbnail-channel-users">
+                            <span class="glyphicon glyphicon-user"></span>
+                            {{ chan.usercount }}
+                        </div>
+                        <div class="thumbnail-channel-title center">
+                            {{ chan.pagetitle|truncate(25) }}
+                        </div>
+                        <div class="thumbnail-channel-playing center">
+                            {{ chan.mediatitle|truncate(75) }}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div id="homepage-sidebar" class="col-lg-3 col-md-3">
+        <div class="sidebar-widget">
+            <h3>Enter Channel</h3>
+            <input id="channelname" class="form-control" type="text" placeholder="Channel Name" />
+            <p style="margin: 6px 0 0 0;">
+                New channels can be registered from the <a href="/account/channels">My Channels</a> page.
+            </p>
+        </div>
+
+        <div class="sidebar-widget">
+            <img src="https://s3.amazonaws.com/images.pienudes.com/sidebarimg.jpg" style="width: 100%;" />
+            <p style="margin: 6px 0 0 0;">
+                Join us on reddit at <a href="https://www.reddit.com/r/pienudes" target="_blank">/r/pienudes</a>.
+            </p>
+        </div>
+
+        <div class="sidebar-widget">
+            <h3>Notable Quotes</h3>
+            <ul class="sidebar-list">
+                <li>
+                    JacobDicky: if i wa s lockm smtih, hw eaxtaly wwpuld i make the ke to ouru heeat?
+                </li>
+            </ul>
+        </div>
+        
+        <div class="sidebar-widget">
+            <h3>Most Played</h3>
+            <ul class="sidebar-list">
+                {% for m in top_media %}
+                    <li>
+                        <a href="/r/{{ m.channel }}">
+                            {{ m.title|truncate(60) }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

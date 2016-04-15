@@ -1,0 +1,32 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="alert alert-danger">
+            <h1>Invalid Session</h1>
+            <p>
+                Your browser attempted to submit form data to <code>{{ path }}</code> with an invalid authentication
+                token. This may be because:
+            </p>
+            <ul>
+                <li>
+                    Your session has expired
+                </li>
+                <li>
+                    Your request was missing the authentication token
+                </li>
+                <li>
+                    A malicious user has attempted to tamper with your session
+                </li>
+                <li>
+                    Your browser does not support cookies, or they are not enabled
+                </li>
+            </ul>
+            <p>
+                If the problem persists, please contact an administrator.
+            </p>
+            {% if referer %}
+                <a href="{{ referer }}">Return to previous page</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

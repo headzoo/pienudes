@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% include "head.html.twig" %}
+    </head>
+    <body>
+        <div id="wrap">
+            {% include "nav/default.html.twig" %}
+            <section id="mainpage">
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
+            </section>
+        </div>
+        {% include "foot.html.twig" %}
+        <script src="/js/ga.js"></script>
+        <script src="/js/jquery-1.11.0.min.js"></script>
+        <!-- Must be included before jQuery-UI since jQuery-UI overrides jQuery.fn.button-->
+        <script src="/js/jquery-ui.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script>
+            $("#channelname").keydown(function (ev) {
+                if (ev.keyCode === 13) {
+                    location.href = "/r/" + $("#channelname").val();
+                }
+            });
+        </script>
+    </body>
+</html>
