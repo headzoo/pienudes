@@ -26,23 +26,23 @@ $("#togglemotd").click(function () {
 
 $("#modflair").click(function () {
     var m = $("#modflair");
-    if (m.hasClass("label-success")) {
+    if (m.hasClass("btn-success")) {
         USEROPTS.modhat = false;
-        m.removeClass("label-success");
+        m.removeClass("btn-success");
         if (SUPERADMIN) {
             USEROPTS.adminhat = true;
-            m.addClass("label-danger");
+            m.addClass("btn-danger");
         } else {
-            m.addClass("label-default");
+            m.addClass("btn-default");
         }
-    } else if (m.hasClass("label-danger")) {
+    } else if (m.hasClass("btn-danger")) {
         USEROPTS.adminhat = false;
-        m.removeClass("label-danger")
-            .addClass("label-default");
+        m.removeClass("btn-danger")
+            .addClass("btn-default");
     } else {
         USEROPTS.modhat = true;
-        m.removeClass("label-default")
-            .addClass("label-success");
+        m.removeClass("btn-default")
+            .addClass("btn-success");
     }
 });
 
