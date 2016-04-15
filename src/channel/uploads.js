@@ -52,6 +52,7 @@ UploadModule.prototype.handleUpload = function (user, data) {
     }
     
     var chname = this.channel.name;
+    var logger = this.channel.logger;
     db_uploads.fetchBytesUsedByChannel(chname, function(err, bytes) {
         if (err) {
             user.socket.emit("errorMsg", {
@@ -104,6 +105,7 @@ UploadModule.prototype.handleUpload = function (user, data) {
                                             url: Config.get("uploads.uploads_url") + params.Key,
                                             size: data.data.length
                                         });
+                                        logger.log("[upload] " + user.getName() + " uploaded file: '" + params.Key + "'");
                                     }
                                 });
                             }
@@ -127,6 +129,7 @@ UploadModule.prototype.handleRemove = function (user, data) {
         var d      = url.parse(data.url);
         var path   = d.path.replace(/^\//, "");;
         var chname = this.channel.name;
+        var logger = this.channel.logger;
         db_uploads.fetchByChannelAndPath(chname, path, function(err, rows) {
             if (err) {
                 user.socket.emit("errorMsg", {
@@ -164,6 +167,7 @@ UploadModule.prototype.handleRemove = function (user, data) {
                             user.socket.emit("removeUpload", {
                                 url: data.url
                             });
+                            logger.log("[upload] " + user.getName() + " removed file: '" + params.Key + "'");
                         }
                     });
                 }
