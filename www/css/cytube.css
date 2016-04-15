@@ -798,3 +798,8 @@ textarea:focus, input:focus{
     background: url(https://uploads.pienudes.com/lobby/background4.jpg) top center no-repeat;
     background-size: 100% 100%;
 }
+
+.homepage input.form-control[type="text"] {
+    background-color: #FFFFFF !important;
+    color: #171616;
+}
