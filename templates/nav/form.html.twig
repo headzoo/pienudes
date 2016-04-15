@@ -2,7 +2,7 @@
     <form id="logoutform" class="navbar-text pull-right" action="{{ loginDomain }}/logout" method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         <input type="hidden" name="dest" value="{{ loginDomain }}/" />
-        <span id="welcome">Welcome, {{ loginName }}</span>
+        <span id="welcome">{{ loginName }}</span>
         <span>&nbsp;·&nbsp;</span>
         <input id="logout" type="submit" value="Log out" class="navbar-link" />
     </form>
