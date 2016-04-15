@@ -3746,7 +3746,7 @@ tbody.collapse.in {
   list-style: none;
   font-size: 14px;
   text-align: left;
-  background-color: rgba(16, 78, 145, 0.83);
+  background-color: rgb(44, 80, 117);
   border: 1px solid #272b30;
   border: 1px solid rgba(0, 0, 0, .15);
   border-radius: 4px;
@@ -3782,7 +3782,7 @@ tbody.collapse.in {
 .dropdown-menu>li>a:hover {
   text-decoration: none;
   color: #fff;
-  background-color: rgba(16, 78, 145, 0.83);
+  background-color: #395F86;
 }
 
 .dropdown-menu>.active>a,
@@ -5016,7 +5016,7 @@ fieldset[disabled] .navbar-default .btn-link:hover {
 .navbar-inverse .navbar-nav>.open>a,
 .navbar-inverse .navbar-nav>.open>a:focus,
 .navbar-inverse .navbar-nav>.open>a:hover {
-  background-color: rgba(16, 78, 145, 0.83);
+  background-color: #2c5075;
   color: #fff
 }
 
@@ -7372,7 +7372,7 @@ button.close {
 }
 
 .navbar-nav>li>a:hover {
-  background-color: rgba(16, 78, 145, 0.83);
+  background-color: #2C5075;
   border-left-color: transparent
 }
 
