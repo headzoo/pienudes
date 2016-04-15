@@ -64,7 +64,11 @@
             <h3>Most Played</h3>
             <ul class="sidebar-list">
                 {% for m in top_media %}
-                    <li>{{ m.title|truncate(60) }}</li>
+                    <li>
+                        <a href="/r/{{ m.channel }}">
+                            {{ m.title|truncate(60) }}
+                        </a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
