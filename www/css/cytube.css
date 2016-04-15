@@ -336,10 +336,6 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
     background-color: #ddffdd;
 }
 
-.nick-hover {
-    background-color: #ffff99;
-}
-
 .timestamp {
     font-size: 8pt;
 }
