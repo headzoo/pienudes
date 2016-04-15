@@ -1,6 +1,7 @@
 var Logger = require("../logger");
 var ChannelModule = require("./module");
 var Flags = require("../flags");
+var XSS = require("../xss");
 var Account = require("../account");
 var util = require("../utilities");
 var fs = require("graceful-fs");
@@ -412,7 +413,7 @@ Channel.prototype.acceptUser = function (user) {
     var join_msg = self.modules.options.get("join_msg").trim();
     if (join_msg.length != 0) {
         user.socket.emit("chatMsg", {
-            msg: join_msg,
+            msg: XSS.sanitizeHTML(join_msg),
             time: Date.now(),
             username: "chmod"
         });
