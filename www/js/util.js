@@ -540,7 +540,7 @@ function addQueueButtons(li) {
             .appendTo(menu);
     }
     // Delete
-    if((hasPermission("playlistdelete")) || (Client.name === li.data("queueby"))) {
+    if((hasPermission("playlistdelete")) || (CLIENT.name === li.data("queueby"))) {
         $("<button/>").addClass("btn btn-xs btn-default qbtn-delete")
             .html("<span class='glyphicon glyphicon-trash'></span>Delete")
             .click(function() {
