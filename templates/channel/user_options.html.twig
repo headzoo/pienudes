@@ -147,6 +147,7 @@
                     <div id="us-chat" class="tab-pane">
                         <h4>Chat Preferences</h4>
                         <form class="form-horizontal" action="javascript:void(0)">
+                            {{ rcheckbox("us-chat-colors", "Show colors in chat") }}
                             {{ rcheckbox("us-chat-timestamp", "Show timestamps in chat") }}
                             {{ rcheckbox("us-sort-rank", "Sort userlist by rank") }}
                             {{ rcheckbox("us-sort-afk", "Sort AFKers to bottom") }}

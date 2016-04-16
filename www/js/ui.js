@@ -25,8 +25,6 @@ $("#togglemotd").click(function () {
 /* chatbox */
 
 $(function() {
-    $("#chatcolor").hide();
-    /*
     $("#chatcolor").spectrum({
         color: CHAT_LINE_COLOR,
         preferredFormat: "hex",
@@ -36,7 +34,6 @@ $(function() {
         CHAT_LINE_COLOR = $(this).val();
         window.localStorage.setItem("chat_line_color", CHAT_LINE_COLOR);
     });
-    */
 });
 
 
@@ -220,18 +217,11 @@ $("#chatline").keydown(function(ev) {
                 meta.modflair = CLIENT.rank;
                 msg = msg.substring(3);
             }
-            
-            if (msg[0] == "/") {
-                socket.emit("chatMsg", {
-                    msg: msg,
-                    meta: meta
-                });
-            } else {
-                socket.emit("chatMsg", {
-                    msg: msg,
-                    meta: meta
-                });
-            }
+            meta.color = CHAT_LINE_COLOR;
+            socket.emit("chatMsg", {
+                msg: msg,
+                meta: meta
+            });
 
             CHATHIST.push($("#chatline").val());
             CHATHISTIDX = CHATHIST.length;

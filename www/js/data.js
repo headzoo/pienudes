@@ -102,6 +102,7 @@ var USEROPTS = {
     layout               : getOrDefault("layout", "fluid"),
     synch                : getOrDefault("synch", true),
     hidevid              : getOrDefault("hidevid", false),
+    show_colors          : getOrDefault("show_colors", true),
     show_timestamps      : getOrDefault("show_timestamps", true),
     modhat               : getOrDefault("modhat", false),
     blink_title          : getOrDefault("blink_title", "onlyping"),

@@ -633,6 +633,7 @@ function showUserOptions() {
     $("#us-oldbtns").prop("checked", USEROPTS.qbtn_idontlikechange);
     $("#us-default-quality").val(USEROPTS.default_quality || "auto");
 
+    $("#us-chat-colors").prop("checked", USEROPTS.show_colors);
     $("#us-chat-timestamp").prop("checked", USEROPTS.show_timestamps);
     $("#us-sort-rank").prop("checked", USEROPTS.sort_rank);
     $("#us-sort-afk").prop("checked", USEROPTS.sort_afk);
@@ -667,6 +668,7 @@ function saveUserOptions() {
     USEROPTS.qbtn_idontlikechange = $("#us-oldbtns").prop("checked");
     USEROPTS.default_quality      = $("#us-default-quality").val();
 
+    USEROPTS.show_colors          = $("#us-chat-colors").prop("checked");
     USEROPTS.show_timestamps      = $("#us-chat-timestamp").prop("checked");
     USEROPTS.sort_rank            = $("#us-sort-rank").prop("checked");
     USEROPTS.sort_afk             = $("#us-sort-afk").prop("checked");
@@ -1412,6 +1414,10 @@ function formatChatMessage(data, last) {
             addClassToNameAndTimestamp: data.msgclass
         };
     }
+    if (!data.meta.color) {
+        data.meta.color = "#ffffff";
+    }
+    
     // Phase 1: Determine whether to show the username or not
     var skip = data.username === last.name || data.username === "chmod";
     if(data.meta.addClass === "server-whisper")
@@ -1466,6 +1472,9 @@ function formatChatMessage(data, last) {
 
     // Add the message itself
     var message = $("<span/>").appendTo(div);
+    if (USEROPTS.show_colors) {
+        message.css("color", data.meta.color);
+    }
     message[0].innerHTML = data.msg;
 
     // For /me the username is part of the message
@@ -1479,6 +1488,7 @@ function formatChatMessage(data, last) {
     if (data.meta.shadow) {
         div.addClass("chat-shadow");
     }
+    
     return div;
 }
 

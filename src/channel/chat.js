@@ -124,7 +124,7 @@ ChatModule.prototype.shadowMutedUsers = function () {
 ChatModule.prototype.handleChatMsg = function (user, data) {
     var self = this;
     counters.add("chat:incoming");
-
+    
     if (!this.channel || !this.channel.modules.permissions.canChat(user)) {
         return;
     }
@@ -147,7 +147,9 @@ ChatModule.prototype.handleChatMsg = function (user, data) {
         return;
     }
 
-    var meta = {};
+    var meta = {
+        color: data.meta.color || "#ffffff"
+    };
     data.meta = data.meta || {};
     if (user.account.effectiveRank >= 2) {
         if ("modflair" in data.meta && data.meta.modflair === user.account.effectiveRank) {
