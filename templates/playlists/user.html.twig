@@ -1,27 +1,27 @@
 {% extends "layout.html.twig" %}
 {% block content %}
     <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
-        <h3>Playlist History</h3>
+        <h3>{{ name }}'s Playlist</h3>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Queued By</th>
+                    <th style="width: 40%">Date</th>
                 </tr>
             </thead>
             <tbody>
-                {% for m in media %}
-                    <tr>
-                        <td>
-                            <a href="/r/{{ m.channel }}">
-                                {{ m.title }}
-                            </a>
-                        </td>
-                        <td>
-                            {{ m.user }}
-                        </td>
-                    </tr>
-                {% endfor %}
+            {% for m in media %}
+                <tr>
+                    <td>
+                        <a href="/r/{{ m.channel }}">
+                            {{ m.title }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
 
@@ -33,7 +33,7 @@
                     </li>
                 {% else %}
                     <li class="previous">
-                        <a href="/playlists/history/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                        <a href="/playlists/user/{{ name }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
                     </li>
                 {% endif %}
                 {% if page == pages %}
@@ -42,7 +42,7 @@
                     </li>
                 {% else %}
                     <li class="next">
-                        <a href="/playlists/history/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                        <a href="/playlists/user/{{ name }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
                     </li>
                 {% endif %}
             </ul>
