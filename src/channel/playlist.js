@@ -970,7 +970,7 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
             self.current = item;
             self.startPlayback();
         }
-        db_playlist.insertPlaylistHistory(media, self.channel.name, data.queueby);
+        db_playlist.insert(media, self.channel.name, data.queueby);
         
         if (cb) {
             cb();

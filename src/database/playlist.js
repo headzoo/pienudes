@@ -1,7 +1,7 @@
 "use strict";
 var db = require("../database");
 
-var blackHole = function () { };
+var noop = function () { };
 
 module.exports = {
     init: function () {
@@ -10,9 +10,9 @@ module.exports = {
     /**
      * Adds a video to the playlist history
      */
-    insertPlaylistHistory(media, channel, user, callback) {
+    insert(media, channel, user, callback) {
         if (typeof callback !== "function") {
-            callback = blackHole;
+            callback = noop;
         }
         
         db.query("INSERT INTO `playlist_history` (`uid`, `title`, `seconds`, `type`, `channel`, `user`, `time`) VALUES(?, ?, ?, ?, ?, ?, ?)",
@@ -30,13 +30,11 @@ module.exports = {
     /**
      * Returns rows from the playlist history
      */
-    fetchPlaylistHistory(limit, offset, callback) {
+    fetch(limit, offset, callback) {
+        callback = callback || noop;
+        
         limit  = limit || 20;
         offset = offset || 0;
-        if (typeof callback !== "function") {
-            callback = blackHole;
-        }
-        
         limit = parseInt(limit);
         offset = parseInt(offset);
         if (isNaN(limit)) {
@@ -48,6 +46,36 @@ module.exports = {
         
         var sql = "SELECT * FROM `playlist_history` ORDER BY `id` DESC LIMIT " + offset + ", " + limit;
         db.query(sql, [], callback);
+    },
+    
+    /**
+     * Returns rows matching the given user
+     */
+    fetchByUser(user, limit, offset, callback) {
+        callback = callback || noop;
+    
+        limit  = limit || 20;
+        offset = offset || 0;
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 20;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+    
+        var sql = "SELECT * FROM `playlist_history` WHERE `user` = ? ORDER BY `id` DESC LIMIT " + offset + ", " + limit;
+        db.query(sql, [user], callback);
+    },
+    
+    /**
+     * Returns the names of each user in the table
+     */
+    fetchDistinctUsers(callback) {
+        callback = callback || noop;
+        
+        db.query("SELECT `user`, COUNT(*) AS `cnt` FROM `playlist_history` GROUP BY `user` ORDER BY `cnt` DESC", callback);
     },
     
     /**
@@ -66,8 +94,18 @@ module.exports = {
     /**
      * Returns the number of rows in the playlist_history table
      */
-    countPlaylistHistory(callback) {
+    count(callback) {
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history`", [], function(err, rows) {
+            if (err) {
+                callback(err, []);
+                return;
+            }
+            callback(null, rows[0]["c"]);
+        });
+    },
+    
+    countByUser(user, callback) {
+        db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `user` = ?", [user], function(err, rows) {
             if (err) {
                 callback(err, []);
                 return;

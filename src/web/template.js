@@ -1,10 +1,16 @@
-var nunjucks  = require('nunjucks');
-var fs        = require("fs");
-var path      = require("path");
-var Config    = require("../config");
-var templates = path.join(__dirname, "..", "..", "templates");
+var nunjucks    = require('nunjucks');
+var dateFilter  = require('nunjucks-date-filter');
+var commaFilter = require('nunjucks-comma-filter');
+var fs          = require("fs");
+var path        = require("path");
+var Config      = require("../config");
+var templates   = path.join(__dirname, "..", "..", "templates");
 
-nunjucks.configure(templates, { autoescape: true });
+var env = new nunjucks.Environment(new nunjucks.FileSystemLoader(templates), {
+    autoescape: true
+});
+env.addFilter("date", dateFilter);
+env.addFilter("comma", commaFilter);
 
 /**
  * Merges locals with globals for template rendering
@@ -44,7 +50,7 @@ function send(res, view, locals) {
     locals.loggedIn  = locals.loggedIn || !!res.user;
     locals.loginName = locals.loginName || res.user ? res.user.name : false;
     var file = view + ".html.twig";
-    var html = nunjucks.render(file, merge(locals, res));
+    var html = env.render(file, merge(locals, res));
     res.send(html);
 }
 

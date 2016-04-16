@@ -1,0 +1,28 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+    <h3>User Playlists</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th style="width: 40%">Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in users %}
+            <tr>
+                <td>
+                    <a href="/playlists/user/{{ u.name }}">
+                        {{ u.name }}
+                    </a>
+                </td>
+                <td>
+                    {{ u.count|comma }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
