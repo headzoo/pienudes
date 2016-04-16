@@ -545,17 +545,15 @@ PlaylistModule.prototype.queueYouTubePlaylist = function (user, data) {
 PlaylistModule.prototype.handleDelete = function (user, data) {
     var self = this;
     var perms = this.channel.modules.permissions;
-	if (typeof data !== "number") {
-        return;
-    }
-	var plitem = this.items.find(data);
-    if ((!perms.canDeleteVideo(user)) || (user.getname() !== plitem.media.queueby)) {
+    if (!perms.canDeleteVideo(user)) {
         return;
     }
 
-    
+    if (typeof data !== "number") {
+        return;
+    }
 
-    
+    var plitem = this.items.find(data);
     self.channel.refCounter.ref("PlaylistModule::handleDelete");
     this.semaphore.queue(function (lock) {
         if (self._delete(data)) {
