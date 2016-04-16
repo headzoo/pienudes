@@ -457,6 +457,7 @@ function makeQueueEntry(item, addbtns) {
     li.data("uid", item.uid);
     li.data("media", video);
     li.data("temp", item.temp);
+	li.data("queueby", item.queueby);
     if(video.thumb) {
         $("<img/>").attr("src", video.thumb.url)
             .css("float", "left")
@@ -473,7 +474,8 @@ function makeQueueEntry(item, addbtns) {
     if(item.temp) {
         li.addClass("queue_temp");
     }
-
+	if (Client.name === item.queueby)
+		addbtns = true;
     if(addbtns)
         addQueueButtons(li);
     return li;
@@ -538,7 +540,7 @@ function addQueueButtons(li) {
             .appendTo(menu);
     }
     // Delete
-    if(hasPermission("playlistdelete")) {
+    if((hasPermission("playlistdelete")) || (Client.name === li.data("queueby"))) {
         $("<button/>").addClass("btn btn-xs btn-default qbtn-delete")
             .html("<span class='glyphicon glyphicon-trash'></span>Delete")
             .click(function() {
