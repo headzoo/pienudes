@@ -765,6 +765,7 @@ $("#cs-chatfilters-import").click(function () {
 });
 
 $("#cs-emotes-export").click(function () {
+    console.log(CHANNEL.emotes);
     var em = CHANNEL.emotes.map(function (f) {
         return {
             name: f.name,
