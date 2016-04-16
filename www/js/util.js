@@ -474,7 +474,7 @@ function makeQueueEntry(item, addbtns) {
     if(item.temp) {
         li.addClass("queue_temp");
     }
-	if (Client.name === item.queueby)
+	if (CLIENT.name === item.queueby) 
 		addbtns = true;
     if(addbtns)
         addQueueButtons(li);
