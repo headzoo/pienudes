@@ -481,6 +481,7 @@ function makeQueueEntry(item, addbtns) {
     return li;
 }
 
+
 function makeSearchEntry(video) {
     var li = $("<li/>");
     li.addClass("queue_entry");
