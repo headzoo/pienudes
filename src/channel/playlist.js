@@ -555,8 +555,6 @@ PlaylistModule.prototype.handleDelete = function (user, data) {
 		}
 	}
     
-
-    
     self.channel.refCounter.ref("PlaylistModule::handleDelete");
     this.semaphore.queue(function (lock) {
         if (self._delete(data)) {
