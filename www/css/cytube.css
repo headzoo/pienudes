@@ -803,3 +803,12 @@ textarea:focus, input:focus{
 #chatcolor, .sp-replacer {
     float: right;
 }
+
+.sp-replacer {
+    background: #34393D !important;
+    border: solid 1px #161A20 !important;
+}
+
+.sp-dd {
+    color: #fff;
+}
