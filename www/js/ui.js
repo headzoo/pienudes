@@ -735,7 +735,7 @@ $("#cs-chatfilters-export").click(function () {
             socket.listeners("chatFilters").indexOf(callback)
         );
 
-        $("#cs-chatfilters-exporttext").val(JSON.stringify(data));
+        $("#cs-chatfilters-exporttext").val(JSON.stringify(data, null, '\t'));
     };
 
     socket.on("chatFilters", callback);
@@ -765,14 +765,13 @@ $("#cs-chatfilters-import").click(function () {
 });
 
 $("#cs-emotes-export").click(function () {
-    console.log(CHANNEL.emotes);
     var em = CHANNEL.emotes.map(function (f) {
         return {
             name: f.name,
             image: f.image
         };
     });
-    $("#cs-emotes-exporttext").val(JSON.stringify(em));
+    $("#cs-emotes-exporttext").val(JSON.stringify(em, null, '\t'));
 });
 
 $("#cs-emotes-import").click(function () {
