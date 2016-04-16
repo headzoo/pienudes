@@ -116,6 +116,7 @@ var USEROPTS = {
     first_visit          : getOrDefault("first_visit", true),
     ignore_channelcss    : getOrDefault("ignore_channelcss", false),
     ignore_channeljs     : getOrDefault("ignore_channeljs", false),
+    hide_channelbg       : getOrDefault("hide_channelbg", false),
     sort_rank            : getOrDefault("sort_rank", true),
     sort_afk             : getOrDefault("sort_afk", false),
     default_quality      : getOrDefault("default_quality", "auto"),

@@ -281,7 +281,7 @@ Callbacks = {
         } else {
             $("#voteskip").attr("disabled", true);
         }
-        if (opts.background_url) {
+        if (opts.background_url && !USEROPTS.hide_channelbg) {
             var background_url_wrap = $("#wrap");
             background_url_wrap
                 .css("background-image", "url(" + opts.background_url + ")")

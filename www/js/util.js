@@ -626,6 +626,7 @@ function showUserOptions() {
     $("#us-layout").val(USEROPTS.layout);
     $("#us-no-channelcss").prop("checked", USEROPTS.ignore_channelcss);
     $("#us-no-channeljs").prop("checked", USEROPTS.ignore_channeljs);
+    $("#us-hide-channelbg").prop("checked", USEROPTS.hide_channelbg);
 
     $("#us-synch").prop("checked", USEROPTS.synch);
     $("#us-synch-accuracy").val(USEROPTS.sync_accuracy);
@@ -660,6 +661,7 @@ function saveUserOptions() {
     USEROPTS.layout               = $("#us-layout").val();
     USEROPTS.ignore_channelcss    = $("#us-no-channelcss").prop("checked");
     USEROPTS.ignore_channeljs     = $("#us-no-channeljs").prop("checked");
+    USEROPTS.hide_channelbg       = $("#us-hide-channelbg").prop("checked");
     USEROPTS.secure_connection    = $("#us-ssl").prop("checked");
 
     USEROPTS.synch                = $("#us-synch").prop("checked");
