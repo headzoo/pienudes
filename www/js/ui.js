@@ -635,6 +635,14 @@ $(".cs-textbox").keyup(function () {
     }, 1000);
 });
 
+$(".cs-select").change(function() {
+    var box = $(this);
+    var key = box.attr("id").replace("cs-", "");
+    var data = {};
+    data[key] = box.val();
+    socket.emit("setOptions", data);
+});
+
 $("#cs-chanlog-refresh").click(function () {
     socket.emit("readChanLog");
 });

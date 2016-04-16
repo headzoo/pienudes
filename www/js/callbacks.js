@@ -276,10 +276,16 @@ Callbacks = {
 
         CHANNEL.opts = opts;
 
-        if(opts.allow_voteskip)
+        if(opts.allow_voteskip) {
             $("#voteskip").attr("disabled", false);
-        else
+        } else {
             $("#voteskip").attr("disabled", true);
+        }
+        if (opts.background_url) {
+            $("#wrap")
+                .css("background-image", "url(" + opts.background_url + ")")
+                .css("background-repeat", opts.background_repeat);
+        }
         handlePermissionChange();
     },
 

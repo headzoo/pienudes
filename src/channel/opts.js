@@ -10,6 +10,8 @@ function OptionsModule(channel) {
         voteskip_ratio: 0.5,       // Ratio of skip votes:non-afk users needed to skip the video
         afk_timeout: 600,          // Number of seconds before a user is automatically marked afk
         thumbnail: "https://s3.amazonaws.com/images.pienudes.com/channel.jpg",// Channel thumbnail displayed on the home page
+        background_url: "",        // Channel background image
+        background_repeat: "no-repeat", // Background tiling
         join_msg: "",              // Message show to user when they join the channel.
         pagetitle: this.channel.name, // Title of the browser tab
         maxlength: 0,              // Maximum length (in seconds) of a video queued
@@ -153,6 +155,47 @@ OptionsModule.prototype.handleSetOptions = function (user, data) {
     
             this.opts.thumbnail = link;
         }
+    }
+    
+    if ("background_url" in data) {
+        var link = (""+data.background_url).substring(0, 255);
+        if (!link) {
+            this.opts.background_url = "";
+        } else {
+            try {
+                var d = url.parse(link);
+                if (!d.protocol || d.protocol != "https:") {
+                    throw "Channel background must start with https.";
+                } else if (!d.host) {
+                    throw "Channel background is missing host.";
+                } else if (!d.path.match(/\.(jpg|jpeg|gif|png)$/)) {
+                    throw "Channel background must be an image. Either jpg, gif, or png."
+                } else {
+                    link = d.href;
+                }
+            } catch (e) {
+                user.socket.emit("errorMsg", {
+                    msg: e,
+                    alert: true
+                });
+                return;
+            }
+            
+            this.opts.background_url = link;
+        }
+    }
+    
+    if ("background_repeat" in data) {
+        var repeat = "" + data.background_repeat.toLowerCase().trim();
+        if (repeat != "no-repeat" && repeat != "repeat" && repeat != "repeat-x" && repeat != "repeat-y") {
+            user.socket.emit("errorMsg", {
+                msg: "Invalid background repeat value.",
+                alert: true
+            });
+            return;
+        }
+        
+        this.opts.background_repeat = repeat;
     }
     
     if ("join_msg" in data) {

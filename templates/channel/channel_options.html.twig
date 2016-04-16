@@ -141,7 +141,6 @@
                             {{ textboxauto("cs-voteskip_ratio", "Voteskip ratio", "0.5") }}
                             {{ textboxauto("cs-maxlength", "Max video length", "HH:MM:SS") }}
                             {{ textboxauto("cs-afk_timeout", "Auto-AFK Delay", "0 (disabled)") }}
-                            {{ textboxauto("cs-thumbnail", "Thumbnail URL") }}
                             {{ textboxauto("cs-join_msg", "Join Message") }}
                             <div class="form-group">
                                 <div class="col-sm-offset-4"></div>
@@ -170,6 +169,19 @@
                             {{ textboxauto("cs-password", "Password", "leave blank to disable") }}
                             {{ textboxauto("cs-externalcss", "External CSS", "Stylesheet URL") }}
                             {{ textboxauto("cs-externaljs", "External Javascript", "Script URL") }}
+                            {{ textboxauto("cs-thumbnail", "Thumbnail URL") }}
+                            {{ textboxauto("cs-background_url", "Background URL") }}
+                            <div class="form-group">
+                                <label class="control-label col-sm-4" for="cs-background_repeat">Background Repeat</label>
+                                <div class="col-sm-8">
+                                    <select id="cs-background_repeat" class="form-control cs-select">
+                                        <option value="no-repeat">None</option>
+                                        <option value="repeat">Repeat</option>
+                                        <option value="repeat-x">Repeat X</option>
+                                        <option value="repeat-y">Repeat Y</option>
+                                    </select>
+                                </div>
+                            </div>
                             {{ rcheckboxauto("cs-show_public", "List channel publicly") }}
                             {{ rcheckboxauto("cs-torbanned", "Block connections from Tor") }}
                             {{ rcheckboxauto("cs-allow_ascii_control", "Allow ASCII control characters (e.g. newlines)") }}

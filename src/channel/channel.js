@@ -671,7 +671,9 @@ Channel.prototype.packInfo = function (isAdmin) {
         usercount: this.users.length,
         users: [],
         registered: this.is(Flags.C_REGISTERED),
-        thumbnail: this.modules.options.get("thumbnail")
+        thumbnail: this.modules.options.get("thumbnail"),
+        background_url: this.modules.options.get("background_url"),
+        background_repeat: this.modules.options.get("background_repeat")
     };
     
     for (var i = 0; i < this.users.length; i++) {

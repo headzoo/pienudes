@@ -7868,6 +7868,7 @@ footer.homepage-footer .text-muted {
 input.form-control[type="text"],
 input.form-control[type="password"],
 input.form-control[type="email"],
+select.form-control,
 textarea.form-control {
   background-color: #161a20 !important;
   color: #c8c8c8;
