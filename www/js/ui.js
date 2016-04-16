@@ -24,6 +24,19 @@ $("#togglemotd").click(function () {
 
 /* chatbox */
 
+$(function() {
+    $("#chatcolor").spectrum({
+        color: CHAT_LINE_COLOR,
+        preferredFormat: "hex",
+        showInput: true,
+        clickoutFiresChange: true
+    }).on("change", function() {
+        CHAT_LINE_COLOR = $(this).val();
+        window.localStorage.setItem("chat_line_color", CHAT_LINE_COLOR);
+    });
+});
+
+
 $("#modflair").click(function () {
     var m = $("#modflair");
     if (m.hasClass("btn-success")) {
@@ -206,7 +219,7 @@ $("#chatline").keydown(function(ev) {
             }
 
             socket.emit("chatMsg", {
-                msg: msg,
+                msg: CHAT_LINE_COLOR + " " + msg,
                 meta: meta
             });
             CHATHIST.push($("#chatline").val());

@@ -66,6 +66,8 @@ var PL_WAIT_SCROLL = false;
 var FILTER_FROM = 0;
 var FILTER_TO = 0;
 var NO_STORAGE = typeof localStorage == "undefined" || localStorage === null;
+var CHAT_LINE_COLOR = window.localStorage.getItem("chat_line_color") || "#ffffff";
+
 
 function getOpt(k) {
     var v = NO_STORAGE ? readCookie(k) : localStorage.getItem(k);

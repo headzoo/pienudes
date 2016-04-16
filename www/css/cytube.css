@@ -799,3 +799,7 @@ textarea:focus, input:focus{
     background-color: #FFFFFF !important;
     color: #171616;
 }
+
+#chatcolor, .sp-replacer {
+    float: right;
+}
