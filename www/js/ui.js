@@ -217,11 +217,19 @@ $("#chatline").keydown(function(ev) {
                 meta.modflair = CLIENT.rank;
                 msg = msg.substring(3);
             }
+            
+            if (msg[0] == "/") {
+                socket.emit("chatMsg", {
+                    msg: msg,
+                    meta: meta
+                });
+            } else {
+                socket.emit("chatMsg", {
+                    msg: CHAT_LINE_COLOR + " " + msg,
+                    meta: meta
+                });
+            }
 
-            socket.emit("chatMsg", {
-                msg: CHAT_LINE_COLOR + " " + msg,
-                meta: meta
-            });
             CHATHIST.push($("#chatline").val());
             CHATHISTIDX = CHATHIST.length;
             $("#chatline").val("");
