@@ -225,7 +225,7 @@ $("#chatline").keydown(function(ev) {
                 });
             } else {
                 socket.emit("chatMsg", {
-                    msg: CHAT_LINE_COLOR + " " + msg,
+                    msg: msg,
                     meta: meta
                 });
             }
