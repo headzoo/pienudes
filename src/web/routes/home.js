@@ -23,6 +23,12 @@ function handleHelp(req, res) {
     });
 }
 
+function handleAbout(req, res) {
+    template.send(res, 'home/about', {
+        pageTitle: "About Us"
+    });
+}
+
 module.exports = {
     /**
      * Initializes auth callbacks
@@ -31,6 +37,7 @@ module.exports = {
         app.get('/terms', handleUserAgreement);
         app.get('/privacy', handlePrivacyPolicy);
         app.get('/help', handleHelp);
+        app.get('/about', handleAbout);
         app.get('/', (req, res) => {
             channelIndex.listPublicChannels().then((channels) => {
                 channels.sort((a, b) => {
