@@ -130,7 +130,7 @@ ChatModule.prototype.handleChatMsg = function (user, data) {
     }
 
     // Limit to 240 characters
-    data.msg = data.msg.substring(0, 240);
+    data.msg = data.msg.substring(0, 500);
     // If channel doesn't permit them, strip ASCII control characters
     if (!this.channel.modules.options ||
         !this.channel.modules.options.get("allow_ascii_control")) {
