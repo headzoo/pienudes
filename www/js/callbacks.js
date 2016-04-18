@@ -21,20 +21,22 @@ Callbacks = {
             });
         }
 
-        $("<div/>").addClass("server-msg-reconnect")
-            .text("Connected")
-            .appendTo($("#messagebuffer"));
-        scrollChat();
+        //$("<div/>").addClass("server-msg-reconnect")
+        //    .text("Connected")
+        //    .appendTo($("#messagebuffer"));
+        //scrollChat();
     },
 
     disconnect: function() {
-        if(KICKED)
-            return;
-        $("<div/>")
-            .addClass("server-msg-disconnect")
-            .text("Disconnected from server.  Attempting reconnection...")
-            .appendTo($("#messagebuffer"));
-        scrollChat();
+        //if(KICKED) {
+        //    return;
+        //}
+        
+        //$("<div/>")
+        //    .addClass("server-msg-disconnect")
+        //    .text("Disconnected from server.  Attempting reconnection...")
+        //    .appendTo($("#messagebuffer"));
+        //scrollChat();
     },
 
     errorMsg: function(data) {
