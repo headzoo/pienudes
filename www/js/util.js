@@ -1476,9 +1476,14 @@ function formatChatMessage(data, last) {
 
     // Add the message itself
     var message = $("<span/>").appendTo(div);
+    data.msg = data.msg.replace('[br]', '<br />');
     if (USEROPTS.show_colors) {
         message.css("color", data.meta.color);
+        data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
+    } else {
+        data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
     }
+    
     message[0].innerHTML = data.msg;
 
     // For /me the username is part of the message
