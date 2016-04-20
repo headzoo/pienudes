@@ -756,7 +756,7 @@ textarea:focus, input:focus{
 }
 
 .thumbnail-channel img {
-    width: 245px !important;
+    width: 100% !important;
     height: 245px !important;
     margin-bottom: 4px;
 }
