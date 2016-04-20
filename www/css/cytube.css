@@ -389,7 +389,7 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
 }
 
 #guestlogin .input-group-addon {
-    min-width: 120px;
+    min-width: 155px;
 }
 
 #channeloptions .modal-header {
