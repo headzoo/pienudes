@@ -756,7 +756,7 @@ textarea:focus, input:focus{
 }
 
 .thumbnail-channel img {
-    width: 245px !important;
+    width: 100% !important;
     height: 245px !important;
     margin-bottom: 4px;
 }
@@ -797,6 +797,10 @@ textarea:focus, input:focus{
 .homepage input.form-control[type="text"] {
     background-color: #FFFFFF !important;
     color: #171616;
+}
+
+.chatbuttons {
+    margin-top: 2px;
 }
 
 #chatcolor, .sp-replacer {

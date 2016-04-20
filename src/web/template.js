@@ -20,6 +20,7 @@ function merge(locals, res) {
         siteTitle:       Config.get("html-template.title"),
         siteDescription: Config.get("html-template.description"),
         siteAuthor:      "",
+        cacheBuster:     guid(),
         csrfToken:       typeof res.req.csrfToken === 'function' ? res.req.csrfToken() : '',
         baseUrl:         getBaseUrl(res),
         loginDomain:     Config.get("https.enabled") ? Config.get("https.full-address")
@@ -52,6 +53,15 @@ function send(res, view, locals) {
     var file = view + ".html.twig";
     var html = env.render(file, merge(locals, res));
     res.send(html);
+}
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4();
 }
 
 module.exports = {
