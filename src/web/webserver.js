@@ -16,7 +16,7 @@ import counters from "../counters";
 
 function initializeLog(app) {
     const logFormat = ':real-address - :remote-user [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
-    const logPath = path.join(__dirname, '..', '..', 'http.log');
+    const logPath = path.join(Config.get("logs.directory"), 'http.log');
     const outputStream = fs.createWriteStream(logPath, {
         flags: 'a', // append to existing file
         encoding: 'utf8'

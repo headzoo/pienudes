@@ -1,6 +1,7 @@
 var Logger = require('./logger');
+var Config = require('./config');
 var path = require('path');
-var counterLog = new Logger.Logger(path.resolve(__dirname, '..', 'counters.log'));
+var counterLog = new Logger.Logger(path.resolve(Config.get("logs.directory"), 'counters.log'));
 import os from 'os';
 import io from 'socket.io';
 import Socket from 'socket.io/lib/socket';
