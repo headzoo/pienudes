@@ -799,6 +799,10 @@ textarea:focus, input:focus{
     color: #171616;
 }
 
+.chatbuttons {
+    margin-top: 2px;
+}
+
 #chatcolor, .sp-replacer {
     float: right;
 }

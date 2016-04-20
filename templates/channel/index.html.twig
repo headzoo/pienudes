@@ -35,24 +35,22 @@
                             <span class="input-group-addon">Guest Login</span>
                             <input id="guestname" class="form-control" type="text" placeholder="Name" />
                         </div>
+                        <div class="chatbuttons">
+                            <div class="btn-group">
+                                <button id="modflair" class="btn btn-sm btn-default">Name Color</button>
+                                <button id="biobtn" class="btn btn-sm btn-default">Information</button>
+                                <button id="newpollbtn" class="btn btn-sm btn-default">New Poll</button>
+                                <button id="emotelistbtn" class="btn btn-sm btn-default">Emote List</button>
+                            </div>
+                            <input id="chatcolor" type="color" />
+                        </div>
                     </div>
                     <div id="videowrap" class="col-lg-5 col-md-5">
                         <p id="currenttitle">Nothing Playing</p>
                         <div class="embed-responsive embed-responsive-16by9">
                             <div id="ytapiplayer" class="embed-responsive-item"></div>
                         </div>
-                    </div>
-                </div>
-                <div id="controlsrow" class="row">
-                    <div id="leftcontrols" class="col-lg-7 col-md-7">
-                        <button id="modflair" class="btn btn-sm btn-default">Name Color</button>
-                        <button id="biobtn" class="btn btn-sm btn-default">Information</button>
-                        <button id="newpollbtn" class="btn btn-sm btn-default">New Poll</button>
-                        <button id="emotelistbtn" class="btn btn-sm btn-default">Emote List</button>
-                        <input id="chatcolor" type="color" />
-                    </div>
-                    <div id="rightcontrols" class="col-lg-5 col-md-5">
-                        <div id="plcontrol" class="btn-group">
+                        <div id="plcontrol" class="btn-group chatbuttons">
                             <button id="showsearch" class="btn btn-sm btn-default" title="Search for a video" data-toggle="collapse" data-target="#searchcontrol">
                                 <span class="glyphicon glyphicon-search"></span>
                             </button>
