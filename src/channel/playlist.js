@@ -443,6 +443,8 @@ PlaylistModule.prototype.handleQueue = function (user, data) {
     } else {
         this.queueStandard(user, data);
     }
+    
+    user.setAFK(false);
 };
 
 PlaylistModule.prototype.queueStandard = function (user, data) {
