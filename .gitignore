@@ -3,7 +3,6 @@ cfg.json
 config.yaml
 chandump
 chanlogs
-*.log
 node_modules
 *.crt
 *.cert

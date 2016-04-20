@@ -3882,6 +3882,10 @@ tbody.collapse.in {
   vertical-align: middle
 }
 
+#videocontrols {
+  margin-top: 2px;
+}
+
 .btn-group-vertical>.btn,
 .btn-group>.btn {
   position: relative;
