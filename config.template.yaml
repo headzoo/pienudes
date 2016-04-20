@@ -9,6 +9,11 @@ mysql:
   database: 'cytube3'
   user: 'cytube3'
   password: ''
+  
+# Log related settings.
+logs:
+  # Directory where logs will be written.
+  directory: /var/log/pienudes
 
 # Define IPs/ports to listen on
 # Each entry MUST define ip and port (ip can be '' to bind all available addresses)

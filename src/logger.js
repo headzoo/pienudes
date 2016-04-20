@@ -1,5 +1,6 @@
 var fs = require("graceful-fs");
 var path = require("path");
+var Config = require('./config');
 
 function getTimeString() {
     var d = new Date();
@@ -51,9 +52,9 @@ function makeConsoleLogger(filename) {
     return log;
 }
 
-var errlog = makeConsoleLogger(path.join(__dirname, "..", "error.log"));
-var syslog = makeConsoleLogger(path.join(__dirname, "..", "sys.log"));
-var eventlog = makeConsoleLogger(path.join(__dirname, "..", "events.log"));
+var errlog = makeConsoleLogger(path.join(Config.get("logs.directory"), "error.log"));
+var syslog = makeConsoleLogger(path.join(Config.get("logs.directory"), "sys.log"));
+var eventlog = makeConsoleLogger(path.join(Config.get("logs.directory"), "events.log"));
 
 exports.Logger = Logger;
 exports.errlog = errlog;

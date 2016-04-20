@@ -81,7 +81,7 @@ function handleReadErrlog(req, res) {
  * Handles a request to read the http log
  */
 function handleReadHttplog(req, res) {
-    readLog(res, path.join(__dirname, "..", "..", "http.log"), 1048576);
+    readLog(res, path.join(Config.get("logs.directory"), "http.log"), 1048576);
 }
 
 /**

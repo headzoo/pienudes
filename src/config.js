@@ -11,7 +11,10 @@ var defaults = {
         port: 3306,
         database: "cytube3",
         user: "cytube3",
-        password: "",
+        password: ""
+    },
+    logs: {
+        directory: "/var/log/pienudes"
     },
     listen: [
         {
