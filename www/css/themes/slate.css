@@ -7933,7 +7933,7 @@ textarea.form-control {
 }
 #chatline, #guestname {
   background-color: #161A20 !important;
-  color: #FFF;
+  color: #c8c8c8;
 }
 
 .queue_entry {
