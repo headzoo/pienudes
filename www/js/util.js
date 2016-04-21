@@ -472,7 +472,7 @@ function makeQueueEntry(item, addbtns) {
     if (item.queueby) {
         if (item.queueby[0] == "@") {
             item.queueby = item.queueby.substring(1);
-            time.html("<span class='glyphicon glyphicon-link requeue-icon'></span> " + item.queueby + " &middot; " + video.duration);
+            time.html("<span class='glyphicon glyphicon-transfer requeue-icon' title='RNGmod'></span> " + item.queueby + " &middot; " + video.duration);
         } else {
             time.html(item.queueby + " &middot; " + video.duration);
         }

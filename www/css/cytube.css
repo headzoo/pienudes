@@ -818,4 +818,5 @@ textarea:focus, input:focus{
 
 .requeue-icon {
     font-size: 10px;
+    vertical-align: middle;
 }
