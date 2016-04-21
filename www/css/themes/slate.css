@@ -7931,6 +7931,10 @@ textarea.form-control {
   border-left: 1px solid #494949;
   background-color: #161A20;
 }
+#chatline {
+  background-color: #161A20 !important;
+  color: #FFF;
+}
 
 .queue_entry {
   border-color: #4A4949;
