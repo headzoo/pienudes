@@ -7883,7 +7883,7 @@ input.form-control[type="password"],
 input.form-control[type="email"],
 select.form-control,
 textarea.form-control {
-  background-color: #FFF !important;
+  background-color: #FFF;
   color: #2D2D2D;
 }
 
@@ -7931,8 +7931,9 @@ textarea.form-control {
   border-left: 1px solid #494949;
   background-color: #161A20;
 }
+
 #chatline, #guestname {
-  background-color: #161A20 !important;
+  background-color: #161A20;
   color: #c8c8c8;
 }
 
