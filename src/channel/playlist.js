@@ -970,8 +970,9 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
             self.current = item;
             self.startPlayback();
         }
-        db_playlist.insert(media, self.channel.name, data.queueby);
-        
+        if (data.queueby[0] != "@") {
+            db_playlist.insert(media, self.channel.name, data.queueby);
+        }
         if (cb) {
             cb();
         }
