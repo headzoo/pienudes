@@ -25,15 +25,20 @@ $("#togglemotd").click(function () {
 /* chatbox */
 
 $(function() {
-    $("#chatcolor").spectrum({
-        color: CHAT_LINE_COLOR,
-        preferredFormat: "hex",
-        showInput: true,
-        clickoutFiresChange: true
-    }).on("change", function() {
-        CHAT_LINE_COLOR = $(this).val();
-        window.localStorage.setItem("chat_line_color", CHAT_LINE_COLOR);
-    });
+    if (USEROPTS.show_colors) {
+        $("#chatcolor").spectrum({
+            color: CHAT_LINE_COLOR,
+            preferredFormat: "hex",
+            showInput: true,
+            clickoutFiresChange: true
+        }).on("change", function () {
+            CHAT_LINE_COLOR = $(this).val();
+            window.localStorage.setItem("chat_line_color", CHAT_LINE_COLOR);
+        });
+        $("#chatline").css("color", CHAT_LINE_COLOR);
+    } else {
+        $("#chatcolor").hide();
+    }
 });
 
 

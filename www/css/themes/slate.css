@@ -7931,7 +7931,7 @@ textarea.form-control {
   border-left: 1px solid #494949;
   background-color: #161A20;
 }
-#chatline {
+#chatline, #guestname {
   background-color: #161A20 !important;
   color: #FFF;
 }

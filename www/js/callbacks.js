@@ -125,7 +125,6 @@ Callbacks = {
 
     cooldown: function (time) {
         time = time + 200;
-        $("#chatline").css("color", "#ff0000");
         $(".pm-input").css("color", "#ff0000");
         if (CHATTHROTTLE && $("#chatline").data("throttle_timer")) {
             clearTimeout($("#chatline").data("throttle_timer"));
@@ -133,7 +132,6 @@ Callbacks = {
         CHATTHROTTLE = true;
         $("#chatline").data("throttle_timer", setTimeout(function () {
             CHATTHROTTLE = false;
-            $("#chatline").css("color", "");
             $(".pm-input").css("color", "");
         }, time));
     },
