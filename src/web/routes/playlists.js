@@ -22,6 +22,12 @@ function handleHistory(req, res) {
         var offset = (page - 1) * limit;
         
         db_playlists.fetch(limit, offset, function(err, rows) {
+            rows.forEach(function(row) {
+                if (row.user[0] == "@") {
+                    row.user = row.user.substring(1);
+                }
+            });
+            
             template.send(res, 'playlists/history', {
                 pageTitle: "Playlist History",
                 media: rows,

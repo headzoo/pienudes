@@ -14,6 +14,9 @@ module.exports = {
         if (typeof callback !== "function") {
             callback = noop;
         }
+        if (user[0] == "@") {
+            user = user.substring(1);
+        }
         
         db.query("INSERT INTO `playlist_history` (`uid`, `title`, `seconds`, `type`, `channel`, `user`, `time`) VALUES(?, ?, ?, ?, ?, ?, ?)",
             [media.id, media.title, media.seconds, media.type, channel, user, Date.now()],
