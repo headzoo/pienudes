@@ -815,3 +815,7 @@ textarea:focus, input:focus{
 .sp-dd {
     color: #fff;
 }
+
+.requeue-icon {
+    font-size: 10px;
+}

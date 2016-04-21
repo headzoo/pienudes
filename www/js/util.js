@@ -469,8 +469,13 @@ function makeQueueEntry(item, addbtns) {
         .attr("href", formatURL(video))
         .attr("target", "_blank");
     var time = $("<span/>").addClass("qe_time").appendTo(li);
-    if (item.queueby && item.queueby != "chmod") {
-        time.html(item.queueby + " &middot; " + video.duration);
+    if (item.queueby) {
+        if (item.queueby[0] == "@") {
+            item.queueby = item.queueby.substring(1);
+            time.html("<span class='glyphicon glyphicon-link requeue-icon'></span> " + item.queueby + " &middot; " + video.duration);
+        } else {
+            time.html(item.queueby + " &middot; " + video.duration);
+        }
     } else {
         time.html(video.duration);
     }

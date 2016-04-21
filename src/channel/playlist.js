@@ -1003,7 +1003,7 @@ PlaylistModule.prototype._addRandom = function() {
             var media = new Media(row.uid, row.title, row.seconds, row.type, {});
             var qdata = {
                 temp: true,
-                queueby: "chmod",
+                queueby: "@" + row.user,
                 maxlength: row.seconds,
                 pos: 0
             };
