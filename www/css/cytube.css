@@ -794,7 +794,7 @@ textarea:focus, input:focus{
     background-size: 100% 100%;
 }
 
-.homepage input.form-control[type="text"] {
+.homepage input.form-control[type="text"], .homepage input.form-control[type="password"] {
     background-color: #FFFFFF !important;
     color: #171616;
 }

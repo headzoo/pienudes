@@ -1,29 +1,23 @@
 {% if loggedIn %}
-    <form id="logoutform" class="navbar-text pull-right" action="{{ loginDomain }}/logout" method="post">
+    <form id="logoutform" class="navbar-form navbar-right" action="{{ loginDomain }}/logout" method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         <input type="hidden" name="dest" value="{{ loginDomain }}/" />
         <span id="welcome">{{ loginName }}</span>
         <span>&nbsp;·&nbsp;</span>
-        <input id="logout" type="submit" value="Log out" class="navbar-link" />
+        <button id="logout" class="btn btn-default navbar-link" type="submit">Log out</button>
     </form>
 {% else %}
     <form id="loginForm" class="navbar-form navbar-right" action="{{ loginDomain }}/login" method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         <input type="hidden" name="dest" value="{{ loginDomain }}/" />
+        <input type="hidden" name="remember" value="1" />
         <div class="form-group">
             <input class="form-control" type="text" name="name" placeholder="Username" />
         </div>
         <div class="form-group">
             <input class="form-control" type="password" name="password" placeholder="Password" />
         </div>
-        <div class="form-group">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="remember" />
-                    <span class="navbar-text-nofloat">Remember Me</span>
-                </label>
-            </div>
-        </div>
-        <button id="login" class="btn btn-default" type="submit">Login</button>
+        <button id="login" class="btn btn-default navbar-link" type="submit">Login</button>
+        <button id="register-button" class="btn btn-default navbar-link" onclick="document.location = '/register'; return false;">Register</button>
     </form>
 {% endif %}
