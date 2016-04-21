@@ -92,6 +92,25 @@ module.exports = {
     },
     
     /**
+     * Returns a random row from the table
+     */
+    fetchRandomByChannel(channel, callback) {
+        callback = callback || noop;
+        
+        var sql = "SELECT * FROM playlist_history WHERE `channel` = ? ORDER BY RAND() LIMIT 1";
+        db.query(sql, [channel], function(err, rows) {
+            if (err) {
+                return callback(err, null);
+            }
+            if (rows.length > 0) {
+                callback(err, rows[0]);
+            } else {
+                callback(null, null);
+            }
+        });
+    },
+    
+    /**
      * Returns the number of rows in the playlist_history table
      */
     count(callback) {

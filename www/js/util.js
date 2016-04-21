@@ -469,7 +469,11 @@ function makeQueueEntry(item, addbtns) {
         .attr("href", formatURL(video))
         .attr("target", "_blank");
     var time = $("<span/>").addClass("qe_time").appendTo(li);
-    time.html(item.queueby + " &middot; " + video.duration);
+    if (item.queueby && item.queueby != "chmod") {
+        time.html(item.queueby + " &middot; " + video.duration);
+    } else {
+        time.html(video.duration);
+    }
     var clear = $("<div/>").addClass("qe_clear").appendTo(li);
     if(item.temp) {
         li.addClass("queue_temp");

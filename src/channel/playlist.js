@@ -848,9 +848,10 @@ PlaylistModule.prototype._delete = function (uid) {
             u.socket.emit("setPlaylistMeta", self.meta);
         });
     }
-
+    
     if (self.current === item && item === next) {
         self.current = null;
+        self._addRandom();
     } else if (self.current === item) {
         self.current = next;
         self.startPlayback();
@@ -867,10 +868,7 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
     }
 
     var qfail = function (msg) {
-        user.socket.emit("queueFail", {
-            msg: msg,
-            link: data.link
-        });
+        console.log(msg);
         if (cb) {
             cb();
         }
@@ -993,6 +991,25 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
             return qfail("Playlist failure");
         }
     }
+};
+
+PlaylistModule.prototype._addRandom = function() {
+    db_playlist.fetchRandomByChannel(this.channel.name, function(err, row) {
+        if (err) {
+            setTimeout(function() {
+                this._addRandom();
+            }.bind(this), 10000);
+        } else if (row) {
+            var media = new Media(row.uid, row.title, row.seconds, row.type, {});
+            var qdata = {
+                temp: true,
+                queueby: "chmod",
+                maxlength: row.seconds,
+                pos: 0
+            };
+            this._addItem(media, qdata);
+        }
+    }.bind(this));
 };
 
 function isExpired(media) {
