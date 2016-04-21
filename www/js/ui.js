@@ -34,9 +34,7 @@ $(function() {
         }).on("change", function () {
             CHAT_LINE_COLOR = $(this).val();
             window.localStorage.setItem("chat_line_color", CHAT_LINE_COLOR);
-            $("#chatline").css("color", CHAT_LINE_COLOR);
         });
-        $("#chatline").css("color", CHAT_LINE_COLOR);
     } else {
         $("#chatcolor").hide();
     }
