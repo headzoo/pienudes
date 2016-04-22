@@ -29,7 +29,8 @@ function OptionsModule(channel) {
         allow_dupes: false,        // Allow duplicate videos on the playlist
         torbanned: false,          // Block connections from Tor exit nodes
         allow_ascii_control: false,// Allow ASCII control characters (\x00-\x1f)
-        playlist_max_per_user: 0   // Maximum number of playlist items per user
+        playlist_max_per_user: 0,  // Maximum number of playlist items per user
+        rngmod_count: 1            // Number of random vids to add when playlist is empty
     };
 }
 
@@ -112,6 +113,17 @@ OptionsModule.prototype.handleSetOptions = function (user, data) {
             ratio = 0;
         }
         this.opts.voteskip_ratio = ratio;
+    }
+    
+    if ("rngmod_count" in data) {
+        var rngmod_count = parseInt(data.rngmod_count);
+        if (rngmod_count < 0 || isNaN(rngmod_count)) {
+            rngmod_count = 0;
+        }
+        if (rngmod_count > 10) {
+            rngmod_count = 10;
+        }
+        this.opts.rngmod_count = rngmod_count;
     }
 
     if ("afk_timeout" in data) {

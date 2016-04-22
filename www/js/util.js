@@ -909,6 +909,7 @@ function handleModPermissions() {
     $("#cs-afk_timeout").val(CHANNEL.opts.afk_timeout);
     $("#cs-allow_voteskip").prop("checked", CHANNEL.opts.allow_voteskip);
     $("#cs-voteskip_ratio").val(CHANNEL.opts.voteskip_ratio);
+    $("#cs-rngmod_count").val(CHANNEL.opts.rngmod_count);
     $("#cs-thumbnail").val(CHANNEL.opts.thumbnail);
     $("#cs-background_url").val(CHANNEL.opts.background_url);
     $("#cs-background_repeat").val(CHANNEL.opts.background_repeat);

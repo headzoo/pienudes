@@ -893,9 +893,11 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
         return qfail("This item is already on the playlist");
     }
 
-    var usersItems = this.items.findAll(function (item) {
-        return item.queueby.toLowerCase() === user.getLowerName();
-    });
+    if (data.queueby[0] != "@") {
+        var usersItems = this.items.findAll(function (item) {
+            return item.queueby.toLowerCase() === user.getLowerName();
+        });
+    }
 
     if (this.channel.modules.options &&
         this.channel.modules.options.get("playlist_max_per_user") &&
@@ -995,20 +997,28 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
 };
 
 PlaylistModule.prototype._addRandom = function() {
-    db_playlist.fetchRandomByChannel(this.channel.name, function(err, row) {
+    var rngmod_count = this.channel.modules.options.get("rngmod_count");
+    rngmod_count = parseInt(rngmod_count);
+    if (rngmod_count == 0 || isNaN(rngmod_count)) {
+        return;
+    }
+    
+    db_playlist.fetchRandomByChannel(this.channel.name, rngmod_count, function(err, rows) {
         if (err) {
             setTimeout(function() {
                 this._addRandom();
             }.bind(this), 10000);
-        } else if (row) {
-            var media = new Media(row.uid, row.title, row.seconds, row.type, {});
-            var qdata = {
-                temp: true,
-                queueby: "@" + row.user,
-                maxlength: row.seconds,
-                pos: 0
-            };
-            this._addItem(media, qdata);
+        } else if (rows.length > 0) {
+            rows.forEach(function(row) {
+                var media = new Media(row.uid, row.title, row.seconds, row.type, {});
+                var qdata = {
+                    temp: true,
+                    queueby: "@" + row.user,
+                    maxlength: row.seconds,
+                    pos: 0
+                };
+                this._addItem(media, qdata);
+            }.bind(this));
         }
     }.bind(this));
 };

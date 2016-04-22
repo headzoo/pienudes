@@ -97,19 +97,16 @@ module.exports = {
     /**
      * Returns a random row from the table
      */
-    fetchRandomByChannel(channel, callback) {
+    fetchRandomByChannel(channel, limit, callback) {
         callback = callback || noop;
+        limit = limit || 1;
         
-        var sql = "SELECT * FROM playlist_history WHERE `channel` = ? ORDER BY RAND() LIMIT 1";
+        var sql = "SELECT * FROM playlist_history WHERE `channel` = ? ORDER BY RAND() LIMIT " + limit;
         db.query(sql, [channel], function(err, rows) {
             if (err) {
                 return callback(err, null);
             }
-            if (rows.length > 0) {
-                callback(err, rows[0]);
-            } else {
-                callback(null, null);
-            }
+            callback(null, rows);
         });
     },
     
