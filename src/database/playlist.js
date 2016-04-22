@@ -52,6 +52,14 @@ module.exports = {
     },
     
     /**
+     * Returns every row in the table
+     */
+    fetchAll(callback) {
+        callback = callback || noop;
+        db.query("SELECT * FROM `playlist_history`", [], callback);
+    },
+    
+    /**
      * Returns rows matching the given user
      */
     fetchByUser(user, limit, offset, callback) {
