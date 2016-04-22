@@ -8,6 +8,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "async": "^1.5.2",
     "aws-sdk": "^2.3.3",
     "babel": "^5.8.23",
     "bcrypt": "^0.8.5",

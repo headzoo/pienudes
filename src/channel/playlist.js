@@ -7,6 +7,7 @@ var Config = require("../config");
 var Flags = require("../flags");
 var db = require("../database");
 var db_playlist = require('../database/playlist');
+var db_media    = require('../database/media');
 var Logger = require("../logger");
 var CustomEmbedFilter = require("../customembed").filter;
 var XSS = require("../xss");
@@ -974,7 +975,11 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
             self.startPlayback();
         }
         if (data.queueby[0] != "@") {
-            db_playlist.insert(media, self.channel.name, data.queueby);
+            db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function(err, media_id) {
+                if (!err) {
+                    db_playlist.insert(media_id, self.channel.name, data.queueby);
+                }
+            });
         }
         if (cb) {
             cb();

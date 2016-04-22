@@ -112,18 +112,28 @@ const TBL_CHANNEL_DATA = "" +
     "PRIMARY KEY (`channel_id`, `key`)," +
     "FOREIGN KEY (`channel_id`) REFERENCES `channels`(`id`) ON DELETE CASCADE" +
     ") CHARACTER SET utf8";
+
+const TBL_MEDIA = "" +
+    "CREATE TABLE IF NOT EXISTS `media` (" +
+    "`id` BIGINT NOT NULL AUTO_INCREMENT," +
+    "`uid` VARCHAR(40) NOT NULL," +
+    "`type` VARCHAR(2) NOT NULL," +
+    "`title` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL," +
+    "`seconds` INT NOT NULL," +
+    "`time` BIGINT NOT NULL," +
+    "PRIMARY KEY (`id`)," +
+    "UNIQUE INDEX(`uid`, `type`)" +
+    ") CHARACTER SET utf8";
     
 const TBL_PLAYLIST_HISTORY = "" +
     "CREATE TABLE IF NOT EXISTS `playlist_history` (" +
         "`id` BIGINT NOT NULL AUTO_INCREMENT," +
-        "`uid` VARCHAR(40) NOT NULL," +
-        "`title` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL," +
-        "`seconds` INT NOT NULL," +
-        "`type` VARCHAR(2) NOT NULL," +
+        "`media_id` BIGINT NOT NULL," +
         "`channel` VARCHAR(30) NOT NULL," +
         "`user` VARCHAR(20) NOT NULL," +
         "`time` BIGINT NOT NULL," +
-    "PRIMARY KEY (`id`)" +
+    "PRIMARY KEY (`id`)," +
+    "FOREIGN KEY (`media_id`) REFERENCES `media`(`id`) ON DELETE CASCADE" +
     ") CHARACTER SET utf8";
 
 const TBL_UPLOADS = "" +
@@ -150,6 +160,7 @@ module.exports.init = function (queryfn, cb) {
         stats: TBL_STATS,
         meta: TBL_META,
         channel_data: TBL_CHANNEL_DATA,
+        media: TBL_MEDIA,
         playlist_history: TBL_PLAYLIST_HISTORY,
         uploads: TBL_UPLOADS
     };

@@ -10,7 +10,7 @@ module.exports = {
     /**
      * Adds a video to the playlist history
      */
-    insert(media, channel, user, callback) {
+    insert(media_id, channel, user, callback) {
         if (typeof callback !== "function") {
             callback = noop;
         }
@@ -18,14 +18,37 @@ module.exports = {
             user = user.substring(1);
         }
         
-        db.query("INSERT INTO `playlist_history` (`uid`, `title`, `seconds`, `type`, `channel`, `user`, `time`) VALUES(?, ?, ?, ?, ?, ?, ?)",
-            [media.id, media.title, media.seconds, media.type, channel, user, Date.now()],
+        db.query("INSERT INTO `playlist_history` (`media_id`, `channel`, `user`, `time`) VALUES(?, ?, ?, ?)",
+            [media_id, channel, user, Date.now()],
             function (err, res) {
                 if (err) {
                     callback(err, []);
                     return;
                 }
             
+                callback(err, res);
+            });
+    },
+    
+    /**
+     * Adds a video to the playlist history
+     */
+     insertNew(media_id, channel, user, callback) {
+        if (typeof callback !== "function") {
+            callback = noop;
+        }
+        if (user[0] == "@") {
+            user = user.substring(1);
+        }
+        
+        db.query("INSERT INTO `playlist_history_new` (`media_id`, `channel`, `user`, `time`) VALUES(?, ?, ?, ?)",
+            [media_id, channel, user, Date.now()],
+            function (err, res) {
+                if (err) {
+                    callback(err, []);
+                    return;
+                }
+                
                 callback(err, res);
             });
     },
@@ -47,8 +70,16 @@ module.exports = {
             offset = 0;
         }
         
-        var sql = "SELECT * FROM `playlist_history` ORDER BY `id` DESC LIMIT " + offset + ", " + limit;
+        var sql = "SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
         db.query(sql, [], callback);
+    },
+    
+    /**
+     * Returns every row in the table
+     */
+    fetchAll(callback) {
+        callback = callback || noop;
+        db.query("SELECT * FROM `playlist_history`", [], callback);
     },
     
     /**
@@ -68,7 +99,7 @@ module.exports = {
             offset = 0;
         }
     
-        var sql = "SELECT * FROM `playlist_history` WHERE `user` = ? ORDER BY `id` DESC LIMIT " + offset + ", " + limit;
+        var sql = "SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `user` = ? ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
         db.query(sql, [user], callback);
     },
     
@@ -78,7 +109,7 @@ module.exports = {
     fetchDistinctUsers(callback) {
         callback = callback || noop;
         
-        db.query("SELECT `user`, COUNT(*) AS `cnt` FROM `playlist_history` GROUP BY `user` ORDER BY `cnt` DESC", callback);
+        db.query("SELECT `user`, COUNT(*) AS `cnt` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` GROUP BY `user` ORDER BY `cnt` DESC", callback);
     },
     
     /**
@@ -90,7 +121,7 @@ module.exports = {
             limit = 25;
         }
         
-        var sql = "SELECT *, COUNT(*) AS `cnt` FROM playlist_history GROUP BY `uid` ORDER BY `cnt` DESC, `time` ASC LIMIT " + limit;
+        var sql = "SELECT *, COUNT(*) AS `cnt` FROM playlist_history INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` GROUP BY `uid` ORDER BY `cnt` DESC, `playlist_history`.`time` ASC LIMIT " + limit;
         db.query(sql, [], callback);
     },
     
@@ -101,7 +132,7 @@ module.exports = {
         callback = callback || noop;
         limit = limit || 1;
         
-        var sql = "SELECT * FROM playlist_history WHERE `channel` = ? ORDER BY RAND() LIMIT " + limit;
+        var sql = "SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `channel` = ? ORDER BY RAND() LIMIT " + limit;
         db.query(sql, [channel], function(err, rows) {
             if (err) {
                 return callback(err, null);
