@@ -115,12 +115,12 @@ const TBL_CHANNEL_DATA = "" +
 
 const TBL_MEDIA = "" +
     "CREATE TABLE IF NOT EXISTS `media` (" +
-    "`id` BIGINT NOT NULL AUTO_INCREMENT," +
-    "`uid` VARCHAR(40) NOT NULL," +
-    "`type` VARCHAR(2) NOT NULL," +
-    "`title` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL," +
-    "`seconds` INT NOT NULL," +
-    "`time` BIGINT NOT NULL," +
+        "`id` BIGINT NOT NULL AUTO_INCREMENT," +
+        "`uid` VARCHAR(40) NOT NULL," +
+        "`type` VARCHAR(2) NOT NULL," +
+        "`title` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL," +
+        "`seconds` INT NOT NULL," +
+        "`time` BIGINT NOT NULL," +
     "PRIMARY KEY (`id`)," +
     "UNIQUE INDEX(`uid`, `type`)" +
     ") CHARACTER SET utf8";
