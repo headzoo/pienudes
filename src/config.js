@@ -1,6 +1,6 @@
 var fs = require("fs");
 var path = require("path");
-var Logger = require("./logger");
+//var Logger = require("./logger");
 var nodemailer = require("nodemailer");
 var net = require("net");
 var YAML = require("yamljs");
@@ -135,9 +135,9 @@ function merge(obj, def, path) {
                 merge(obj[key], def[key], path + "." + key);
             }
         } else {
-            Logger.syslog.log("[WARNING] Missing config key " + (path + "." + key) +
-                        "; using default: " + JSON.stringify(def[key]));
-            obj[key] = def[key];
+            //Logger.syslog.log("[WARNING] Missing config key " + (path + "." + key) +
+             //           "; using default: " + JSON.stringify(def[key]));
+            //obj[key] = def[key];
         }
     }
 }
@@ -152,14 +152,14 @@ exports.load = function (file) {
         cfg = YAML.load(path.join(__dirname, "..", file));
     } catch (e) {
         if (e.code === "ENOENT") {
-            Logger.syslog.log(file + " does not exist, assuming default configuration");
+            //Logger.syslog.log(file + " does not exist, assuming default configuration");
             cfg = defaults;
             return;
         } else {
-            Logger.errlog.log("Error loading config file " + file + ": ");
-            Logger.errlog.log(e);
+            //Logger.errlog.log("Error loading config file " + file + ": ");
+            //Logger.errlog.log(e);
             if (e.stack) {
-                Logger.errlog.log(e.stack);
+                //Logger.errlog.log(e.stack);
             }
             cfg = defaults;
             return;
@@ -167,8 +167,8 @@ exports.load = function (file) {
     }
 
     if (cfg == null) {
-        Logger.syslog.log(file + " is an Invalid configuration file, " +
-                          "assuming default configuration");
+        //Logger.syslog.log(file + " is an Invalid configuration file, " +
+        //                  "assuming default configuration");
         cfg = defaults;
         return;
     }
@@ -182,16 +182,16 @@ exports.load = function (file) {
     cfg.mail.config = mailconfig;
 
     preprocessConfig(cfg);
-    Logger.syslog.log("Loaded configuration from " + file);
+    //Logger.syslog.log("Loaded configuration from " + file);
 };
 
 function preprocessConfig(cfg) {
     /* Detect 3.0.0-style config and warng the user about it */
     if ("host" in cfg.http || "port" in cfg.http || "port" in cfg.https) {
-        Logger.syslog.log("[WARN] The method of specifying which IP/port to bind has "+
-                          "changed.  The config loader will try to handle this "+
-                          "automatically, but you should read config.template.yaml "+
-                          "and change your config.yaml to the new format.");
+        //Logger.syslog.log("[WARN] The method of specifying which IP/port to bind has "+
+        //                  "changed.  The config loader will try to handle this "+
+        //                  "automatically, but you should read config.template.yaml "+
+        //                  "and change your config.yaml to the new format.");
         cfg.listen = [
             {
                 ip: cfg.http.host || "0.0.0.0",
@@ -304,21 +304,21 @@ function preprocessConfig(cfg) {
         if (net.isIPv6(srv.ip) || srv.ip === "::") {
             if (srv.https && !cfg.io["ipv6-ssl"]) {
                 if (!srv.url) {
-                    Logger.errlog.log("Config Error: no URL defined for IPv6 " +
-                                      "Socket.IO listener!  Ignoring this listener " +
-                                      "because the Socket.IO client cannot connect to " +
-                                      "a raw IPv6 address.");
-                    Logger.errlog.log("(Listener was: " + JSON.stringify(srv) + ")");
+                    //Logger.errlog.log("Config Error: no URL defined for IPv6 " +
+                    //                  "Socket.IO listener!  Ignoring this listener " +
+                    //                  "because the Socket.IO client cannot connect to " +
+                    //                  "a raw IPv6 address.");
+                    //Logger.errlog.log("(Listener was: " + JSON.stringify(srv) + ")");
                 } else {
                     cfg.io["ipv6-ssl"] = srv.url;
                 }
             } else if (!cfg.io["ipv6-nossl"]) {
                 if (!srv.url) {
-                    Logger.errlog.log("Config Error: no URL defined for IPv6 " +
-                                      "Socket.IO listener!  Ignoring this listener " +
-                                      "because the Socket.IO client cannot connect to " +
-                                      "a raw IPv6 address.");
-                    Logger.errlog.log("(Listener was: " + JSON.stringify(srv) + ")");
+                    //Logger.errlog.log("Config Error: no URL defined for IPv6 " +
+                    //                  "Socket.IO listener!  Ignoring this listener " +
+                    //                  "because the Socket.IO client cannot connect to " +
+                    //                  "a raw IPv6 address.");
+                    //Logger.errlog.log("(Listener was: " + JSON.stringify(srv) + ")");
                 } else {
                     cfg.io["ipv6-nossl"] = srv.url;
                 }
@@ -372,10 +372,10 @@ function preprocessConfig(cfg) {
         require("cytube-mediaquery/lib/provider/youtube").setApiKey(
                 cfg["youtube-v3-key"]);
     } else {
-        Logger.errlog.log("Warning: No YouTube v3 API key set.  YouTube links will " +
-            "not work.  See youtube-v3-key in config.template.yaml and " +
-            "https://developers.google.com/youtube/registering_an_application for " +
-            "information on registering an API key.");
+        //Logger.errlog.log("Warning: No YouTube v3 API key set.  YouTube links will " +
+        //    "not work.  See youtube-v3-key in config.template.yaml and " +
+        //    "https://developers.google.com/youtube/registering_an_application for " +
+        //    "information on registering an API key.");
     }
 
     return cfg;

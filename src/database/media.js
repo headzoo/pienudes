@@ -8,7 +8,7 @@ module.exports = {
     },
     
     /**
-     * Adds a video to the table
+     * Adds a row to the table
      */
      insert(uid, type, title, seconds, callback) {
         callback = callback || noop;
@@ -18,6 +18,30 @@ module.exports = {
             [uid, type, title, seconds, Date.now()],
             callback
         );
+    },
+    
+    /**
+     * Inserts a row if not already found
+     */
+    insertIgnore(uid, type, title, seconds, callback) {
+        callback = callback || noop;
+        
+        this.fetchByUidAndType(uid, type, function(err, row) {
+            if (err) return callback(err);
+           
+            if (row) {
+                callback(null, row.id);
+            } else {
+                db.query(
+                    "INSERT IGNORE INTO `media` (`uid`, `type`, `title`, `seconds`, `time`) VALUES(?, ?, ?, ?, ?)",
+                    [uid, type, title, seconds, Date.now()],
+                    function(err, res) {
+                        if (err) return callback(err);
+                        callback(null, res.insertId);
+                    }
+                );
+            }
+        }.bind(this));
     },
     
     /**

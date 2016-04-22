@@ -128,14 +128,12 @@ const TBL_MEDIA = "" +
 const TBL_PLAYLIST_HISTORY = "" +
     "CREATE TABLE IF NOT EXISTS `playlist_history` (" +
         "`id` BIGINT NOT NULL AUTO_INCREMENT," +
-        "`uid` VARCHAR(40) NOT NULL," +
-        "`title` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL," +
-        "`seconds` INT NOT NULL," +
-        "`type` VARCHAR(2) NOT NULL," +
+        "`media_id` BIGINT NOT NULL," +
         "`channel` VARCHAR(30) NOT NULL," +
         "`user` VARCHAR(20) NOT NULL," +
         "`time` BIGINT NOT NULL," +
-    "PRIMARY KEY (`id`)" +
+    "PRIMARY KEY (`id`)," +
+    "FOREIGN KEY (`media_id`) REFERENCES `media`(`id`) ON DELETE CASCADE" +
     ") CHARACTER SET utf8";
 
 const TBL_UPLOADS = "" +
