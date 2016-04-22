@@ -31,29 +31,6 @@ module.exports = {
     },
     
     /**
-     * Adds a video to the playlist history
-     */
-     insertNew(media_id, channel, user, callback) {
-        if (typeof callback !== "function") {
-            callback = noop;
-        }
-        if (user[0] == "@") {
-            user = user.substring(1);
-        }
-        
-        db.query("INSERT INTO `playlist_history_new` (`media_id`, `channel`, `user`, `time`) VALUES(?, ?, ?, ?)",
-            [media_id, channel, user, Date.now()],
-            function (err, res) {
-                if (err) {
-                    callback(err, []);
-                    return;
-                }
-                
-                callback(err, res);
-            });
-    },
-    
-    /**
      * Returns rows from the playlist history
      */
     fetch(limit, offset, callback) {
@@ -79,7 +56,7 @@ module.exports = {
      */
     fetchAll(callback) {
         callback = callback || noop;
-        db.query("SELECT * FROM `playlist_history`", [], callback);
+        db.query("SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id`", [], callback);
     },
     
     /**
