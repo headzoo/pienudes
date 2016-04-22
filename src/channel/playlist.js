@@ -976,7 +976,6 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
         if (data.queueby[0] != "@") {
             db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function(err, media_id) {
                 if (!err) {
-                    console.log(media_id);
                     db_playlist.insert(media_id, self.channel.name, data.queueby);
                 }
             });
