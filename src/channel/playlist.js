@@ -893,8 +893,9 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
         return qfail("This item is already on the playlist");
     }
 
+    var userItems = [];
     if (data.queueby[0] != "@") {
-        var usersItems = this.items.findAll(function (item) {
+        usersItems = this.items.findAll(function (item) {
             return item.queueby.toLowerCase() === user.getLowerName();
         });
     }
