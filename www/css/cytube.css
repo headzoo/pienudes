@@ -367,6 +367,11 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
     border-radius: 5px;
 }
 
+.profile-avatar {
+    max-width: 50px;
+    max-height: 50px;
+}
+
 #togglemotd .glyphicon {
     font-size: 10pt;
 }

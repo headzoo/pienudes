@@ -1,0 +1,69 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <h1>
+        {% if user.profile.image %}
+            <img src="{{ user.profile.image }}" class="profile-avatar" />
+        {% endif %}
+        {{ user.name }}
+    </h1>
+    {% if user.profile.text %}
+        <p>{{ user.profile.text }}</p>
+    {% endif %}
+    <ul class="nav nav-tabs">
+        <li{% if pageTab == "home" %} class="active"{% endif %}>
+            <a href="/user/{{ user.name }}">Playlist</a>
+        </li>
+        <li><a href="#">Up voted</a></li>
+        <li><a href="#">Down voted</a></li>
+    </ul>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Channel</th>
+            <th style="width: 40%">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for m in media %}
+            <tr>
+                <td>
+                    <a href="/r/{{ m.channel }}">
+                        {{ m.title }}
+                    </a>
+                </td>
+                <td>
+                    <a href="/r/{{ m.channel }}">
+                        /r/{{ m.channel }}
+                    </a>
+                </td>
+                <td>
+                    {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <nav>
+        <ul class="pager">
+            {% if page == 1 %}
+                <li class="previous disabled">
+                    <a href="#"><span aria-hidden="true">&larr;</span> Newer</a>
+                </li>
+            {% else %}
+                <li class="previous">
+                    <a href="/user/{{ user.name }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                </li>
+            {% endif %}
+            {% if page == pages %}
+                <li class="next disabled">
+                    <a href="#">Older <span aria-hidden="true">&rarr;</span></a>
+                </li>
+            {% else %}
+                <li class="next">
+                    <a href="/user/{{ user.name }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock %}

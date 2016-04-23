@@ -75,60 +75,11 @@ function handleUsers(req, res) {
     });
 }
 
-function handleUser(req, res) {
-    var name = req.params.name;
-    db_accounts.getUser(name, function(err) {
-        if (err == "User does not exist") {
-            return template.send(res, 'error/http', {
-                path: req.path,
-                status: 404,
-                message: err
-            });
-        }
-        
-        var page = req.params.page;
-        if (page == undefined) {
-            page = 1;
-        }
-        if (page < 1) {
-            page = 1;
-        }
-    
-        db_playlists.countByUser(name, function(err, count) {
-            if (count == 0) {
-                template.send(res, 'playlists/user_empty', {
-                    pageTitle: name + "'s Playlist",
-                    name: name
-                });
-                return;
-            }
-        
-            var limit  = 100;
-            var pages  = Math.ceil(count / limit);
-            if (page > pages) {
-                page = pages;
-            }
-            var offset = (page - 1) * limit;
-        
-            db_playlists.fetchByUser(name, limit, offset, function(err, rows) {
-                template.send(res, 'playlists/user', {
-                    pageTitle: name + "'s Playlist",
-                    name: name,
-                    media: rows,
-                    page:  parseInt(page),
-                    pages: parseInt(pages)
-                });
-            });
-        });
-    });
-}
-
 module.exports = {
     /**
      * Initializes auth callbacks
      */
     init: function (app) {
-        app.get('/playlists/user/:name([a-zA-Z0-9_\-]{1,20})/:page?', handleUser);
         app.get('/playlists/users', handleUsers);
         app.get('/playlists/history/:page?', handleHistory);
         app.get('/playlists/top', handleTop);
