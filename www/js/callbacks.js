@@ -964,6 +964,10 @@ Callbacks = {
         $("#voteupvalue").text(data.up);
         $("#votedownvalue").text(data.down);
     },
+    
+    userVideoVotes: function(data) {
+        formatUserVideoVotes(data);
+    },
 
     /* REGION Polls */
     newPoll: function(data) {

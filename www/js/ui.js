@@ -337,6 +337,13 @@ $("#userpl_save").click(function() {
     });
 });
 
+$("#showuservotes").click(function() {
+    var showing = !$("#uservotes").is(":visible");
+    if (showing) {
+        socket.emit("userVideoVotes");
+    }
+});
+
 /* video controls */
 
 $("#mediarefresh").click(function() {

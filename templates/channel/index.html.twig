@@ -81,6 +81,9 @@
                                     <button id="voteup" class="btn btn-sm btn-default" title="Upvote">
                                         <span class="glyphicon glyphicon-chevron-up"></span> <span id="voteupvalue">0</span>
                                     </button>
+                                    <button id="showuservotes" class="btn btn-sm btn-primary" title="Your upvoted videos" data-toggle="collapse" data-target="#uservotes">
+                                        <span class="glyphicon glyphicon-star"></span>
+                                    </button>
                                     <button id="votedown" class="btn btn-sm btn-default" title="Downvote">
                                         <span class="glyphicon glyphicon-chevron-down"></span> <span id="votedownvalue">0</span>
                                     </button>
@@ -189,6 +192,13 @@
                                     </label>
                                 </div>
                                 <ul id="userpl_list" class="videolist"></ul>
+                            </div>
+                            <div id="uservotes" class="collpse plcontrol-collapse col-lg-12 col-md-12">
+                                <div class="vertical-spacer"></div>
+                                <p class="text-muted">
+                                    Last 50 videos you have upvoted.
+                                </p>
+                                <ul id="uservoteslist" class="videolist col-lg-12 col-md-12"></ul>
                             </div>
                             <div id="queuefail" class="col-lg-12 col-md-12">
                                 <div class="vertical-spacer"></div>

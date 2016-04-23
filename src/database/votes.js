@@ -46,6 +46,27 @@ module.exports = {
         );
     },
     
+    fetchUpvotedByUser: function(user_id, limit, offset, callback) {
+        callback = callback || noop;
+    
+        limit  = limit || 50;
+        offset = offset || 0;
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 50;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+    
+        db.query(
+            "SELECT * FROM `votes` INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` WHERE `user_id` = ? AND `value` = 1 ORDER BY `votes`.`id` DESC LIMIT " + offset + "," + limit,
+            [user_id],
+            callback
+        );
+    },
+    
     insert: function(user_id, media_id, value, callback) {
         callback = callback || noop;
         

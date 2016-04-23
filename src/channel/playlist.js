@@ -222,6 +222,7 @@ PlaylistModule.prototype.onUserPostJoin = function (user) {
     user.socket.on("jumpTo", this.handleJumpTo.bind(this, user));
     user.socket.on("playNext", this.handlePlayNext.bind(this, user));
     user.socket.on("voteVideo", this.handleVoteVideo.bind(this, user));
+    user.socket.on("userVideoVotes", this.handleUserVideoVotes.bind(this, user));
     user.socket.typecheckedOn("assignLeader", TYPE_ASSIGN_LEADER, this.handleAssignLeader.bind(this, user));
     user.socket.typecheckedOn("mediaUpdate", TYPE_MEDIA_UPDATE, this.handleUpdate.bind(this, user));
     var self = this;
@@ -916,6 +917,31 @@ PlaylistModule.prototype.sendVideoVotes = function() {
             }.bind(this));
         }
     }.bind(this));
+};
+
+PlaylistModule.prototype.handleUserVideoVotes = function(user) {
+    if (user.account.guest) {
+        return user.socket.emit("errorMsg", {
+            msg: "Only registered users can vote for favorites."
+        });
+    }
+    
+    db_accounts.getUser(user.account.name, function(err, u) {
+        if (err || !u) {
+            return user.socket.emit("errorMsg", {
+                msg: "There was an error fetching your votes. Try again in a minute."
+            });
+        }
+        
+        db_votes.fetchUpvotedByUser(u.id, 50, 0, function(err, rows) {
+            if (err) {
+                return user.socket.emit("errorMsg", {
+                    msg: "There was an error fetching your votes. Try again in a minute."
+                });
+            }
+            user.socket.emit("userVideoVotes", rows);
+        });
+    });
 };
 
 /**

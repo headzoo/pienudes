@@ -2614,6 +2614,77 @@ function formatUploadsList(first) {
     }
 }
 
+function formatUserVideoVotes(votes) {
+    var list = $("#uservoteslist");
+    list.empty();
+    votes.forEach(function(vote) {
+        var li = $("<li/>");
+        li.addClass("queue_entry");
+        li.appendTo(list);
+    
+        var group = $("<div/>");
+        group.addClass("btn-group pull-left");
+        group.appendTo(li);
+    
+        if(hasPermission("playlistadd")) {
+            if(hasPermission("playlistnext")) {
+                $("<button/>").addClass("btn btn-xs btn-default")
+                    .text("Next")
+                    .click(function() {
+                        socket.emit("queue", {
+                            id: vote.uid,
+                            pos: "next",
+                            type: vote.type,
+                            temp: $(".add-temp").prop("checked")
+                        });
+                    })
+                    .appendTo(group);
+            }
+            $("<button/>").addClass("btn btn-xs btn-default")
+                .text("End")
+                .click(function() {
+                    socket.emit("queue", {
+                        id: vote.uid,
+                        pos: "end",
+                        type: vote.type,
+                        temp: $(".add-temp").prop("checked")
+                    });
+                })
+                .appendTo(group);
+        }
+        
+        if (vote.type == "yt") {
+            var thumb = $("<img/>");
+            thumb.attr("src", "https://i.ytimg.com/vi/" + vote.uid + "/default.jpg");
+            thumb.css({
+                float: "left",
+                clear: "both"
+            });
+            thumb.appendTo(li);
+    
+            var title = $("<a/>");
+            title.addClass("qe_title");
+            title.attr("href", "http://youtube.com/watch?v=" + vote.uid);
+            title.attr("target", "_blank");
+            title.text(vote.title);
+            title.appendTo(li);
+        } else {
+            var title = $("<div/>");
+            title.addClass("qe_title");
+            title.text(vote.title);
+            title.appendTo(li);
+        }
+        
+        var time = $("<span/>");
+        time.addClass("qe_time");
+        time.text(secondsToTime(vote.seconds));
+        time.appendTo(li);
+        
+        var clear = $('<div class="qe_clear"></div>');
+        clear.appendTo(li);
+    });
+}
+
 function formatTime(sec) {
     var h = Math.floor(sec / 3600) + "";
     var m = Math.floor((sec % 3600) / 60) + "";
@@ -3169,4 +3240,23 @@ function humanFileSize(bytes) {
         ++u;
     } while(Math.abs(bytes) >= thresh && u < units.length - 1);
     return bytes.toFixed(1)+' '+units[u];
+}
+
+function secondsToTime(seconds) {
+    seconds = Math.floor(seconds);
+    var hours = Math.floor(seconds / 3600);
+    seconds -= hours*3600;
+    var minutes = Math.floor(seconds / 60);
+    seconds -= minutes*60;
+    
+    var d_hours = "00", d_minutes = "00", d_seconds = "00";
+    if (hours   < 10) {d_hours   = "0"+hours;}
+    if (minutes < 10) {d_minutes = "0"+minutes;}
+    if (seconds < 10) {d_seconds = "0"+seconds;}
+    
+    if (hours > 0) {
+        return d_hours + ':' + d_minutes + ':' + d_seconds;
+    } else {
+        return d_minutes + ':' + d_seconds;
+    }
 }
