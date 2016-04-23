@@ -13,6 +13,7 @@ var Config       = require("../../config");
 var Server       = require("../../server");
 var session      = require("../../session");
 var csrf         = require("../csrf");
+var xss          = require("../../xss");
 
 /**
  * Handles a GET request for /account/edit
@@ -395,7 +396,8 @@ function handleAccountProfilePage(req, res) {
         return template.send(res, "account/profile", {
             pageTitle: "Profile",
             profileImage: "",
-            profileText: ""
+            profileText: "",
+            profileBio: ""
         });
     }
 
@@ -405,15 +407,17 @@ function handleAccountProfilePage(req, res) {
                 pageTitle: "Profile",
                 profileError: err,
                 profileImage: "",
-                profileText: ""
+                profileText: "",
+                profileBio: ""
             });
             return;
         }
-
+        
         template.send(res, "account/profile", {
             pageTitle: "Profile",
             profileImage: profile.image,
             profileText: profile.text,
+            profileBio: profile.bio,
             profileError: false
         });
     });
@@ -430,19 +434,22 @@ function handleAccountProfile(req, res) {
             pageTitle: "Profile",
             profileImage: "",
             profileText: "",
-            profileError: "You must be logged in to edit your profile",
+            profileBio: "",
+            profileError: "You must be logged in to edit your profile"
         });
     }
 
     var image = req.body.image;
-    var text = req.body.text;
+    var text  = req.body.text.substring(0, 50);
+    var bio   = xss.sanitizeHTML(req.body.bio.substring(0, 5000));
 
-    db.users.setProfile(req.user.name, { image: image, text: text }, function (err) {
+    db.users.setProfile(req.user.name, { image: image, text: text, bio: bio }, function (err) {
         if (err) {
             template.send(res, "account/profile", {
                 pageTitle: "Profile",
                 profileImage: "",
                 profileText: "",
+                profileBio: "",
                 profileError: err
             });
             return;
@@ -452,6 +459,7 @@ function handleAccountProfile(req, res) {
             pageTitle: "Profile",
             profileImage: image,
             profileText: text,
+            profileBio: bio,
             profileError: false
         });
     });

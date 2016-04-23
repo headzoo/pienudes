@@ -5,7 +5,11 @@
     {{ user.name }}
 </h1>
 {% if user.profile.text %}
-    <p class="tagline">{{ user.profile.text }}</p>
+    <p class="profiletagline">{{ user.profile.text }}</p>
+{% endif %}
+
+{% if user.profile.bio and pageTab == "home" and page == 1 %}
+    <div class="profilebio">{{ user.profile.bio|nl2p|safe }}</div>
 {% endif %}
 
 <ul class="nav nav-tabs">

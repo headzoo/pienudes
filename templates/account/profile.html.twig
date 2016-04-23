@@ -6,26 +6,29 @@
             {{ alerts.danger("Authorization Required", "You must be logged in to view this page.") }}
         {% else %}
             <h3>Profile</h3>
-            {% if profileError %}
-                {{ alerts.danger("Profile Error", profileError) }}
-            {% endif %}
             
-            <div class="profile-box linewrap" style="position: inherit; z-index: auto;">
-                <img src="{{ profileImage }}" class="profile-image" />
-                <strong>{{ loginName }}</strong>
-                <p>{{ profileText }}</p>
-            </div>
-            
-            <h3>Edit Profile</h3>
             <form method="post" action="/account/profile" role="form">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                 <div class="form-group">
-                    <label for="profileimage">Image</label>
+                    <label for="profileimage">Avatar Image</label>
                     <input type="text" name="image" id="profileimage" class="form-control" value="{{ profileImage }}" />
+                    <p class="text-muted">
+                        Displayed on your profile and when users hover over your username in chat.
+                    </p>
                 </div>
                 <div class="form-group">
-                    <label for="profiletext">Text</label>
-                    <textarea id="profiletext" class="form-control" cols="10" name="text">{{ profileText }}</textarea>
+                    <label for="profiletext">Tagline</label>
+                    <input id="profiletext" class="form-control" name="text" maxlength="50" value="{{ profileText }}" />
+                    <p class="text-muted">
+                        Displayed on your profile and when users hover over your username in chat.
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label for="profilebio">Biography</label>
+                    <textarea id="profilebio" class="form-control" name="bio">{{ profileBio }}</textarea>
+                    <p class="text-muted">
+                        Displayed on your profile.
+                    </p>
                 </div>
                 <button class="btn btn-primary btn-block" type="submit">Save</button>
             </form>

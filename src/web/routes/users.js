@@ -25,7 +25,7 @@ function handleProfile(req, res) {
         }
         
         if (user.profile == "") {
-            user.profile = {image: "", text: ""};
+            user.profile = {image: "", text: "", bio: ""};
         } else {
             user.profile = JSON.parse(user.profile);
         }
