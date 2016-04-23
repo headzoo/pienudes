@@ -67,6 +67,27 @@ module.exports = {
         );
     },
     
+    fetchDownvotedByUser: function(user_id, limit, offset, callback) {
+        callback = callback || noop;
+        
+        limit  = limit || 50;
+        offset = offset || 0;
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 50;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+        
+        db.query(
+            "SELECT * FROM `votes` INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` WHERE `user_id` = ? AND `value` = -1 ORDER BY `votes`.`id` DESC LIMIT " + offset + "," + limit,
+            [user_id],
+            callback
+        );
+    },
+    
     insert: function(user_id, media_id, value, callback) {
         callback = callback || noop;
         
@@ -85,5 +106,29 @@ module.exports = {
             [value, user_id, media_id],
             callback
         );
+    },
+    
+    countUpvotedByUser: function(user_id, callback) {
+        callback = callback || noop;
+    
+        db.query("SELECT COUNT(*) AS `cnt` FROM `votes` WHERE `user_id` = ? AND `value` = 1", [user_id], function(err, rows) {
+            if (err) {
+                callback(err, []);
+                return;
+            }
+            callback(null, rows[0]["cnt"]);
+        });
+    },
+    
+    countDownvotedByUser: function(user_id, callback) {
+        callback = callback || noop;
+        
+        db.query("SELECT COUNT(*) AS `cnt` FROM `votes` WHERE `user_id` = ? AND `value` = -1", [user_id], function(err, rows) {
+            if (err) {
+                callback(err, []);
+                return;
+            }
+            callback(null, rows[0]["cnt"]);
+        });
     }
 };

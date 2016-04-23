@@ -1,0 +1,21 @@
+<h1>
+    {% if user.profile.image %}
+        <img src="{{ user.profile.image }}" class="profile-avatar" />
+    {% endif %}
+    {{ user.name }}
+</h1>
+{% if user.profile.text %}
+    <p>{{ user.profile.text }}</p>
+{% endif %}
+
+<ul class="nav nav-tabs">
+    <li{% if pageTab == "home" %} class="active"{% endif %}>
+        <a href="/user/{{ user.name }}">Playlist</a>
+    </li>
+    <li{% if pageTab == "upvotes" %} class="active"{% endif %}>
+        <a href="/user/{{ user.name }}/upvotes">Up Votes</a>
+    </li>
+    <li{% if pageTab == "downvotes" %} class="active"{% endif %}>
+        <a href="/user/{{ user.name }}/downvotes">Down Votes</a>
+    </li>
+</ul>
