@@ -27,6 +27,7 @@ const DEFAULT_PERMISSIONS = {
     pollvote: -1,             // Vote in polls
     viewhiddenpoll: 1.5,      // View results of hidden polls
     voteskip: -1,             // Vote to skip the current video
+    votevideo: 1,             // Up/down vote a video
     viewvoteskip: 1.5,        // View voteskip results
     mute: 1.5,                // Mute other users
     kick: 1.5,                // Kick other users
@@ -142,6 +143,10 @@ PermissionsModule.prototype.handleSetPermissions = function (user, perms) {
     if (!this.canSetPermissions(user)) {
         user.kick("Attempted setPermissions as a non-admin");
         return;
+    }
+    
+    if ("votevideo" in perms && perms.votevideo < 1) {
+        perms.votevideo = 1;
     }
 
     for (var key in perms) {
@@ -259,6 +264,10 @@ PermissionsModule.prototype.canVoteskip = function (account) {
 
 PermissionsModule.prototype.canSeeVoteskipResults = function (actor) {
     return this.hasPermission(actor, "viewvoteskip");
+};
+
+PermissionsModule.prototype.canVoteVideo = function (account) {
+    return this.hasPermission(account, "votevideo");
 };
 
 PermissionsModule.prototype.canMute = function (actor) {

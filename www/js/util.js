@@ -1925,6 +1925,7 @@ function genPermissionsEditor() {
     makeOption("Delete playlist items", "oplaylistdelete", standard, CHANNEL.perms.oplaylistdelete+"");
     makeOption("Jump to video", "oplaylistjump", standard, CHANNEL.perms.oplaylistjump+"");
     makeOption("Queue playlist", "oplaylistaddlist", standard, CHANNEL.perms.oplaylistaddlist+"");
+    makeOption("Up/Down vote", "votevideo", standard, CHANNEL.perms.votevideo+"");
 
     addDivider("General playlist permissions");
     makeOption("View the playlist", "seeplaylist", standard, CHANNEL.perms.seeplaylist+"");

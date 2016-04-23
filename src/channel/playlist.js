@@ -6,8 +6,10 @@ var InfoGetter = require("../get-info");
 var Config = require("../config");
 var Flags = require("../flags");
 var db = require("../database");
+var db_accounts = require('../database/accounts');
 var db_playlist = require('../database/playlist');
 var db_media    = require('../database/media');
+var db_votes    = require('../database/votes');
 var Logger = require("../logger");
 var CustomEmbedFilter = require("../customembed").filter;
 var XSS = require("../xss");
@@ -294,10 +296,8 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     }
 
     var update = this.current.media.getFullUpdate();
-    update.meta.votes = {
-        up: Math.floor(Math.random() * 20),
-        down: Math.floor(Math.random() * 20)
-    };
+    this.sendVideoVotes();
+
     var uid = this.current.uid;
     if (users === this.channel.users) {
         this.channel.broadcastAll("setCurrent", uid);
@@ -827,15 +827,95 @@ PlaylistModule.prototype.handleUpdate = function (user, data) {
     this.channel.broadcastAll("mediaUpdate", update);
 };
 
-PlaylistModule.prototype.handleVoteVideo = function(user, data) {
+PlaylistModule.prototype.handleVoteVideo = function(user, value) {
+    if (!this.current) {
+        return;
+    }
+    if (!this.channel.modules.permissions.canVoteVideo(user) || user.account.guest) {
+        return;
+    }
+    
+    value = parseInt(value, 10);
+    if (isNaN(value) || (value !== -1 && value !== 1)) {
+        return user.socket.emit("errorMsg", {
+            msg: "Invalid vote value."
+        });
+    }
+    
+    var success  = function(media_id) {
+        db_votes.fetchVotes(media_id, function(err, votes) {
+            if (!err) {
+                this.channel.broadcastAll("changeVotes", votes);
+            }
+        }.bind(this));
+    }.bind(this);
+    
+    db_accounts.getUser(user.account.name, function(err, u) {
+        if (err) {
+            return user.socket.emit("errorMsg", {
+                msg: "Unable to fetch user information. Try again in a minute."
+            });
+        }
+        
+        db_media.fetchByUidAndType(this.current.media.id, this.current.media.type, function(err, media) {
+            if (err) {
+                return user.socket.emit("errorMsg", {
+                    msg: "Unable to fetch media information. Try again in a minute."
+                });
+            } else if (media.id) {
+                db_votes.fetch(u.id, media.id, function(err, vote) {
+                    if (err) {
+                        return user.socket.emit("errorMsg", {
+                            msg: "Unable to fetch vote information. Try again in a minute."
+                        });
+                    }
+                    
+                    if (vote) {
+                        if (vote.value != value) {
+                            db_votes.update(u.id, media.id, value, function(err) {
+                                if (err) {
+                                    return user.socket.emit("errorMsg", {
+                                        msg: "Unable to cast vote. Try again in a minute."
+                                    });
+                                }
+                                success(media.id);
+                            });
+                        }
+                    } else {
+                        db_votes.insert(u.id, media.id, value, function(err) {
+                            if (err) {
+                                return user.socket.emit("errorMsg", {
+                                    msg: "Unable to cast vote. Try again in a few minutes."
+                                });
+                            }
+                            success(media.id);
+                        });
+                    }
+                }.bind(this));
+            }
+        }.bind(this));
+    }.bind(this));
+};
+
+PlaylistModule.prototype.sendVideoVotes = function() {
     if (!this.current) {
         return;
     }
     
-    this.channel.broadcastAll("changeVotes", {
-        up: Math.floor(Math.random() * 20),
-        down: Math.floor(Math.random() * 20)
-    });
+    db_media.fetchByUidAndType(this.current.media.id, this.current.media.type, function(err, media) {
+        if (err || !media) {
+            this.channel.broadcastAll("changeVotes", {
+                up: 0,
+                down: 0
+            });
+        } else {
+            db_votes.fetchVotes(media.id, function(err, votes) {
+                if (!err) {
+                    this.channel.broadcastAll("changeVotes", votes);
+                }
+            }.bind(this));
+        }
+    }.bind(this));
 };
 
 /**

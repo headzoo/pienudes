@@ -40,10 +40,10 @@ $(function() {
     }
     
     $("#voteup").click(function() {
-        socket.emit("voteVideo", "up");
+        socket.emit("voteVideo", 1);
     });
     $("#votedown").click(function() {
-        socket.emit("voteVideo", "down");
+        socket.emit("voteVideo", -1);
     });
 });
 

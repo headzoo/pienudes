@@ -889,8 +889,6 @@ Callbacks = {
         }
 
         $("#currenttitle").text(data.title);
-        $("#voteupvalue").text(data.meta.votes.up);
-        $("#votedownvalue").text(data.meta.votes.down);
     },
 
     mediaUpdate: function(data) {
