@@ -2,7 +2,7 @@
     <form id="logoutform" class="navbar-form navbar-right" action="{{ loginDomain }}/logout" method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         <input type="hidden" name="dest" value="{{ loginDomain }}/" />
-        <span id="welcome">{{ loginName }}</span>
+        <span id="welcome"><a href="/user/{{ loginName }}" target="_blank">{{ loginName }}</a></span>
         <span>&nbsp;·&nbsp;</span>
         <button id="logout" class="btn btn-default navbar-link" type="submit">Log out</button>
     </form>

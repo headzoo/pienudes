@@ -843,3 +843,11 @@ textarea:focus, input:focus{
 #votedown:hover {
     background-color: #ff5546;
 }
+
+#userprofile h1 {
+    color: #FFF;
+}
+
+.tagline {
+    color: #FFF;
+}
