@@ -872,7 +872,16 @@ PlaylistModule.prototype.handleVoteVideo = function(user, value) {
                     }
                     
                     if (vote) {
-                        if (vote.value != value) {
+                        if (vote.value == value) {
+                            db_votes.remove(u.id, media.id, function(err) {
+                                if (err) {
+                                    return user.socket.emit("errorMsg", {
+                                        msg: "Unable to cast vote. Try again in a minute."
+                                    });
+                                }
+                                success(media.id);
+                            });
+                        } else {
                             db_votes.update(u.id, media.id, value, function(err) {
                                 if (err) {
                                     return user.socket.emit("errorMsg", {

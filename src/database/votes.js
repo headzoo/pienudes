@@ -108,6 +108,16 @@ module.exports = {
         );
     },
     
+    remove: function(user_id, media_id, callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "DELETE FROM `votes` WHERE `user_id` = ? AND `media_id` = ? LIMIT 1",
+            [user_id, media_id],
+            callback
+        );
+    },
+    
     countUpvotedByUser: function(user_id, callback) {
         callback = callback || noop;
     
