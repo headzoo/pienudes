@@ -844,6 +844,14 @@ textarea:focus, input:focus{
     background-color: #ff5546;
 }
 
+#uservoteslistempty {
+    margin-bottom: 15px;
+}
+
+#uservotesloading {
+    text-align: center;
+}
+
 #userprofile h1 {
     color: #FFF;
 }

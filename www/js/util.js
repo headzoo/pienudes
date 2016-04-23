@@ -2615,8 +2615,19 @@ function formatUploadsList(first) {
 }
 
 function formatUserVideoVotes(votes) {
-    var list = $("#uservoteslist");
-    list.empty();
+    var list    = $("#uservoteslist");
+    var empty   = $("#uservoteslistempty");
+    var loading = $("#uservotesloading");
+    
+    if (votes.length == 0) {
+        loading.hide();
+        empty.show();
+        list.hide();
+        return;
+    }
+    
+    list.empty().hide();
+    empty.hide();
     votes.forEach(function(vote) {
         var li = $("<li/>");
         li.addClass("queue_entry");
@@ -2683,6 +2694,9 @@ function formatUserVideoVotes(votes) {
         var clear = $('<div class="qe_clear"></div>');
         clear.appendTo(li);
     });
+    
+    loading.hide();
+    list.show();
 }
 
 function formatTime(sec) {

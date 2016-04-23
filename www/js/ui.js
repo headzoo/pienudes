@@ -340,6 +340,8 @@ $("#userpl_save").click(function() {
 $("#showuservotes").click(function() {
     var showing = !$("#uservotes").is(":visible");
     if (showing) {
+        $("#uservotesloading").show();
+        $("#uservoteslist").hide();
         socket.emit("userVideoVotes");
     }
 });
