@@ -28,7 +28,7 @@ module.exports = {
         
         this.fetchByUidAndType(uid, type, function(err, row) {
             if (err) return callback(err);
-           
+            
             if (row) {
                 callback(null, row.id);
             } else {
@@ -55,7 +55,7 @@ module.exports = {
             [uid, type],
             function(err, rows) {
                 if (err) return callback(err);
-                if (rows.length == 0) callback(null, null);
+                if (rows.length == 0) return callback(null, null);
                 callback(null, rows[0])
             }
         );
