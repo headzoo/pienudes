@@ -219,6 +219,7 @@ PlaylistModule.prototype.onUserPostJoin = function (user) {
     user.socket.on("delete", this.handleDelete.bind(this, user));
     user.socket.on("jumpTo", this.handleJumpTo.bind(this, user));
     user.socket.on("playNext", this.handlePlayNext.bind(this, user));
+    user.socket.on("voteVideo", this.handleVoteVideo.bind(this, user));
     user.socket.typecheckedOn("assignLeader", TYPE_ASSIGN_LEADER, this.handleAssignLeader.bind(this, user));
     user.socket.typecheckedOn("mediaUpdate", TYPE_MEDIA_UPDATE, this.handleUpdate.bind(this, user));
     var self = this;
@@ -293,6 +294,10 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     }
 
     var update = this.current.media.getFullUpdate();
+    update.meta.votes = {
+        up: Math.floor(Math.random() * 20),
+        down: Math.floor(Math.random() * 20)
+    };
     var uid = this.current.uid;
     if (users === this.channel.users) {
         this.channel.broadcastAll("setCurrent", uid);
@@ -820,6 +825,17 @@ PlaylistModule.prototype.handleUpdate = function (user, data) {
     var update = media.getTimeUpdate();
 
     this.channel.broadcastAll("mediaUpdate", update);
+};
+
+PlaylistModule.prototype.handleVoteVideo = function(user, data) {
+    if (!this.current) {
+        return;
+    }
+    
+    this.channel.broadcastAll("changeVotes", {
+        up: Math.floor(Math.random() * 20),
+        down: Math.floor(Math.random() * 20)
+    });
 };
 
 /**

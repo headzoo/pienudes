@@ -146,6 +146,18 @@ const TBL_UPLOADS = "" +
     "PRIMARY KEY (`id`)" +
     ") CHARACTER SET utf8";
 
+const TBL_VOTES = "" +
+    "CREATE TABLE IF NOT EXISTS `votes` (" +
+        "`id` BIGINT NOT NULL AUTO_INCREMENT," +
+        "`user_id` INT NOT NULL," +
+        "`media_id` BIGINT NOT NULL," +
+        "`value` SMALLINT NOT NULL," +
+        "`time` BIGINT NOT NULL," +
+    "PRIMARY KEY (`id`)," +
+    "FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE," +
+    "FOREIGN KEY (`media_id`) REFERENCES `media`(`id`) ON DELETE CASCADE" +
+    ") CHARACTER SET utf8";
+
 module.exports.init = function (queryfn, cb) {
     var tables = {
         users: TBL_USERS,
@@ -162,7 +174,8 @@ module.exports.init = function (queryfn, cb) {
         channel_data: TBL_CHANNEL_DATA,
         media: TBL_MEDIA,
         playlist_history: TBL_PLAYLIST_HISTORY,
-        uploads: TBL_UPLOADS
+        uploads: TBL_UPLOADS,
+        votes: TBL_VOTES
     };
 
     var AsyncQueue = require("../asyncqueue");

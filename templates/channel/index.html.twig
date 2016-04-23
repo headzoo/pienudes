@@ -50,42 +50,55 @@
                         <div class="embed-responsive embed-responsive-16by9">
                             <div id="ytapiplayer" class="embed-responsive-item"></div>
                         </div>
-                        <div id="plcontrol" class="btn-group chatbuttons">
-                            <button id="showsearch" class="btn btn-sm btn-default" title="Search for a video" data-toggle="collapse" data-target="#searchcontrol">
-                                <span class="glyphicon glyphicon-search"></span>
-                            </button>
-                            <button id="showmediaurl" class="btn btn-sm btn-default" title="Add video from URL" data-toggle="collapse" data-target="#addfromurl">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                            <button id="showcustomembed" class="btn btn-sm btn-default" title="Embed a custom frame" data-toggle="collapse" data-target="#playlistmanager">
-                                <span class="glyphicon glyphicon-th-large"></span>
-                            </button>
-                            <button id="showplaylistmanager" class="btn btn-sm btn-default" title="Manage playlists" data-toggle="collapse" data-target="#playlistmanager">
-                                <span class="glyphicon glyphicon-list"></span>
-                            </button>
-                            <button id="clearplaylist" class="btn btn-sm btn-default" title="Clear the playlist">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </button>
-                            <button id="shuffleplaylist" class="btn btn-sm btn-default" title="Shuffle the playlist">
-                                <span class="glyphicon glyphicon-sort"></span>
-                            </button>
-                            <button id="qlockbtn" class="btn btn-sm btn-default" title="Playlist locked">
-                                <span class="glyphicon glyphicon-lock"></span>
-                            </button>
-                        </div>
-                        <div id="videocontrols" class="btn-group pull-right">
-                            <button id="mediarefresh" class="btn btn-sm btn-default" title="Reload the video player">
-                                <span class="glyphicon glyphicon-retweet"></span>
-                            </button>
-                            <button id="fullscreenbtn" class="btn btn-sm btn-default" title="Make the video player fullscreen">
-                                <span class="glyphicon glyphicon-fullscreen"></span>
-                            </button>
-                            <button id="getplaylist" class="btn btn-sm btn-default" title="Retrieve playlist links">
-                                <span class="glyphicon glyphicon-link"></span>
-                            </button>
-                            <button id="voteskip" class="btn btn-sm btn-default" title="Voteskip">
-                                <span class="glyphicon glyphicon-step-forward"></span>
-                            </button>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div id="plcontrol" class="btn-group chatbuttons">
+                                    <button id="showsearch" class="btn btn-sm btn-default" title="Search for a video" data-toggle="collapse" data-target="#searchcontrol">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                    <button id="showmediaurl" class="btn btn-sm btn-default" title="Add video from URL" data-toggle="collapse" data-target="#addfromurl">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                    <button id="showcustomembed" class="btn btn-sm btn-default" title="Embed a custom frame" data-toggle="collapse" data-target="#playlistmanager">
+                                        <span class="glyphicon glyphicon-th-large"></span>
+                                    </button>
+                                    <button id="showplaylistmanager" class="btn btn-sm btn-default" title="Manage playlists" data-toggle="collapse" data-target="#playlistmanager">
+                                        <span class="glyphicon glyphicon-list"></span>
+                                    </button>
+                                    <button id="clearplaylist" class="btn btn-sm btn-default" title="Clear the playlist">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                    <button id="shuffleplaylist" class="btn btn-sm btn-default" title="Shuffle the playlist">
+                                        <span class="glyphicon glyphicon-sort"></span>
+                                    </button>
+                                    <button id="qlockbtn" class="btn btn-sm btn-default" title="Playlist locked">
+                                        <span class="glyphicon glyphicon-lock"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div id="videovotes" class="btn-group chatbuttons">
+                                    <button id="voteup" class="btn btn-sm btn-default" title="Upvote">
+                                        <span class="glyphicon glyphicon-chevron-up"></span> <span id="voteupvalue">0</span>
+                                    </button>
+                                    <button id="votedown" class="btn btn-sm btn-default" title="Downvote">
+                                        <span class="glyphicon glyphicon-chevron-down"></span> <span id="votedownvalue">0</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div id="videocontrols" class="btn-group pull-right">
+                                    <button id="mediarefresh" class="btn btn-sm btn-default" title="Reload the video player">
+                                        <span class="glyphicon glyphicon-retweet"></span>
+                                    </button>
+                                    <button id="fullscreenbtn" class="btn btn-sm btn-default" title="Make the video player fullscreen">
+                                        <span class="glyphicon glyphicon-fullscreen"></span>
+                                    </button>
+                                    <button id="voteskip" class="btn btn-sm btn-default" title="Voteskip">
+                                        <span class="glyphicon glyphicon-step-forward"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

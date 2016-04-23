@@ -820,3 +820,21 @@ textarea:focus, input:focus{
     font-size: 10px;
     vertical-align: middle;
 }
+
+#voteup {
+    background-color: #00D000;
+    background-image: none;
+}
+
+#voteup:hover {
+    background-color: #00dd00;
+}
+
+#votedown {
+    background-color: #EC4F4B;
+    background-image: none;
+}
+
+#votedown:hover {
+    background-color: #ff5546;
+}

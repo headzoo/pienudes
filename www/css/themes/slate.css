@@ -3266,9 +3266,7 @@ textarea.input-lg {
 .btn:active.focus,
 .btn:active:focus,
 .btn:focus {
-  outline: dotted thin;
-  outline: -webkit-focus-ring-color auto 5px;
-  outline-offset: -2px
+  outline: none;
 }
 
 .btn.focus,

@@ -38,6 +38,13 @@ $(function() {
     } else {
         $("#chatcolor").hide();
     }
+    
+    $("#voteup").click(function() {
+        socket.emit("voteVideo", "up");
+    });
+    $("#votedown").click(function() {
+        socket.emit("voteVideo", "down");
+    });
 });
 
 

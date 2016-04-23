@@ -889,6 +889,8 @@ Callbacks = {
         }
 
         $("#currenttitle").text(data.title);
+        $("#voteupvalue").text(data.meta.votes.up);
+        $("#votedownvalue").text(data.meta.votes.down);
     },
 
     mediaUpdate: function(data) {
@@ -958,6 +960,11 @@ Callbacks = {
             .addClass("pull-right")
             .attr("id", "search_pagination");
         $("#library").data("paginator", p);
+    },
+    
+    changeVotes: function(data) {
+        $("#voteupvalue").text(data.up);
+        $("#votedownvalue").text(data.down);
     },
 
     /* REGION Polls */
