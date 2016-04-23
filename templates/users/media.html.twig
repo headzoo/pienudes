@@ -1,17 +1,17 @@
+{% import "links.html.twig" as links %}
+
 <table class="table table-bordered">
     <thead>
-    <tr>
-        <th>Title</th>
-        <th style="width: 40%">Date</th>
-    </tr>
+        <tr>
+            <th>Title</th>
+            <th style="width: 40%">Date</th>
+        </tr>
     </thead>
     <tbody>
     {% for m in media %}
         <tr>
             <td>
-                <a href="/r/{{ m.channel }}">
-                    {{ m.title }}
-                </a>
+                {{ links.media(m.uid, m.type, m.title) }}
             </td>
             <td>
                 {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}
