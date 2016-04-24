@@ -6,10 +6,10 @@
             <a href="/user/{{ user.name }}">Played</a>
         </li>
         <li{% if pageTab == "upvotes" %} class="active"{% endif %}>
-            <a href="/user/{{ user.name }}/upvotes">Upvoted</a>
+            <a href="/user/{{ user.name }}/liked">Liked</a>
         </li>
         <li{% if pageTab == "downvotes" %} class="active"{% endif %}>
-            <a href="/user/{{ user.name }}/downvotes">Downvoted</a>
+            <a href="/user/{{ user.name }}/disliked">Disliked</a>
         </li>
     </ul>
 

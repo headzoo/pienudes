@@ -10,7 +10,7 @@
     {% endif %}
     <ul id="profile-stats">
         <li>{{ media_count }} Plays</li>
-        <li>34 Upvotes</li>
+        <li>{{ likes }} Likes</li>
     </ul>
     {% if user.profile.bio %}
         <div id="profile-bio">{{ user.profile.bio|nl2p|safe }}</div>
