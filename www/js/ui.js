@@ -45,6 +45,11 @@ $(function() {
     $("#votedown").click(function() {
         socket.emit("voteVideo", -1);
     });
+    
+    $("#clearbtn").click(function() {
+        console.log("cleared");
+        $("#messagebuffer").empty();
+    });
 });
 
 
