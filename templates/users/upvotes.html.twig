@@ -1,10 +1,10 @@
 {% extends "layout_profile.html.twig" %}
 {% block content %}
     <div id="profile">
-        <div id="profile-header" style="background-image: url({{ user.profile.header }});"></div>
+        {% include "users/header.html.twig" %}
         <div class="row margin-remove">
             <div class="col-md-2 col-md-offset-2">
-                {% include "users/head.html.twig" %}
+                {% include "users/info.html.twig" %}
             </div>
             <div class="col-md-4">
                 {% set empty_msg = "User has not up voted any tracks." %}

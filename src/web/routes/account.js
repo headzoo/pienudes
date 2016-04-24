@@ -446,7 +446,7 @@ function handleAccountProfile(req, res) {
     var image  = req.body.image;
     var header = req.body.header;
     var text   = req.body.text.substring(0, 50);
-    var bio    = xss.sanitizeHTML(req.body.bio.substring(0, 5000));
+    var bio    = xss.sanitizeHTML(req.body.bio.substring(0, 1000));
 
     db.users.setProfile(req.user.name, { image: image, header: header, text: text, bio: bio }, function (err) {
         if (err) {

@@ -1,0 +1,184 @@
+$(function() {
+    var ONEMB             = (1024 * 1024);
+    var is_editing        = false;
+    var state             = {};
+    var edit_btn          = $("#profile-edit-btn"),
+        cancel_btn        = $("#profile-cancel-btn"),
+        header_upload_btn = $("#profile-header-edit-upload-btn"),
+        header_remove_btn = $("#profile-header-edit-remove-btn"),
+        header_form       = $("#profile-header-edit-form"),
+        header_file       = $("#profile-header-edit-file"),
+        avatar_upload_btn = $("#profile-avatar-edit-upload-btn"),
+        avatar_remove_btn = $("#profile-avatar-edit-remove-btn"),
+        avatar            = $("#profile-avatar"),
+        avatar_e          = $("#profile-avatar-edit"),
+        avatar_form       = $("#profile-avatar-edit-form"),
+        avatar_file       = $("#profile-avatar-edit-file"),
+        tagline           = $("#profile-tagline"),
+        tagline_e         = $("#profile-tagline-edit"),
+        bio               = $("#profile-bio"),
+        bio_e             = $("#profile-bio-edit"),
+        header            = $("#profile-header"),
+        header_e          = $("#profile-header-edit");
+    
+    setState();
+    
+    edit_btn.on("click", function() {
+        if (is_editing) {
+            var header_img = header.css("background-image").replace(/url\((.*?)\)/, '$1');
+
+            $.ajax({
+                url: "/user/profile/bio/save",
+                type: "post",
+                data: {
+                    text:     tagline_e.val(),
+                    bio:      bio_e.val(),
+                    image:    avatar.attr("src"),
+                    header:   header_img
+                }
+            }).done(function(res) {
+                tagline.text(res.text);
+                tagline_e.val(res.text);
+                bio.html(nl2p(res.bio));
+                bio_e.val(res.bio);
+                setState();
+                
+                is_editing = false;
+                hide();
+            }).fail(function() {
+            
+            });
+        } else {
+            is_editing = true;
+            show();
+        }
+    });
+    
+    cancel_btn.on("click", function() {
+        tagline.text(state.text);
+        bio.html(nl2p(state.bio));
+        avatar.attr("src", state.image);
+        header.css("background-image", state.header_img);
+        header.css("background-image", state.header_color);
+        
+        is_editing = false;
+        hide();
+    });
+    
+    avatar_upload_btn.on("click", function() {
+        avatar_file.trigger("click");
+    });
+    
+    avatar_remove_btn.on("click", function() {
+    
+    });
+    
+    avatar_file.on("change", function() {
+        var file = this.files[0];
+        
+        if(file.name.length < 1) {
+            return;
+        } else if(file.size > ONEMB) {
+            return alert("The file is too big");
+        } else if(file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg') {
+            return alert("The file does not match png, jpg or gif");
+        }
+    
+        var form_data = new FormData(avatar_form[0]);
+        $.ajax({
+            url: "/user/profile/avatar/save",
+            type: "post",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false
+        }).done(function(res) {
+            avatar.attr("src", res.src);
+        }).fail(function() {
+        
+        });
+    });
+    
+    header_upload_btn.on("click", function() {
+        header_file.trigger("click");
+    });
+    
+    header_remove_btn.on("click", function() {
+    
+    });
+    
+    header_file.on("change", function() {
+        var file = this.files[0];
+    
+        if(file.name.length < 1) {
+            return;
+        } else if(file.size > (5 * ONEMB)) {
+            return alert("The file is too big");
+        } else if(file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg') {
+            return alert("The file does not match png, jpg or gif");
+        }
+        
+        var form_data = new FormData(header_form[0]);
+        $.ajax({
+            url:         "/user/profile/header/save",
+            type:        "post",
+            data:        form_data,
+            cache:       false,
+            contentType: false,
+            processData: false
+        }).done(function(res) {
+            console.log(res);
+            header.css("background-image", "url(" + res.src + ")");
+        }).fail(function() {
+        
+        });
+    });
+    
+    header_remove_btn.on("click", function() {
+    
+    });
+    
+    function show() {
+        header_e.show();
+        avatar_e.show();
+        cancel_btn.show();
+    
+        tagline.replaceWith(tagline_e);
+        tagline_e.show();
+        
+        bio_e.height(bio.height() + 16);
+        bio.replaceWith(bio_e);
+        bio_e.show();
+    
+        edit_btn.text("Save");
+    }
+    
+    function hide() {
+        header_e.hide();
+        avatar_e.hide();
+        cancel_btn.hide();
+    
+        tagline_e.replaceWith(tagline);
+        tagline_e.hide();
+        bio_e.replaceWith(bio);
+        bio_e.hide();
+    
+        edit_btn.text("Edit");
+    }
+    
+    function setState() {
+        state = {
+            image:        avatar.attr("src"),
+            header_img:   header.css("background-image"),
+            header_color: header.css("background-image"),
+            text:         tagline_e.val(),
+            bio:          bio_e.val()
+        };
+    }
+    
+    function nl2p(str) {
+        str = '<p>' + str.replace(/\n([ \t]*\n)+/g, '</p><p>')
+                .replace('\n', '<br />') + '</p>';
+        return str;
+    }
+});

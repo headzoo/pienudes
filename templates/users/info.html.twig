@@ -1,0 +1,60 @@
+<div id="profile-info">
+    <div id="profile-info-face">
+        {# avatar #}
+        <div id="profile-avatar-wrap">
+            {% if user.profile.image %}
+                <img src="{{ user.profile.image }}" id="profile-avatar" />
+            {% else %}
+                <img src="/img/avatar.gif" id="profile-avatar" />
+            {% endif %}
+        </div>
+        
+        {# name #}
+        <h1 id="profile-name">
+            {{ user.name }}
+        </h1>
+        
+        {# tagline #}
+        <p id="profile-tagline">{{ user.profile.text }}</p>
+        {% if loggedIn and loginName == user.name %}
+            <input
+                type="text"
+                class="profile-edit-control"
+                id="profile-tagline-edit"
+                value="{{ user.profile.text }}"
+                placeholder="Tagline"
+                style="display: none;" />
+        {% endif %}
+    </div>
+    
+    {% if loggedIn and loginName == user.name %}
+        <div id="profile-avatar-edit" style="display: none;">
+            <span class="glyphicon glyphicon-picture"></span>
+            <div class="btn-group">
+                <button id="profile-avatar-edit-upload-btn" class="btn btn-primary btn-sm">Upload</button>
+                <button id="profile-avatar-edit-remove-btn" class="btn btn-primary btn-sm">Remove</button>
+            </div>
+            <form id="profile-avatar-edit-form" enctype="multipart/form-data" style="width: 0; height: 0;">
+                <input id="profile-avatar-edit-file" type="file" name="avatar" style="width: 0; height: 0;" />
+            </form>
+        </div>
+    {% endif %}
+    
+    {# stats #}
+    <ul id="profile-stats">
+        <li>{{ media_count }} Plays</li>
+        <li>{{ likes }} Likes</li>
+    </ul>
+    
+    {# bio #}
+    <div id="profile-bio">{{ user.profile.bio|nl2p|safe }}</div>
+    {% if loggedIn and loginName == user.name %}
+        <input type="text" id="profile-tagline-edit" value="{{ user.profile.text }}" placeholder="Tagline" style="display: none;" />
+        <textarea id="profile-bio-edit" class="profile-edit-control" style="display: none">{{ user.profile.bio }}</textarea>
+    {% endif %}
+    
+    {% if loggedIn and loginName == user.name %}
+        <button id="profile-edit-btn" class="btn btn-primary">Edit</button>
+        <button id="profile-cancel-btn" class="btn btn-default" style="display: none;">Cancel</button>
+    {% endif %}
+</div>

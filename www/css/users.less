@@ -1,6 +1,36 @@
 @color-card-bg: #1B1B1B;
 @color-card-border: #000;
 
+.profile-mainpage {
+  padding-top: 50px !important;
+}
+
+.profile-wrap {
+  .navbar-inverse {
+    background-color: @color-card-bg;
+    border-color: @color-card-border;
+  }
+
+  .navbar-nav>li>a:hover {
+    background-color: lighten(@color-card-bg, 10%);
+  }
+
+  .navbar-inverse .navbar-nav>.open>a,
+  .navbar-inverse .navbar-nav>.open>a:focus,
+  .navbar-inverse .navbar-nav>.open>a:hover {
+    background-color: lighten(@color-card-bg, 10%);
+  }
+
+  .dropdown-menu {
+    background-color: @color-card-bg;
+  }
+
+  .dropdown-menu>li>a:focus,
+  .dropdown-menu>li>a:hover {
+    background-color: lighten(@color-card-bg, 10%);
+  }
+}
+
 #profile {
   h1 {
     color: #FFF;
@@ -34,18 +64,48 @@
 
 #profile-header {
   width: 100%;
-  height: 225px;
+  height: 275px;
   margin-bottom: 6px;
   background: center center no-repeat;
   background-size: cover;
+  position: relative;
 
   @media only screen and (max-width : 600px) {
     height: 80px;
   }
 }
+#profile-header-edit {
+  text-align: center;
+  width: 178px;
+  height: 42px;
+  margin: auto auto;
+  padding: 6px;
+  color: #fff;
+  background-color: @color-card-bg;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  
+  .glyphicon-picture {
+    font-size: 30px;
+    vertical-align: middle;
+    margin-top: -4px;
+  }
+}
 
 #profile-info {
   padding: 0 6px;
+  margin-top: -10px;
+  
+  .profile-edit-control {
+    border: none;
+  }
+}
+
+#profile-info-face {
+  height: 74px;
+  margin-bottom: 4px;
 }
 
 #profile-timeline {
@@ -56,20 +116,34 @@
   }
 }
 
-.profile-avatar {
+#profile-avatar-wrap {
+  position: relative;
+  width: 70px;
+  height: 70px;
+}
+#profile-avatar {
   width: 70px;
   height: 70px;
   background-size: cover;
   background-position: center;
   border-radius: 50%;
   background-color: #3E444C;
-  margin-top: 10px;
+}
+#profile-avatar-edit {
+  color: #FFF;
+  margin-bottom: 8px;
+  
+  .glyphicon-picture {
+    vertical-align: middle;
+    margin-top: -4px;
+    font-size: 30px;
+  }
 }
 
 #profile-stats {
   list-style-type: none;
-  margin: 22px 0 0 0;
   padding: 0;
+  margin-bottom: 0;
   text-transform: uppercase;
   color: #FFF;
   
@@ -80,49 +154,29 @@
 }
 
 #profile-bio {
-  margin-top: 10px;
+  margin-top: 2px;
   color: #FFF;
 }
-
-.profile-mainpage {
-  padding-top: 50px !important;
+#profile-bio-edit {
+  margin-top: 10px;
+  width: 100%;
+  height: 200px;
 }
 
-.profile-tagline {
+#profile-tagline {
   color: #FFF;
   font-weight: bold;
   margin-left: 78px;
+  font-size: 12px;
+}
+#profile-tagline-edit {
+  margin-left: 78px;
+  width: 188px;
 }
 
 .profile-empty {
   text-align: center;
   margin: 34px 0;
-}
-
-.profile-wrap {
-  .navbar-inverse {
-    background-color: @color-card-bg;
-    border-color: @color-card-border;
-  }
-
-  .navbar-nav>li>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
-  }
-
-  .navbar-inverse .navbar-nav>.open>a,
-  .navbar-inverse .navbar-nav>.open>a:focus,
-  .navbar-inverse .navbar-nav>.open>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
-  }
-  
-  .dropdown-menu {
-    background-color: @color-card-bg;
-  }
-
-  .dropdown-menu>li>a:focus,
-  .dropdown-menu>li>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
-  }
 }
 
 .card {

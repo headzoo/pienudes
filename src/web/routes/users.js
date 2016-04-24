@@ -1,9 +1,32 @@
 "use strict";
+
+var multer  = require('multer');
+var AWS     = require('aws-sdk');
+var fs      = require('fs');
+var Jimp    = require("jimp");
 import template from '../template';
 import Config from '../../config';
+import db from '../../database';
 import db_playlists from '../../database/playlist';
 import db_accounts from '../../database/accounts';
 import db_votes from '../../database/votes';
+import xss from '../../xss';
+
+const ONEMB = (1024 * 1024);
+
+var upload_avatar = multer({
+    dest: '/tmp',
+    limits: {
+        fileSize: ONEMB
+    }
+});
+
+var upload_header = multer({
+    dest: '/tmp',
+    limits: {
+        fileSize: (5 * ONEMB)
+    }
+});
 
 function handleProfile(req, res) {
     var name = req.params.name;
@@ -84,6 +107,118 @@ function handleProfile(req, res) {
                 });
             });
         });
+    });
+}
+
+function handleProfileBioSave(req, res) {
+    
+    db.users.getProfile(req.user.name, function(err, profile) {
+        if (err) {
+            res.json({
+                message: "Failed to fetch profile information."
+            }, 500);
+        }
+    
+        var header = req.body.header;
+        var image  = req.body.image;
+        var text   = req.body.text.substring(0, 50);
+        var bio    = xss.sanitizeHTML(req.body.bio.substring(0, 1000));
+        var meta   = {
+            image:  image,
+            header: header,
+            text:   text,
+            bio:    bio
+        };
+        
+        db.users.setProfile(req.user.name, meta, function (err) {
+            if (err) {
+                res.json({
+                    message: "Failed to save profile information."
+                }, 500);
+            }
+            
+            res.json({
+                text: text,
+                bio: bio,
+                image: profile.image,
+                header: "#9609B5"
+            });
+        });
+    });
+}
+
+function handleProfileAvatarSave(req, res) {
+    
+    db.users.getProfile(req.user.name, function(err, profile) {
+        if (err) {
+            res.json({
+                message: "Failed to fetch profile information."
+            }, 500);
+        }
+        
+        Jimp.read(req.file.path)
+            .then(function(image) {
+                image.resize(80, 80);
+                image.getBuffer("image/png", function(err, buff) {
+                    if (err) throw err;
+                
+                    var filename = "profiles/avatars/" + req.user.name + "-" + Date.now() + ".png";
+                    var bucket   = new AWS.S3({params: {Bucket: Config.get("uploads.s3_bucket")}});
+                    var params   = {
+                        Key:         filename,
+                        Body:        buff,
+                        ContentType: req.file.mimetype,
+                        ACL:         'public-read'
+                    };
+                    bucket.upload(params, function(err) {
+                        if (err) throw err;
+    
+                        res.json({
+                            image: Config.get("uploads.uploads_url") + filename
+                        });
+                    });
+                });
+            })
+            .catch(function(err) {
+            
+            });
+    });
+}
+
+function handleProfileHeaderSave(req, res) {
+    db.users.getProfile(req.user.name, function(err, profile) {
+        if (err) {
+            res.json({
+                message: "Failed to fetch profile information."
+            }, 500);
+        }
+        
+        Jimp.read(req.file.path)
+            .then(function(image) {
+                image.quality(75);
+                image.getBuffer("image/jpeg", function(err, buff) {
+                    if (err) throw err;
+                    
+                    var filename = "profiles/headers/" + req.user.name + "-" + Date.now() + ".jpg";
+                    var bucket   = new AWS.S3({params: {Bucket: Config.get("uploads.s3_bucket")}});
+                    var params   = {
+                        Key:         filename,
+                        Body:        buff,
+                        ContentType: req.file.mimetype,
+                        ACL:         'public-read'
+                    };
+                    bucket.upload(params, function(err) {
+                        if (err) throw err;
+                        
+                        res.json({
+                            src: Config.get("uploads.uploads_url") + filename
+                        });
+                    });
+                });
+            })
+            .catch(function(err) {
+                
+            });
     });
 }
 
@@ -260,5 +395,8 @@ module.exports = {
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/liked/:page?', handleUpvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/disliked/:page?', handleDownvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/:page?', handleProfile);
+        app.post('/user/profile/bio/save', handleProfileBioSave);
+        app.post('/user/profile/avatar/save', upload_avatar.single("avatar"), handleProfileAvatarSave);
+        app.post('/user/profile/header/save', upload_header.single("header"), handleProfileHeaderSave);
     }
 };
