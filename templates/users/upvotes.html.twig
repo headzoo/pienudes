@@ -1,7 +1,7 @@
 {% extends "layout_profile.html.twig" %}
 {% block content %}
     <div id="profile">
-        <div id="profile-header" style="background: url({{ user.profile.header }}) center center no-repeat; background-size: cover;"></div>
+        <div id="profile-header" style="background-image: url({{ user.profile.header }});"></div>
         <div class="row margin-remove">
             <div class="col-md-2 col-md-offset-2">
                 {% include "users/head.html.twig" %}
