@@ -365,15 +365,6 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
     max-height: 80px;
 }
 
-.profile-avatar {
-    max-width: 50px;
-    max-height: 50px;
-}
-
-#profilebio {
-    height: 150px;
-}
-
 #togglemotd .glyphicon {
     font-size: 10pt;
 }
@@ -854,14 +845,7 @@ textarea:focus, input:focus{
     text-align: center;
 }
 
-#userprofile h1 {
-    color: #FFF;
-}
-
-.profiletagline, .profilebio {
-    color: #FFF;
-}
-
-.profiletagline {
-    font-weight: bold;
+.padding-remove {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }

@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-nodemon --watch templates -e twig index.js dev.cakenudes.com 8443
+nodemon --watch templates --watch src -e twig,js index.js dev.cakenudes.com 8443

@@ -1,0 +1,125 @@
+#profile h1 {
+  color: #FFF;
+  padding: 0;
+  margin: -56px 0 0 78px;
+  text-shadow: none;
+  font-size: 22px;
+  width: 90%;
+}
+#profile .nav-tabs {
+  border: 1px solid #000;
+  background: #1b1b1b;
+  text-transform: uppercase;
+}
+#profile .nav-tabs > li.active > a,
+#profile .nav-tabs > li.active > a:focus,
+#profile .nav-tabs > li.active > a:hover {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #fff;
+}
+#profile .nav > li > a:focus,
+#profile .nav > li > a:hover {
+  text-decoration: none;
+  background-color: #111;
+}
+#profile-header {
+  width: 100%;
+  height: 225px;
+  margin-bottom: 6px;
+}
+@media only screen and (max-width: 600px) {
+  #profile-header {
+    height: 80px;
+  }
+}
+#profile-info {
+  padding: 0 6px;
+}
+#profile-timeline {
+  margin-top: -150px;
+}
+@media only screen and (max-width: 600px) {
+  #profile-timeline {
+    margin-top: 0;
+  }
+}
+.profile-avatar {
+  width: 70px;
+  height: 70px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  background-color: #3E444C;
+  margin-top: 10px;
+}
+#profile-stats {
+  list-style-type: none;
+  margin: 22px 0 0 0;
+  padding: 0;
+  text-transform: uppercase;
+  color: #FFF;
+}
+#profile-stats li {
+  display: inline-block;
+  margin-right: 8px;
+}
+#profile-bio {
+  margin-top: 10px;
+  color: #FFF;
+}
+.profile-mainpage {
+  padding-top: 50px !important;
+}
+.profile-tagline {
+  color: #FFF;
+  font-weight: bold;
+  margin-left: 78px;
+}
+.profile-empty {
+  text-align: center;
+  margin: 34px 0;
+}
+.profile-wrap .navbar-inverse {
+  background-color: #1b1b1b;
+  border-color: #000000;
+}
+.profile-wrap .navbar-nav > li > a:hover {
+  background-color: #353535;
+}
+.profile-wrap .navbar-inverse .navbar-nav > .open > a,
+.profile-wrap .navbar-inverse .navbar-nav > .open > a:focus,
+.profile-wrap .navbar-inverse .navbar-nav > .open > a:hover {
+  background-color: #353535;
+}
+.profile-wrap .dropdown-menu {
+  background-color: #1b1b1b;
+}
+.profile-wrap .dropdown-menu > li > a:focus,
+.profile-wrap .dropdown-menu > li > a:hover {
+  background-color: #353535;
+}
+.card {
+  background: #1b1b1b;
+  display: block;
+  min-height: 102px;
+  position: relative;
+  width: 100%;
+  padding: 6px;
+  border-bottom: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-right: 1px solid #000000;
+}
+.card-media {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+.card-media-thumbnail {
+  float: left;
+  margin-right: 6px;
+}
+.card-media-title {
+  font-size: 18px;
+}
+.card-media-time {
+  font-size: 12px;
+}

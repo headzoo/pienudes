@@ -1,7 +1,15 @@
-{% extends "layout.html.twig" %}
+{% extends "layout_profile.html.twig" %}
 {% block content %}
-    <div id="userprofile">
-        {% include "users/head.html.twig" %}
-        {% include "users/media.html.twig" %}
+    <div id="profile">
+        <div id="profile-header" style="background: url({{ user.profile.header }}) center center no-repeat; background-size: cover;"></div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-2 col-md-offset-2">
+                {% include "users/head.html.twig" %}
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-4">
+                {% set empty_msg = "User has not played any tracks." %}
+                {% include "users/timeline.html.twig" %}
+            </div>
+        </div>
     </div>
 {% endblock %}

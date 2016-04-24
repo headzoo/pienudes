@@ -1117,7 +1117,7 @@ body {
   font-size: 14px;
   line-height: 1.42857143;
   color: #c8c8c8;
-  background-color: #272b30
+  background-color: #000;
 }
 
 button,
@@ -4329,7 +4329,7 @@ textarea.input-group-sm>.input-group-btn>.btn {
   margin-right: 2px;
   line-height: 1.42857143;
   border: 1px solid transparent;
-  border-radius: 4px 4px 0 0
+  border-radius: 0;
 }
 
 .nav-tabs>li>a:hover {

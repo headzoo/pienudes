@@ -25,7 +25,7 @@ function handleProfile(req, res) {
         }
         
         if (user.profile == "") {
-            user.profile = {image: "", text: "", bio: ""};
+            user.profile = {image: "", text: "", bio: "", header: ""};
         } else {
             user.profile = JSON.parse(user.profile);
         }
@@ -43,12 +43,13 @@ function handleProfile(req, res) {
                     pageTab: "home",
                     user: user,
                     media: [],
+                    media_count: 0,
                     page:  1,
                     pages: 1
                 });
             }
     
-            var limit  = 100;
+            var limit  = 50;
             var pages  = Math.ceil(count / limit);
             if (page > pages) {
                 page = pages;
@@ -67,6 +68,7 @@ function handleProfile(req, res) {
                     pageTab: "home",
                     user: user,
                     media: rows,
+                    media_count: count,
                     page:  parseInt(page),
                     pages: parseInt(pages)
                 });
@@ -113,6 +115,7 @@ function handleUpvotes(req, res) {
                     pageTab: "upvotes",
                     user: user,
                     media: [],
+                    media_count: 0,
                     page:  1,
                     pages: 1
                 });
@@ -137,6 +140,7 @@ function handleUpvotes(req, res) {
                     pageTab: "upvotes",
                     user: user,
                     media: rows,
+                    media_count: count,
                     page:  parseInt(page),
                     pages: parseInt(pages)
                 });
@@ -183,6 +187,7 @@ function handleDownvotes(req, res) {
                     pageTab: "downvotes",
                     user: user,
                     media: [],
+                    media_count: 0,
                     page:  1,
                     pages: 1
                 });
@@ -207,6 +212,7 @@ function handleDownvotes(req, res) {
                     pageTab: "downvotes",
                     user: user,
                     media: rows,
+                    media_count: count,
                     page:  parseInt(page),
                     pages: parseInt(pages)
                 });

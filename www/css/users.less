@@ -1,0 +1,153 @@
+@color-card-bg: #1B1B1B;
+@color-card-border: #000;
+
+#profile {
+  h1 {
+    color: #FFF;
+    padding: 0;
+    margin: -56px 0 0 78px;
+    text-shadow: none;
+    font-size: 22px;
+    width: 90%;
+  }
+
+  .nav-tabs {
+    border: 1px solid #000;
+    background: @color-card-bg;
+    text-transform: uppercase;
+  }
+  
+  .nav-tabs>li.active>a,
+  .nav-tabs>li.active>a:focus,
+  .nav-tabs>li.active>a:hover {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+  }
+
+  .nav>li>a:focus,
+  .nav>li>a:hover {
+    text-decoration: none;
+    background-color: #111;
+  }
+}
+
+#profile-header {
+  width: 100%;
+  height: 225px;
+  margin-bottom: 6px;
+
+  @media only screen and (max-width : 600px) {
+    height: 80px;
+  }
+}
+
+#profile-info {
+  padding: 0 6px;
+}
+
+#profile-timeline {
+  margin-top: -150px;
+
+  @media only screen and (max-width : 600px) {
+    margin-top: 0;
+  }
+}
+
+.profile-avatar {
+  width: 70px;
+  height: 70px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  background-color: #3E444C;
+  margin-top: 10px;
+}
+
+#profile-stats {
+  list-style-type: none;
+  margin: 22px 0 0 0;
+  padding: 0;
+  text-transform: uppercase;
+  color: #FFF;
+  
+  li {
+    display: inline-block;
+    margin-right: 8px;
+  }
+}
+
+#profile-bio {
+  margin-top: 10px;
+  color: #FFF;
+}
+
+.profile-mainpage {
+  padding-top: 50px !important;
+}
+
+.profile-tagline {
+  color: #FFF;
+  font-weight: bold;
+  margin-left: 78px;
+}
+
+.profile-empty {
+  text-align: center;
+  margin: 34px 0;
+}
+
+.profile-wrap {
+  .navbar-inverse {
+    background-color: @color-card-bg;
+    border-color: @color-card-border;
+  }
+
+  .navbar-nav>li>a:hover {
+    background-color: lighten(@color-card-bg, 10%);
+  }
+
+  .navbar-inverse .navbar-nav>.open>a,
+  .navbar-inverse .navbar-nav>.open>a:focus,
+  .navbar-inverse .navbar-nav>.open>a:hover {
+    background-color: lighten(@color-card-bg, 10%);
+  }
+  
+  .dropdown-menu {
+    background-color: @color-card-bg;
+  }
+
+  .dropdown-menu>li>a:focus,
+  .dropdown-menu>li>a:hover {
+    background-color: lighten(@color-card-bg, 10%);
+  }
+}
+
+.card {
+  background: @color-card-bg;
+  display: block;
+  min-height: 102px;
+  position: relative;
+  width: 100%;
+  padding: 6px;
+  border-bottom: 1px solid @color-card-border;
+  border-left: 1px solid @color-card-border;
+  border-right: 1px solid @color-card-border;
+}
+
+.card-media {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.card-media-thumbnail {
+  float: left;
+  margin-right: 6px;
+}
+
+.card-media-title {
+  font-size: 18px;
+}
+
+.card-media-time {
+  font-size: 12px;
+}

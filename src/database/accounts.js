@@ -463,6 +463,7 @@ module.exports = {
             } else {
                 var userprof = {
                     image: "",
+                    header: "",
                     text: "",
                     bio: ""
                 };
@@ -474,9 +475,10 @@ module.exports = {
 
                 try {
                     var profile = JSON.parse(rows[0].profile);
-                    userprof.image = profile.image || "";
-                    userprof.text  = profile.text || "";
-                    userprof.bio   = profile.bio || "";
+                    userprof.image  = profile.image || "";
+                    userprof.header = profile.header || "";
+                    userprof.text   = profile.text || "";
+                    userprof.bio    = profile.bio || "";
                     callback(null, userprof);
                 } catch (e) {
                     Logger.errlog.log("Corrupt profile: " + rows[0].profile +
@@ -507,17 +509,20 @@ module.exports = {
 
         // Cast to string to guarantee string type
         profile.image += "";
+        profile.header += "";
         profile.text += "";
         profile.bio += "";
 
         // Limit size
-        profile.image = profile.image.substring(0, 255);
-        profile.text  = profile.text.substring(0, 50);
-        profile.bio   = profile.bio.substring(0, 5000);
+        profile.image  = profile.image.substring(0, 255);
+        profile.header = profile.header.substring(0, 255);
+        profile.text   = profile.text.substring(0, 50);
+        profile.bio    = profile.bio.substring(0, 5000);
 
         // Stringify the literal to guarantee I only get the keys I want
         var profilejson = JSON.stringify({
             image: profile.image,
+            header: profile.header,
             text: profile.text,
             bio: profile.bio
         });

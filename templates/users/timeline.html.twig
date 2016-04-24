@@ -1,0 +1,56 @@
+{% import "links.html.twig" as links %}
+
+<div id="profile-timeline">
+    <ul class="nav nav-tabs">
+        <li{% if pageTab == "home" %} class="active"{% endif %}>
+            <a href="/user/{{ user.name }}">Played</a>
+        </li>
+        <li{% if pageTab == "upvotes" %} class="active"{% endif %}>
+            <a href="/user/{{ user.name }}/upvotes">Upvoted</a>
+        </li>
+        <li{% if pageTab == "downvotes" %} class="active"{% endif %}>
+            <a href="/user/{{ user.name }}/downvotes">Downvoted</a>
+        </li>
+    </ul>
+
+    {% if media_count == 0 %}
+        <div class="card card-media">
+            <div class="profile-empty">
+                {{ empty_msg }}
+            </div>
+        </div>
+    {% else %}
+        {% for m in media %}
+            <div class="card card-media">
+                <img class="card-media-thumbnail" src="https://i.ytimg.com/vi/{{ m.uid }}/default.jpg" />
+                {{ links.media(m.uid, m.type, m.title, "card-media-title") }}
+                <div class="card-media-time">
+                    {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}
+                </div>
+            </div>
+        {% endfor %}
+
+        <nav>
+            <ul class="pager">
+                {% if page == 1 %}
+                    <li class="previous disabled">
+                        <a href="#"><span aria-hidden="true">&larr;</span> Newer</a>
+                    </li>
+                {% else %}
+                    <li class="previous">
+                        <a href="/user/{{ user.name }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                    </li>
+                {% endif %}
+                {% if page == pages %}
+                    <li class="next disabled">
+                        <a href="#">Older <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                {% else %}
+                    <li class="next">
+                        <a href="/user/{{ user.name }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
