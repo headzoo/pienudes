@@ -849,3 +849,8 @@ textarea:focus, input:focus{
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+
+.margin-remove {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}

@@ -1,0 +1,35 @@
+{% macro media(media, class='') %}
+    {% if media.type == "yt" %}
+        <a href="http://youtube.com/watch?v={{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "sc" %}
+        <a href="{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "vi" %}
+        <a href="http://vimeo.com/{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "dm" %}
+        <a href="http://dailymotion.com/video/{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "li" %}
+        <a href="http://livestream.com/{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "tw" %}
+        <a href="http://twitch.tv/{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "im" %}
+        <a href="http://imgur.com/a/{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "us" %}
+        <a href="http://ustream.tv/{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "gd" %}
+        <a href="https://docs.google.com/file/d/{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% elif media.type == "hb" %}
+        <a href="http://hitbox.tv/{{ media.uid }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+    {% else %}
+        {{ media.title }}
+    {% endif %}
+{% endmacro %}
+
+{% macro thumbnail(media, class='') %}
+    {% if media.type == "yt" %}
+        <img src="https://i.ytimg.com/vi/{{ media.uid }}/default.jpg" class="{{ class }}" />
+    {% elif media.type == "sc" %}
+        <img src="/img/thumbs/sc.png" class="{{ class }}" />
+    {% else %}
+        <img src="/img/thumbs/missing.jpg" class="{{ class }}" />
+    {% endif %}
+{% endmacro %}

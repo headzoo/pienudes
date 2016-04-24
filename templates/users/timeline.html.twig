@@ -1,4 +1,4 @@
-{% import "links.html.twig" as links %}
+{% import "macros/links.html.twig" as links %}
 
 <div id="profile-timeline">
     <ul class="nav nav-tabs">
@@ -22,8 +22,8 @@
     {% else %}
         {% for m in media %}
             <div class="card card-media">
-                <img class="card-media-thumbnail" src="https://i.ytimg.com/vi/{{ m.uid }}/default.jpg" />
-                {{ links.media(m.uid, m.type, m.title, "card-media-title") }}
+                {{ links.thumbnail(m, "card-media-thumbnail") }}
+                {{ links.media(m, "card-media-title") }}
                 <div class="card-media-time">
                     {% if m.channel %}
                         Played in <a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a> on {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}.
