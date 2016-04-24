@@ -25,7 +25,11 @@
                 <img class="card-media-thumbnail" src="https://i.ytimg.com/vi/{{ m.uid }}/default.jpg" />
                 {{ links.media(m.uid, m.type, m.title, "card-media-title") }}
                 <div class="card-media-time">
-                    {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}
+                    {% if m.channel %}
+                        Played in <a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a> on {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}.
+                    {% else %}
+                        {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
