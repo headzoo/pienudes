@@ -158,7 +158,7 @@ function handleProfileAvatarSave(req, res) {
         
         Jimp.read(req.file.path)
             .then(function(image) {
-                image.resize(80, 80);
+                image.resize(200, 200);
                 image.getBuffer("image/png", function(err, buff) {
                     if (err) throw err;
                 
@@ -174,7 +174,7 @@ function handleProfileAvatarSave(req, res) {
                         if (err) throw err;
     
                         res.json({
-                            image: Config.get("uploads.uploads_url") + filename
+                            src: Config.get("uploads.uploads_url") + filename
                         });
                     });
                 });
