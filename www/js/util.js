@@ -1593,7 +1593,6 @@ function addUserJoinMessage(data) {
     
     var timestamp = new Date(data.time).toTimeString().split(" ")[0];
     var msg = "[" + timestamp + "] " + data.name + " has joined chat";
-    msg = execEmotes(msg);
     
     var msgBuf = $("#messagebuffer");
     var div = $("<div/>");
