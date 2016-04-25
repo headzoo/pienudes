@@ -3,7 +3,8 @@
 var multer  = require('multer');
 var AWS     = require('aws-sdk');
 var fs      = require('fs');
-var Jimp    = require("jimp");
+var Jimp    = require('jimp');
+var async   = require('async');
 import template from '../template';
 import Config from '../../config';
 import db from '../../database';
@@ -80,7 +81,7 @@ function handleProfile(req, res) {
                     });
                 }
         
-                var limit  = 50;
+                var limit  = 25;
                 var pages  = Math.ceil(count / limit);
                 if (page > pages) {
                     page = pages;
@@ -94,15 +95,34 @@ function handleProfile(req, res) {
                         });
                     }
                     
-                    template.send(res, 'users/profile', {
-                        pageTitle: req.params.name,
-                        pageTab: "home",
-                        user: user,
-                        media: rows,
-                        media_count: count,
-                        likes: likes,
-                        page:  parseInt(page),
-                        pages: parseInt(pages)
+                    var pids = [];
+                    rows.forEach(function(row) {
+                        pids.push(row.pid);
+                    });
+                    async.map(pids, findPlayedByCount, function(err, results) {
+                        if (err) {
+                            return template.send(res, 'error/http', {
+                                status: 500
+                            });
+                        }
+                        rows.forEach(function(row) {
+                            results.forEach(function(r) {
+                                if (row.pid == r.pid) {
+                                    row.common = parseInt(r.num) - 1;
+                                }
+                            });
+                        });
+    
+                        template.send(res, 'users/profile', {
+                            pageTitle: req.params.name,
+                            pageTab: "home",
+                            user: user,
+                            media: rows,
+                            media_count: count,
+                            likes: likes,
+                            page:  parseInt(page),
+                            pages: parseInt(pages)
+                        });
                     });
                 });
             });
@@ -407,6 +427,12 @@ function handleTrackDelete(req, res) {
     });
 }
 
+function findPlayedByCount(pid, callback) {
+    db_playlists.countDistinctUsersById(pid, function(err, num) {
+        if (err) return callback(err);
+        callback(null, {pid: pid, num: num});
+    });
+}
 
 module.exports = {
     /**

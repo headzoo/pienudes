@@ -34,6 +34,11 @@
                     {% else %}
                         {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}
                     {% endif %}
+                    {% if pageTab == "home" and m.common != 0 %}
+                        <div>
+                            Played by {{ m.common }} other {% if m.common == 1 %}person{% else %}people{% endif %}.
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

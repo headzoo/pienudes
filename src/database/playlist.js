@@ -143,6 +143,7 @@ module.exports = {
      * Returns the number of rows in the playlist_history table
      */
     count(callback) {
+        callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history`", [], function(err, rows) {
             if (err) {
                 callback(err, []);
@@ -153,6 +154,7 @@ module.exports = {
     },
     
     countByUser(user, callback) {
+        callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `user` = ?", [user], function(err, rows) {
             if (err) {
                 callback(err, []);
@@ -160,5 +162,25 @@ module.exports = {
             }
             callback(null, rows[0]["c"]);
         });
+    },
+    
+    countDistinctUsersById(pid, callback) {
+        callback = callback || noop;
+        
+        this.fetchById(pid, function(err, row) {
+            if (err) return callback(err);
+            if (!row) return callback(null, 0);
+            
+            db.query(
+                "SELECT COUNT(DISTINCT(`user`)) AS `cnt` FROM `playlist_history` WHERE `media_id` = ?",
+                [row.media_id],
+                function(err, rows) {
+                    if (err) return callback(err);
+                    if (!rows) return callback(null, 0);
+                    callback(null, rows[0].cnt);
+                }
+            );
+        });
+
     }
 };
