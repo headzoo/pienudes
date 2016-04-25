@@ -194,10 +194,7 @@
   border-left: 1px solid @color-card-border;
   border-right: 1px solid @color-card-border;
   border-top: 1px solid @color-card-border-lite;
-  
-  a:hover {
-    text-decoration: underline;
-  }
+  transition: all 0.2s ease-out;
 }
 
 .card-media {
@@ -240,6 +237,8 @@
   font-size: 16px;
   margin-right: 120px;
   display: block;
+  max-height: 68px;
+  overflow: hidden;
 }
 
 .card-media-time {

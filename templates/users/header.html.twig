@@ -1,4 +1,10 @@
-<div id="profile-header" style="background-image: url({{ user.profile.header }}); background-color: #9609B5;">
+{% if user.profile.header_color %}
+    {% set style = "background-image: none; background-color: " + user.profile.header_color + ";" %}
+{% else %}
+    {% set style = "background-image: url(" + user.profile.header + "); background-color: #9609B5;" %}
+{% endif %}
+
+<div id="profile-header" style="{{ style }}">
     {% if loggedIn and loginName == user.name %}
         <div id="profile-header-edit" style="display: none;">
             <span class="glyphicon glyphicon-picture"></span>

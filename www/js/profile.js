@@ -71,7 +71,7 @@ $(function() {
     });
     
     avatar_remove_btn.on("click", function() {
-    
+        avatar.attr("src", "/img/avatar.gif");
     });
     
     avatar_file.on("change", function() {
@@ -105,7 +105,8 @@ $(function() {
     });
     
     header_remove_btn.on("click", function() {
-    
+        header.css("background-image", "none");
+        header.css("background-color", "#9609B5");
     });
     
     header_file.on("change", function() {

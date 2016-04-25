@@ -14,6 +14,7 @@ import db_votes from '../../database/votes';
 import xss from '../../xss';
 
 const ONEMB = (1024 * 1024);
+const HEADER_COLOR = "#9609B5";
 
 var upload_avatar = multer({
     dest: '/tmp',
@@ -49,11 +50,15 @@ function handleProfile(req, res) {
         }
         
         if (user.profile == "") {
-            user.profile = {image: "", text: "", bio: "", header: ""};
+            user.profile = {image: "", text: "", bio: "", header: "", header_color: ""};
         } else {
             user.profile = JSON.parse(user.profile);
+            if (user.profile.header[0] == "#") {
+                user.profile.header_color = user.profile.header;
+                user.profile.header = "";
+            }
         }
-    
+        
         db_votes.countLikesByUser(user.name, function(err, likes) {
             if (err) {
                 return template.send(res, 'error/http', {
@@ -140,6 +145,10 @@ function handleProfileBioSave(req, res) {
         }
     
         var header = req.body.header;
+        if (!header || header == "none") {
+            header = HEADER_COLOR;
+        }
+        
         var image  = req.body.image;
         var text   = req.body.text.substring(0, 50);
         var bio    = xss.sanitizeHTML(req.body.bio.substring(0, 1000));
