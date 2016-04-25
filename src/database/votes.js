@@ -46,6 +46,16 @@ module.exports = {
         );
     },
     
+    fetchByMediaId: function(media_id, callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "SELECT * FROM `votes` WHERE `media_id` = ?",
+            [media_id],
+            callback
+        );
+    },
+    
     fetchUpvotedByUser: function(user_id, limit, offset, callback) {
         callback = callback || noop;
     

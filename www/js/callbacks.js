@@ -965,6 +965,17 @@ Callbacks = {
         $("#votedownvalue").text(data.down);
     },
     
+    changeUserVideoVote: function(data) {
+        if (data == 1) {
+            $("#voteup").addClass("active");
+        } else if (data == -1) {
+            $("#votedown").addClass("active");
+        } else {
+            $("#voteup").removeClass("active");
+            $("#votedown").removeClass("active");
+        }
+    },
+    
     userVideoVotes: function(data) {
         formatUserVideoVotes(data);
     },

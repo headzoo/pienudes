@@ -829,21 +829,29 @@ textarea:focus, input:focus{
 }
 
 #voteup {
-    background-color: #00D000;
+    background-color: #025D02;
     background-image: none;
+}
+
+#voteup.active {
+    background-color: #00D000 !important;
 }
 
 #voteup:hover {
-    background-color: #00dd00;
+    background-color: #037703;
 }
 
 #votedown {
-    background-color: #EC4F4B;
+    background-color: #8E0F04;
     background-image: none;
 }
 
+#votedown.active {
+    background-color: #E42E1F !important;
+}
+
 #votedown:hover {
-    background-color: #ff5546;
+    background-color: #9E1004;
 }
 
 #uservoteslistempty {
