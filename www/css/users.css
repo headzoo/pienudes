@@ -64,6 +64,7 @@
   padding: 6px;
   color: #fff;
   background-color: rgba(27, 27, 27, 0.75);
+  border: 1px solid #000;
   position: absolute;
   top: 44px;
   left: 0;
@@ -94,9 +95,9 @@
 }
 #profile-avatar-wrap {
   width: 100%;
-  text-align: center;
-  margin-top: -104px;
-  margin-bottom: 8px;
+  text-align: left;
+  margin-top: -110px;
+  margin-bottom: 12px;
 }
 #profile-avatar {
   width: 200px;
@@ -169,6 +170,17 @@
 }
 .card-media:hover {
   background: #282828;
+}
+.card-media:hover .card-media-remove-btn {
+  color: #4e4e4e;
+}
+.card-media:hover .card-media-remove-btn:hover {
+  color: #686868;
+}
+.card-media .card-media-remove-btn {
+  float: right;
+  cursor: pointer;
+  color: #1b1b1b;
 }
 .card-media-thumbnail {
   float: left;

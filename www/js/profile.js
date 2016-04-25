@@ -19,7 +19,8 @@ $(function() {
         bio               = $("#profile-bio"),
         bio_e             = $("#profile-bio-edit"),
         header            = $("#profile-header"),
-        header_e          = $("#profile-header-edit");
+        header_e          = $("#profile-header-edit"),
+        track_deletes     = $(".card-media-remove-btn");
     
     setState();
     
@@ -136,6 +137,24 @@ $(function() {
     
     header_remove_btn.on("click", function() {
     
+    });
+    
+    track_deletes.on("click", function() {
+        var target = $(this),
+            parent = target.parents(".card:first"),
+            pid    = target.data("pid");
+        
+        $.ajax({
+            url: "/user/profile/track/delete",
+            type: "post",
+            data: {
+                pid: pid
+            }
+        }).done(function() {
+            parent.fadeOut("fast");
+        }).fail(function() {
+            alert("Error. Please try that again in a minute.");
+        });
     });
     
     function show() {

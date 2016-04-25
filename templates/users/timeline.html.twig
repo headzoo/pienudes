@@ -20,8 +20,12 @@
             </div>
         </div>
     {% else %}
+        {% set is_owner = (loggedIn and loginName == user.name) %}
         {% for m in media %}
             <div class="card card-media">
+                {% if is_owner %}
+                    <span class="card-media-remove-btn glyphicon glyphicon-remove" title="Delete" data-pid="{{ m.pid }}"></span>
+                {% endif %}
                 {{ links.thumbnail(m, "card-media-thumbnail") }}
                 {{ links.media(m, "card-media-title") }}
                 <div class="card-media-time">

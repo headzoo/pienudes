@@ -93,7 +93,7 @@ function handleProfile(req, res) {
                             status: 500
                         });
                     }
-            
+                    
                     template.send(res, 'users/profile', {
                         pageTitle: req.params.name,
                         pageTab: "home",
@@ -195,7 +195,7 @@ function handleProfileHeaderSave(req, res) {
         
         Jimp.read(req.file.path)
             .then(function(image) {
-                image.quality(75);
+                image.quality(65);
                 image.getBuffer("image/jpeg", function(err, buff) {
                     if (err) throw err;
                     
@@ -386,6 +386,27 @@ function handleDownvotes(req, res) {
     });
 }
 
+function handleTrackDelete(req, res) {
+    var pid = req.body.pid;
+    
+    db_playlists.fetchById(pid, function(err, row) {
+        if (err || !row) {
+            return res.json({status: "error"}, 500);
+        }
+        if (row.user != req.user.name) {
+            return res.json({status: "error"}, 403);
+        }
+    
+        db_playlists.removeById(pid, function(err) {
+            if (err) {
+                return res.json({status: "error"}, 500);
+            }
+        
+            res.json({status: "ok"});
+        });
+    });
+}
+
 
 module.exports = {
     /**
@@ -398,5 +419,6 @@ module.exports = {
         app.post('/user/profile/bio/save', handleProfileBioSave);
         app.post('/user/profile/avatar/save', upload_avatar.single("avatar"), handleProfileAvatarSave);
         app.post('/user/profile/header/save', upload_header.single("header"), handleProfileHeaderSave);
+        app.post('/user/profile/track/delete', handleTrackDelete);
     }
 };

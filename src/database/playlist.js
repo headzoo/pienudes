@@ -11,9 +11,8 @@ module.exports = {
      * Adds a video to the playlist history
      */
     insert(media_id, channel, user, callback) {
-        if (typeof callback !== "function") {
-            callback = noop;
-        }
+        callback = callback || noop;
+        
         if (user[0] == "@") {
             user = user.substring(1);
         }
@@ -28,6 +27,28 @@ module.exports = {
             
                 callback(err, res);
             });
+    },
+    
+    removeById(pid, callback) {
+        callback = callback || noop;
+        
+        pid = parseInt(pid);
+        db.query("DELETE FROM `playlist_history` WHERE `id` = ? LIMIT 1", [pid], callback);
+    },
+    
+    fetchById(pid, callback) {
+        callback = callback || noop;
+    
+        pid = parseInt(pid);
+        db.query(
+            "SELECT * FROM `playlist_history` WHERE `id` = ? LIMIT 1",
+            [pid],
+            function(err, rows) {
+                if (err) return callback(err);
+                if (rows.length == 0) return callback(null, null);
+                callback(null, rows[0]);
+            }
+        );
     },
     
     /**
@@ -76,7 +97,7 @@ module.exports = {
             offset = 0;
         }
     
-        var sql = "SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `user` = ? ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
+        var sql = "SELECT *, `playlist_history`.`id` AS `pid` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `user` = ? ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
         db.query(sql, [user], callback);
     },
     
