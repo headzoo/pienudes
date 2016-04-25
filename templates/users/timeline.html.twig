@@ -23,23 +23,24 @@
         {% set is_owner = (loggedIn and loginName == user.name) %}
         {% for m in media %}
             <div class="card card-media">
+                <div class="card-media-time">
+                    {% if m.channel %}
+                    <a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a><br />
+                    {% endif %}
+                    {{ m.time|fromNow }}
+                </div>
+                {{ links.thumbnail(m, "card-media-thumbnail") }}
+                {{ links.media(m, "card-media-title") }}
+
+                {% if pageTab == "home" and m.common != 0 %}
+                    <div class="card-media-common">
+                        <a href="/track/{{ m.media_id }}/{{ m.title|urlencode }}">Played by {{ m.common }} other {% if m.common == 1 %}person{% else %}people{% endif %}</a>
+                    </div>
+                {% endif %}
+
                 {% if is_owner %}
                     <span class="card-media-remove-btn glyphicon glyphicon-remove" title="Delete" data-pid="{{ m.pid }}"></span>
                 {% endif %}
-                {{ links.thumbnail(m, "card-media-thumbnail") }}
-                {{ links.media(m, "card-media-title") }}
-                <div class="card-media-time">
-                    {% if m.channel %}
-                        Played in <a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a> on {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}.
-                    {% else %}
-                        {{ m.time|date("dddd, MMMM Do YYYY, h:mm a") }}
-                    {% endif %}
-                    {% if pageTab == "home" and m.common != 0 %}
-                        <div>
-                            Played by {{ m.common }} other {% if m.common == 1 %}person{% else %}people{% endif %}.
-                        </div>
-                    {% endif %}
-                </div>
             </div>
         {% endfor %}
 

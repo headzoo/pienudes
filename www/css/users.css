@@ -95,7 +95,7 @@
 }
 #profile-avatar-wrap {
   width: 100%;
-  text-align: left;
+  text-align: center;
   margin-top: -110px;
   margin-bottom: 12px;
 }
@@ -164,6 +164,10 @@
   border-bottom: 1px solid #000000;
   border-left: 1px solid #000000;
   border-right: 1px solid #000000;
+  border-top: 1px solid #232323;
+}
+.card a:hover {
+  text-decoration: underline;
 }
 .card-media {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
@@ -177,8 +181,13 @@
 .card-media:hover .card-media-remove-btn:hover {
   color: #686868;
 }
+.card-media:hover .card-media-thumbnail {
+  border: 1px solid #303030;
+}
 .card-media .card-media-remove-btn {
-  float: right;
+  position: absolute;
+  top: 80px;
+  right: 5px;
   cursor: pointer;
   color: #1b1b1b;
 }
@@ -187,10 +196,18 @@
   margin-right: 6px;
   width: 120px;
   height: 90px;
+  border: 1px solid #232323;
 }
 .card-media-title {
-  font-size: 18px;
+  font-size: 16px;
+  margin-right: 120px;
+  display: block;
 }
 .card-media-time {
+  font-size: 12px;
+  float: right;
+  text-align: right;
+}
+.card-media-common {
   font-size: 12px;
 }
