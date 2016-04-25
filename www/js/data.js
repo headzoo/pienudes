@@ -52,7 +52,7 @@ var LASTCHAT = {
     name: ""
 };
 var FOCUSED = true;
-var PAGETITLE = "CyTube";
+var PAGETITLE = "Pienudes";
 var TITLE_BLINK;
 var CHATSOUND = new Audio("/boop.wav");
 var KICKED = false;
