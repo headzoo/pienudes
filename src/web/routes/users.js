@@ -54,7 +54,7 @@ function handleProfile(req, res) {
         } else {
             user.profile = JSON.parse(user.profile);
         }
-        console.log(user.profile);
+        
         db_votes.countLikesByUser(user.name, function(err, likes) {
             if (err) {
                 return template.send(res, 'error/http', {

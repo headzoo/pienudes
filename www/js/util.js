@@ -203,6 +203,17 @@ function addUserDropdown(entry) {
     $("<br/>").appendTo(menu);
 
     var btngroup = $("<div/>").addClass("btn-group-vertical").appendTo(menu);
+    
+    /* profile button */
+    if (rank > 0) {
+        var profile = $("<button/>")
+            .addClass("btn btn-xs btn-default")
+            .text("Profile")
+            .appendTo(btngroup);
+        profile.click(function () {
+            window.open("/user/" + name);
+        });
+    }
 
     /* ignore button */
     var ignore = $("<button/>").addClass("btn btn-xs btn-default")
