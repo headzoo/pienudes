@@ -77,13 +77,16 @@
 }
 #profile-info {
   padding: 0 6px;
+  color: #FFF;
 }
 #profile-info .profile-edit-control {
   border: none;
   padding: 4px;
+  margin-bottom: 2px;
+  width: 100%;
 }
-#profile-info-face {
-  margin-bottom: 4px;
+#profile-info .profile-edit-control.invalid {
+  border: 1px solid red;
 }
 #profile-timeline {
   margin-top: -150px;
@@ -125,6 +128,7 @@
   list-style-type: none;
   padding: 0;
   margin-bottom: 0;
+  margin-top: 2px;
   text-transform: uppercase;
   color: #FFF;
 }
@@ -147,8 +151,11 @@
   font-size: 12px;
 }
 #profile-tagline-edit {
-  width: 100%;
   margin-bottom: 6px;
+}
+#profile-website {
+  display: block;
+  color: #AFA8FB;
 }
 .profile-empty {
   text-align: center;

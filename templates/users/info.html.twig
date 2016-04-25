@@ -20,6 +20,7 @@
             </div>
         {% endif %}
     </div>
+    
     <div id="profile-info-face">
         {# name #}
         <h1 id="profile-name">
@@ -34,10 +35,41 @@
                 class="profile-edit-control"
                 id="profile-tagline-edit"
                 value="{{ user.profile.text }}"
+                maxlength="{{ input_maxes.text }}"
                 placeholder="Tagline"
                 style="display: none;" />
         {% endif %}
     </div>
+
+    {# location #}
+    <div id="profile-location">{{ user.profile.location }}</div>
+    {% if loggedIn and loginName == user.name %}
+        <input
+            type="text" 
+            id="profile-location-edit" 
+            class="profile-edit-control" 
+            value="{{ user.profile.location }}"
+            maxlength="{{ input_maxes.location }}"
+            placeholder="Location" style="display: none;" />
+    {% endif %}
+
+    {# website #}
+    {% if user.profile.website %}
+        <a href="{{ user.profile.website }}" id="profile-website" target="_blank">
+            {{ user.profile.website|truncate(50) }}
+        </a>
+    {% else %}
+        <div id="profile-website"></div>
+    {% endif %}
+    {% if loggedIn and loginName == user.name %}
+        <input 
+            type="text" 
+            id="profile-website-edit" 
+            class="profile-edit-control" 
+            value="{{ user.profile.website }}"
+            maxlength="{{ input_maxes.website }}" 
+            placeholder="Website" style="display: none;" />
+    {% endif %}
     
     {# stats #}
     <ul id="profile-stats">
@@ -45,13 +77,10 @@
         <li>{{ likes }} Likes</li>
     </ul>
     
-    
-    
     {# bio #}
     <div id="profile-bio">{{ user.profile.bio|nl2p|safe }}</div>
     {% if loggedIn and loginName == user.name %}
-        <input type="text" id="profile-tagline-edit" value="{{ user.profile.text }}" placeholder="Tagline" style="display: none;" />
-        <textarea id="profile-bio-edit" class="profile-edit-control" style="display: none">{{ user.profile.bio }}</textarea>
+        <textarea id="profile-bio-edit" class="profile-edit-control" maxlength="{{ input_maxes.bio }}" style="display: none">{{ user.profile.bio }}</textarea>
     {% endif %}
     
     {% if loggedIn and loginName == user.name %}

@@ -16,6 +16,10 @@ $(function() {
         avatar_file       = $("#profile-avatar-edit-file"),
         tagline           = $("#profile-tagline"),
         tagline_e         = $("#profile-tagline-edit"),
+        location          = $("#profile-location"),
+        location_e        = $("#profile-location-edit"),
+        website           = $("#profile-website"),
+        website_e         = $("#profile-website-edit"),
         bio               = $("#profile-bio"),
         bio_e             = $("#profile-bio-edit"),
         header            = $("#profile-header"),
@@ -34,20 +38,30 @@ $(function() {
                 data: {
                     text:     tagline_e.val(),
                     bio:      bio_e.val(),
+                    location: location_e.val(),
+                    website:  website_e.val(),
                     image:    avatar.attr("src"),
                     header:   header_img
                 }
             }).done(function(res) {
                 tagline.text(res.text);
-                tagline_e.val(res.text);
+                tagline_e.val(res.text).removeClass("invalid");
+                location.text(res.location);
+                location_e.val(res.location).removeClass("invalid");
+                website.text(res.website);
+                website_e.val(res.website).removeClass("invalid");
                 bio.html(nl2p(res.bio));
-                bio_e.val(res.bio);
+                bio_e.val(res.bio).removeClass("invalid");
                 setState();
                 
                 is_editing = false;
                 hide();
-            }).fail(function() {
-            
+            }).fail(function(jqXHR) {
+                var obj = JSON.parse(jqXHR.responseText);
+                if (obj.target) {
+                    $(obj.target).addClass("invalid");
+                }
+                alert(obj.message);
             });
         } else {
             is_editing = true;
@@ -57,7 +71,14 @@ $(function() {
     
     cancel_btn.on("click", function() {
         tagline.text(state.text);
+        tagline_e.val(state.text).removeClass("invalid");
+        location.text(state.location);
+        location_e.val(state.location).removeClass("invalid");
+        website.text(state.website);
+        website_e.val(state.website).removeClass("invalid");
         bio.html(nl2p(state.bio));
+        bio_e.val(state.bio).removeClass("invalid");
+        
         avatar.attr("src", state.image);
         header.css("background-image", state.header_img);
         header.css("background-image", state.header_color);
@@ -71,7 +92,7 @@ $(function() {
     });
     
     avatar_remove_btn.on("click", function() {
-        avatar.attr("src", "/img/avatar.gif");
+        avatar.attr("src", "https://pienudes.com/img/avatar.gif");
     });
     
     avatar_file.on("change", function() {
@@ -136,10 +157,6 @@ $(function() {
         });
     });
     
-    header_remove_btn.on("click", function() {
-    
-    });
-    
     track_deletes.on("click", function() {
         var target = $(this),
             parent = target.parents(".card:first"),
@@ -165,7 +182,10 @@ $(function() {
     
         tagline.replaceWith(tagline_e);
         tagline_e.show();
-        
+        location.replaceWith(location_e);
+        location_e.show();
+        website.replaceWith(website_e);
+        website_e.show();
         bio_e.height(bio.height() + 16);
         bio.replaceWith(bio_e);
         bio_e.show();
@@ -180,6 +200,10 @@ $(function() {
     
         tagline_e.replaceWith(tagline);
         tagline_e.hide();
+        location_e.replaceWith(location);
+        location_e.hide();
+        website_e.replaceWith(website);
+        website_e.hide();
         bio_e.replaceWith(bio);
         bio_e.hide();
     
@@ -192,6 +216,8 @@ $(function() {
             header_img:   header.css("background-image"),
             header_color: header.css("background-image"),
             text:         tagline_e.val(),
+            location:     location_e.val(),
+            website:      website_e.val(),
             bio:          bio_e.val()
         };
     }

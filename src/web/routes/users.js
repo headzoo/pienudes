@@ -82,7 +82,8 @@ function handleProfile(req, res) {
                         media_count: 0,
                         likes: likes,
                         page:  1,
-                        pages: 1
+                        pages: 1,
+                        input_maxes: getInputMaxes()
                     });
                 }
         
@@ -126,7 +127,8 @@ function handleProfile(req, res) {
                             media_count: count,
                             likes: likes,
                             page:  parseInt(page),
-                            pages: parseInt(pages)
+                            pages: parseInt(pages),
+                            input_maxes: getInputMaxes()
                         });
                     });
                 });
@@ -135,7 +137,7 @@ function handleProfile(req, res) {
     });
 }
 
-function handleProfileBioSave(req, res) {
+function handleProfileSave(req, res) {
     
     db.users.getProfile(req.user.name, function(err, profile) {
         if (err) {
@@ -143,20 +145,41 @@ function handleProfileBioSave(req, res) {
                 message: "Failed to fetch profile information."
             }, 500);
         }
-    
-        var header = req.body.header;
+        
+        var text     = xss.sanitizeHTML(req.body.text).trim();
+        var location = xss.sanitizeHTML(req.body.location).trim();
+        var website  = xss.sanitizeHTML(req.body.website).trim();
+        var bio      = xss.sanitizeHTML(req.body.bio).trim();
+        var image    = xss.sanitizeHTML(req.body.image).trim();
+        var header   = xss.sanitizeHTML(req.body.header).trim();
         if (!header || header == "none") {
             header = HEADER_COLOR;
         }
         
-        var image  = req.body.image;
-        var text   = req.body.text.substring(0, 50);
-        var bio    = xss.sanitizeHTML(req.body.bio.substring(0, 1000));
-        var meta   = {
-            image:  image,
-            header: header,
-            text:   text,
-            bio:    bio
+        if (website && (website.substring(0, 8) !== "https://" && website.substring(0, 7) !== "http://")) {
+            return res.json({
+                message: "Website value must start with http:// or https://",
+                target: "#profile-website-edit"
+            }, 500);
+        }
+        if (image && image.substring(0, 8) !== "https://") {
+            return res.json({
+                message: "Invalid avatar value."
+            }, 500);
+        }
+        if (header && header[0] !== "#" && header.substring(0, 8) !== "https://") {
+            return res.json({
+                message: "Invalid header image value."
+            }, 500);
+        }
+        
+        var meta = {
+            image:    image,
+            header:   header,
+            text:     text,
+            location: location,
+            website:  website,
+            bio:      bio
         };
         
         db.users.setProfile(req.user.name, meta, function (err) {
@@ -167,10 +190,12 @@ function handleProfileBioSave(req, res) {
             }
             
             res.json({
-                text: text,
-                bio: bio,
-                image: profile.image,
-                header: "#9609B5"
+                text:     text,
+                location: location,
+                website:  website,
+                bio:      bio,
+                image:    profile.image,
+                header:   profile.header
             });
         });
     });
@@ -299,7 +324,8 @@ function handleUpvotes(req, res) {
                         media_count: 0,
                         likes: likes,
                         page:  1,
-                        pages: 1
+                        pages: 1,
+                        input_maxes: getInputMaxes()
                     });
                 }
         
@@ -325,7 +351,8 @@ function handleUpvotes(req, res) {
                         media_count: count,
                         likes: likes,
                         page:  parseInt(page),
-                        pages: parseInt(pages)
+                        pages: parseInt(pages),
+                        input_maxes: getInputMaxes()
                     });
                 });
             });
@@ -381,7 +408,8 @@ function handleDownvotes(req, res) {
                         media_count: 0,
                         likes: likes,
                         page:  1,
-                        pages: 1
+                        pages: 1,
+                        input_maxes: getInputMaxes()
                     });
                 }
         
@@ -407,7 +435,8 @@ function handleDownvotes(req, res) {
                         media_count: count,
                         likes: likes,
                         page:  parseInt(page),
-                        pages: parseInt(pages)
+                        pages: parseInt(pages),
+                        input_maxes: getInputMaxes()
                     });
                 });
             });
@@ -443,6 +472,17 @@ function findPlayedByCount(pid, callback) {
     });
 }
 
+function getInputMaxes() {
+    return {
+        image:    db.users.max_image,
+        header:   db.users.max_header,
+        text:     db.users.max_text,
+        location: db.users.max_location,
+        website:  db.users.max_website,
+        bio:      db.users.max_bio
+    }
+}
+
 module.exports = {
     /**
      * Initializes auth callbacks
@@ -451,7 +491,7 @@ module.exports = {
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/liked/:page?', handleUpvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/disliked/:page?', handleDownvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/:page?', handleProfile);
-        app.post('/user/profile/bio/save', handleProfileBioSave);
+        app.post('/user/profile/bio/save', handleProfileSave);
         app.post('/user/profile/avatar/save', upload_avatar.single("avatar"), handleProfileAvatarSave);
         app.post('/user/profile/header/save', upload_header.single("header"), handleProfileHeaderSave);
         app.post('/user/profile/track/delete', handleTrackDelete);
