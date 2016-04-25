@@ -39,11 +39,25 @@ $(function() {
         $("#chatcolor").hide();
     }
     
-    $("#voteup").click(function() {
+    var voteup   = $("#voteup");
+    var votedown = $("#votedown");
+    voteup.click(function() {
         socket.emit("voteVideo", 1);
+        if (voteup.is(".active")) {
+            voteup.removeClass("active");
+        } else {
+            voteup.addClass("active");
+            votedown.removeClass("active");
+        }
     });
-    $("#votedown").click(function() {
+    votedown.click(function() {
         socket.emit("voteVideo", -1);
+        if (votedown.is(".active")) {
+            votedown.removeClass("active");
+        } else {
+            votedown.addClass("active");
+            voteup.removeClass("active");
+        }
     });
     
     $("#clearbtn").click(function() {

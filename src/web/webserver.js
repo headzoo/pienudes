@@ -132,7 +132,7 @@ module.exports = {
         require('./middleware/x-forwarded-for')(app, webConfig);
         app.use(bodyParser.urlencoded({
             extended: false,
-            limit: '1MB' // No POST data should ever exceed this size under normal usage
+            limit: '50MB' // No POST data should ever exceed this size under normal usage
         }));
         if (webConfig.getCookieSecret() === 'change-me') {
             Logger.errlog.log('WARNING: The configured cookie secret was left as the ' +

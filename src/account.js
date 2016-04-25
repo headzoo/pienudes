@@ -3,6 +3,7 @@ var Q = require("q");
 
 function Account(opts) {
     var defaults = {
+        id: 0,
         name: "",
         ip: "",
         aliases: [],
@@ -15,6 +16,7 @@ function Account(opts) {
         }
     };
 
+    this.id = opts.id || defaults.id;
     this.name = opts.name || defaults.name;
     this.lowername = this.name.toLowerCase();
     this.ip = opts.ip || defaults.ip;
@@ -62,16 +64,25 @@ module.exports.getAccount = function (name, ip, opts, cb) {
             }
         }
     }).then(function (chanRank) {
-        data.channelRank = chanRank;
-        /* Look up profile for registered user */
-        if (data.globalRank >= 1) {
-            return Q.nfcall(db.users.getProfile, name);
-        } else {
-            return { text: "", image: "" };
-        }
+            data.channelRank = chanRank;
+            /* Look up profile for registered user */
+            if (data.globalRank >= 1) {
+                return Q.nfcall(db.users.getUser, name);
+            } else {
+                return {text: "", image: ""};
+            }
+    }).then(function(user) {
+            data.id = user.id;
+            /* Look up profile for registered user */
+            if (data.globalRank >= 1) {
+                return Q.nfcall(db.users.getProfile, name);
+            } else {
+                return 0;
+            }
     }).then(function (profile) {
         setImmediate(function () {
             cb(null, new Account({
+                id: data.id,
                 name: name,
                 ip: ip,
                 aliases: data.aliases,

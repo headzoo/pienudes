@@ -298,6 +298,7 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
 
     var update = this.current.media.getFullUpdate();
     this.sendVideoVotes();
+    this.sendUserVideoVotes(users);
 
     var uid = this.current.uid;
     if (users === this.channel.users) {
@@ -926,6 +927,40 @@ PlaylistModule.prototype.sendVideoVotes = function() {
             }.bind(this));
         }
     }.bind(this));
+};
+
+PlaylistModule.prototype.sendUserVideoVotes = function(users) {
+    var uid = this.current.uid;
+    
+    db_media.fetchByUidAndType(this.current.media.id, this.current.media.type, function(err, media) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        
+        db_votes.fetchByMediaId(media.id, function(err, votes) {
+            if (!err) {
+                users.forEach(function(user) {
+                    var found   = false;
+                    var user_id = user.account.id;
+                    for(var i = 0; i < votes.length; i++) {
+                        if (user_id == votes[i].user_id) {
+                            user.socket.emit("changeUserVideoVote", votes[i].value);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        user.socket.emit("changeUserVideoVote", 0);
+                    }
+                });
+            }
+        });
+    });
+    
+
+    
+
 };
 
 PlaylistModule.prototype.handleUserVideoVotes = function(user) {
