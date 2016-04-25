@@ -8,12 +8,16 @@ $(function() {
         header_remove_btn = $("#profile-header-edit-remove-btn"),
         header_form       = $("#profile-header-edit-form"),
         header_file       = $("#profile-header-edit-file"),
+        header_spinner    = $("#profile-header-edit-spinner"),
+        header_icon       = $("#profile-header-edit-icon"),
         avatar_upload_btn = $("#profile-avatar-edit-upload-btn"),
         avatar_remove_btn = $("#profile-avatar-edit-remove-btn"),
         avatar            = $("#profile-avatar"),
         avatar_e          = $("#profile-avatar-edit"),
         avatar_form       = $("#profile-avatar-edit-form"),
         avatar_file       = $("#profile-avatar-edit-file"),
+        avatar_spinner    = $("#profile-avatar-edit-spinner"),
+        avatar_icon       = $("#profile-avatar-edit-icon"),
         tagline           = $("#profile-tagline"),
         tagline_e         = $("#profile-tagline-edit"),
         location          = $("#profile-location"),
@@ -113,11 +117,18 @@ $(function() {
             data: form_data,
             cache: false,
             contentType: false,
-            processData: false
+            processData: false,
+            beforeSend: function() {
+                avatar_spinner.show();
+                avatar_icon.removeClass("glyphicon-picture");
+            }
         }).done(function(res) {
             avatar.attr("src", res.src);
         }).fail(function() {
-        
+            alert("Error. Please try again in a minute.");
+        }).complete(function() {
+            avatar_spinner.hide();
+            avatar_icon.addClass("glyphicon-picture");
         });
     });
     
@@ -148,12 +159,18 @@ $(function() {
             data:        form_data,
             cache:       false,
             contentType: false,
-            processData: false
+            processData: false,
+            beforeSend: function() {
+                header_spinner.show();
+                header_icon.removeClass("glyphicon-picture");
+            }
         }).done(function(res) {
-            console.log(res);
             header.css("background-image", "url(" + res.src + ")");
         }).fail(function() {
-        
+            alert("Error. Please try again in a minute.");
+        }).complete(function() {
+            header_spinner.hide();
+            header_icon.addClass("glyphicon-picture");
         });
     });
     

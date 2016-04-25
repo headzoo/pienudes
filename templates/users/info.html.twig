@@ -8,8 +8,11 @@
         {% endif %}
 
         {% if loggedIn and loginName == user.name %}
-            <div id="profile-avatar-edit" style="display: none;">
-                <span class="glyphicon glyphicon-picture"></span>
+            <div id="profile-avatar-edit" style="display: none">
+                <span id="profile-avatar-edit-icon" class="glyphicon glyphicon-picture">
+                    <img src="/img/spinner.gif" id="profile-avatar-edit-spinner" class="profile-ajax-spinner" style="display: none" />
+                </span>
+                
                 <div class="btn-group">
                     <button id="profile-avatar-edit-upload-btn" class="btn btn-default btn-sm btn-upload">Upload</button>
                     <button id="profile-avatar-edit-remove-btn" class="btn btn-default btn-sm btn-upload">Remove</button>
