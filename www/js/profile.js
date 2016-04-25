@@ -10,6 +10,7 @@ $(function() {
         header_file       = $("#profile-header-edit-file"),
         header_spinner    = $("#profile-header-edit-spinner"),
         header_icon       = $("#profile-header-edit-icon"),
+        header_color      = $("#profile-header-edit-color"),
         avatar_upload_btn = $("#profile-avatar-edit-upload-btn"),
         avatar_remove_btn = $("#profile-avatar-edit-remove-btn"),
         avatar            = $("#profile-avatar"),
@@ -35,7 +36,7 @@ $(function() {
     edit_btn.on("click", function() {
         if (is_editing) {
             var header_img = header.css("background-image").replace(/url\((.*?)\)/, '$1');
-
+            
             $.ajax({
                 url: "/user/profile/bio/save",
                 type: "post",
@@ -45,7 +46,8 @@ $(function() {
                     location: location_e.val(),
                     website:  website_e.val(),
                     image:    avatar.attr("src"),
-                    header:   header_img
+                    header:   header_img,
+                    color:    header.css("background-color")
                 }
             }).done(function(res) {
                 tagline.text(res.text);
@@ -84,8 +86,8 @@ $(function() {
         bio_e.val(state.bio).removeClass("invalid");
         
         avatar.attr("src", state.image);
-        header.css("background-image", state.header_img);
-        header.css("background-image", state.header_color);
+        header.css("background-image", state.header);
+        header.css("background-color", state.color);
         
         is_editing = false;
         hide();
@@ -192,6 +194,16 @@ $(function() {
         });
     });
     
+    header_color.spectrum({
+        color: header.css("background-color"),
+        preferredFormat: "hex",
+        showInput: true,
+        clickoutFiresChange: true
+    }).on("change", function () {
+        var color = $(this).val();
+        header.css("background-color", color);
+    });
+    
     function show() {
         header_e.show();
         avatar_e.show();
@@ -230,8 +242,8 @@ $(function() {
     function setState() {
         state = {
             image:        avatar.attr("src"),
-            header_img:   header.css("background-image"),
-            header_color: header.css("background-image"),
+            header:       header.css("background-image"),
+            color:        header.css("background-color"),
             text:         tagline_e.val(),
             location:     location_e.val(),
             website:      website_e.val(),

@@ -19,6 +19,7 @@
 <script src="/js/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="/js/profile.js?v={{ cacheBuster }}"></script>
+{% include "scripts.html.twig" %}
 <script>
     $("#channelname").keydown(function (ev) {
         if (ev.keyCode === 13) {

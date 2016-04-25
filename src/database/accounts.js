@@ -474,7 +474,8 @@ module.exports = {
                     text:     "",
                     location: "",
                     website:  "",
-                    bio:      ""
+                    bio:      "",
+                    color:    ""
                 };
 
                 if (rows[0].profile === "") {
@@ -490,6 +491,7 @@ module.exports = {
                     userprof.location = profile.location || "";
                     userprof.website  = profile.website || "";
                     userprof.bio      = profile.bio || "";
+                    userprof.color    = profile.color || "#9609B5";
                     callback(null, userprof);
                 } catch (e) {
                     Logger.errlog.log("Corrupt profile: " + rows[0].profile +
@@ -525,6 +527,7 @@ module.exports = {
         profile.location += "";
         profile.website  += "";
         profile.bio      += "";
+        profile.color    += "";
 
         // Limit size
         profile.image    = profile.image.substring(0, this.max_image);
@@ -541,7 +544,8 @@ module.exports = {
             text:     profile.text,
             location: profile.location,
             website:  profile.website,
-            bio:      profile.bio
+            bio:      profile.bio,
+            color:    profile.color
         });
 
         db.query("UPDATE `users` SET profile=? WHERE name=?", [profilejson, name],

@@ -53,12 +53,8 @@ function handleProfile(req, res) {
             user.profile = {image: "", text: "", bio: "", header: "", header_color: ""};
         } else {
             user.profile = JSON.parse(user.profile);
-            if (user.profile.header[0] == "#") {
-                user.profile.header_color = user.profile.header;
-                user.profile.header = "";
-            }
         }
-        
+        console.log(user.profile);
         db_votes.countLikesByUser(user.name, function(err, likes) {
             if (err) {
                 return template.send(res, 'error/http', {
@@ -152,8 +148,9 @@ function handleProfileSave(req, res) {
         var bio      = xss.sanitizeHTML(req.body.bio).trim();
         var image    = xss.sanitizeHTML(req.body.image).trim();
         var header   = xss.sanitizeHTML(req.body.header).trim();
-        if (!header || header == "none") {
-            header = HEADER_COLOR;
+        var color    = xss.sanitizeHTML(req.body.color).trim();
+        if (header == "none") {
+            header = "";
         }
         
         if (website && (website.substring(0, 8) !== "https://" && website.substring(0, 7) !== "http://")) {
@@ -179,7 +176,8 @@ function handleProfileSave(req, res) {
             text:     text,
             location: location,
             website:  website,
-            bio:      bio
+            bio:      bio,
+            color:    color
         };
         
         db.users.setProfile(req.user.name, meta, function (err) {
@@ -194,6 +192,7 @@ function handleProfileSave(req, res) {
                 location: location,
                 website:  website,
                 bio:      bio,
+                color:    color,
                 image:    profile.image,
                 header:   profile.header
             });

@@ -61,7 +61,7 @@ var defaults = {
         /* the key "config" is omitted because the format depends on the
            service the owner is configuring for nodemailer */
         "from-address": "some.user@gmail.com",
-        "from-name": "CyTube Services"
+        "from-name": "Pienudes Services"
     },
     uploads: {
         bytes_per_channel: 1073741824,
@@ -89,7 +89,7 @@ var defaults = {
         secret: ""
     },
     "html-template": {
-        title: "CyTube Beta", description: "Free, open source synchtube"
+        title: "Pienudes", description: "Music and Chat"
     },
     "reserved-names": {
         usernames: ["^(.*?[-_])?admin(istrator)?([-_].*)?$", "^(.*?[-_])?owner([-_].*)?$"],
