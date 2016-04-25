@@ -861,4 +861,14 @@ textarea:focus, input:focus{
 .margin-remove {
     margin-left: 0 !important;
     margin-right: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important
+}
+
+.margin-top {
+    margin-top: 20px;
+}
+
+.margin-bottom {
+    margin-bottom: 20px;
 }

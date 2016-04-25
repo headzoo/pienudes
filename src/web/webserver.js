@@ -169,6 +169,7 @@ module.exports = {
         require('./routes/account').init(app);
         require('./routes/playlists').init(app);
         require('./routes/users').init(app);
+        require('./routes/tracks').init(app);
         require('./routes/acp').init(app);
         
         require('../google2vtt').attach(app);

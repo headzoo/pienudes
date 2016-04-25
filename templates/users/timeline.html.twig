@@ -34,7 +34,7 @@
 
                 {% if pageTab == "home" and m.common != 0 %}
                     <div class="card-media-common">
-                        <a href="/track/{{ m.media_id }}/{{ m.title|urlencode }}">Played by {{ m.common }} other {% if m.common == 1 %}person{% else %}people{% endif %}</a>
+                        <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">Played by {{ m.common }} other {% if m.common == 1 %}person{% else %}people{% endif %}</a>
                     </div>
                 {% endif %}
 

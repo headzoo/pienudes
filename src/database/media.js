@@ -44,6 +44,20 @@ module.exports = {
         }.bind(this));
     },
     
+    fetchById(mid, callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "SELECT * FROM `media` WHERE `id` = ? LIMIT 1",
+            [mid],
+            function(err, rows) {
+                if (err) return callback(err);
+                if (rows.length == 0) return callback(null, null);
+                callback(null, rows[0])
+            }
+        );
+    },
+    
     /**
      * Finds the row with the given uid and type
      */

@@ -1,0 +1,41 @@
+{% import "macros/links.html.twig" as links %}
+
+{% extends "layout_profile.html.twig" %}
+{% block content %}
+    <div id="profile" class="row margin-remove">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+            <div class="card card-media margin-bottom margin-top">
+                {{ links.thumbnail(media, "card-media-thumbnail") }}
+                {{ links.media(media, "card-media-title") }}
+                <div class="card-media-common">
+                    Played by {{ user_count }} {% if user_count == 1 %}person{% else %}people{% endif %}</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            {% for user in users %}
+                <div class="col-xs-12 col-sm-6 col-md-3 profile-info inline">
+                    {# avatar #}
+                    <a href="/user/{{ user.name }}" class="profile-avatar-wrap margin-remove">
+                        {% if user.profile.image %}
+                            <img src="{{ user.profile.image }}" class="profile-avatar" />
+                        {% else %}
+                            <img src="/img/avatar.gif" class="profile-avatar" />
+                        {% endif %}
+                    </a>
+
+                    <div>
+                        {# name #}
+                        <h1 class="profile-name">
+                            {{ user.name }}
+                        </h1>
+
+                        {# tagline #}
+                        <p class="profile-tagline">{{ user.profile.text }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

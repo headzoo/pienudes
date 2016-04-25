@@ -39,7 +39,6 @@
     margin: 0;
     text-shadow: none;
     font-size: 24px;
-    width: 90%;
   }
 
   .nav-tabs {
@@ -101,7 +100,7 @@
   }
 }
 
-#profile-info {
+#profile-info, .profile-info {
   padding: 0 6px;
   color: #FFF;
   
@@ -115,6 +114,12 @@
       border: 1px solid red;
     }
   }
+  
+  &.inline {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+  }
 }
 
 #profile-timeline {
@@ -125,13 +130,13 @@
   }
 }
 
-#profile-avatar-wrap {
+#profile-avatar-wrap, .profile-avatar-wrap {
   width: 100%;
   text-align: center;
   margin-top: -110px;
   margin-bottom: 12px;
 }
-#profile-avatar {
+#profile-avatar, .profile-avatar {
   width: 200px;
   height: 200px;
   background-size: cover;
@@ -181,7 +186,7 @@
   height: 200px;
 }
 
-#profile-tagline {
+#profile-tagline, .profile-tagline {
   color: #FFF;
   font-weight: bold;
   font-size: 12px;

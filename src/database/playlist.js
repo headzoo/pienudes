@@ -51,6 +51,22 @@ module.exports = {
         );
     },
     
+    fetchUsersByMediaId(mid, callback) {
+        callback = callback || noop;
+    
+        mid = parseInt(mid);
+        db.query(
+            "SELECT `users`.*, `playlist_history`.`id` AS `pid` " +
+            "FROM `playlist_history` " +
+            "INNER JOIN `users` ON `users`.`name` = `playlist_history`.`user` " +
+            "WHERE `playlist_history`.`media_id` = ? " +
+            "GROUP BY `playlist_history`.`user` " +
+            "ORDER BY `playlist_history`.`id`",
+            [mid],
+            callback
+        );
+    },
+    
     /**
      * Returns rows from the playlist history
      */
