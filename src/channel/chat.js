@@ -89,6 +89,7 @@ ChatModule.prototype.onUserPostJoin = function (user) {
             user.setFlag(Flags.U_MUTED);
             self.channel.sendUserMeta(self.channel.users, user, muteperm);
         }
+        self.sendJoinMessage(user.account.name);
     });
 
     user.socket.typecheckedOn("chatMsg", TYPE_CHAT, this.handleChatMsg.bind(this, user));
@@ -372,6 +373,13 @@ ChatModule.prototype.sendModMessage = function (msg, minrank) {
         if (u.account.effectiveRank >= minrank) {
             u.socket.emit("chatMsg", msgobj);
         }
+    });
+};
+
+ChatModule.prototype.sendJoinMessage = function(name) {
+    this.channel.broadcastAll("userJoin", {
+        name: name,
+        time: Date.now()
     });
 };
 

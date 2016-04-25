@@ -104,6 +104,7 @@ var USEROPTS = {
     hidevid              : getOrDefault("hidevid", false),
     show_colors          : getOrDefault("show_colors", true),
     show_timestamps      : getOrDefault("show_timestamps", true),
+    show_joins           : getOrDefault("show_joins", true),
     modhat               : getOrDefault("modhat", false),
     blink_title          : getOrDefault("blink_title", "onlyping"),
     sync_accuracy        : getOrDefault("sync_accuracy", 2),

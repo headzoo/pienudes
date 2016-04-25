@@ -530,6 +530,10 @@ Callbacks = {
             pm.removeClass("panel-default").addClass("panel-primary");
         }
     },
+    
+    userJoin: function(data) {
+        addUserJoinMessage(data);
+    },
 
     joinMessage: function(data) {
         if(USEROPTS.joinmessage)

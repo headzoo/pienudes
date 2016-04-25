@@ -647,6 +647,7 @@ function showUserOptions() {
 
     $("#us-chat-colors").prop("checked", USEROPTS.show_colors);
     $("#us-chat-timestamp").prop("checked", USEROPTS.show_timestamps);
+    $("#us-chat-joins").prop("checked", USEROPTS.show_joins);
     $("#us-sort-rank").prop("checked", USEROPTS.sort_rank);
     $("#us-sort-afk").prop("checked", USEROPTS.sort_afk);
     $("#us-blink-title").val(USEROPTS.blink_title);
@@ -683,6 +684,7 @@ function saveUserOptions() {
 
     USEROPTS.show_colors          = $("#us-chat-colors").prop("checked");
     USEROPTS.show_timestamps      = $("#us-chat-timestamp").prop("checked");
+    USEROPTS.show_joins           = $("#us-chat-joins").prop("checked");
     USEROPTS.sort_rank            = $("#us-sort-rank").prop("checked");
     USEROPTS.sort_afk             = $("#us-sort-afk").prop("checked");
     USEROPTS.blink_title          = $("#us-blink-title").val();
@@ -1582,6 +1584,24 @@ function addChatMessage(data) {
 
     pingMessage(isHighlight);
 
+}
+
+function addUserJoinMessage(data) {
+    if (!USEROPTS.show_joins || CLIENT.name == data.name || CLIENT.rank > 1) {
+        return;
+    }
+    
+    var timestamp = new Date(data.time).toTimeString().split(" ")[0];
+    var msg = "[" + timestamp + "] " + data.name + " has joined chat";
+    msg = execEmotes(msg);
+    
+    var msgBuf = $("#messagebuffer");
+    var div = $("<div/>");
+    div.addClass("join-message");
+    div.appendTo(msgBuf);
+    
+    var message = $("<span/>").appendTo(div);
+    message.html(msg);
 }
 
 function trimChatBuffer() {
