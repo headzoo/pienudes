@@ -292,6 +292,7 @@ function handleProfileAvatarUpload(req, res) {
                                     }, 500);
                                 }
                                 client.quit();
+                                fs.unlink(req.file.path);
                                 
                                 res.json({
                                     src: src
@@ -301,7 +302,7 @@ function handleProfileAvatarUpload(req, res) {
                     });
                 });
             })
-            .catch(function(err) {
+            .catch(function() {
                 res.json({
                     message: "Failed to upload image."
                 }, 500);
@@ -351,6 +352,8 @@ function handleProfileHeaderUpload(req, res) {
                                 }
             
                                 client.quit();
+                                fs.unlink(req.file.path);
+                                
                                 res.json({
                                     src: src
                                 });
