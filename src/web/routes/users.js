@@ -59,7 +59,7 @@ function handleIndex(req, res) {
         });
         
         template.send(res, 'users/index', {
-            pageTitle: "users",
+            pageTitle: "Users",
             users: users
         });
     });
