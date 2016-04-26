@@ -399,9 +399,12 @@ function handleUpvotes(req, res) {
         }
     
         if (user.profile == "") {
-            user.profile = {image: "", text: ""};
+            user.profile = {image: "", text: "", bio: "", header: "", color: HEADER_COLOR};
         } else {
             user.profile = JSON.parse(user.profile);
+            if (!user.profile.color) {
+                user.profile.color = HEADER_COLOR;
+            }
         }
     
         db_votes.countLikesByUser(user.name, function(err, likes) {
@@ -481,11 +484,14 @@ function handleDownvotes(req, res) {
                 message: err
             });
         }
-        
+    
         if (user.profile == "") {
-            user.profile = {image: "", text: ""};
+            user.profile = {image: "", text: "", bio: "", header: "", color: HEADER_COLOR};
         } else {
             user.profile = JSON.parse(user.profile);
+            if (!user.profile.color) {
+                user.profile.color = HEADER_COLOR;
+            }
         }
     
         db_votes.countLikesByUser(user.name, function(err, likes) {
