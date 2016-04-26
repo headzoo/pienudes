@@ -687,8 +687,8 @@ module.exports = {
         app.post("/account/edit", handleAccountEdit);
         app.get("/account/channels", handleAccountChannelPage);
         app.post("/account/channels", handleAccountChannel);
-        app.get("/account/profile", handleAccountProfilePage);
-        app.post("/account/profile", handleAccountProfile);
+        //app.get("/account/profile", handleAccountProfilePage);
+        //app.post("/account/profile", handleAccountProfile);
         app.get("/account/passwordreset", handlePasswordResetPage);
         app.post("/account/passwordreset", handlePasswordReset);
         app.get("/account/passwordrecover/:hash", handlePasswordRecover);

@@ -19,6 +19,7 @@ $(function() {
         avatar_file       = $("#profile-avatar-edit-file"),
         avatar_spinner    = $("#profile-avatar-edit-spinner"),
         avatar_icon       = $("#profile-avatar-edit-icon"),
+        avatar_navbar     = $("#navbar-avatar"),
         tagline           = $("#profile-tagline"),
         tagline_e         = $("#profile-tagline-edit"),
         location          = $("#profile-location"),
@@ -58,6 +59,8 @@ $(function() {
                 website_e.val(res.website).removeClass("invalid");
                 bio.html(nl2p(res.bio));
                 bio_e.val(res.bio).removeClass("invalid");
+                avatar_navbar.attr("src", avatar.attr("src"));
+                
                 setState();
                 
                 is_editing = false;

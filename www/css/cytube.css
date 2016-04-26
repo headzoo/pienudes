@@ -838,3 +838,29 @@ input:focus {
   text-decoration: none;
   color: #fff;
 }
+.navbar .navbar-form {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+@media only screen and (max-width: 321px) {
+  #login-button,
+  #register-button {
+    padding: 4px 8px;
+  }
+  .navbar .navbar-form {
+    margin: 0;
+    border-top: none;
+    border-bottom: none;
+  }
+}
+@media only screen and (max-width: 481px) {
+  #login-button,
+  #register-button {
+    padding: 4px 8px;
+  }
+  .navbar .navbar-form {
+    margin: 0;
+    border-top: none;
+    border-bottom: none;
+  }
+}
