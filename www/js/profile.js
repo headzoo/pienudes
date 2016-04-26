@@ -35,7 +35,7 @@ $(function() {
     
     edit_btn.on("click", function() {
         if (is_editing) {
-            var header_img = header.css("background-image").replace(/url\((.*?)\)/, '$1');
+            var header_img = header.css("background-image").replace(/url\("?(.*?)"?\)/, '$1');
             
             $.ajax({
                 url: "/user/profile/bio/save",
@@ -63,6 +63,7 @@ $(function() {
                 is_editing = false;
                 hide();
             }).fail(function(jqXHR) {
+                console.log(jqXHR.responseText);
                 var obj = JSON.parse(jqXHR.responseText);
                 if (obj.target) {
                     $(obj.target).addClass("invalid");

@@ -178,7 +178,9 @@ function handleProfileSave(req, res) {
                         message: "Failed to save profile."
                     }, 500);
                 }
-                avatars = urls;
+                if (urls) {
+                    avatars = urls;
+                }
                 
                 client.hgetall(key_headers, function(err, urls) {
                     if (err) {
@@ -187,7 +189,9 @@ function handleProfileSave(req, res) {
                             message: "Failed to save profile."
                         }, 500);
                     }
-                    headers = urls;
+                    if (urls) {
+                        headers = urls;
+                    }
                     
                     if (website) {
                         if (!website.match(/^https?:\/\//)) {
