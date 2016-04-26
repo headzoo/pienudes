@@ -1,35 +1,11 @@
-@color-card-bg: #1B1B1B;
-@color-card-border: #000;
-@color-card-border-lite: #232323;
+@import "variables";
 
 .profile-mainpage {
   padding-top: 50px !important;
 }
 
 .profile-wrap {
-  .navbar-inverse {
-    background-color: @color-card-bg;
-    border-color: @color-card-border;
-  }
 
-  .navbar-nav>li>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
-  }
-
-  .navbar-inverse .navbar-nav>.open>a,
-  .navbar-inverse .navbar-nav>.open>a:focus,
-  .navbar-inverse .navbar-nav>.open>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
-  }
-
-  .dropdown-menu {
-    background-color: @color-card-bg;
-  }
-
-  .dropdown-menu>li>a:focus,
-  .dropdown-menu>li>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
-  }
 }
 
 #profile {
@@ -160,6 +136,25 @@
     width: 30px;
     height: 30px;
   }
+}
+
+#navbar-avatar-link {
+  padding-top: 0;
+  padding-bottom: 0;
+  
+  &:hover, &:focus {
+    background-color: transparent;
+  }
+}
+
+#navbar-avatar {
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  background-color: #3E444C;
+  margin: 6px 8px 3px 0;
 }
 
 #profile-stats {
