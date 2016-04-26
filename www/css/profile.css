@@ -82,6 +82,7 @@
   display: inline-block;
   vertical-align: top;
   text-align: center;
+  margin-bottom: 18px;
 }
 #profile-timeline {
   margin-top: -150px;
@@ -170,6 +171,10 @@
 #profile-tagline-edit {
   margin-bottom: 6px;
 }
+#users-list .profile-tagline {
+  margin-bottom: 0;
+  min-height: 17px;
+}
 #profile-website {
   display: block;
   color: #AFA8FB;
@@ -177,6 +182,13 @@
 .profile-empty {
   text-align: center;
   margin: 34px 0;
+}
+.profile-name {
+  color: #FFF;
+  padding: 0;
+  margin: 0;
+  text-shadow: none;
+  font-size: 24px;
 }
 .profile-ajax-spinner {
   width: 50px;

@@ -5,8 +5,7 @@ import db_playlists from '../../database/playlist';
 import db_media from '../../database/media';
 
 function handleMedia(req, res) {
-    var mid   = req.params.mid;
-    var title = req.params.title;
+    var mid = req.params.mid;
     
     db_media.fetchById(mid, function(err, media) {
         if (err) {

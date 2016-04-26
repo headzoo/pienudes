@@ -48,39 +48,11 @@ function handleTop(req, res) {
     });
 }
 
-function handleUsers(req, res) {
-    db_playlists.fetchDistinctUsers(function(err, rows) {
-        if (err) {
-            return template.send(res, 'error/http', {
-                path: req.path,
-                status: 500,
-                message: err
-            });
-        }
-        
-        var users = [];
-        rows.forEach(function(row) {
-            if (row.user.length != 0) {
-                users.push({
-                    name: row.user,
-                    count: row.cnt
-                });
-            }
-        });
-        
-        template.send(res, 'playlists/users', {
-            pageTitle: "User Playlists",
-            users: users
-        });
-    });
-}
-
 module.exports = {
     /**
      * Initializes auth callbacks
      */
     init: function (app) {
-        app.get('/playlists/users', handleUsers);
         app.get('/playlists/history/:page?', handleHistory);
         app.get('/playlists/top', handleTop);
     }

@@ -123,7 +123,7 @@ module.exports = {
     fetchDistinctUsers(callback) {
         callback = callback || noop;
         
-        db.query("SELECT `user`, COUNT(*) AS `cnt` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` GROUP BY `user` ORDER BY `cnt` DESC", callback);
+        db.query("SELECT `users`.*, COUNT(*) AS `cnt` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` INNER JOIN `users` ON `users`.`name` = `playlist_history`.`user` GROUP BY `playlist_history`.`user` ORDER BY `cnt` DESC", callback);
     },
     
     /**

@@ -32,6 +32,39 @@ var upload_header = multer({
     }
 });
 
+function handleIndex(req, res) {
+    db_playlists.fetchDistinctUsers(function(err, rows) {
+        if (err) {
+            return template.send(res, 'error/http', {
+                path: req.path,
+                status: 500,
+                message: err
+            });
+        }
+        
+        var users = [];
+        rows.forEach(function(row) {
+            if (row.name.length != 0) {
+                if (row.profile == "") {
+                    row.profile = {image: "", text: "", bio: "", header: "", color: HEADER_COLOR};
+                } else {
+                    row.profile = JSON.parse(row.profile);
+                    if (!row.profile.color) {
+                        row.profile.color = HEADER_COLOR;
+                    }
+                }
+                
+                users.push(row);
+            }
+        });
+        
+        template.send(res, 'users/index', {
+            pageTitle: "users",
+            users: users
+        });
+    });
+}
+
 function handleProfile(req, res) {
     var name = req.params.name;
     var page = req.params.page;
@@ -597,6 +630,7 @@ module.exports = {
      * Initializes auth callbacks
      */
     init: function (app) {
+        app.get('/users', handleIndex);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/liked/:page?', handleUpvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/disliked/:page?', handleDownvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/:page?', handleProfile);
