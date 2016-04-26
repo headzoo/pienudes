@@ -1,6 +1,7 @@
 var nunjucks    = require('nunjucks');
 var dateFilter  = require('nunjucks-date-filter');
 var commaFilter = require('nunjucks-comma-filter');
+var moment      = require('moment');
 var fs          = require("fs");
 var path        = require("path");
 var Config      = require("../config");
@@ -15,6 +16,107 @@ env.addFilter('nl2p', function(str) {
     str = '<p>' + str.replace(/\n([ \t]*\n)+/g, '</p><p>')
             .replace('\n', '<br />') + '</p>';
     return str;
+});
+env.addFilter('media_url', function(media) {
+    switch(media.type) {
+        case "yt":
+            return "http://youtube.com/watch?v=" + media.uid;
+            break;
+        case "sc":
+            return media.uid;
+            break;
+        case "vi":
+            return "http://vimeo.com/" + media.uid;
+            break;
+        case "dm":
+            return "http://dailymotion.com/video/" + media.uid;
+            break;
+        case "li":
+            return "http://livestream.com/" + media.uid;
+            break;
+        case "tw":
+            return "http://twitch.tv/" + media.uid;
+            break;
+        case "im":
+            return "http://imgur.com/a/" + media.uid;
+            break;
+        case "us":
+            return "http://imgur.com/a/" + media.uid;
+            break;
+        case "gd":
+            return "https://docs.google.com/file/d/" + media.uid;
+            break;
+        case "hb":
+            return "http://hitbox.tv/" + media.uid;
+            break;
+        default:
+            return media.uid;
+            break;
+    
+    }
+});
+
+env.addFilter('thumbnail_url', function(media) {
+    switch(media.type) {
+        case "yt":
+            return "https://i.ytimg.com/vi/" + media.uid + "/default.jpg";
+            break;
+        case "sc":
+            return "/img/thumbs/sc.png";
+            break;
+        case "vi":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "dm":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "li":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "tw":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "im":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "us":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "gd":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "hb":
+            return "/img/thumbs/missing.jpg";
+            break;
+        default:
+            return "/img/thumbs/missing.jpg";
+            break;
+        
+    }
+});
+
+env.addFilter('fromNow', function(date) {
+    var result;
+    var errs = [];
+    var obj;
+    
+    try {
+        obj = moment.utc(date);
+    } catch (err) {
+        errs.push(err);
+    }
+    if (obj) {
+        try {
+            result = obj.fromNow(false);
+        } catch(err) {
+            errs.push(err);
+        }
+    }
+    
+    if (errs.length) {
+        return errs.join("\n");
+    }
+    return result;
 });
 
 /**
@@ -55,6 +157,12 @@ function getBaseUrl(res) {
 function send(res, view, locals) {
     locals.loggedIn  = locals.loggedIn || !!res.user;
     locals.loginName = locals.loginName || res.user ? res.user.name : false;
+    locals.loginAvatar = "/img/avatar.gif";
+    if (locals.loggedIn && res.user.profile) {
+        var profile = JSON.parse(res.user.profile);
+        locals.loginAvatar = profile.image || "/img/avatar.gif";
+    }
+    
     var file = view + ".html.twig";
     var html = env.render(file, merge(locals, res));
     res.send(html);

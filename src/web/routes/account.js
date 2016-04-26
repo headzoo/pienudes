@@ -396,6 +396,7 @@ function handleAccountProfilePage(req, res) {
         return template.send(res, "account/profile", {
             pageTitle: "Profile",
             profileImage: "",
+            profileHeader: "",
             profileText: "",
             profileBio: ""
         });
@@ -407,6 +408,7 @@ function handleAccountProfilePage(req, res) {
                 pageTitle: "Profile",
                 profileError: err,
                 profileImage: "",
+                profileHeader: "",
                 profileText: "",
                 profileBio: ""
             });
@@ -416,6 +418,7 @@ function handleAccountProfilePage(req, res) {
         template.send(res, "account/profile", {
             pageTitle: "Profile",
             profileImage: profile.image,
+            profileHeader: profile.header,
             profileText: profile.text,
             profileBio: profile.bio,
             profileError: false
@@ -433,21 +436,24 @@ function handleAccountProfile(req, res) {
         return template.send(res, "account/profile", {
             pageTitle: "Profile",
             profileImage: "",
+            profileHeader: "",
             profileText: "",
             profileBio: "",
             profileError: "You must be logged in to edit your profile"
         });
     }
 
-    var image = req.body.image;
-    var text  = req.body.text.substring(0, 50);
-    var bio   = xss.sanitizeHTML(req.body.bio.substring(0, 5000));
+    var image  = req.body.image;
+    var header = req.body.header;
+    var text   = req.body.text.substring(0, 50);
+    var bio    = xss.sanitizeHTML(req.body.bio.substring(0, 1000));
 
-    db.users.setProfile(req.user.name, { image: image, text: text, bio: bio }, function (err) {
+    db.users.setProfile(req.user.name, { image: image, header: header, text: text, bio: bio }, function (err) {
         if (err) {
             template.send(res, "account/profile", {
                 pageTitle: "Profile",
                 profileImage: "",
+                profileHeader: "",
                 profileText: "",
                 profileBio: "",
                 profileError: err
@@ -458,6 +464,7 @@ function handleAccountProfile(req, res) {
         template.send(res, "account/profile", {
             pageTitle: "Profile",
             profileImage: image,
+            profileHeader: header,
             profileText: text,
             profileBio: bio,
             profileError: false
@@ -680,8 +687,8 @@ module.exports = {
         app.post("/account/edit", handleAccountEdit);
         app.get("/account/channels", handleAccountChannelPage);
         app.post("/account/channels", handleAccountChannel);
-        app.get("/account/profile", handleAccountProfilePage);
-        app.post("/account/profile", handleAccountProfile);
+        //app.get("/account/profile", handleAccountProfilePage);
+        //app.post("/account/profile", handleAccountProfile);
         app.get("/account/passwordreset", handlePasswordResetPage);
         app.post("/account/passwordreset", handlePasswordReset);
         app.get("/account/passwordrecover/:hash", handlePasswordRecover);

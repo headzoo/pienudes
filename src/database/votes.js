@@ -150,5 +150,18 @@ module.exports = {
             }
             callback(null, rows[0]["cnt"]);
         });
+    },
+    
+    countLikesByUser: function(name, callback) {
+        callback = callback || noop;
+        
+        db.query(
+            "SELECT SUM(`votes`.`value`) AS `likes` FROM `votes` INNER JOIN `playlist_history` AS `ph` ON `ph`.`media_id` = `votes`.`media_id` WHERE `ph`.`user` = ?",
+            [name],
+            function(err, rows) {
+                if (err) return callback(err);
+                callback(null, rows[0].likes || 0)
+            }
+        );
     }
 };

@@ -124,7 +124,6 @@ function handleLoginPage(req, res) {
  * Handles a request for /logout.  Clears auth cookie
  */
 function handleLogout(req, res) {
-    csrf.verify(req);
 
     res.clearCookie("auth");
     req.user = res.user = null;
@@ -245,7 +244,7 @@ module.exports = {
     init: function (app) {
         app.get("/login", handleLoginPage);
         app.post("/login", handleLogin);
-        app.post("/logout", handleLogout);
+        app.get("/logout", handleLogout);
         app.get("/register", handleRegisterPage);
         app.post("/register", handleRegister);
     }

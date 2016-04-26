@@ -48,7 +48,7 @@ module.exports = {
                     return b.usercount - a.usercount;
                 });
                 
-                playlists.fetchMostWatched(25, function(err, rows) {
+                playlists.fetch(5, 0, function(err, rows) {
                     template.send(res, 'home/index', {
                         pageTitle: "Pienudes - Music and Chat",
                         top_media: rows,

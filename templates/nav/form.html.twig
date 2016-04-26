@@ -1,23 +1,30 @@
 {% if loggedIn %}
-    <form id="logoutform" class="navbar-form navbar-right" action="{{ loginDomain }}/logout" method="post">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <input type="hidden" name="dest" value="{{ loginDomain }}/" />
-        <span id="welcome"><a href="/user/{{ loginName }}" target="_blank">{{ loginName }}</a></span>
-        <span>&nbsp;·&nbsp;</span>
-        <button id="logout" class="btn btn-default navbar-link" type="submit">Log out</button>
-    </form>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a href="/user/{{ loginName }}" id="navbar-avatar-link" data-toggle="dropdown">
+                <img id="navbar-avatar" src="{{ loginAvatar }}" />
+            </a>
+            <ul class="dropdown-menu pull-right" style="margin-right: 15px;">
+                <li>
+                    <a href="{{ loginDomain }}/user/{{ loginName }}">Profile</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                    <a href="{{ loginDomain }}/account/channels">Your Channels</a>
+                </li>
+                <li>
+                    <a href="{{ loginDomain }}/account/edit">Account Settings</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                    <a href="{{ loginDomain }}/logout">Logout</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
 {% else %}
-    <form id="loginForm" class="navbar-form navbar-right" action="{{ loginDomain }}/login" method="post">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <input type="hidden" name="dest" value="{{ loginDomain }}/" />
-        <input type="hidden" name="remember" value="1" />
-        <div class="form-group">
-            <input class="form-control" type="text" name="name" placeholder="Username" />
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password" />
-        </div>
-        <button id="login" class="btn btn-default navbar-link" type="submit">Login</button>
+    <div class="navbar-form navbar-right">
+        <button id="login-button" class="btn btn-default navbar-link" onclick="document.location = '/login'; return false;">Login</button>
         <button id="register-button" class="btn btn-default navbar-link" onclick="document.location = '/register'; return false;">Register</button>
-    </form>
+    </div>
 {% endif %}

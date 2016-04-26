@@ -11,9 +11,8 @@ module.exports = {
      * Adds a video to the playlist history
      */
     insert(media_id, channel, user, callback) {
-        if (typeof callback !== "function") {
-            callback = noop;
-        }
+        callback = callback || noop;
+        
         if (user[0] == "@") {
             user = user.substring(1);
         }
@@ -28,6 +27,44 @@ module.exports = {
             
                 callback(err, res);
             });
+    },
+    
+    removeById(pid, callback) {
+        callback = callback || noop;
+        
+        pid = parseInt(pid);
+        db.query("DELETE FROM `playlist_history` WHERE `id` = ? LIMIT 1", [pid], callback);
+    },
+    
+    fetchById(pid, callback) {
+        callback = callback || noop;
+    
+        pid = parseInt(pid);
+        db.query(
+            "SELECT * FROM `playlist_history` WHERE `id` = ? LIMIT 1",
+            [pid],
+            function(err, rows) {
+                if (err) return callback(err);
+                if (rows.length == 0) return callback(null, null);
+                callback(null, rows[0]);
+            }
+        );
+    },
+    
+    fetchUsersByMediaId(mid, callback) {
+        callback = callback || noop;
+    
+        mid = parseInt(mid);
+        db.query(
+            "SELECT `users`.*, `playlist_history`.`id` AS `pid` " +
+            "FROM `playlist_history` " +
+            "INNER JOIN `users` ON `users`.`name` = `playlist_history`.`user` " +
+            "WHERE `playlist_history`.`media_id` = ? " +
+            "GROUP BY `playlist_history`.`user` " +
+            "ORDER BY `playlist_history`.`id`",
+            [mid],
+            callback
+        );
     },
     
     /**
@@ -76,7 +113,7 @@ module.exports = {
             offset = 0;
         }
     
-        var sql = "SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `user` = ? ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
+        var sql = "SELECT *, `playlist_history`.`id` AS `pid` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `user` = ? ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
         db.query(sql, [user], callback);
     },
     
@@ -122,6 +159,7 @@ module.exports = {
      * Returns the number of rows in the playlist_history table
      */
     count(callback) {
+        callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history`", [], function(err, rows) {
             if (err) {
                 callback(err, []);
@@ -132,6 +170,7 @@ module.exports = {
     },
     
     countByUser(user, callback) {
+        callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `user` = ?", [user], function(err, rows) {
             if (err) {
                 callback(err, []);
@@ -139,5 +178,25 @@ module.exports = {
             }
             callback(null, rows[0]["c"]);
         });
+    },
+    
+    countDistinctUsersById(pid, callback) {
+        callback = callback || noop;
+        
+        this.fetchById(pid, function(err, row) {
+            if (err) return callback(err);
+            if (!row) return callback(null, 0);
+            
+            db.query(
+                "SELECT COUNT(DISTINCT(`user`)) AS `cnt` FROM `playlist_history` WHERE `media_id` = ?",
+                [row.media_id],
+                function(err, rows) {
+                    if (err) return callback(err);
+                    if (!rows) return callback(null, 0);
+                    callback(null, rows[0].cnt);
+                }
+            );
+        });
+
     }
 };

@@ -1,0 +1,70 @@
+{% import "macros/links.html.twig" as links %}
+
+<div id="profile-timeline">
+    <ul class="nav nav-tabs">
+        <li{% if pageTab == "home" %} class="active"{% endif %}>
+            <a href="/user/{{ user.name }}">Played</a>
+        </li>
+        <li{% if pageTab == "upvotes" %} class="active"{% endif %}>
+            <a href="/user/{{ user.name }}/liked">Liked</a>
+        </li>
+        <li{% if pageTab == "downvotes" %} class="active"{% endif %}>
+            <a href="/user/{{ user.name }}/disliked">Disliked</a>
+        </li>
+    </ul>
+
+    {% if media_count == 0 %}
+        <div class="card card-media">
+            <div class="profile-empty">
+                {{ empty_msg }}
+            </div>
+        </div>
+    {% else %}
+        {% set is_owner = (loggedIn and loginName == user.name) %}
+        {% for m in media %}
+            <div class="card card-media">
+                <div class="card-media-time">
+                    {% if m.channel %}
+                    <a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a><br />
+                    {% endif %}
+                    {{ m.time|fromNow }}
+                </div>
+                {{ links.thumbnail(m, "card-media-thumbnail") }}
+                {{ links.media(m, "card-media-title") }}
+
+                {% if pageTab == "home" and m.common != 0 %}
+                    <div class="card-media-common">
+                        <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">Played by {{ m.common }} other {% if m.common == 1 %}person{% else %}people{% endif %}</a>
+                    </div>
+                {% endif %}
+
+                {% if is_owner %}
+                    <span class="card-media-remove-btn glyphicon glyphicon-remove" title="Delete" data-pid="{{ m.pid }}"></span>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <nav>
+            <ul class="pager">
+                {% if page == 1 %}
+                    <li class="previous disabled">
+                        <a href="#"><span aria-hidden="true">&larr;</span> Newer</a>
+                    </li>
+                {% else %}
+                    <li class="previous">
+                        <a href="/user/{{ user.name }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                    </li>
+                {% endif %}
+                {% if page == pages %}
+                    <li class="next disabled">
+                        <a href="#">Older <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                {% else %}
+                    <li class="next">
+                        <a href="/user/{{ user.name }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>

@@ -1,0 +1,284 @@
+@import "variables";
+
+.profile-mainpage {
+  padding-top: 50px !important;
+}
+
+.profile-wrap {
+
+}
+
+#profile {
+  h1 {
+    color: #FFF;
+    padding: 0;
+    margin: 0;
+    text-shadow: none;
+    font-size: 24px;
+  }
+
+  .nav-tabs {
+    border: 1px solid #000;
+    background: @color-card-bg;
+    text-transform: uppercase;
+  }
+  
+  .nav-tabs>li.active>a,
+  .nav-tabs>li.active>a:focus,
+  .nav-tabs>li.active>a:hover {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+  }
+
+  .nav>li>a:focus,
+  .nav>li>a:hover {
+    text-decoration: none;
+    background-color: #111;
+  }
+}
+
+#profile-header {
+  width: 100%;
+  height: 275px;
+  margin-bottom: 6px;
+  background: center center no-repeat;
+  background-size: cover;
+  position: relative;
+
+  @media only screen and (max-width : 600px) {
+    height: 116px;
+  }
+}
+#profile-header-edit {
+  text-align: center;
+  margin: auto auto;
+  padding: 6px;
+  color: #fff;
+  background-color: rgba(27, 27, 27, 0.75);
+  border: 1px solid #000;
+  position: absolute;
+  top: 44px;
+  left: 0;
+  right: 0;
+
+  .glyphicon {
+    vertical-align: middle;
+    margin-top: -4px;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .sp-replacer {
+    float: none;
+    border-radius: 3px;
+  }
+}
+
+#profile-info, .profile-info {
+  padding: 0 6px;
+  color: #FFF;
+  
+  .profile-edit-control {
+    border: none;
+    padding: 4px;
+    margin-bottom: 2px;
+    width: 100%;
+    
+    &.invalid {
+      border: 1px solid red;
+    }
+  }
+  
+  &.inline {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+  }
+}
+
+#profile-timeline {
+  margin-top: -150px;
+
+  @media only screen and (max-width : 600px) {
+    margin-top: 0;
+  }
+}
+
+#profile-avatar-wrap, .profile-avatar-wrap {
+  width: 100%;
+  text-align: center;
+  margin-top: -110px;
+  margin-bottom: 12px;
+}
+#profile-avatar, .profile-avatar {
+  width: 200px;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  background-color: #3E444C;
+}
+#profile-avatar-edit {
+  text-align: center;
+  height: 42px;
+  margin: 8px auto;
+  padding: 6px;
+  color: #fff;
+  border-radius: 2px;
+  background-color: #222;
+  
+  .glyphicon {
+    vertical-align: middle;
+    margin-top: -4px;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+#navbar-avatar-link {
+  padding-top: 0;
+  padding-bottom: 0;
+  
+  &:hover, &:focus {
+    background-color: transparent;
+  }
+}
+
+#navbar-avatar {
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  background-color: #3E444C;
+  margin: 6px 15px 3px 0;
+}
+
+#profile-stats {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 0;
+  margin-top: 2px;
+  text-transform: uppercase;
+  color: #FFF;
+  
+  li {
+    display: inline-block;
+    margin-right: 8px;
+  }
+}
+
+#profile-bio {
+  margin-top: 10px;
+  color: #FFF;
+}
+#profile-bio-edit {
+  margin-top: 10px;
+  width: 100%;
+  height: 200px;
+}
+
+#profile-tagline, .profile-tagline {
+  color: #FFF;
+  font-weight: bold;
+  font-size: 12px;
+}
+#profile-tagline-edit {
+  margin-bottom: 6px;
+}
+
+#profile-website {
+  display: block;
+  color: #AFA8FB;
+}
+
+.profile-empty {
+  text-align: center;
+  margin: 34px 0;
+}
+
+.profile-ajax-spinner {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  z-index: 1;
+  left: -10px;
+  top: -7px;
+}
+
+.card {
+  background: @color-card-bg;
+  display: block;
+  min-height: 102px;
+  position: relative;
+  width: 100%;
+  padding: 6px;
+  border-bottom: 1px solid @color-card-border;
+  border-left: 1px solid @color-card-border;
+  border-right: 1px solid @color-card-border;
+  border-top: 1px solid @color-card-border-lite;
+  transition: all 0.2s ease-out;
+}
+
+.card-media {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  
+  &:hover {
+    background: lighten(@color-card-bg, 5%);
+
+    .card-media-remove-btn {
+      color: lighten(@color-card-bg, 20%);
+      
+      &:hover {
+        color: lighten(@color-card-bg, 30%);
+      }
+    }
+
+    .card-media-thumbnail {
+      border: 1px solid lighten(@color-card-border-lite, 5%);
+    }
+  }
+
+  .card-media-remove-btn {
+    position: absolute;
+    top: 80px;
+    right: 5px;
+    cursor: pointer;
+    color: @color-card-bg;
+  }
+}
+
+.card-media-thumbnail {
+  float: left;
+  margin-right: 6px;
+  width: 120px;
+  height: 90px;
+  border: 1px solid @color-card-border-lite;
+}
+
+.card-media-title {
+  font-size: 16px;
+  margin-right: 120px;
+  display: block;
+  max-height: 68px;
+  overflow: hidden;
+  
+  &.smaller {
+    font-size: 12px;
+    margin-right: 78px;
+    max-height: 80px;
+  }
+}
+
+.card-media-time {
+  font-size: 12px;
+  float: right;
+  text-align: right;
+}
+
+.card-media-common {
+  font-size: 12px;
+}

@@ -1,0 +1,9 @@
+{% macro media(media, class='') %}
+    <a href="{{ media|media_url }}" target="_blank" class="{{ class }}">{{ media.title }}</a>
+{% endmacro %}
+
+{% macro thumbnail(media, class='') %}
+    <a href="{{  media|media_url }}" target="_blank">
+        <img src="{{ media|thumbnail_url }}" class="{{ class }}" />
+    </a>
+{% endmacro %}

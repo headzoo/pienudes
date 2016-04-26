@@ -17,6 +17,13 @@ function wildcardSimilarChars(name) {
 }
 
 module.exports = {
+    max_image: 255,
+    max_header: 255,
+    max_text: 50,
+    max_location: 50,
+    max_website: 100,
+    max_bio: 1000,
+    
     init: function () {
     },
 
@@ -462,9 +469,13 @@ module.exports = {
                 callback("User does not exist", null);
             } else {
                 var userprof = {
-                    image: "",
-                    text: "",
-                    bio: ""
+                    image:    "",
+                    header:   "",
+                    text:     "",
+                    location: "",
+                    website:  "",
+                    bio:      "",
+                    color:    ""
                 };
 
                 if (rows[0].profile === "") {
@@ -474,9 +485,13 @@ module.exports = {
 
                 try {
                     var profile = JSON.parse(rows[0].profile);
-                    userprof.image = profile.image || "";
-                    userprof.text  = profile.text || "";
-                    userprof.bio   = profile.bio || "";
+                    userprof.image    = profile.image || "";
+                    userprof.header   = profile.header || "";
+                    userprof.text     = profile.text || "";
+                    userprof.location = profile.location || "";
+                    userprof.website  = profile.website || "";
+                    userprof.bio      = profile.bio || "";
+                    userprof.color    = profile.color || "#9609B5";
                     callback(null, userprof);
                 } catch (e) {
                     Logger.errlog.log("Corrupt profile: " + rows[0].profile +
@@ -506,20 +521,31 @@ module.exports = {
         }
 
         // Cast to string to guarantee string type
-        profile.image += "";
-        profile.text += "";
-        profile.bio += "";
+        profile.image    += "";
+        profile.header   += "";
+        profile.text     += "";
+        profile.location += "";
+        profile.website  += "";
+        profile.bio      += "";
+        profile.color    += "";
 
         // Limit size
-        profile.image = profile.image.substring(0, 255);
-        profile.text  = profile.text.substring(0, 50);
-        profile.bio   = profile.bio.substring(0, 5000);
+        profile.image    = profile.image.substring(0, this.max_image);
+        profile.header   = profile.header.substring(0, this.max_header);
+        profile.text     = profile.text.substring(0, this.max_text);
+        profile.location = profile.location.substring(0, this.max_location);
+        profile.website  = profile.website.substring(0, this.max_website);
+        profile.bio      = profile.bio.substring(0, this.max_bio);
 
         // Stringify the literal to guarantee I only get the keys I want
         var profilejson = JSON.stringify({
-            image: profile.image,
-            text: profile.text,
-            bio: profile.bio
+            image:    profile.image,
+            header:   profile.header,
+            text:     profile.text,
+            location: profile.location,
+            website:  profile.website,
+            bio:      profile.bio,
+            color:    profile.color
         });
 
         db.query("UPDATE `users` SET profile=? WHERE name=?", [profilejson, name],
