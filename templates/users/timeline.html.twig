@@ -23,7 +23,7 @@
         {% set is_owner = (loggedIn and loginName == user.name) %}
         {% for m in media %}
             <div class="card card-media">
-                <div class="card-media-time">
+                <div class="card-media-time" data-time="{{ m.time }}">
                     {% if m.channel %}
                     <a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a><br />
                     {% endif %}
