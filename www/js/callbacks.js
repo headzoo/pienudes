@@ -435,8 +435,9 @@ Callbacks = {
         handlePermissionChange();
         if(SUPERADMIN && $("#setrank").length == 0) {
             var li = $("<li/>").addClass("dropdown")
-                .attr("id", "setrank")
-                .appendTo($(".nav")[0]);
+                .attr("id", "setrank");
+                //.appendTo($(".nav")[0]);
+                
             $("<a/>").addClass("dropdown-toggle")
                 .attr("data-toggle", "dropdown")
                 .attr("href", "javascript:void(0)")
