@@ -13,6 +13,13 @@ var defaults = {
         user: "cytube3",
         password: ""
     },
+    redis: {
+        host: "127.0.0.1",
+        port: 6379,
+        databases: {
+            uploads: 0
+        }
+    },
     logs: {
         directory: "/var/log/pienudes"
     },

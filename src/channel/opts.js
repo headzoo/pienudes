@@ -9,7 +9,7 @@ function OptionsModule(channel) {
         allow_voteskip: true,      // Allow users to voteskip
         voteskip_ratio: 0.5,       // Ratio of skip votes:non-afk users needed to skip the video
         afk_timeout: 600,          // Number of seconds before a user is automatically marked afk
-        thumbnail: "https://s3.amazonaws.com/images.pienudes.com/channel.jpg",// Channel thumbnail displayed on the home page
+        thumbnail: "https://images.pienudes.com/channel.jpg",// Channel thumbnail displayed on the home page
         background_url: "",        // Channel background image
         background_repeat: "no-repeat", // Background tiling
         join_msg: "",              // Message show to user when they join the channel.

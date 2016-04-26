@@ -10,6 +10,13 @@ mysql:
   user: 'cytube3'
   password: ''
   
+# Redis configuration
+redis:
+  host: 127.0.0.1
+  port: 6379
+  databases:
+    - uploads: 0
+  
 # Log related settings.
 logs:
   # Directory where logs will be written.

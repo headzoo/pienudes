@@ -98,7 +98,7 @@ $(function() {
     });
     
     avatar_remove_btn.on("click", function() {
-        avatar.attr("src", "https://pienudes.com/img/avatar.gif");
+        avatar.attr("src", "/img/avatar.gif");
     });
     
     avatar_file.on("change", function() {

@@ -1,10 +1,12 @@
 "use strict";
 
-var multer  = require('multer');
-var AWS     = require('aws-sdk');
-var fs      = require('fs');
-var Jimp    = require('jimp');
-var async   = require('async');
+var multer   = require('multer');
+var AWS      = require('aws-sdk');
+var fs       = require('fs');
+var Jimp     = require('jimp');
+var async    = require('async');
+var Redis    = require('../../redis');
+
 import template from '../template';
 import Config from '../../config';
 import db from '../../database';
@@ -152,55 +154,100 @@ function handleProfileSave(req, res) {
         if (header == "none") {
             header = "";
         }
-        
-        if (website && (website.substring(0, 8) !== "https://" && website.substring(0, 7) !== "http://")) {
-            return res.json({
-                message: "Website value must start with http:// or https://",
-                target: "#profile-website-edit"
-            }, 500);
-        }
-        if (image && image.substring(0, 8) !== "https://") {
-            return res.json({
-                message: "Invalid avatar value."
-            }, 500);
-        }
-        if (header && header[0] !== "#" && header.substring(0, 8) !== "https://") {
-            return res.json({
-                message: "Invalid header image value."
-            }, 500);
-        }
-        
-        var meta = {
-            image:    image,
-            header:   header,
-            text:     text,
-            location: location,
-            website:  website,
-            bio:      bio,
-            color:    color
-        };
-        
-        db.users.setProfile(req.user.name, meta, function (err) {
+    
+        Redis.createClient(Config.get("redis.databases").uploads, function(err, client) {
             if (err) {
-                res.json({
-                    message: "Failed to save profile information."
+                client.quit();
+                return res.json({
+                    message: "Failed to save profile."
                 }, 500);
             }
+    
+            var avatars     = {};
+            var headers     = {};
+            var key_avatars = "uploads:avatars:" + req.user.name;
+            var key_headers = "uploads:headers:" + req.user.name;
             
-            res.json({
-                text:     text,
-                location: location,
-                website:  website,
-                bio:      bio,
-                color:    color,
-                image:    profile.image,
-                header:   profile.header
+            client.hgetall(key_avatars, function(err, urls) {
+                if (err) {
+                    client.quit();
+                    return res.json({
+                        message: "Failed to save profile."
+                    }, 500);
+                }
+                avatars = urls;
+                
+                client.hgetall(key_headers, function(err, urls) {
+                    if (err) {
+                        client.quit();
+                        return res.json({
+                            message: "Failed to save profile."
+                        }, 500);
+                    }
+                    headers = urls;
+                    
+                    if (website) {
+                        if (!website.match(/^https?:\/\//)) {
+                            website = "http://" + website;
+                        }
+                    }
+    
+                    if (image && image != "/img/avatar.gif") {
+                        if (image != profile.image && avatars[image] === undefined) {
+                            client.quit();
+                            return res.json({
+                                message: "Invalid avatar value."
+                            }, 500);
+                        }
+                        client.hdel(key_avatars, image);
+                    }
+    
+                    if (header) {
+                        if (header != profile.header && headers[header] === undefined) {
+                            client.quit();
+                            return res.json({
+                                message: "Invalid header image value."
+                            }, 500);
+                        }
+                        client.hdel(key_headers, header);
+                    }
+    
+                    var meta = {
+                        image:    image,
+                        header:   header,
+                        text:     text,
+                        location: location,
+                        website:  website,
+                        bio:      bio,
+                        color:    color
+                    };
+    
+                    db.users.setProfile(req.user.name, meta, function (err) {
+                        if (err) {
+                            client.quit();
+                            return res.json({
+                                message: "Failed to save profile information."
+                            }, 500);
+                        }
+                        
+                        client.quit();
+                        res.json({
+                            text:     text,
+                            location: location,
+                            website:  website,
+                            bio:      bio,
+                            color:    color,
+                            image:    profile.image,
+                            header:   profile.header
+                        });
+                    });
+                });
             });
         });
     });
 }
 
-function handleProfileAvatarSave(req, res) {
+function handleProfileAvatarUpload(req, res) {
     
     db.users.getProfile(req.user.name, function(err, profile) {
         if (err) {
@@ -226,19 +273,40 @@ function handleProfileAvatarSave(req, res) {
                     bucket.upload(params, function(err) {
                         if (err) throw err;
     
-                        res.json({
-                            src: Config.get("uploads.uploads_url") + filename
+                        var src = Config.get("uploads.uploads_url") + filename;
+                        Redis.createClient(Config.get("redis.databases").uploads, function(err, client) {
+                            if (err) {
+                                return res.json({
+                                    message: "Failed to upload image."
+                                }, 500);
+                            }
+    
+                            var key = "uploads:avatars:" + req.user.name;
+                            client.hset(key, src, Date.now(), function(err) {
+                                if (err) {
+                                    return res.json({
+                                        message: "Failed to upload image."
+                                    }, 500);
+                                }
+                                client.quit();
+                                
+                                res.json({
+                                    src: src
+                                });
+                            });
                         });
                     });
                 });
             })
             .catch(function(err) {
-            
+                res.json({
+                    message: "Failed to upload image."
+                }, 500);
             });
     });
 }
 
-function handleProfileHeaderSave(req, res) {
+function handleProfileHeaderUpload(req, res) {
     db.users.getProfile(req.user.name, function(err, profile) {
         if (err) {
             res.json({
@@ -262,15 +330,36 @@ function handleProfileHeaderSave(req, res) {
                     };
                     bucket.upload(params, function(err) {
                         if (err) throw err;
-                        
-                        res.json({
-                            src: Config.get("uploads.uploads_url") + filename
+    
+                        var src = Config.get("uploads.uploads_url") + filename;
+                        Redis.createClient(Config.get("redis.databases").uploads, function(err, client) {
+                            if (err) {
+                                return res.json({
+                                    message: "Failed to upload image."
+                                }, 500);
+                            }
+        
+                            var key = "uploads:headers:" + req.user.name;
+                            client.hset(key, src, Date.now(), function(err) {
+                                if (err) {
+                                    return res.json({
+                                        message: "Failed to upload image."
+                                    }, 500);
+                                }
+            
+                                client.quit();
+                                res.json({
+                                    src: src
+                                });
+                            });
                         });
                     });
                 });
             })
-            .catch(function(err) {
-                
+            .catch(function() {
+                res.json({
+                    message: "Failed to upload image."
+                }, 500);
             });
     });
 }
@@ -491,8 +580,8 @@ module.exports = {
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/disliked/:page?', handleDownvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/:page?', handleProfile);
         app.post('/user/profile/bio/save', handleProfileSave);
-        app.post('/user/profile/avatar/save', upload_avatar.single("avatar"), handleProfileAvatarSave);
-        app.post('/user/profile/header/save', upload_header.single("header"), handleProfileHeaderSave);
+        app.post('/user/profile/avatar/save', upload_avatar.single("avatar"), handleProfileAvatarUpload);
+        app.post('/user/profile/header/save', upload_header.single("header"), handleProfileHeaderUpload);
         app.post('/user/profile/track/delete', handleTrackDelete);
     }
 };
