@@ -129,6 +129,20 @@ var defaults = {
     },
     "channel-storage": {
         type: "file"
+    },
+    profiles: {
+        header: {
+            width: 1500,
+            height: 275,
+            quality: 75,
+            mime: "image/jpeg"
+        },
+        avatar: {
+            width: 200,
+            height: 200,
+            quality: 75,
+            mime: "image/png"
+        }
     }
 };
 

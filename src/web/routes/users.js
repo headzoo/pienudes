@@ -265,8 +265,9 @@ function handleProfileAvatarUpload(req, res) {
         
         Jimp.read(req.file.path)
             .then(function(image) {
-                image.resize(200, 200);
-                image.getBuffer("image/png", function(err, buff) {
+                image.quality(Config.get("profiles.avatar.quality"))
+                    .resize(Config.get("profiles.avatar.width"), Config.get("profiles.avatar.height"));
+                image.getBuffer(Config.get("profiles.avatar.mime"), function(err, buff) {
                     if (err) throw err;
                 
                     var filename = "profiles/avatars/" + req.user.name + "-" + Date.now() + ".png";
@@ -306,7 +307,8 @@ function handleProfileAvatarUpload(req, res) {
                     });
                 });
             })
-            .catch(function() {
+            .catch(function(err) {
+                console.log(err);
                 res.json({
                     message: "Failed to upload image."
                 }, 500);
@@ -324,8 +326,10 @@ function handleProfileHeaderUpload(req, res) {
         
         Jimp.read(req.file.path)
             .then(function(image) {
-                image.quality(65);
-                image.getBuffer("image/jpeg", function(err, buff) {
+                image
+                    .quality(Config.get("profiles.header.quality"))
+                    .cover(Config.get("profiles.header.width"), Config.get("profiles.header.height"));
+                image.getBuffer(Config.get("profiles.header.mime"), function(err, buff) {
                     if (err) throw err;
                     
                     var filename = "profiles/headers/" + req.user.name + "-" + Date.now() + ".jpg";
@@ -366,7 +370,8 @@ function handleProfileHeaderUpload(req, res) {
                     });
                 });
             })
-            .catch(function() {
+            .catch(function(err) {
+                console.log(err);
                 res.json({
                     message: "Failed to upload image."
                 }, 500);

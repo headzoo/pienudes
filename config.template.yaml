@@ -258,3 +258,16 @@ setuid:
 # concurrent updates), then run `node lib/channel-storage/migrate.js`.
 channel-storage:
   type: 'file'
+
+
+profiles:
+  header:
+    width: 1500
+    height: 275
+    quality: 65
+    mime: image/jpeg
+  avatar:
+    width: 200
+    height: 200
+    quality: 65
+    mime: image/png
