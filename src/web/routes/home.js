@@ -48,11 +48,14 @@ module.exports = {
                     return b.usercount - a.usercount;
                 });
                 
-                playlists.fetch(5, 0, function(err, rows) {
-                    template.send(res, 'home/index', {
-                        pageTitle: "Pienudes - Music and Chat",
-                        top_media: rows,
-                        channels: channels
+                playlists.fetch(5, 0, function(err, recent_rows) {
+                    playlists.fetchMostWatched(5, function(err, top_rows) {
+                        template.send(res, 'home/index', {
+                            pageTitle: "Pienudes - Music and Chat",
+                            top_media: top_rows,
+                            recent_media: recent_rows,
+                            channels: channels
+                        });
                     });
                 });
             });
