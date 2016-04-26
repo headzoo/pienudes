@@ -93,7 +93,7 @@ module.exports = {
      */
     fetchAll(callback) {
         callback = callback || noop;
-        db.query("SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id`", [], callback);
+        db.query("SELECT *, `playlist_history`.`time` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id`", [], callback);
     },
     
     /**
