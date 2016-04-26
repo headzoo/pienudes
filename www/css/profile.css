@@ -235,6 +235,11 @@
   max-height: 68px;
   overflow: hidden;
 }
+.card-media-title.smaller {
+  font-size: 12px;
+  margin-right: 78px;
+  max-height: 80px;
+}
 .card-media-time {
   font-size: 12px;
   float: right;

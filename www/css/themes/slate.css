@@ -5212,9 +5212,7 @@ a.badge:hover {
   padding: 4px;
   margin-bottom: 20px;
   line-height: 1.42857143;
-  background-color: #15304E;
-  border: 1px solid #16314E;
-  border-radius: 4px;
+  border-radius: 2px;
   -webkit-transition: border .2s ease-in-out;
   -o-transition: border .2s ease-in-out;
   transition: border .2s ease-in-out
