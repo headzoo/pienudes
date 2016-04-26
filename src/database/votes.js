@@ -71,7 +71,7 @@ module.exports = {
         }
     
         db.query(
-            "SELECT * FROM `votes` INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` WHERE `user_id` = ? AND `value` = 1 ORDER BY `votes`.`id` DESC LIMIT " + offset + "," + limit,
+            "SELECT *, `votes`.`time` AS `time` FROM `votes` INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` WHERE `user_id` = ? AND `value` = 1 ORDER BY `votes`.`id` DESC LIMIT " + offset + "," + limit,
             [user_id],
             callback
         );
@@ -92,7 +92,7 @@ module.exports = {
         }
         
         db.query(
-            "SELECT * FROM `votes` INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` WHERE `user_id` = ? AND `value` = -1 ORDER BY `votes`.`id` DESC LIMIT " + offset + "," + limit,
+            "SELECT *, `votes`.`time` AS `time` FROM `votes` INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` WHERE `user_id` = ? AND `value` = -1 ORDER BY `votes`.`id` DESC LIMIT " + offset + "," + limit,
             [user_id],
             callback
         );
