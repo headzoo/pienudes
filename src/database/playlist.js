@@ -84,7 +84,7 @@ module.exports = {
             offset = 0;
         }
         
-        var sql = "SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
+        var sql = "SELECT *, `playlist_history`.`time` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
         db.query(sql, [], callback);
     },
     
