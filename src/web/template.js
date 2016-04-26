@@ -13,6 +13,9 @@ var env = new nunjucks.Environment(new nunjucks.FileSystemLoader(templates), {
 env.addFilter("date", dateFilter);
 env.addFilter("comma", commaFilter);
 env.addFilter('nl2p', function(str) {
+    if (!str) {
+        return str;
+    }
     str = '<p>' + str.replace(/\n([ \t]*\n)+/g, '</p><p>')
             .replace('\n', '<br />') + '</p>';
     return str;
