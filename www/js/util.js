@@ -1525,6 +1525,7 @@ function formatChatMessage(data, last) {
 }
 
 function addChatMessage(data) {
+    console.log(data);
     if (data.username != "chmod") {
         if (IGNORED.indexOf(data.username) !== -1) {
             return;
@@ -1595,7 +1596,7 @@ function addChatMessage(data) {
 
     pingMessage(isHighlight);
     
-    if(data.meta.addClass != "server-whisper") {
+    if(data.meta.addClass != "server-whisper" && !isHighlight) {
         if (!FOCUSED) {
             UNREAD_MSG_COUNT++;
             document.title = "(" + UNREAD_MSG_COUNT + ") " + PAGETITLE;
