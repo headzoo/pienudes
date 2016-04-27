@@ -1,0 +1,32 @@
+{% extends "admin/layout.html.twig" %}
+{% block content %}
+    <div>
+        <h1>Active Channels</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Users</th>
+                    <th>Title</th>
+                    <th>Name</th>
+                    <th>Public</th>
+                    <th>Playing</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ch in channels %}
+                    <tr>
+                        <td>{{ ch.usercount|comma }}</td>
+                        <td>{{ ch.pagetitle }}</td>
+                        <td>
+                            <a href="/r/{{ ch.name }}" target="_blank">
+                                /r/{{ ch.name }}
+                            </a>
+                        </td>
+                        <td>{% if ch.public %}Yes{% else %}No{% endif %}</td>
+                        <td>{{ ch.mediatitle }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

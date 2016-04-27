@@ -161,9 +161,16 @@ function send(res, view, locals) {
     locals.loggedIn  = locals.loggedIn || !!res.user;
     locals.loginName = locals.loginName || res.user ? res.user.name : false;
     locals.loginAvatar = "/img/avatar.gif";
-    if (locals.loggedIn && res.user.profile) {
-        var profile = JSON.parse(res.user.profile);
-        locals.loginAvatar = profile.image || "/img/avatar.gif";
+    locals.isSuperAdmin = false;
+    
+    if (locals.loggedIn) {
+        if (res.user.profile) {
+            var profile = JSON.parse(res.user.profile);
+            locals.loginAvatar = profile.image || "/img/avatar.gif";
+        }
+        if (res.user.global_rank >= 255) {
+            locals.isSuperAdmin = true;
+        }
     }
     
     var file = view + ".html.twig";

@@ -9,6 +9,12 @@
                     <a href="{{ loginDomain }}/user/{{ loginName }}">Profile</a>
                 </li>
                 <li role="separator" class="divider"></li>
+                {% if isSuperAdmin %}
+                    <li>
+                        <a href="{{ loginDomain }}/admin">Admin</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                {% endif %}
                 <li>
                     <a href="{{ loginDomain }}/account/channels">Your Channels</a>
                 </li>

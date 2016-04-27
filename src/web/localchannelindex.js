@@ -11,4 +11,12 @@ export default class LocalChannelIndex {
 
         return Promise.resolve(SERVER.packChannelList(true));
     }
+    
+    listAllChannels() {
+        if (SERVER === null) {
+            SERVER = require('../server').getServer();
+        }
+    
+        return Promise.resolve(SERVER.packChannelList(false));
+    }
 }
