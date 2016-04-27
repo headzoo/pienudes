@@ -16,7 +16,7 @@ import db_votes from '../../database/votes';
 import xss from '../../xss';
 
 const ONEMB = (1024 * 1024);
-const HEADER_COLOR = "#9609B5";
+const HEADER_COLOR = "#430550";
 
 var upload_avatar = multer({
     dest: '/tmp',

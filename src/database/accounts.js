@@ -506,7 +506,7 @@ module.exports = {
                     userprof.location = profile.location || "";
                     userprof.website  = profile.website || "";
                     userprof.bio      = profile.bio || "";
-                    userprof.color    = profile.color || "#9609B5";
+                    userprof.color    = profile.color || "#430550";
                     callback(null, userprof);
                 } catch (e) {
                     Logger.errlog.log("Corrupt profile: " + rows[0].profile +
