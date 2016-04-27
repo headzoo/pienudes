@@ -1597,7 +1597,7 @@ function addChatMessage(data) {
     
     if (!FOCUSED) {
         UNREAD_MSG_COUNT++;
-        document.title = PAGETITLE + " (" + UNREAD_MSG_COUNT + ")";
+        document.title = "(" + UNREAD_MSG_COUNT + ") " + PAGETITLE;
     } else {
         UNREAD_MSG_COUNT = 0;
     }
