@@ -4,6 +4,7 @@ $(window).focus(function() {
     clearInterval(TITLE_BLINK);
     TITLE_BLINK = false;
     document.title = PAGETITLE;
+    UNREAD_MSG_COUNT = 0;
 }).blur(function() {
     FOCUSED = false;
 });

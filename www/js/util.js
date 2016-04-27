@@ -1593,8 +1593,14 @@ function addChatMessage(data) {
         }
     }
 
-    pingMessage(isHighlight);
-
+    pingMessage(true);
+    
+    if (!FOCUSED) {
+        UNREAD_MSG_COUNT++;
+        document.title = PAGETITLE + " (" + UNREAD_MSG_COUNT + ")";
+    } else {
+        UNREAD_MSG_COUNT = 0;
+    }
 }
 
 function addUserJoinMessage(data) {
