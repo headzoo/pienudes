@@ -1525,7 +1525,6 @@ function formatChatMessage(data, last) {
 }
 
 function addChatMessage(data) {
-    console.log(data);
     if (data.username != "chmod") {
         if (IGNORED.indexOf(data.username) !== -1) {
             return;
