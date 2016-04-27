@@ -1,0 +1,40 @@
+{% extends "admin/layout.html.twig" %}
+{% block content %}
+    <div>
+        <h1>Users</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Rank</th>
+                    <th>IP</th>
+                    <th>Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>
+                        <a href="/user/{{ user.name }}" target="_blank">
+                            {{ user.name }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if user.email %}
+                            {{ user.email }}
+                        {% else %}
+                            (not given)
+                        {% endif %}
+                    </td>
+                    <td>{{ user.global_rank }}</td>
+                    <td>{{ user.ip }}</td>
+                    <td>{{ user.time|date("MMMM Do YYYY, h:mm:ss a") }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

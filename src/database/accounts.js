@@ -74,6 +74,21 @@ module.exports = {
             callback(null, rows);
         });
     },
+    
+    getAll: function(limit, offset, callback) {
+        limit  = limit || 100;
+        offset = offset || 0;
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 100;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+        
+        db.query("SELECT * FROM `users` ORDER BY `id` DESC LIMIT " + offset + "," + limit, [], callback);
+    },
 
     getUser: function (name, callback) {
         if (typeof callback !== "function") {
