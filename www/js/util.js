@@ -1595,11 +1595,13 @@ function addChatMessage(data) {
 
     pingMessage(isHighlight);
     
-    if (!FOCUSED) {
-        UNREAD_MSG_COUNT++;
-        document.title = "(" + UNREAD_MSG_COUNT + ") " + PAGETITLE;
-    } else {
-        UNREAD_MSG_COUNT = 0;
+    if(data.meta.addClass != "server-whisper") {
+        if (!FOCUSED) {
+            UNREAD_MSG_COUNT++;
+            document.title = "(" + UNREAD_MSG_COUNT + ") " + PAGETITLE;
+        } else {
+            UNREAD_MSG_COUNT = 0;
+        }
     }
 }
 
