@@ -710,8 +710,10 @@ input:focus {
   color: #fff;
 }
 .requeue-icon {
-  font-size: 10px;
+  font-size: 12px;
   vertical-align: middle;
+  margin-top: -3px;
+  color: #8D8E8E;
 }
 #voteup {
   background-color: #025D02;
