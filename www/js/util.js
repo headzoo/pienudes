@@ -1593,7 +1593,7 @@ function addChatMessage(data) {
         }
     }
 
-    pingMessage(true);
+    pingMessage(isHighlight);
     
     if (!FOCUSED) {
         UNREAD_MSG_COUNT++;
