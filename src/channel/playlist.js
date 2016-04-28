@@ -295,7 +295,7 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     if (!this.current || !this.current.media || this._refreshing) {
         return;
     }
-
+    
     var update = this.current.media.getFullUpdate();
     this.sendVideoVotes();
     this.sendUserVideoVotes(users);
@@ -937,6 +937,9 @@ PlaylistModule.prototype.sendUserVideoVotes = function(users) {
             console.log(err);
             return;
         }
+        if (!media) {
+            return;
+        }
         
         db_votes.fetchByMediaId(media.id, function(err, votes) {
             if (!err) {
@@ -957,10 +960,6 @@ PlaylistModule.prototype.sendUserVideoVotes = function(users) {
             }
         });
     });
-    
-
-    
-
 };
 
 PlaylistModule.prototype.handleUserVideoVotes = function(user) {
@@ -1014,6 +1013,15 @@ PlaylistModule.prototype._delete = function (uid) {
             }
             u.socket.emit("setPlaylistMeta", self.meta);
         });
+        
+        if (self.current && self.current.queueby && self.current.queueby[0] != "@") {
+            var media = self.current.media;
+            db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function(err, media_id) {
+                if (!err) {
+                    db_playlist.insert(media_id, self.channel.name, self.current.queueby);
+                }
+            });
+        }
     }
     
     if (self.current === item && item === next) {
@@ -1140,13 +1148,7 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
             self.current = item;
             self.startPlayback();
         }
-        if (data.queueby[0] != "@") {
-            db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function(err, media_id) {
-                if (!err) {
-                    db_playlist.insert(media_id, self.channel.name, data.queueby);
-                }
-            });
-        }
+
         if (cb) {
             cb();
         }

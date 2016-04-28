@@ -65,6 +65,11 @@
                         </div>
                         {{ links.thumbnail(m, "card-media-thumbnail") }}
                         {{ links.media(m, "card-media-title smaller") }}
+                        {% if m.user %}
+                            <div class="card-media-common">
+                                Played by <a href="/r/{{ m.user }}">{{ m.user }}</a>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </ul>
@@ -82,6 +87,11 @@
                         </div>
                         {{ links.thumbnail(m, "card-media-thumbnail") }}
                         {{ links.media(m, "card-media-title smaller") }}
+                        {% if m.user %}
+                            <div class="card-media-common">
+                                First played by <a href="/r/{{ m.user }}">{{ m.user }}</a>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </ul>
