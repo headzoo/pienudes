@@ -667,11 +667,11 @@ input:focus {
 }
 .thumbnail-channel img {
   width: 100% !important;
-  height: 245px !important;
+  height: 215px !important;
   margin-bottom: 4px;
 }
 .thumbnail-channel a.thumbnail {
-  height: 320px;
+  height: 290px;
   overflow: hidden;
 }
 .thumbnail-channel-title {
