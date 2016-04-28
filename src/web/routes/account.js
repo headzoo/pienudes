@@ -220,7 +220,7 @@ function handleAccountChannelPage(req, res) {
 }
 
 /**
- * Handles a POST request to modify a user"s channels
+ * Handles a POST request to modify a user's channels
  */
 function handleAccountChannel(req, res) {
     csrf.verify(req);
