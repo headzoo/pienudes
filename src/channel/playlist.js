@@ -864,7 +864,7 @@ PlaylistModule.prototype.handleVoteVideo = function(user, value) {
                 return user.socket.emit("errorMsg", {
                     msg: "Unable to fetch media information. Try again in a minute."
                 });
-            } else if (media.id) {
+            } else if (media && media.id) {
                 db_votes.fetch(u.id, media.id, function(err, vote) {
                     if (err) {
                         return user.socket.emit("errorMsg", {
