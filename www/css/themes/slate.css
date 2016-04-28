@@ -4601,6 +4601,10 @@ textarea.input-group-sm>.input-group-btn>.btn {
   .navbar-nav .open .dropdown-menu>li>a:hover {
     background-image: none
   }
+
+  .navbar-nav>li>a {
+    font-size: 10px;
+  }
 }
 
 @media (min-width:768px) {
