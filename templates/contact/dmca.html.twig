@@ -1,0 +1,108 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="col-md-8 col-md-offset-2">
+        {% if pageSuccess %}
+            <div class="alert alert-success" role="alert">{{ pageSuccess }}</div>
+        {% endif %}
+        {% if pageError %}
+            <div class="alert alert-danger" role="alert">{{ pageError }}</div>
+        {% endif %}
+        
+        <h1>DMCA</h1>
+        
+        <h4>DMCA Notice & Takedown Policy and Procedures</h4>
+        <p>
+            This website (pienudes.com) qualifies as a “Service Provider” within the meaning of 17 U.S.C. § 512(k)(1)
+            of the Digital Millennium Copyright Act (“DMCA”). Accordingly, it is entitled to certain protections
+            from claims of copyright infringement under the DMCA, commonly referred to as the “safe harbor” provisions.
+            We respect the intellectual property of others, and we ask our users to do the same. Accordingly, we
+            observe and comply with the DMCA, and have adopted the following Notice and Takedown Policy relating
+            to claims of copyright infringement by our customers, subscribers or users.
+        </p>
+        
+        <h4>Take Down Procedure</h4>
+        <p>
+            The SITE implements the following “notification and takedown” procedure upon receipt of any notification
+            of claimed copyright infringement. The SITE reserves the right at any time to disable access to, or
+            remove any material or activity accessible on or from any SITE or any Materials claimed to be infringing
+            or based on facts or circumstances from which infringing activity is apparent. It is the firm policy of
+            the SITE to terminate the account of repeat copyright infringers, when appropriate, and the SITE will
+            act expeditiously to remove access to all material that infringes on another’s copyright, according to
+            the procedure set forth in 17 U.S.C. §512 of the Digital Millennium Copyright Act (“DMCA”). The SITE’s
+            DMCA Notice Procedures are set forth in the preceding paragraph. If the notice does not comply with §512
+            of the DMCA, but does comply with three requirements for identifying sites that are infringing according
+            to §512 of the DMCA, the SITE shall attempt to contact or take other reasonable steps to contact the
+            complaining party to help that party comply with the notice requirements. When the Designated Agent
+            receives a valid notice, the SITE will expeditiously remove and/or disable access to the infringing
+            material and shall notify the affected user. Then, the affected user may submit a counter-notification
+            to the Designated Agent containing a statement made under penalty of perjury that the user has a good
+            faith belief that the material was removed because of misidentification of the material. After the
+            Designated Agent receives the counter-notification, it will replace the material at issue within
+            10-14 days after receipt of the counter-notification unless the Designated Agent receives notice that
+            a court action has been filed by the complaining party seeking an injunction against the infringing
+            activity. The SITE reserves the right to modify, alter or add to this policy, and all users should
+            regularly check back to these Terms and Conditions to stay current on any such changes.
+        </p>
+        
+        <h4>Service Provider Customers or Subscribers</h4>
+        <p>
+            In the event that the alleged infringer identified in an intended DMCA Notice is, itself, operating as
+            a “Service Provider” within the meaning of 17 U.S.C. § 512(k)(1), the SITE requests that any such DMCA
+            Notices relating to alleged infringement by third party users, customers or subscribers of such service
+            providers be submitted directly to the DMCA Agent designated by the service provider instead of the SITE.
+        </p>
+        
+        <h4>Notice of Claimed Infringement</h4>
+        <p>
+            If you believe that your work has been copied in a way that constitutes copyright infringement, please
+            provide Our Designated Copyright Agent (identified below) with the following information:
+        </p>
+        <ul>
+            <li>an electronic or physical signature of the person authorized to act on behalf of the owner of the copyright or other intellectual property interest;</li>
+            <li>description of the copyrighted work or other intellectual property that you claim has been infringed;</li>
+            <li>a description of where the material that you claim is infringing is located on the SITE, must include the specific url’s associated with each file;</li>
+            <li>your address, telephone number, and email address;</li>
+            <li>a statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law; and,</li>
+            <li>a statement by you, made under penalty of perjury, that the above information in your Notice is accurate and that you are the copyright or intellectual property owner or authorized to act on the copyright or intellectual property owner’s behalf.</li>
+        </ul>
+        
+        
+        <form method="post" action="/dmca" style="margin-bottom: 20px;">
+            <div class="form-group{% if errors.email %} has-error{% endif %}">
+                <label for="form-email">Email</label>
+                {% if errors.email %}
+                    <div class="invalid">{{ errors.email }}</div>
+                {% endif %}
+                <input type="email" name="email" class="form-control" id="form-email" value="{{ fields.email }}" required>
+            </div>
+            
+            <div class="form-group{% if errors.name %} has-error{% endif %}">
+                <label for="form-name">Full Name</label>
+                {% if errors.name %}
+                    <div class="invalid">{{ errors.name }}</div>
+                {% endif %}
+                <input type="text" name="name" class="form-control" id="form-name" value="{{ fields.name }}" required>
+            </div>
+
+            <div class="form-group{% if errors.phone %} has-error{% endif %}">
+                <label for="form-phone">Phone Number</label>
+                {% if errors.phone %}
+                    <div class="invalid">{{ errors.phone }}</div>
+                {% endif %}
+                <input type="text" name="phone" class="form-control" id="form-phone" value="{{ fields.phone }}" required>
+            </div>
+            
+            <div class="form-group{% if errors.message %} has-error{% endif %}">
+                <label for="form-message">
+                    Substantiation
+                </label>
+                {% if errors.message %}
+                    <div class="invalid">{{ errors.message }}</div>
+                {% endif %}
+                <textarea id="form-message" name="message" class="form-control" rows="10" required>{{ fields.message }}</textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+{% endblock %}

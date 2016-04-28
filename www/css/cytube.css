@@ -709,6 +709,9 @@ input:focus {
 .sp-replacer {
   float: right;
 }
+.invalid {
+  color: red;
+}
 .sp-replacer {
   background: #34393D !important;
   border: solid 1px #161A20 !important;

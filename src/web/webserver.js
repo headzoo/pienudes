@@ -164,7 +164,7 @@ module.exports = {
         require('./routes/channel')(app, ioConfig);
         require('./routes/socketconfig')(app, clusterClient);
         require('./routes/home').init(app, channelIndex);
-        require('./routes/contact')(app, webConfig);
+        require('./routes/contact').init(app);
         require('./routes/auth').init(app);
         require('./routes/account').init(app);
         require('./routes/playlists').init(app);
