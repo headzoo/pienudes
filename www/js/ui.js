@@ -875,6 +875,10 @@ $(".add-temp").change(function () {
     $(".add-temp").prop("checked", $(this).prop("checked"));
 });
 
+if ($(window).width() < 700) {
+    toggleUserlist();
+}
+
 /*
  * Fixes #417 which is caused by changes in Bootstrap 3.3.0
  * (see twbs/bootstrap#15136)
