@@ -58,10 +58,8 @@
                 {% for m in recent_media %}
                     <div class="card card-media">
                         <div class="card-media-time">
-                            {% if m.channel %}
-                                <a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a><br />
-                            {% endif %}
-                            {{ m.time|fromNow }}
+                            {{ m.time|fromNow }}{% if m.channel %}<br /><a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a>{% endif %}
+                            
                         </div>
                         {{ links.thumbnail(m, "card-media-thumbnail") }}
                         {{ links.media(m, "card-media-title smaller") }}
