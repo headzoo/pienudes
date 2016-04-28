@@ -42,56 +42,55 @@
                 <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4>User Preferences</h4>
                 <ul class="nav nav-tabs">
-                    <li><a href="#us-general" data-toggle="tab">General</a></li>
-                    <li><a href="#us-playback" data-toggle="tab">Playback</a></li>
                     <li><a href="#us-chat" data-toggle="tab">Chat</a></li>
+                    <li><a href="#us-playback" data-toggle="tab">Playback</a></li>
                     <li><a href="#us-scriptcontrol" data-toggle="tab">Script Access</a></li>
                     <li><a href="#us-mod" data-toggle="tab" style="">Moderator</a></li>
                 </ul>
             </div>
             <div class="modal-body">
                 <div class="tab-content">
-                    <!-- General settings -->
-                    <div id="us-general" class="tab-pane">
-                        <h4>General Preferences</h4>
+                    <!-- Chat preferences -->
+                    <div id="us-chat" class="tab-pane">
+                        <h4>Chat Preferences</h4>
                         <form class="form-horizontal" action="javascript:void(0)">
-                            <div class="form-group">
-                                <label class="control-label col-sm-4" for="us-theme">Theme</label>
-                                <div class="col-sm-8">
-                                    <select id="us-theme" class="form-control">
-                                        <option value="/css/themes/light.css">Light</option>
-                                        <option value="/css/themes/bootstrap-theme.min.css">Bootstrap</option>
-                                        <option value="/css/themes/slate.css">Slate</option>
-                                        <option value="/css/themes/cyborg.css">Cyborg</option>
-                                        <option value="/css/themes/modern.css">Modern</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="control-label col-sm-4" for="us-layout">Layout</label>
-                                <div class="col-sm-8">
-                                    <select id="us-layout" class="form-control">
-                                        <option value="default">Compact</option>
-                                        <option value="synchtube">Synchtube (flipped)</option>
-                                        <option value="fluid">Fluid</option>
-                                        <option value="synchtube-fluid">Synchtube + Fluid</option>
-                                        <option value="hd">HD</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-8">
-                                <p class="text-danger">
-                                    Changing layouts may require refreshing to take effect.
-                                </p>
-                            </div>
-                            
+                            {{ rcheckbox("us-chat-colors", "Show colors in chat") }}
+                            {{ rcheckbox("us-chat-timestamp", "Show timestamps in chat") }}
+                            {{ rcheckbox("us-chat-joins", "Show join messages in chat") }}
+                            {{ rcheckbox("us-sort-rank", "Sort userlist by rank") }}
+                            {{ rcheckbox("us-sort-afk", "Sort AFKers to bottom") }}
+                            {{ rcheckbox("us-sendbtn", "Add a send button to chat") }}
+                            {{ rcheckbox("us-no-emotes", "Disable chat emotes") }}
                             {{ rcheckbox("us-no-channelcss", "Ignore Channel CSS") }}
                             {{ rcheckbox("us-no-channeljs", "Ignore Channel Javascript") }}
                             {{ rcheckbox("us-hide-channelbg", "Hide Channel Background") }}
-                            <div class="clear"></div>
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-8">
+                                <p class="text-info">
+                                    The following 2 options apply to how and when you will be notified if a new chat
+                                    message is received while Pienudes is not the active window.
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4" for="us-blink-title">Blink page title on new messages</label>
+                                <div class="col-sm-8">
+                                    <select id="us-blink-title" class="form-control">
+                                        <option value="never">Never</option>
+                                        <option value="onlyping">Only when I am mentioned or PMed</option>
+                                        <option value="always">Always</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4" for="us-ping-sound">Notification sound on new messages</label>
+                                <div class="col-sm-8">
+                                    <select id="us-ping-sound" class="form-control">
+                                        <option value="never">Never</option>
+                                        <option value="onlyping">Only when I am mentioned or PMed</option>
+                                        <option value="always">Always</option>
+                                    </select>
+                                </div>
+                            </div>
                         </form>
                     </div>
 
@@ -141,47 +140,6 @@
                                     </select>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-
-                    <!-- Chat preferences -->
-                    <div id="us-chat" class="tab-pane">
-                        <h4>Chat Preferences</h4>
-                        <form class="form-horizontal" action="javascript:void(0)">
-                            {{ rcheckbox("us-chat-colors", "Show colors in chat") }}
-                            {{ rcheckbox("us-chat-timestamp", "Show timestamps in chat") }}
-                            {{ rcheckbox("us-chat-joins", "Show join messages in chat") }}
-                            {{ rcheckbox("us-sort-rank", "Sort userlist by rank") }}
-                            {{ rcheckbox("us-sort-afk", "Sort AFKers to bottom") }}
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-8">
-                                <p class="text-info">
-                                    The following 2 options apply to how and when you will be notified if a new chat
-                                    message is received while Pienudes is not the active window.
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-4" for="us-blink-title">Blink page title on new messages</label>
-                                <div class="col-sm-8">
-                                    <select id="us-blink-title" class="form-control">
-                                        <option value="never">Never</option>
-                                        <option value="onlyping">Only when I am mentioned or PMed</option>
-                                        <option value="always">Always</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-4" for="us-ping-sound">Notification sound on new messages</label>
-                                <div class="col-sm-8">
-                                    <select id="us-ping-sound" class="form-control">
-                                        <option value="never">Never</option>
-                                        <option value="onlyping">Only when I am mentioned or PMed</option>
-                                        <option value="always">Always</option>
-                                    </select>
-                                </div>
-                            </div>
-                            {{ rcheckbox("us-sendbtn", "Add a send button to chat") }}
-                            {{ rcheckbox("us-no-emotes", "Disable chat emotes") }}
                         </form>
                     </div>
 

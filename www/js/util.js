@@ -641,9 +641,7 @@ function showUserOptions() {
     } else {
         $("a[href='#us-mod']").parent().show();
     }
-
-    $("#us-theme").val(USEROPTS.theme);
-    $("#us-layout").val(USEROPTS.layout);
+    
     $("#us-no-channelcss").prop("checked", USEROPTS.ignore_channelcss);
     $("#us-no-channeljs").prop("checked", USEROPTS.ignore_channeljs);
     $("#us-hide-channelbg").prop("checked", USEROPTS.hide_channelbg);
@@ -672,14 +670,11 @@ function showUserOptions() {
 
     formatScriptAccessPrefs();
 
-    $("a[href='#us-general']").click();
+    $("a[href='#us-chat']").click();
     $("#useroptions").modal();
 }
 
 function saveUserOptions() {
-    USEROPTS.theme                = $("#us-theme").val();
-    createCookie("cytube-theme", USEROPTS.theme, 1000);
-    USEROPTS.layout               = $("#us-layout").val();
     USEROPTS.ignore_channelcss    = $("#us-no-channelcss").prop("checked");
     USEROPTS.ignore_channeljs     = $("#us-no-channeljs").prop("checked");
     USEROPTS.hide_channelbg       = $("#us-hide-channelbg").prop("checked");
@@ -720,21 +715,6 @@ function storeOpts() {
 }
 
 function applyOpts() {
-    if ($("#usertheme").attr("href") !== USEROPTS.theme) {
-        var old = $("#usertheme").attr("id", "usertheme_old");
-        var theme = USEROPTS.theme;
-        if (theme === "default") {
-            theme = "/css/themes/slate.css";
-        }
-        $("<link/>").attr("rel", "stylesheet")
-            .attr("type", "text/css")
-            .attr("id", "usertheme")
-            .attr("href", theme)
-            .attr("onload", "$('#usertheme_old').remove()")
-            .appendTo($("head"));
-        fixWeirdButtonAlignmentIssue();
-    }
-
     switch (USEROPTS.layout) {
         case "synchtube-fluid":
             fluidLayout();

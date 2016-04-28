@@ -99,8 +99,6 @@ function getOrDefault(k, def) {
 }
 
 var USEROPTS = {
-    theme                : getOrDefault("theme", "/css/themes/slate.css"),
-    layout               : getOrDefault("layout", "fluid"),
     synch                : getOrDefault("synch", true),
     hidevid              : getOrDefault("hidevid", false),
     show_colors          : getOrDefault("show_colors", true),
@@ -210,10 +208,6 @@ function eraseCookie(name) {
 (function () {
     var localVersion = parseFloat(getOpt("version"));
     if (isNaN(localVersion)) {
-        USEROPTS.theme = "/css/themes/slate.css";
-        USEROPTS.layout = "fluid";
-        setOpt("theme", "/css/themes/slate.css");
-        setOpt("layout", "fluid");
         setOpt("version", CL_VERSION);
     }
 })();
