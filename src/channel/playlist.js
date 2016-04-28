@@ -1149,6 +1149,10 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
             self.current = item;
             self.startPlayback();
         }
+    
+        if (data.queueby[0] != "@") {
+            db_media.insertIgnore(media.id, media.type, media.title, media.seconds);
+        }
 
         if (cb) {
             cb();
