@@ -1015,10 +1015,11 @@ PlaylistModule.prototype._delete = function (uid) {
         });
         
         if (self.current && self.current.queueby && self.current.queueby[0] != "@") {
-            var media = self.current.media;
+            var media   = self.current.media;
+            var queueby = self.current.queueby;
             db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function(err, media_id) {
                 if (!err) {
-                    db_playlist.insert(media_id, self.channel.name, self.current.queueby);
+                    db_playlist.insert(media_id, self.channel.name, queueby);
                 }
             });
         }
