@@ -18,7 +18,7 @@
         <div class="row">
             {% for chan in channels %}
                 <div class="col-xs-12 col-sm-6 col-md-4 thumbnail-channel">
-                    <a href="/r/{{ chan.name }}" class="thumbnail">
+                    <a href="/r/{{ chan.name }}" class="thumbnail card">
                         <img src="{{ chan.thumbnail }}" alt="Thumbnail">
                         <div class="thumbnail-channel-users">
                             <span class="glyphicon glyphicon-user"></span>
@@ -57,7 +57,6 @@
                     <div class="card card-media">
                         <div class="card-media-time">
                             {{ m.time|fromNow }}{% if m.channel %}<br /><a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a>{% endif %}
-                            
                         </div>
                         {{ links.thumbnail(m, "card-media-thumbnail") }}
                         {{ links.media(m, "card-media-title smaller") }}
@@ -94,13 +93,6 @@
         </div>
 
         <div class="sidebar-widget">
-            <img src="https://images.pienudes.com/sidebarimg.jpg" style="width: 100%;" />
-            <p style="margin: 6px 0 0 0;">
-                Join us on reddit at <a href="https://www.reddit.com/r/pienudes" target="_blank">/r/pienudes</a>.
-            </p>
-        </div>
-
-        <div class="sidebar-widget">
             <h3>Notable Quotes</h3>
             <ul class="sidebar-list">
                 <li>
@@ -110,6 +102,13 @@
                     SalmonBaconator: i just always pictured Toto as like a black Freddie Mercury
                 </li>
             </ul>
+        </div>
+
+        <div class="sidebar-widget">
+            <img src="https://images.pienudes.com/sidebarimg.jpg" style="width: 100%;" />
+            <p style="margin: 6px 0 0 0;">
+                Join us on reddit at <a href="https://www.reddit.com/r/pienudes" target="_blank">/r/pienudes</a>.
+            </p>
         </div>
     </div>
 {% endblock %}
