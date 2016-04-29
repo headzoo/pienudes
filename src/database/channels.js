@@ -617,5 +617,24 @@ module.exports = {
         }
 
         db.query("DELETE FROM `channel_bans` WHERE channel=?", [chan], callback);
+    },
+    
+    /**
+     * Returns a channel data value
+     */
+    fetchDataByKey: function(channel_id, key, callback) {
+        if (typeof callback !== "function") {
+            callback = blackHole;
+        }
+        
+        db.query(
+            "SELECT `value` FROM `channel_data` WHERE `channel_id` = ? AND `key` = ? LIMIT 1",
+            [channel_id, key],
+            function(err, rows) {
+                if (err) return callback(err);
+                if (rows.length == 0) return callback(null, "");
+                callback(null, rows[0].value);
+            }
+        );
     }
 };

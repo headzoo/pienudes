@@ -5,7 +5,10 @@ var ChannelModule = require("./module");
 var util = require("../utilities");
 var Flags = require("../flags");
 var url = require("url");
+var emotes = require('./emotes');
 var counters = require("../counters");
+var db_channels = require('../database/channels');
+var db_chat_logs = require('../database/chat_logs');
 
 const SHADOW_TAG = "[shadow]";
 const LINK = /(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)/ig;
@@ -258,7 +261,7 @@ ChatModule.prototype.processChatMsg = function (user, data) {
     if (data.msg.indexOf("/afk") === -1) {
         user.setAFK(false);
     }
-
+    
     var msgobj = this.formatMessage(user.getName(), data);
     var antiflood = MIN_ANTIFLOOD;
     if (this.channel.modules.options &&
@@ -308,6 +311,15 @@ ChatModule.prototype.processChatMsg = function (user, data) {
         });
         return;
     }
+    
+    db_channels.lookup(this.channel.name, function(err, chan) {
+        if (!err && chan) {
+            emotes.exec(chan.id, msgobj.msg, function(msg) {
+                db_chat_logs.insert(chan.id, user.getName(), 'message', msg, JSON.stringify(msgobj.meta));
+            });
+        }
+    });
+    
     this.sendMessage(msgobj);
     counters.add("chat:sent");
 };
@@ -628,5 +640,6 @@ ChatModule.prototype.handleCmdUnmute = function (user, msg, meta) {
     this.channel.logger.log("[mod] " + user.getName() + " unmuted " + target.getName());
     this.sendModMessage(user.getName() + " unmuted " + target.getName(), muteperm);
 };
+
 
 module.exports = ChatModule;

@@ -7,9 +7,11 @@ var Config = require("../config");
 var Flags = require("../flags");
 var db = require("../database");
 var db_accounts = require('../database/accounts');
+var db_channels = require('../database/channels');
 var db_playlist = require('../database/playlist');
 var db_media    = require('../database/media');
 var db_votes    = require('../database/votes');
+var db_chat_logs = require('../database/chat_logs');
 var Logger = require("../logger");
 var CustomEmbedFilter = require("../customembed").filter;
 var XSS = require("../xss");
@@ -299,7 +301,17 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     var update = this.current.media.getFullUpdate();
     this.sendVideoVotes();
     this.sendUserVideoVotes(users);
-
+    
+    db_channels.lookup(this.channel.name, function(err, chan) {
+        if (!err && chan) {
+            var media_obj = {
+                media: this.current.media,
+                queueby: this.current.queueby
+            };
+            db_chat_logs.insert(chan.id, "", 'media', this.current.media.title, JSON.stringify(media_obj));
+        }
+    }.bind(this));
+    
     var uid = this.current.uid;
     if (users === this.channel.users) {
         this.channel.broadcastAll("setCurrent", uid);

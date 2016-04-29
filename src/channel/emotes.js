@@ -1,5 +1,6 @@
 var ChannelModule = require("./module");
 var XSS = require("../xss");
+var db_channels = require('../database/channels');
 
 function EmoteList(defaults) {
     if (!defaults) {
@@ -214,6 +215,21 @@ EmoteModule.prototype.handleMoveEmote = function (user, data) {
     }
 
     this.emotes.moveEmote(data.from, data.to);
+};
+
+EmoteModule.exec = function(chan_id, msg, callback) {
+    db_channels.fetchDataByKey(chan_id, "emotes", function(err, data) {
+        if (!err && data) {
+            var emotes = JSON.parse(data);
+            emotes.forEach(function (e) {
+                msg = msg.replace(
+                    new RegExp(e.source, "gi"),
+                    '$1<img class="channel-emote" src="' + e.image + '" title="' + e.name + '">'
+                );
+            });
+            callback(msg);
+        }
+    });
 };
 
 module.exports = EmoteModule;

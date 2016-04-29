@@ -145,6 +145,21 @@ const TBL_UPLOADS = "" +
         "`time` BIGINT NOT NULL," +
     "PRIMARY KEY (`id`)" +
     ") CHARACTER SET utf8";
+    
+const TBL_CHAT_LOGS = "" +
+    "CREATE TABLE IF NOT EXISTS `chat_logs` (" +
+        "`id`         BIGINT NOT NULL AUTO_INCREMENT," +
+        "`channel_id` INT NOT NULL," +
+        "`user`       VARCHAR(20) NOT NULL," +
+        "`type`       ENUM('message', 'media') NOT NULL," +
+        "`version`    VARCHAR(10) NOT NULL," +
+        "`time`       BIGINT NOT NULL," +
+        "`msg`        TEXT NOT NULL," +
+        "`meta`       TEXT NOT NULL," +
+    "PRIMARY KEY(`id`)," +
+    "INDEX(`user`)," +
+    "FOREIGN KEY (`channel_id`) REFERENCES `channels`(`id`) ON DELETE CASCADE" +
+    ") CHARACTER SET utf8";
 
 const TBL_VOTES = "" +
     "CREATE TABLE IF NOT EXISTS `votes` (" +
@@ -175,6 +190,7 @@ module.exports.init = function (queryfn, cb) {
         media: TBL_MEDIA,
         playlist_history: TBL_PLAYLIST_HISTORY,
         uploads: TBL_UPLOADS,
+        chat_logs: TBL_CHAT_LOGS,
         votes: TBL_VOTES
     };
 
