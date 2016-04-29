@@ -304,11 +304,7 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     
     db_channels.lookup(this.channel.name, function(err, chan) {
         if (!err && chan) {
-            var media_obj = {
-                media: this.current.media,
-                queueby: this.current.queueby
-            };
-            db_chat_logs.insert(chan.id, "", 'media', this.current.media.title, JSON.stringify(media_obj));
+            db_chat_logs.insert(chan.id, this.current.queueby, 'media', this.current.media.title, JSON.stringify(this.current.media));
         }
     }.bind(this));
     
