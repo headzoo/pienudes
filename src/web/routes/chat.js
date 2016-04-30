@@ -21,13 +21,15 @@ function handleLogsIndex(req, res) {
         });
         template.send(res, 'chat/logs', {
             pageTitle: "Chat Logs",
-            pageScripts: ["/js/data.js", "/js/util.js", "/js/chat_logs.js"],
+            pageScripts: ["/js/data.js", "/js/util.js", "/js/bbq.js", "/js/chat_logs.js"],
             channels: channels
         });
     });
 }
 
 function handleLogsForChannel(req, res) {
+    var after = req.query.after;
+    
     db_channels.lookup(req.params.channel, function(err, chan) {
         if (err) {
             console.log(err);
@@ -37,18 +39,33 @@ function handleLogsForChannel(req, res) {
             return res.send(404);
         }
         
-        db_chat_logs.fetchTodayByChannel(chan.id, function(err, rows) {
-            if (err) {
-                console.log(err);
-                return res.send(500);
-            }
-            
-            rows.forEach(function(row) {
-                row.meta = JSON.parse(row.meta);
+        if (after != 0) {
+            db_chat_logs.fetchTodayByChannelAfterId(chan.id, after, function (err, rows) {
+                if (err) {
+                    console.log(err);
+                    return res.send(500);
+                }
+        
+                rows.forEach(function (row) {
+                    row.meta = JSON.parse(row.meta);
+                });
+        
+                res.json(rows);
             });
-            
-            res.json(rows);
-        });
+        } else {
+            db_chat_logs.fetchTodayByChannel(chan.id, function (err, rows) {
+                if (err) {
+                    console.log(err);
+                    return res.send(500);
+                }
+        
+                rows.forEach(function (row) {
+                    row.meta = JSON.parse(row.meta);
+                });
+        
+                res.json(rows);
+            });
+        }
     });
 }
 

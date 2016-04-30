@@ -48,5 +48,15 @@ module.exports = {
             [channel_id],
             callback
         );
+    },
+    
+    fetchTodayByChannelAfterId: function(channel_id, after_id, callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "SELECT * FROM `chat_logs` WHERE `id` >= ? AND `channel_id` = ? AND FROM_UNIXTIME(`time` / 1000) > DATE_SUB(NOW(), INTERVAL 24 HOUR) ORDER BY `id` ASC",
+            [after_id, channel_id],
+            callback
+        );
     }
 };

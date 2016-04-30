@@ -13,18 +13,34 @@
     USEROPTS.show_colors = true;
     
     channels.on("click", "li", function() {
-        channel = $(this).data("channel");
+        document.location = "/chat/logs#c=" + $(this).data("channel");
+    });
+    
+    $(window).bind("hashchange", function() {
         fetchLogs();
     });
     
     fetchLogs();
     
     function fetchLogs() {
+        var after   = 0;
+        var params  = $.deparam.fragment();
+        if (params.c != undefined) {
+            channel = params.c;
+        }
+        if (params.i != undefined) {
+            after = params.i;
+        }
+        
         $.ajax({
-            url: "/chat/logs/" + channel
+            url: "/chat/logs/" + channel,
+            data: {
+                after: after
+            }
         }).done(function(res) {
             title.text("Chat Logs - " + channel + " - Past 24 Hours");
             formatLogs(res);
+            $("html, body").animate({ scrollTop: 0 }, "slow");
         }).fail(function() {
             alert("There was an error. Please try again in a minute.")
         });
@@ -43,7 +59,7 @@
                     meta: log.meta,
                     time: log.time
                 };
-                div = formatChatMessage(obj, {name: ""});
+                div = formatChatMessage(obj, {name: ""}, "/chat/logs#c=" + channel + "&i=" + log.id);
                 box.append(div);
             } else {
                 if (log.meta.id != last_mid) {

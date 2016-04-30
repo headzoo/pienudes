@@ -1412,7 +1412,7 @@ function sendVideoUpdate() {
 
 /* chat */
 
-function formatChatMessage(data, last) {
+function formatChatMessage(data, last, permalink) {
     // Backwards compat
     if (!data.meta || data.msgclass) {
         data.meta = {
@@ -1448,9 +1448,13 @@ function formatChatMessage(data, last) {
 
     // Add timestamps (unless disabled)
     if (USEROPTS.show_timestamps && data.username !== "chmod") {
-        var time = $("<span/>").addClass("timestamp").appendTo(div);
+        if (permalink) {
+            var time = $("<a/>").addClass("timestamp").attr("href", permalink).appendTo(div);
+        } else {
+            var time = $("<span/>").addClass("timestamp").appendTo(div);
+        }
         var timestamp = new Date(data.time).toTimeString().split(" ")[0];
-        time.text("["+timestamp+"] ");
+        time.text("[" + timestamp + "] ");
         if (data.meta.addClass && data.meta.addClassToNameAndTimestamp) {
             time.addClass(data.meta.addClass);
         }
