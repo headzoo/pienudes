@@ -2831,13 +2831,19 @@ function initPm(user) {
     if ($("#pm-" + user).length > 0) {
         return $("#pm-" + user);
     }
-
-    var pm = $("<div/>").addClass("panel panel-default pm-panel")
+console.log(user);
+    var pm = $("<div/>")
+        .addClass("panel panel-default pm-panel")
         .appendTo($("#pmbar"))
         .data("last", { name: "" })
+        .data("unread_msg_count", 0)
         .attr("id", "pm-" + user);
 
-    var title = $("<div/>").addClass("panel-heading").text(user).appendTo(pm);
+    var title = $("<div/>")
+        .addClass("panel-heading")
+        .text(user)
+        .data("username", user)
+        .appendTo(pm);
     var close = $("<button/>").addClass("close pull-right")
         .html("&times;")
         .appendTo(title).click(function () {
@@ -2845,8 +2851,11 @@ function initPm(user) {
             $("#pm-placeholder-" + user).remove();
         });
 
-    var body = $("<div/>").addClass("panel-body").appendTo(pm).hide();
+    var body = $("<div/>")
+        .addClass("panel-body")
+        .appendTo(pm).hide();
     var placeholder;
+    
     title.click(function () {
         body.toggle();
         pm.removeClass("panel-primary").addClass("panel-default");
@@ -2858,11 +2867,13 @@ function initPm(user) {
             pm.css("position", "absolute")
                 .css("bottom", "0px")
                 .css("left", left);
+            title.text(title.data("username"));
         } else {
             pm.css("position", "");
             $("#pm-placeholder-" + user).remove();
         }
     });
+    
     var buffer = $("<div/>").addClass("pm-buffer linewrap").appendTo(body);
     $("<hr/>").appendTo(body);
     var input = $("<input/>").addClass("form-control pm-input").attr("type", "text")

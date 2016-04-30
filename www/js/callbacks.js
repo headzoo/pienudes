@@ -523,12 +523,29 @@ Callbacks = {
             pingMessage(true);
         }
         var pm = initPm(name);
+        var body = pm.find(".panel-body:first");
+        var heading = pm.find(".panel-heading:first");
         var msg = formatChatMessage(data, pm.data("last"));
         var buffer = pm.find(".pm-buffer");
         msg.appendTo(buffer);
         buffer.scrollTop(buffer.prop("scrollHeight"));
         if (pm.find(".panel-body").is(":hidden")) {
             pm.removeClass("panel-default").addClass("panel-primary");
+        }
+    
+        var unread_msg_count = pm.data("unread_msg_count");
+        if (body.is(":hidden")) {
+            unread_msg_count++;
+            pm.data("unread_msg_count", unread_msg_count);
+            heading.text(heading.data("username") + " (" + unread_msg_count + ")");
+            heading.addClass("flash unread_messages");
+            setTimeout(function() {
+                heading.removeClass("flash");
+            }, 120000);
+        } else {
+            pm.data("unread_msg_count", 0);
+            unread_msg_count = 0;
+            heading.text(heading.data("username")).removeClass("unread_messages");
         }
     },
     
