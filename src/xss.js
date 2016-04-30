@@ -43,7 +43,7 @@ var ATTRIBUTE_MAP = {
     table: ["cellpadding", "cellspacing"],
     th: ["colspan", "rowspan"],
     td: ["colspan", "rowspan"],
-    audio: ["src", "autoplay"]
+    audio: ["src", "autoplay", "controls"]
 }
 
 for (var key in ATTRIBUTE_MAP) {
