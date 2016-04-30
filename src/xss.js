@@ -7,14 +7,13 @@ const ALLOWED_TAGS = [
     "center",
     "details",
     "font",
-    "h1",
-    "h2",
     "img",
     "marquee", // It pains me to do this, but a lot of people use it...
     "s",
     "section",
     "span",
-    "summary"
+    "summary",
+    "audio"
 ];
 
 const ALLOWED_ATTRIBUTES = [
@@ -43,7 +42,8 @@ var ATTRIBUTE_MAP = {
     marquee: ["behavior", "behaviour", "direction", "scrollamount"],
     table: ["cellpadding", "cellspacing"],
     th: ["colspan", "rowspan"],
-    td: ["colspan", "rowspan"]
+    td: ["colspan", "rowspan"],
+    audio: ["src", "autoplay"]
 }
 
 for (var key in ATTRIBUTE_MAP) {
