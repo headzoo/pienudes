@@ -98,6 +98,28 @@ module.exports = {
         );
     },
     
+    fetchMostUpvoted: function(limit, callback) {
+        callback = callback || noop;
+        
+        limit = limit || 25;
+        limit = parseInt(limit);
+        if (isNaN(limit)) {
+            limit = 25;
+        }
+        
+        db.query(
+            "SELECT `media`.*, `media`.`id` AS `media_id`, `users`.`name` AS `user`, SUM(`value`) AS `vote_count` " +
+            "FROM `votes` " +
+            "INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` " +
+            "INNER JOIN `users` ON `users`.`id` = `votes`.`user_id` " +
+            "GROUP BY `media`.`uid` " + 
+            "ORDER BY `vote_count` DESC " +
+            "LIMIT " + limit,
+            [],
+            callback
+        );
+    },
+    
     insert: function(user_id, media_id, value, callback) {
         callback = callback || noop;
         

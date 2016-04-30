@@ -5,11 +5,15 @@
         <changefreq>daily</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/playlists/top</loc>
+        <loc>https://pienudes.com/charts/top</loc>
         <changefreq>hourly</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/playlists/history</loc>
+        <loc>https://pienudes.com/charts/history</loc>
+        <changefreq>hourly</changefreq>
+    </url>
+    <url>
+        <loc>https://pienudes.com/charts/upvoted</loc>
         <changefreq>hourly</changefreq>
     </url>
     <url>

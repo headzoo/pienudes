@@ -167,7 +167,7 @@ module.exports = {
         require('./routes/contact').init(app);
         require('./routes/auth').init(app);
         require('./routes/account').init(app);
-        require('./routes/playlists').init(app);
+        require('./routes/charts').init(app);
         require('./routes/users').init(app);
         require('./routes/tracks').init(app);
         require('./routes/chat').init(app);

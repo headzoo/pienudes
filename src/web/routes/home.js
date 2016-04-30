@@ -1,7 +1,8 @@
 "use strict";
 import template from '../template';
 import Config from '../../config';
-import playlists from '../../database/playlist';
+import db_playlists from '../../database/playlist';
+import db_votes from '../../database/votes';
 
 function handleUserAgreement(req, res) {
     template.send(res, 'home/tos', {
@@ -47,14 +48,17 @@ module.exports = {
                 
                     return b.usercount - a.usercount;
                 });
-                
-                playlists.fetch(5, 0, function(err, recent_rows) {
-                    playlists.fetchMostWatched(5, function(err, top_rows) {
-                        template.send(res, 'home/index', {
-                            pageTitle: "Pienudes - Music and Chat",
-                            top_media: top_rows,
-                            recent_media: recent_rows,
-                            channels: channels
+    
+                db_playlists.fetch(3, 0, function(err, recent_rows) {
+                    db_playlists.fetchMostWatched(3, function(err, top_rows) {
+                        db_votes.fetchMostUpvoted(3, function(err, voted_rows) {
+                            template.send(res, 'home/index', {
+                                pageTitle: "Pienudes - Music and Chat",
+                                top_media: top_rows,
+                                recent_media: recent_rows,
+                                voted_rows: voted_rows,
+                                channels: channels
+                            });
                         });
                     });
                 });

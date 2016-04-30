@@ -1,0 +1,29 @@
+{% import "macros/links.html.twig" as links %}
+{% set container_fluid = true %}
+{% set container_remove_padding = true %}
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div id="tracks">
+        <div class="header-graphic"></div>
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+
+            <div class="timeline">
+                <h1>Most Upvoted</h1>
+                {% for m in media %}
+                    <div class="card card-media">
+                        <div class="card-media-time" data-time="{{ m.time }}">
+                            {{ m.vote_count|comma }} votes
+                        </div>
+                        {{ links.thumbnail(m, "card-media-thumbnail") }}
+                        {{ links.media(m, "card-media-title") }}
+
+                        <div class="card-media-common">
+                            Played by <a href="/user/{{ m.user }}">{{ m.user }}</a> and <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">others</a>.
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

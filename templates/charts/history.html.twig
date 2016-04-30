@@ -32,7 +32,7 @@
                         </li>
                     {% else %}
                         <li class="previous">
-                            <a href="/playlists/history/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                            <a href="/charts/history/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
                         </li>
                     {% endif %}
                     {% if page == pages %}
@@ -41,7 +41,7 @@
                         </li>
                     {% else %}
                         <li class="next">
-                            <a href="/playlists/history/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                            <a href="/charts/history/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
                         </li>
                     {% endif %}
                 </ul>
