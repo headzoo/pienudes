@@ -50,6 +50,28 @@
 
         <div class="sidebar-widget-empty">
             <h3 class="sidebar-widget-title">
+                <a href="/charts/history">Recently Played</a>
+            </h3>
+            <ul class="sidebar-list">
+                {% for m in recent_media %}
+                    <div class="card card-media">
+                        <div class="card-media-time">
+                            {{ m.time|fromNow }}{% if m.channel %}<br /><a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a>{% endif %}
+                        </div>
+                        {{ links.thumbnail(m, "card-media-thumbnail") }}
+                        {{ links.media(m, "card-media-title smaller") }}
+                        {% if m.user %}
+                            <div class="card-media-common">
+                                Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="sidebar-widget-empty">
+            <h3 class="sidebar-widget-title">
                 <a href="/charts/upvoted">Most Upvoted</a>
             </h3>
             <ul class="sidebar-list">
@@ -79,28 +101,6 @@
                     <div class="card card-media">
                         <div class="card-media-time">
                             {{ m.cnt|comma }} plays
-                        </div>
-                        {{ links.thumbnail(m, "card-media-thumbnail") }}
-                        {{ links.media(m, "card-media-title smaller") }}
-                        {% if m.user %}
-                            <div class="card-media-common">
-                                Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="sidebar-widget-empty">
-            <h3 class="sidebar-widget-title">
-                <a href="/charts/history">Recently Played</a>
-            </h3>
-            <ul class="sidebar-list">
-                {% for m in recent_media %}
-                    <div class="card card-media">
-                        <div class="card-media-time">
-                            {{ m.time|fromNow }}{% if m.channel %}<br /><a href="/r/{{ m.channel }}">/r/{{ m.channel }}</a>{% endif %}
                         </div>
                         {{ links.thumbnail(m, "card-media-thumbnail") }}
                         {{ links.media(m, "card-media-title smaller") }}
