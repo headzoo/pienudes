@@ -62,7 +62,7 @@
                         {{ links.media(m, "card-media-title smaller") }}
                         {% if m.user %}
                             <div class="card-media-common">
-                                Played by <a href="/user/{{ m.user }}">{{ m.user }}</a>
+                                Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
                             </div>
                         {% endif %}
                     </div>
@@ -84,7 +84,7 @@
                         {{ links.media(m, "card-media-title smaller") }}
                         {% if m.user %}
                             <div class="card-media-common">
-                                Played by <a href="/user/{{ m.user }}">{{ m.user }}</a>
+                                Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
                             </div>
                         {% endif %}
                     </div>
@@ -106,7 +106,7 @@
                         {{ links.media(m, "card-media-title smaller") }}
                         {% if m.user %}
                             <div class="card-media-common">
-                                Played by <a href="/user/{{ m.user }}">{{ m.user }}</a>
+                                Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
                             </div>
                         {% endif %}
                     </div>
