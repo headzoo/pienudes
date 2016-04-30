@@ -1,0 +1,48 @@
+#chat-log-box {
+  background-color: #1b1b1b;
+  padding: 12px 4px;
+  border-right: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+@media only screen and (max-width: 600px) {
+  #chat-log-box {
+    margin-top: 0;
+  }
+}
+#chat-log-box .card {
+  background: #202020;
+  width: 102%;
+  margin: 12px -1%;
+  border-bottom: 1px solid #151515;
+  border-top: 1px solid #151515;
+  border-right: none;
+  border-left: none;
+  min-height: 78px;
+  border-radius: 2px;
+}
+#chat-log-box .card .card-media-thumbnail {
+  width: 86px;
+  height: 64px;
+}
+#chat-log-box .card .card-media-title {
+  font-size: 14px;
+  margin-right: 150px;
+}
+#chat-log-box .card-media {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+#chat-logs-channels {
+  list-style-type: none;
+  margin: 0 0 20px 0;
+}
+#chat-logs-channels li {
+  cursor: pointer;
+  text-align: right;
+}
+#chat-logs-channels li:hover {
+  text-decoration: underline;
+}

@@ -636,5 +636,17 @@ module.exports = {
                 callback(null, rows[0].value);
             }
         );
+    },
+    
+    fetchAll: function(callback) {
+        if (typeof callback !== "function") {
+            callback = blackHole;
+        }
+    
+        db.query(
+            "SELECT * FROM `channels` INNER JOIN `channel_data` ON `channel_data`.`channel_id` = `channels`.`id` WHERE `channel_data`.`key` = 'opts'",
+            [],
+            callback
+        );
     }
 };

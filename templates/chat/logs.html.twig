@@ -1,0 +1,26 @@
+{% import "macros/links.html.twig" as links %}
+{% set container_fluid = true %}
+{% set container_remove_padding = true %}
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div id="tracks">
+        <div class="header-graphic"></div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-2 col-md-offset-2">
+                <ul id="chat-logs-channels">
+                    {% for ch in channels %}
+                        <li data-channel="{{ ch.name }}">/r/{{ ch.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-4">
+                <div class="timeline">
+                    <h1 id="chat-logs-title">Chat Logs</h1>
+                    <div id="chat-log-box">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

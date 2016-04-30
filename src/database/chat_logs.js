@@ -17,5 +17,36 @@ module.exports = {
             [channel_id, user, type, VERSION, Date.now(), msg, meta],
             callback
         );
+    },
+    
+    fetchByChannel: function(channel_id, limit, offset, callback) {
+        callback = callback || noop;
+    
+        limit  = limit || 200;
+        offset = offset || 0;
+        limit  = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 200;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+        
+        db.query(
+            "SELECT * FROM `chat_logs` WHERE `channel_id` = ? ORDER BY `id` ASC LIMIT " + offset + "," + limit,
+            [channel_id],
+            callback
+        );
+    },
+    
+    fetchTodayByChannel: function(channel_id, callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "SELECT * FROM `chat_logs` WHERE `channel_id` = ? AND FROM_UNIXTIME(`time` / 1000) > DATE_SUB(NOW(), INTERVAL 24 HOUR) ORDER BY `id` ASC",
+            [channel_id],
+            callback
+        );
     }
 };

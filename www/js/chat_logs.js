@@ -1,0 +1,165 @@
+(function() {
+    var box = $("#chat-log-box");
+    if (box.length == 0) {
+        return;
+    }
+    
+    var channel  = "lobby";
+    var last_mid = "";
+    var title    = $("#chat-logs-title");
+    var channels = $("#chat-logs-channels");
+    
+    USEROPTS.show_timestamps = true;
+    USEROPTS.show_colors = true;
+    
+    channels.on("click", "li", function() {
+        channel = $(this).data("channel");
+        fetchLogs();
+    });
+    
+    fetchLogs();
+    
+    function fetchLogs() {
+        $.ajax({
+            url: "/chat/logs/" + channel
+        }).done(function(res) {
+            title.text("Chat Logs - " + channel + " - Past 24 Hours");
+            formatLogs(res);
+        }).fail(function() {
+            alert("There was an error. Please try again in a minute.")
+        });
+    }
+    
+    function formatLogs(logs) {
+        box.empty();
+        var div;
+        
+        for(var i = 0; i < logs.length; i++) {
+            var log = logs[i];
+            if (log.type == "message") {
+                var obj = {
+                    username: log.user,
+                    msg: log.msg,
+                    meta: log.meta,
+                    time: log.time
+                };
+                div = formatChatMessage(obj, {name: ""});
+                box.append(div);
+            } else {
+                if (log.meta.id != last_mid) {
+                    div = formatMediaCard(log);
+                    box.append(div);
+                    last_mid = log.meta.id;
+                }
+            }
+        }
+    }
+    
+    function formatMediaCard(log) {
+        var card = $("<div/>");
+        card.addClass("card card-media");
+        
+        var time = $("<div/>");
+        time.addClass("card-media-time");
+        if (log.user[0] == "@") {
+            time.html("<span class='glyphicon glyphicon-refresh requeue-icon'></span> " + log.user.substring(1) + " &middot; " + log.meta.duration);
+        } else {
+            time.html(log.user + " &middot; " + log.meta.duration);
+        }
+        card.append(time);
+        
+        var thumbnail_link = $("<a/>");
+        thumbnail_link.attr("href", mediaUrl(log.meta));
+        thumbnail_link.attr("target", "_blank");
+        
+        var thumbnail_img  = $("<img/>");
+        thumbnail_img.addClass("card-media-thumbnail");
+        thumbnail_img.attr("src", thumbnailUrl(log.meta));
+        thumbnail_link.append(thumbnail_img);
+        card.append(thumbnail_link);
+        
+        var title = $("<a/>");
+        title.addClass("card-media-title");
+        title.attr("href", mediaUrl(log.meta));
+        title.text(log.msg);
+        card.append(title);
+        
+        return card;
+    }
+    
+    function mediaUrl(media) {
+        switch(media.type) {
+            case "yt":
+                return "http://youtube.com/watch?v=" + media.id;
+                break;
+            case "sc":
+                return media.id;
+                break;
+            case "vi":
+                return "http://vimeo.com/" + media.id;
+                break;
+            case "dm":
+                return "http://dailymotion.com/video/" + media.id;
+                break;
+            case "li":
+                return "http://livestream.com/" + media.id;
+                break;
+            case "tw":
+                return "http://twitch.tv/" + media.id;
+                break;
+            case "im":
+                return "http://imgur.com/a/" + media.id;
+                break;
+            case "us":
+                return "http://imgur.com/a/" + media.id;
+                break;
+            case "gd":
+                return "https://docs.google.com/file/d/" + media.id;
+                break;
+            case "hb":
+                return "http://hitbox.tv/" + media.id;
+                break;
+            default:
+                return media.id;
+                break;
+        }
+    }
+    
+    function thumbnailUrl(media) {
+        switch(media.type) {
+            case "yt":
+                return "https://i.ytimg.com/vi/" + media.id + "/default.jpg";
+                break;
+            case "sc":
+                return "/img/thumbs/sc.png";
+                break;
+            case "vi":
+                return "/img/thumbs/missing.jpg";
+                break;
+            case "dm":
+                return "/img/thumbs/missing.jpg";
+                break;
+            case "li":
+                return "/img/thumbs/missing.jpg";
+                break;
+            case "tw":
+                return "/img/thumbs/missing.jpg";
+                break;
+            case "im":
+                return "/img/thumbs/missing.jpg";
+                break;
+            case "us":
+                return "/img/thumbs/missing.jpg";
+                break;
+            case "gd":
+                return "/img/thumbs/missing.jpg";
+                break;
+            case "hb":
+                return "/img/thumbs/missing.jpg";
+                break;
+            default:
+                return "/img/thumbs/missing.jpg";
+                break;
+        }
+    }
+})();
