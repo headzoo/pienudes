@@ -2831,7 +2831,7 @@ function initPm(user) {
     if ($("#pm-" + user).length > 0) {
         return $("#pm-" + user);
     }
-console.log(user);
+    
     var pm = $("<div/>")
         .addClass("panel panel-default pm-panel")
         .appendTo($("#pmbar"))
@@ -2841,12 +2841,16 @@ console.log(user);
 
     var title = $("<div/>")
         .addClass("panel-heading")
-        .text(user)
+        .html("<span>" + user + "</span>")
         .data("username", user)
         .appendTo(pm);
-    var close = $("<button/>").addClass("close pull-right")
+    
+    var close = $("<button/>")
+        .addClass("close pull-right")
         .html("&times;")
-        .appendTo(title).click(function () {
+        .appendTo(title);
+    
+    close.click(function () {
             pm.remove();
             $("#pm-placeholder-" + user).remove();
         });
@@ -2867,7 +2871,7 @@ console.log(user);
             pm.css("position", "absolute")
                 .css("bottom", "0px")
                 .css("left", left);
-            title.text(title.data("username"));
+            title.find("span:first").text(title.data("username"));
         } else {
             pm.css("position", "");
             $("#pm-placeholder-" + user).remove();

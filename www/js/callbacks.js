@@ -537,7 +537,7 @@ Callbacks = {
         if (body.is(":hidden")) {
             unread_msg_count++;
             pm.data("unread_msg_count", unread_msg_count);
-            heading.text(heading.data("username") + " (" + unread_msg_count + ")");
+            heading.find("span:first").text(heading.data("username") + " (" + unread_msg_count + ")");
             heading.addClass("flash unread_messages");
             setTimeout(function() {
                 heading.removeClass("flash");
@@ -545,7 +545,7 @@ Callbacks = {
         } else {
             pm.data("unread_msg_count", 0);
             unread_msg_count = 0;
-            heading.text(heading.data("username")).removeClass("unread_messages");
+            heading.removeClass("unread_messages").find("span:first").text(heading.data("username"));
         }
     },
     
