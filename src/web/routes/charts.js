@@ -43,6 +43,40 @@ function handleHistory(req, res) {
     });
 }
 
+function handleHistorySearch(req, res) {
+    var term = req.query.q;
+    var page = req.params.page;
+    if (page == undefined) {
+        page = 1;
+    }
+    if (page < 1) {
+        page = 1;
+    }
+    var limit  = 100;
+    var offset = (page - 1) * limit;
+    
+    db_playlists.fetchBySearchTerm(term, limit, offset, function(err, rows, found) {
+        rows.forEach(function(row) {
+            if (row.user[0] == "@") {
+                row.user = row.user.substring(1);
+            }
+        });
+    
+        var pages = Math.ceil(found / limit);
+        if (page > pages) {
+            page = pages;
+        }
+        
+        template.send(res, 'charts/history_search', {
+            pageTitle: "Playlist History",
+            media: rows,
+            term: term,
+            page:  parseInt(page),
+            pages: parseInt(pages)
+        });
+    });
+}
+
 function handleTopRedirect(req, res) {
     res.redirect(301, '/charts/top');
 }
@@ -73,11 +107,12 @@ module.exports = {
      * Initializes auth callbacks
      */
     init: function (app) {
-        app.get('/playlists/history/:page?', handleHistoryRedirect);
-        app.get('/playlists/top', handleTopRedirect);
-    
+        app.get('/charts/history/search/:page?', handleHistorySearch);
         app.get('/charts/history/:page?', handleHistory);
         app.get('/charts/top', handleTop);
         app.get('/charts/upvoted', handleUpvoted);
+        
+        app.get('/playlists/history/:page?', handleHistoryRedirect);
+        app.get('/playlists/top', handleTopRedirect);
     }
 };

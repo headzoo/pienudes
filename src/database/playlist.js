@@ -155,6 +155,35 @@ module.exports = {
         });
     },
     
+    fetchBySearchTerm: function(term, limit, offset, callback) {
+        callback = callback || noop;
+    
+        limit  = limit || 20;
+        offset = offset || 0;
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 20;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+        
+        db.query(
+            "SELECT SQL_CALC_FOUND_ROWS * FROM `playlist_history` " +
+            "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+            "WHERE `media`.`title` LIKE ? " +
+            "GROUP BY `media`.`id`" +
+            "LIMIT " + offset + "," + limit +
+            "; SELECT FOUND_ROWS() AS `f`;",
+            ['%' + term + '%'],
+            function(err, rows) {
+                if (err) return callback(err);
+                callback(null, rows[0], rows[1].f);
+            }
+        );
+    },
+    
     /**
      * Returns the number of rows in the playlist_history table
      */

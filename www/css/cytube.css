@@ -915,3 +915,8 @@ input:focus {
   line-height: 1.42857143;
   color: #FFF;
 }
+#playlist-history-search-input {
+  float: right;
+  width: 135px;
+  margin-top: -5px;
+}

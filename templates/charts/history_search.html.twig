@@ -10,9 +10,9 @@
             <div class="timeline">
                 <h1>
                     <form method="get" action="/charts/history/search">
-                        <input id="playlist-history-search-input" name="q" type="text" class="form-control input-sm" placeholder="Search.." />
+                        <input id="playlist-history-search-input" name="q" type="text" class="form-control input-sm" value="{{ term }}" placeholder="Search.." />
                     </form>
-                    Recently Played{% if page != 1 %} &middot; Page {{ page }}{% endif %}
+                    Search Results{% if page != 1 %} &middot; Page {{ page }}{% endif %}
                 </h1>
                 {% for m in media %}
                     <div class="card card-media">
@@ -37,7 +37,7 @@
                         </li>
                     {% else %}
                         <li class="previous">
-                            <a href="/charts/history/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                            <a href="/charts/history/search/{{ page - 1 }}?q={{ term|urlencode }}"><span aria-hidden="true">&larr;</span> Newer</a>
                         </li>
                     {% endif %}
                     {% if page == pages %}
@@ -46,7 +46,7 @@
                         </li>
                     {% else %}
                         <li class="next">
-                            <a href="/charts/history/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                            <a href="/charts/history/search/{{ page + 1 }}?q={{ term|urlencode }}">Older <span aria-hidden="true">&rarr;</span></a>
                         </li>
                     {% endif %}
                 </ul>
