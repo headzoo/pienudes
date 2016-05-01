@@ -6,7 +6,8 @@
     
     var channel  = "lobby";
     var last_mid = "";
-    var title    = $("#chat-logs-title");
+    var title    = $("#chat-logs-title span:first");
+    var input    = $("#chat-logs-search-input");
     var channels = $("#chat-logs-channels");
     
     USEROPTS.show_timestamps = true;
@@ -20,10 +21,21 @@
         fetchLogs();
     });
     
+    var search = $.deparam.fragment().s;
+    if (search) {
+        input.val(search);
+    }
+    input.on("keyup", function(e) {
+        if (e.keyCode == 13) {
+            document.location = "/chat/logs#c=" + channel + "&s=" + encodeURIComponent(input.val());
+        }
+    });
+    
     fetchLogs();
     
     function fetchLogs() {
         var after   = 0;
+        var search  = "";
         var params  = $.deparam.fragment();
         if (params.c != undefined) {
             channel = params.c;
@@ -31,16 +43,23 @@
         if (params.i != undefined) {
             after = params.i;
         }
+        if (params.s != undefined) {
+            search = params.s;
+        }
         
         $.ajax({
             url: "/chat/logs/" + channel,
             data: {
-                after: after
+                after: after,
+                search: search
             }
         }).done(function(res) {
             title.text("Chat Logs - " + channel + " - Past 24 Hours");
             formatLogs(res);
             $("html, body").animate({ scrollTop: 0 }, "slow");
+            if (!search) {
+                input.val("");
+            }
         }).fail(function() {
             alert("There was an error. Please try again in a minute.")
         });

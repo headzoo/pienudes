@@ -28,43 +28,55 @@ function handleLogsIndex(req, res) {
 }
 
 function handleLogsForChannel(req, res) {
-    var after = req.query.after;
+    var after  = req.query.after;
+    var search = req.query.search.trim();
     
     db_channels.lookup(req.params.channel, function(err, chan) {
         if (err) {
-            console.log(err);
             return res.send(500);
         }
         if (!chan) {
             return res.send(404);
         }
         
-        if (after != 0) {
-            db_chat_logs.fetchTodayByChannelAfterId(chan.id, after, function (err, rows) {
+        if (search.length != 0) {
+            db_chat_logs.fetchByChannelAndSearch(chan.id, search, function(err, rows) {
                 if (err) {
                     console.log(err);
                     return res.send(500);
                 }
-        
+                
                 rows.forEach(function (row) {
                     row.meta = JSON.parse(row.meta);
                 });
-        
                 res.json(rows);
             });
         } else {
-            db_chat_logs.fetchTodayByChannel(chan.id, function (err, rows) {
-                if (err) {
-                    console.log(err);
-                    return res.send(500);
-                }
-        
-                rows.forEach(function (row) {
-                    row.meta = JSON.parse(row.meta);
+            if (after != 0) {
+                db_chat_logs.fetchTodayByChannelAfterId(chan.id, after, function (err, rows) {
+                    if (err) {
+                        console.log(err);
+                        return res.send(500);
+                    }
+            
+                    rows.forEach(function (row) {
+                        row.meta = JSON.parse(row.meta);
+                    });
+                    res.json(rows);
                 });
-        
-                res.json(rows);
-            });
+            } else {
+                db_chat_logs.fetchTodayByChannel(chan.id, function (err, rows) {
+                    if (err) {
+                        console.log(err);
+                        return res.send(500);
+                    }
+            
+                    rows.forEach(function (row) {
+                        row.meta = JSON.parse(row.meta);
+                    });
+                    res.json(rows);
+                });
+            }
         }
     });
 }

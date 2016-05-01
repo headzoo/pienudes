@@ -54,8 +54,18 @@ module.exports = {
         callback = callback || noop;
     
         db.query(
-            "SELECT * FROM `chat_logs` WHERE `id` >= ? AND `channel_id` = ? AND FROM_UNIXTIME(`time` / 1000) > DATE_SUB(NOW(), INTERVAL 24 HOUR) ORDER BY `id` ASC",
+            "SELECT * FROM `chat_logs` WHERE `id` >= ? AND `channel_id` = ? ORDER BY `id` ASC LIMIT 100",
             [after_id, channel_id],
+            callback
+        );
+    },
+    
+    fetchByChannelAndSearch: function(channel_id, search, callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "SELECT * FROM `chat_logs` WHERE `channel_id` = ? AND `msg` LIKE ? ORDER BY `id` ASC LIMIT 500",
+            [channel_id, '%' + search + '%'],
             callback
         );
     }
