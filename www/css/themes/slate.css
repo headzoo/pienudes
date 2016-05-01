@@ -6119,7 +6119,7 @@ a.list-group-item-danger.active:hover {
   padding: 0;
   overflow: hidden;
   background-color: #161A20;
-  border: 1px solid #4A4949;
+  border: 1px solid #353535;
 }
 
 .embed-responsive .embed-responsive-item,
@@ -7198,10 +7198,10 @@ button.close {
 }
 
 .btn-default {
-  background-image: -webkit-linear-gradient(#484e55, #3a3f44 60%, #313539);
-  background-image: -o-linear-gradient(#484e55, #3a3f44 60%, #313539);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#484e55), color-stop(60%, #3a3f44), to(#313539));
-  background-image: linear-gradient(#484e55, #3a3f44 60%, #313539);
+  background-image: -webkit-linear-gradient(#2F2F2F, #313131 60%, #2C2E2F);
+  background-image: -o-linear-gradient(#2F2F2F, #313131 60%, #2C2E2F);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#2F2F2F), color-stop(60%, #313131), to(#2C2E2F));
+  background-image: linear-gradient(#2F2F2F, #313131 60%, #2C2E2F);;
   background-repeat: no-repeat;
   -webkit-filter: none;
   filter: none
@@ -7676,16 +7676,8 @@ textarea.form-control {
   color: #2D2D2D;
 }
 
-.queue_active {
-  background-image: -webkit-linear-gradient(#8a9196, #7a8288 60%, #70787d);
-  background-image: linear-gradient(#8a9196, #7a8288, #70787d);
-  background-repeat: no-repeat;
-}
-
 .queue_active.queue_temp {
-  background-color: #70787d;
-  background-image: url(/img/stripe-diagonal-black.png);
-  background-repeat: repeat;
+  background-color: #212121;
 }
 
 .profile-box,
@@ -7715,9 +7707,9 @@ textarea.form-control {
 
 #userlist,
 #messagebuffer {
-  border-right: 1px solid #4A4949;
-  border-top: 1px solid #494949;
-  border-left: 1px solid #494949;
+  border-right: 1px solid #353535;
+  border-top: 1px solid #353535;
+  border-left: 1px solid #353535;
   background-color: #161A20;
 }
 
@@ -7726,9 +7718,13 @@ textarea.form-control {
   color: #c8c8c8;
 }
 
+#chatline {
+  border: 1px solid #353535;
+}
+
 .queue_entry {
   border-color: #4A4949;
-  background-color: #272b30;
+  background-color: #1B1B1B;
 }
 
 #newmessages-indicator-bghack {

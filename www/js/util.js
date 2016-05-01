@@ -528,7 +528,7 @@ function addQueueButtons(li) {
     // Play
     if(hasPermission("playlistjump")) {
         $("<button/>").addClass("btn btn-xs btn-default qbtn-play")
-            .html("<span class='glyphicon glyphicon-play'></span>Play")
+            .html("Play")
             .click(function() {
                 socket.emit("jumpTo", li.data("uid"));
             })
@@ -537,7 +537,7 @@ function addQueueButtons(li) {
     // Queue next
     if(hasPermission("playlistmove")) {
         $("<button/>").addClass("btn btn-xs btn-default qbtn-next")
-            .html("<span class='glyphicon glyphicon-share-alt'></span>Queue Next")
+            .html("Queue Next")
             .click(function() {
                 socket.emit("moveMedia", {
                     from: li.data("uid"),
@@ -550,7 +550,7 @@ function addQueueButtons(li) {
     if(hasPermission("settemp")) {
         var tempstr = li.data("temp")?"Make Permanent":"Make Temporary";
         $("<button/>").addClass("btn btn-xs btn-default qbtn-tmp")
-            .html("<span class='glyphicon glyphicon-flag'></span>" + tempstr)
+            .html(tempstr)
             .click(function() {
                 socket.emit("setTemp", {
                     uid: li.data("uid"),
@@ -562,7 +562,7 @@ function addQueueButtons(li) {
     // Delete
     if((hasPermission("playlistdelete")) || (CLIENT.name === li.data("queueby"))) {
         $("<button/>").addClass("btn btn-xs btn-default qbtn-delete")
-            .html("<span class='glyphicon glyphicon-trash'></span>Delete")
+            .html("Delete")
             .click(function() {
                 socket.emit("delete", li.data("uid"));
             })
