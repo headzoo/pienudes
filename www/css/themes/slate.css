@@ -7710,11 +7710,11 @@ textarea.form-control {
   border-right: 1px solid #353535;
   border-top: 1px solid #353535;
   border-left: 1px solid #353535;
-  background-color: #161A20;
+  background-color: #000;
 }
 
 #chatline, #guestname {
-  background-color: #161A20;
+  background-color: #000;
   color: #c8c8c8;
 }
 
