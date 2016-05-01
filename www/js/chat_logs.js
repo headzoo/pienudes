@@ -54,12 +54,18 @@
                 search: search
             }
         }).done(function(res) {
-            title.text("Chat Logs - " + channel + " - Past 24 Hours");
-            formatLogs(res);
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-            if (!search) {
+            if (search) {
+                title.text("Chat Logs - " + channel + " - Search Results");
+            } else if (after > 0) {
+                title.text("Chat Logs - " + channel);
+                input.val("");
+            } else {
+                title.text("Chat Logs - " + channel + " - Past 24 Hours");
                 input.val("");
             }
+            
+            formatLogs(res);
+            $("html, body").animate({ scrollTop: 0 }, "slow");
         }).fail(function() {
             alert("There was an error. Please try again in a minute.")
         });
