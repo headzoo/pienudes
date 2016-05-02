@@ -8,6 +8,7 @@
             </div>
             <div class="col-xs-12 col-sm-8 col-md-4">
                 {% set empty_msg = "User has not played any tracks." %}
+                {% set page_base_url = "/user/" + user.name %}
                 {% include "users/timeline.html.twig" %}
             </div>
         </div>

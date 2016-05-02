@@ -1,11 +1,12 @@
 "use strict";
 
-var multer   = require('multer');
-var AWS      = require('aws-sdk');
-var fs       = require('fs');
-var Jimp     = require('jimp');
-var async    = require('async');
-var Redis    = require('../../redis');
+var multer    = require('multer');
+var AWS       = require('aws-sdk');
+var fs        = require('fs');
+var Jimp      = require('jimp');
+var async     = require('async');
+var Redis     = require('../../redis');
+var striptags = require('striptags');
 
 import template from '../template';
 import Config from '../../config';
@@ -179,18 +180,37 @@ function handleProfileSave(req, res) {
                 message: "Failed to fetch profile information."
             }, 500);
         }
-        
-        var text     = xss.sanitizeHTML(req.body.text).trim();
-        var location = xss.sanitizeHTML(req.body.location).trim();
-        var website  = xss.sanitizeHTML(req.body.website).trim();
-        var bio      = xss.sanitizeHTML(req.body.bio).trim();
-        var image    = xss.sanitizeHTML(req.body.image).trim();
-        var header   = xss.sanitizeHTML(req.body.header).trim();
-        var color    = xss.sanitizeHTML(req.body.color).trim();
+    
+        var text     = req.body.text.trim();
+        var location = req.body.location.trim();
+        var website  = req.body.website.trim();
+        var bio      = req.body.bio.trim();
+        var image    = req.body.image.trim();
+        var header   = req.body.header.trim();
+        var color    = req.body.color.trim();
         if (header == "none") {
             header = "";
         }
-    
+        
+        // The "original" members can have some html in their profile.
+        if (req.user.id < 37) {
+            text     = xss.sanitizeHTML(text);
+            location = xss.sanitizeHTML(location);
+            website  = xss.sanitizeHTML(website);
+            bio      = xss.sanitizeHTML(bio);
+            image    = xss.sanitizeHTML(image);
+            header   = xss.sanitizeHTML(header);
+            color    = xss.sanitizeHTML(color);
+        } else {
+            text     = striptags(text);
+            location = striptags(location);
+            website  = striptags(website);
+            bio      = striptags(bio);
+            image    = striptags(image);
+            header   = striptags(header);
+            color    = striptags(color);
+        }
+        
         Redis.createClient(Config.get("redis.databases").uploads, function(err, client) {
             if (err) {
                 client.quit();

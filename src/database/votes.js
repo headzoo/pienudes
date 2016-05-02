@@ -108,10 +108,11 @@ module.exports = {
         }
         
         db.query(
-            "SELECT `media`.*, `media`.`id` AS `media_id`, `users`.`name` AS `user`, SUM(`value`) AS `vote_count` " +
+            "SELECT `media`.*, `media`.`id` AS `media_id`, `playlist_history`.`user` AS `user`, SUM(`value`) AS `vote_count` " +
             "FROM `votes` " +
             "INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` " +
-            "INNER JOIN `users` ON `users`.`id` = `votes`.`user_id` " +
+            "INNER JOIN `playlist_history` ON `playlist_history`.`media_id` = `media`.`id` " +
+            "INNER JOIN `users` ON `users`.`name` = `playlist_history`.`user` " +
             "GROUP BY `media`.`uid` " + 
             "ORDER BY `vote_count` DESC " +
             "LIMIT " + limit,

@@ -49,7 +49,7 @@
                     </li>
                 {% else %}
                     <li class="previous">
-                        <a href="/user/{{ user.name }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                        <a href="{{ page_base_url }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
                     </li>
                 {% endif %}
                 {% if page == pages %}
@@ -58,7 +58,7 @@
                     </li>
                 {% else %}
                     <li class="next">
-                        <a href="/user/{{ user.name }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                        <a href="{{ page_base_url }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
                     </li>
                 {% endif %}
             </ul>
