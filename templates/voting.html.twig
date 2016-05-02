@@ -1,0 +1,8 @@
+<div class="btn-group btn-group-sm vote-btn-group" data-mid="{{ m.media_id }}">
+    <button class="btn btn-sm vote-up{% if m.votes.user == 1 %} active{% endif %}" data-vote="up" title="Upvote">
+        <span class="glyphicon glyphicon-chevron-up"></span> <span>{{ m.votes.up }}</span>
+    </button>
+    <button class="btn btn-sm vote-down{% if m.votes.user == -1 %} active{% endif %}" data-vote="down" title="Downvote">
+        <span class="glyphicon glyphicon-chevron-down"></span> <span>{{ m.votes.down }}</span>
+    </button>
+</div>

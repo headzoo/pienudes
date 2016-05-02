@@ -1,4 +1,6 @@
 "use strict";
+
+var async = require('async');
 import template from '../template';
 import Config from '../../config';
 import db_playlists from '../../database/playlist';
@@ -19,7 +21,7 @@ function handleHistory(req, res) {
     }
     
     db_playlists.count(function(err, count) {
-        var limit  = 100;
+        var limit  = 50;
         var pages  = Math.ceil(count / limit);
         if (page > pages) {
             page = pages;
@@ -32,14 +34,42 @@ function handleHistory(req, res) {
                     row.user = row.user.substring(1);
                 }
             });
-            
-            template.send(res, 'charts/history', {
-                pageTitle: "Playlist History",
-                media: rows,
-                page:  parseInt(page),
-                pages: parseInt(pages)
+    
+            var user_id = (req.user.id != undefined) ? req.user.id : 0;
+            async.map(rows, attachVotes.bind(this, req), function(err, results) {
+                template.send(res, 'charts/history', {
+                    pageTitle: "Playlist History",
+                    media: results,
+                    page:  parseInt(page),
+                    pages: parseInt(pages),
+                    pageScripts: ["/js/voting.js"]
+                });
             });
         });
+    });
+}
+
+function attachVotes(req, row, callback) {
+    db_votes.fetchByMediaId(row.media_id, function(err, rows) {
+        if (err) return callback(err);
+    
+        row.votes = {
+            up: 0,
+            down: 0,
+            user: 0
+        };
+        rows.forEach(function(r) {
+            if (r.value == 1) {
+                row.votes.up++;
+            } else if (r.value == -1) {
+                row.votes.down++;
+            }
+            if (req.user.id != undefined && req.user.id == r.user_id) {
+                row.votes.user = r.value;
+            }
+        });
+        
+        callback(null, row);
     });
 }
 
@@ -93,7 +123,6 @@ function handleTop(req, res) {
 
 function handleUpvoted(req, res) {
     db_votes.fetchMostUpvoted(25, function(err, rows) {
-        console.log(rows);
         template.send(res, 'charts/upvoted', {
             pageTitle: "25 Most Upvoted Videos",
             media: rows,

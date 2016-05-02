@@ -25,6 +25,8 @@
                         <div class="card-media-common">
                             Played by <a href="/user/{{ m.user }}">{{ m.user }}</a>.
                         </div>
+                        
+                        {% include "voting.html.twig" %}
                     </div>
                 {% endfor %}
             </div>

@@ -726,25 +726,37 @@ input:focus {
   margin-top: -3px;
   color: #8D8E8E;
 }
-#voteup {
-  background-color: #025D02;
+#voteup,
+.vote-up {
+  background-color: #013E01;
   background-image: none;
 }
-#voteup.active {
-  background-color: #00D000 !important;
+#voteup.active,
+.vote-up.active {
+  background-color: #019E01 !important;
 }
 #voteup:hover {
   background-color: #037703;
 }
-#votedown {
-  background-color: #8E0F04;
+#votedown,
+.vote-down {
+  background-color: #5A0902;
   background-image: none;
 }
-#votedown.active {
-  background-color: #E42E1F !important;
+#votedown.active,
+.vote-down.active {
+  background-color: #B31508 !important;
 }
 #votedown:hover {
   background-color: #9E1004;
+}
+.btn-group.vote-btn-group {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+}
+.btn-group.vote-btn-group .btn-sm {
+  padding: 0 5px;
 }
 #uservoteslistempty {
   margin-bottom: 15px;
