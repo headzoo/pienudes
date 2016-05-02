@@ -1,8 +1,8 @@
 'use strict';
 
-var db_votes    = require('../database/votes');
-var db_accounts = require('../database/accounts');
-var db_media    = require('../database/media');
+var db_votes    = require('./database/votes');
+var db_accounts = require('./database/accounts');
+var db_media    = require('./database/media');
 
 var noop = function() {};
 
@@ -49,6 +49,30 @@ module.exports = {
                     });
                 }
             });
+        });
+    },
+    
+    attachVotes: function(req, row, callback) {
+        db_votes.fetchByMediaId(row.media_id, function(err, rows) {
+            if (err) return callback(err);
+        
+            row.votes = {
+                up: 0,
+                down: 0,
+                user: 0
+            };
+            rows.forEach(function(r) {
+                if (r.value == 1) {
+                    row.votes.up++;
+                } else if (r.value == -1) {
+                    row.votes.down++;
+                }
+                if (req.user != undefined && req.user.id != undefined && req.user.id == r.user_id) {
+                    row.votes.user = r.value;
+                }
+            });
+        
+            callback(null, row);
         });
     }
 };

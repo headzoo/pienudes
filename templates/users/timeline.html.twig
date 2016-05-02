@@ -38,6 +38,8 @@
                 {% if is_owner %}
                     <span class="card-media-remove-btn glyphicon glyphicon-remove" title="Delete" data-pid="{{ m.pid }}"></span>
                 {% endif %}
+
+                {% include "voting.html.twig" %}
             </div>
         {% endfor %}
 

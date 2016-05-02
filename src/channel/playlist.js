@@ -12,6 +12,7 @@ var db_playlist = require('../database/playlist');
 var db_media    = require('../database/media');
 var db_votes    = require('../database/votes');
 var db_chat_logs = require('../database/chat_logs');
+var mod_votes    = require('../voting');
 var Logger = require("../logger");
 var CustomEmbedFilter = require("../customembed").filter;
 var XSS = require("../xss");
@@ -852,14 +853,6 @@ PlaylistModule.prototype.handleVoteVideo = function(user, value) {
         });
     }
     
-    var success  = function(media_id) {
-        db_votes.fetchVotes(media_id, function(err, votes) {
-            if (!err) {
-                this.channel.broadcastAll("changeVotes", votes);
-            }
-        }.bind(this));
-    }.bind(this);
-    
     db_accounts.getUser(user.account.name, function(err, u) {
         if (err) {
             return user.socket.emit("errorMsg", {
@@ -873,43 +866,13 @@ PlaylistModule.prototype.handleVoteVideo = function(user, value) {
                     msg: "Unable to fetch media information. Try again in a minute."
                 });
             } else if (media && media.id) {
-                db_votes.fetch(u.id, media.id, function(err, vote) {
+                mod_votes.vote(media.id, u.id, value, function(err, votes) {
                     if (err) {
                         return user.socket.emit("errorMsg", {
                             msg: "Unable to fetch vote information. Try again in a minute."
                         });
                     }
-                    
-                    if (vote) {
-                        if (vote.value == value) {
-                            db_votes.remove(u.id, media.id, function(err) {
-                                if (err) {
-                                    return user.socket.emit("errorMsg", {
-                                        msg: "Unable to cast vote. Try again in a minute."
-                                    });
-                                }
-                                success(media.id);
-                            });
-                        } else {
-                            db_votes.update(u.id, media.id, value, function(err) {
-                                if (err) {
-                                    return user.socket.emit("errorMsg", {
-                                        msg: "Unable to cast vote. Try again in a minute."
-                                    });
-                                }
-                                success(media.id);
-                            });
-                        }
-                    } else {
-                        db_votes.insert(u.id, media.id, value, function(err) {
-                            if (err) {
-                                return user.socket.emit("errorMsg", {
-                                    msg: "Unable to cast vote. Try again in a few minutes."
-                                });
-                            }
-                            success(media.id);
-                        });
-                    }
+                    this.channel.broadcastAll("changeVotes", votes);
                 }.bind(this));
             }
         }.bind(this));
@@ -984,7 +947,7 @@ PlaylistModule.prototype.handleUserVideoVotes = function(user) {
             });
         }
         
-        db_votes.fetchUpvotedByUser(u.id, 50, 0, function(err, rows) {
+        db_votes.fetchUpvotedByUser(u.id, 100, 0, function(err, rows) {
             if (err) {
                 return user.socket.emit("errorMsg", {
                     msg: "There was an error fetching your votes. Try again in a minute."

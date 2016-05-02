@@ -19,5 +19,10 @@
                 }
             });
         </script>
+        {% if pageScripts %}
+            {% for script in pageScripts %}
+                <script src="{{ script }}?v={{ cacheBuster }}"></script>
+            {% endfor %}
+        {% endif %}
     </body>
 </html>

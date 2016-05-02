@@ -1,12 +1,13 @@
 "use strict";
 
-var multer    = require('multer');
-var AWS       = require('aws-sdk');
-var fs        = require('fs');
-var Jimp      = require('jimp');
-var async     = require('async');
-var Redis     = require('../../redis');
-var striptags = require('striptags');
+var multer     = require('multer');
+var AWS        = require('aws-sdk');
+var fs         = require('fs');
+var Jimp       = require('jimp');
+var async      = require('async');
+var Redis      = require('../../redis');
+var striptags  = require('striptags');
+var mod_voting = require('../../voting');
 
 import template from '../template';
 import Config from '../../config';
@@ -154,16 +155,19 @@ function handleProfile(req, res) {
                             });
                         });
     
-                        template.send(res, 'users/profile', {
-                            pageTitle: req.params.name,
-                            pageTab: "home",
-                            user: user,
-                            media: rows,
-                            media_count: count,
-                            likes: likes,
-                            page:  parseInt(page),
-                            pages: parseInt(pages),
-                            input_maxes: getInputMaxes()
+                        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                            template.send(res, 'users/profile', {
+                                pageTitle: req.params.name,
+                                pageTab: "home",
+                                user: user,
+                                media: results,
+                                media_count: count,
+                                likes: likes,
+                                page:  parseInt(page),
+                                pages: parseInt(pages),
+                                input_maxes: getInputMaxes(),
+                                pageScripts: ["/js/voting.js"]
+                            });
                         });
                     });
                 });
@@ -501,17 +505,20 @@ function handleUpvotes(req, res) {
                             status: 500
                         });
                     }
-            
-                    template.send(res, 'users/upvotes', {
-                        pageTitle: name + "'s Up Votes",
-                        pageTab: "upvotes",
-                        user: user,
-                        media: rows,
-                        media_count: count,
-                        likes: likes,
-                        page:  parseInt(page),
-                        pages: parseInt(pages),
-                        input_maxes: getInputMaxes()
+    
+                    async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                        template.send(res, 'users/upvotes', {
+                            pageTitle: name + "'s Up Votes",
+                            pageTab: "upvotes",
+                            user: user,
+                            media: results,
+                            media_count: count,
+                            likes: likes,
+                            page:  parseInt(page),
+                            pages: parseInt(pages),
+                            input_maxes: getInputMaxes(),
+                            pageScripts: ["/js/voting.js"]
+                        });
                     });
                 });
             });
@@ -588,17 +595,20 @@ function handleDownvotes(req, res) {
                             status: 500
                         });
                     }
-            
-                    template.send(res, 'users/downvotes', {
-                        pageTitle: name + "'s Down Votes",
-                        pageTab: "downvotes",
-                        user: user,
-                        media: rows,
-                        media_count: count,
-                        likes: likes,
-                        page:  parseInt(page),
-                        pages: parseInt(pages),
-                        input_maxes: getInputMaxes()
+    
+                    async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                        template.send(res, 'users/downvotes', {
+                            pageTitle: name + "'s Down Votes",
+                            pageTab: "downvotes",
+                            user: user,
+                            media: results,
+                            media_count: count,
+                            likes: likes,
+                            page:  parseInt(page),
+                            pages: parseInt(pages),
+                            input_maxes: getInputMaxes(),
+                            pageScripts: ["/js/voting.js"]
+                        });
                     });
                 });
             });

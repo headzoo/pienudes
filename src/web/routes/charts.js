@@ -6,6 +6,7 @@ import Config from '../../config';
 import db_playlists from '../../database/playlist';
 import db_accounts from '../../database/accounts';
 import db_votes from '../../database/votes';
+import mod_voting from '../../voting';
 
 function handleHistoryRedirect(req, res) {
     res.redirect(301, '/charts/history');
@@ -34,9 +35,8 @@ function handleHistory(req, res) {
                     row.user = row.user.substring(1);
                 }
             });
-    
-            var user_id = (req.user.id != undefined) ? req.user.id : 0;
-            async.map(rows, attachVotes.bind(this, req), function(err, results) {
+            
+            async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
                 template.send(res, 'charts/history', {
                     pageTitle: "Playlist History",
                     media: results,
@@ -46,30 +46,6 @@ function handleHistory(req, res) {
                 });
             });
         });
-    });
-}
-
-function attachVotes(req, row, callback) {
-    db_votes.fetchByMediaId(row.media_id, function(err, rows) {
-        if (err) return callback(err);
-    
-        row.votes = {
-            up: 0,
-            down: 0,
-            user: 0
-        };
-        rows.forEach(function(r) {
-            if (r.value == 1) {
-                row.votes.up++;
-            } else if (r.value == -1) {
-                row.votes.down++;
-            }
-            if (req.user.id != undefined && req.user.id == r.user_id) {
-                row.votes.user = r.value;
-            }
-        });
-        
-        callback(null, row);
     });
 }
 
@@ -96,13 +72,16 @@ function handleHistorySearch(req, res) {
         if (page > pages) {
             page = pages;
         }
-        
-        template.send(res, 'charts/history_search', {
-            pageTitle: "Playlist History",
-            media: rows,
-            term: term,
-            page:  parseInt(page),
-            pages: parseInt(pages)
+    
+        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+            template.send(res, 'charts/history_search', {
+                pageTitle: "Playlist History",
+                media: results,
+                term: term,
+                page:  parseInt(page),
+                pages: parseInt(pages),
+                pageScripts: ["/js/voting.js"]
+            });
         });
     });
 }
@@ -113,20 +92,26 @@ function handleTopRedirect(req, res) {
 
 function handleTop(req, res) {
     db_playlists.fetchMostWatched(25, function(err, rows) {
-        template.send(res, 'charts/top', {
-            pageTitle: "25 Most Played Videos",
-            media: rows,
-            count: 25
+        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+            template.send(res, 'charts/top', {
+                pageTitle: "25 Most Played Videos",
+                media: results,
+                count: 25,
+                pageScripts: ["/js/voting.js"]
+            });
         });
     });
 }
 
 function handleUpvoted(req, res) {
     db_votes.fetchMostUpvoted(25, function(err, rows) {
-        template.send(res, 'charts/upvoted', {
-            pageTitle: "25 Most Upvoted Videos",
-            media: rows,
-            count: 25
+        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+            template.send(res, 'charts/upvoted', {
+                pageTitle: "25 Most Upvoted Videos",
+                media: results,
+                count: 25,
+                pageScripts: ["/js/voting.js"]
+            });
         });
     });
 }
