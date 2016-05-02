@@ -44,6 +44,7 @@
     "socket.io-redis": "^1.0.0",
     "source-map-support": "^0.4.0",
     "status-message-polyfill": "calzoneman/status-message-polyfill",
+    "striptags": "^2.1.1",
     "uuid": "^2.0.1",
     "yamljs": "^0.1.6"
   },
