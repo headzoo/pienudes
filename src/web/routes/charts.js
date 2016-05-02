@@ -93,7 +93,6 @@ function handleTop(req, res) {
 
 function handleUpvoted(req, res) {
     db_votes.fetchMostUpvoted(25, function(err, rows) {
-        console.log(rows);
         template.send(res, 'charts/upvoted', {
             pageTitle: "25 Most Upvoted Videos",
             media: rows,
