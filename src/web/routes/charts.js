@@ -116,6 +116,16 @@ function handleUpvoted(req, res) {
     });
 }
 
+function handleUserRedirect(req, res) {
+    var name = req.params.name;
+    var page = req.params.page;
+    if (page && page != 1) {
+        res.redirect(301, '/user/' + name + '/' + page);
+    } else {
+        res.redirect(301, '/user/' + name);
+    }
+}
+
 module.exports = {
     /**
      * Initializes auth callbacks
@@ -127,6 +137,7 @@ module.exports = {
         app.get('/charts/upvoted', handleUpvoted);
         
         app.get('/playlists/history/:page?', handleHistoryRedirect);
+        app.get('/playlists/user/:name/:page?', handleUserRedirect);
         app.get('/playlists/top', handleTopRedirect);
     }
 };
