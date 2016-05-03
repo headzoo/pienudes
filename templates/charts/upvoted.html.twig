@@ -12,14 +12,10 @@
                 {% for m in media %}
                     <div class="card card-media">
                         <div class="card-media-time" data-time="{{ m.time }}">
-                            {{ m.vote_count|comma }} votes
+                            {{ m.vote_count|comma }} upvotes
                         </div>
                         {{ links.thumbnail(m, "card-media-thumbnail") }}
                         {{ links.media(m, "card-media-title") }}
-
-                        <div class="card-media-common">
-                            Played by <a href="/user/{{ m.user }}">{{ m.user }}</a> and <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">others</a>.
-                        </div>
 
                         {% include "voting.html.twig" %}
                     </div>

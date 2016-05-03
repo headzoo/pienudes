@@ -106,14 +106,12 @@ module.exports = {
         if (isNaN(limit)) {
             limit = 25;
         }
-        
+
         db.query(
-            "SELECT `media`.*, `media`.`id` AS `media_id`, `playlist_history`.`user` AS `user`, SUM(`value`) AS `vote_count` " +
+            "SELECT `media`.*, `votes`.*, SUM(`value`) AS `vote_count` " +
             "FROM `votes` " +
             "INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` " +
-            "INNER JOIN `playlist_history` ON `playlist_history`.`media_id` = `media`.`id` " +
-            "INNER JOIN `users` ON `users`.`name` = `playlist_history`.`user` " +
-            "GROUP BY `media`.`uid` " + 
+            "GROUP BY `votes`.`media_id` " + 
             "ORDER BY `vote_count` DESC " +
             "LIMIT " + limit,
             [],
