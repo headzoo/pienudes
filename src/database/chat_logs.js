@@ -44,7 +44,7 @@ module.exports = {
         callback = callback || noop;
     
         db.query(
-            "SELECT * FROM `chat_logs` WHERE `channel_id` = ? AND FROM_UNIXTIME(`time` / 1000) > DATE_SUB(NOW(), INTERVAL 24 HOUR) ORDER BY `id` ASC",
+            "SELECT * FROM `chat_logs` WHERE `channel_id` = ? AND FROM_UNIXTIME(`time` / 1000) > DATE_SUB(NOW(), INTERVAL 3 HOUR) ORDER BY `id` ASC",
             [channel_id],
             callback
         );

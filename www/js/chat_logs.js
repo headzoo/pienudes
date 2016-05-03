@@ -60,7 +60,7 @@
                 title.text("Chat Logs - " + channel);
                 input.val("");
             } else {
-                title.text("Chat Logs - " + channel + " - Past 24 Hours");
+                title.text("Chat Logs - " + channel + " - Past 3 Hours");
                 input.val("");
             }
             
