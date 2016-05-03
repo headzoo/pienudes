@@ -52,6 +52,10 @@
             data: {
                 after: after,
                 search: search
+            },
+            beforeSend: function() {
+                box.empty();
+                box.append('<img class="spinner" src="/img/spinner.gif" />');
             }
         }).done(function(res) {
             if (search) {
@@ -63,16 +67,17 @@
                 title.text("Chat Logs - " + channel + " - Past 3 Hours");
                 input.val("");
             }
-            
+    
+            box.empty();
             formatLogs(res);
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }).fail(function() {
+            box.empty();
             alert("There was an error. Please try again in a minute.")
         });
     }
     
     function formatLogs(logs) {
-        box.empty();
         var div;
         
         for(var i = 0; i < logs.length; i++) {
