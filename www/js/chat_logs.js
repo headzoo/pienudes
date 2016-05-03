@@ -67,8 +67,7 @@
                 title.text("Chat Logs - " + channel + " - Past 3 Hours");
                 input.val("");
             }
-    
-            box.empty();
+            
             formatLogs(res);
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }).fail(function() {
@@ -79,6 +78,7 @@
     
     function formatLogs(logs) {
         var div;
+        var new_box = $("<div/>").attr("id", "chat-log-box");
         
         for(var i = 0; i < logs.length; i++) {
             var log = logs[i];
@@ -90,15 +90,17 @@
                     time: log.time
                 };
                 div = formatChatMessage(obj, {name: ""}, "/chat/logs#c=" + channel + "&i=" + log.id);
-                box.append(div);
+                new_box.append(div);
             } else {
                 if (log.meta.id != last_mid) {
                     div = formatMediaCard(log);
-                    box.append(div);
+                    new_box.append(div);
                     last_mid = log.meta.id;
                 }
             }
         }
+        
+        box.html(new_box.html());
     }
     
     function formatMediaCard(log) {
