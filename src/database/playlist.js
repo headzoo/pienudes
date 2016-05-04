@@ -149,7 +149,14 @@ module.exports = {
         callback = callback || noop;
         limit = limit || 1;
         
-        var sql = "SELECT * FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `channel` = ? ORDER BY RAND() LIMIT " + limit;
+        var sql = "SELECT * FROM `playlist_history` " +
+        "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+        "INNER JOIN `votes` ON `votes`.`media_id` = `media`.`id` " +
+        "WHERE `channel` = ? " + 
+        "GROUP BY `media`.`id` " +
+        "HAVING SUM(`votes`.`value`) > 0 " +
+        "ORDER BY RAND() " +
+        "LIMIT " + limit;
         db.query(sql, [channel], function(err, rows) {
             if (err) {
                 return callback(err, null);
