@@ -2,7 +2,7 @@
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
             <a href="/user/{{ loginName }}" id="navbar-avatar-link" data-toggle="dropdown">
-                <img id="navbar-avatar" src="{{ loginAvatar }}" />
+                <span id="navbar-username" class="hidden-xs">{{ loginName }}</span> <img id="navbar-avatar" src="{{ loginAvatar }}" />
             </a>
             <ul class="dropdown-menu pull-right" style="margin-right: 15px;">
                 <li>

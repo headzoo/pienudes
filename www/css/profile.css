@@ -141,6 +141,9 @@
   background-color: #3E444C;
   margin: 6px 15px 3px 0;
 }
+#navbar-username {
+  margin-right: 6px;
+}
 #profile-stats {
   list-style-type: none;
   padding: 0;
