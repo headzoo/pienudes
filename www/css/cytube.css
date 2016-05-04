@@ -39,6 +39,10 @@
   overflow-y: scroll;
   margin-bottom: 0;
 }
+#messagebuffer .embedded-image {
+  max-height: 75px;
+  margin: 2px 0;
+}
 #chatline,
 #guestlogin > input,
 #guestlogin > .input-group-addon {

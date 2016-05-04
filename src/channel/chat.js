@@ -357,7 +357,11 @@ ChatModule.prototype.filterMessage = function (msg) {
         if (filtered !== link) {
             return filtered;
         } else if (convertLinks) {
-            return "<a href=\"" + link + "\" target=\"_blank\">" + link + "</a>";
+            if (link.match(/(https?:\/\/.*\.(?:png|jpe?g|gif))/i)) {
+                return "<a href=\"" + link + "\" target=\"_blank\"><img src=\"" + link + "\" class=\"embedded-image\" /></a>";
+            } else {
+                return "<a href=\"" + link + "\" target=\"_blank\">" + link + "</a>";
+            }
         } else {
             return link;
         }
