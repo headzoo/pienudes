@@ -933,6 +933,12 @@ input:focus {
   line-height: 1.42857143;
   color: #FFF;
 }
+#tracks h1 img {
+  vertical-align: top;
+  height: 14px;
+  width: 14px;
+  margin-top: 1px;
+}
 #playlist-history-search-input {
   float: right;
   width: 135px;
