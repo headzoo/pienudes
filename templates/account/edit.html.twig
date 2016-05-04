@@ -34,7 +34,8 @@
                 <button id="changepassbtn" class="btn btn-danger btn-block" type="submit">Change Password</button>
             </form>
             <hr />
-            
+
+            <h3>Change Email</h3>
             <form method="post" action="/account/edit" onsubmit="return submitEmail()">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                 <input type="hidden" name="action" value="change_email" />
