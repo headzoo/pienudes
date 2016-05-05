@@ -11,6 +11,8 @@ gulp
 
 Updating
 --------
+The `npm install` command is optional. Only needs to be run when new packages are added.
+
 ```
 git pull
 npm install
