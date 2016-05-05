@@ -36,6 +36,16 @@ $(function() {
             CHAT_LINE_COLOR = $(this).val();
             window.localStorage.setItem("chat_line_color", CHAT_LINE_COLOR);
         });
+        
+        $("#channel-buffer-color").spectrum({
+            color: CHAT_LINE_COLOR,
+            preferredFormat: "hex",
+            showInput: true,
+            clickoutFiresChange: true
+        }).on("change", function () {
+            CHAT_LINE_COLOR = $(this).val();
+            window.localStorage.setItem("chat_line_color", CHAT_LINE_COLOR);
+        });
     } else {
         $("#chatcolor").hide();
     }

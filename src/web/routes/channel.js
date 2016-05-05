@@ -18,7 +18,7 @@ export default function initialize(app, ioConfig) {
         }
         const socketBaseURL = endpoints[0].url;
     
-        template.send(res, 'channel/index', {
+        template.send(res, 'channel/index_new', {
             channelName: req.params.channel,
             bytes_per_channel: Config.get("uploads.bytes_per_channel"),
             bytes_per_file: Config.get("uploads.bytes_per_file"),
