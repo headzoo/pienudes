@@ -9,3 +9,10 @@ gulp
 ```
 
 
+Updating
+--------
+```
+git pull
+npm install
+gulp
+```
