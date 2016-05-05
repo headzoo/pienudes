@@ -12,4 +12,5 @@ torlist
 www/cache
 google-drive-subtitles
 lib/
+www/build/
 .idea/
