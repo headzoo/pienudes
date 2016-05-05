@@ -42,6 +42,9 @@
   display: block;
   margin: 0 auto;
 }
+#chat-log-box .embedded-image {
+  max-height: 125px;
+}
 #chat-logs-channels {
   list-style-type: none;
   margin: 0 0 20px 0;
