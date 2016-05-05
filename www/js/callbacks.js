@@ -1198,7 +1198,7 @@ setupCallbacks = function() {
     }
 };
 
-(function () {
+$(function () {
     if (typeof io === "undefined") {
         makeAlert("Uh oh!", "It appears the socket.io connection " +
                             "has failed.  If this error persists, a firewall or " +
@@ -1248,4 +1248,4 @@ setupCallbacks = function() {
                 .appendTo($("#announcements"));
             Callbacks.disconnect();
         });
-})();
+});

@@ -837,8 +837,11 @@ function showPollMenu() {
 }
 
 function scrollChat() {
-    scrollAndIgnoreEvent($("#messagebuffer").prop("scrollHeight"));
-    $("#newmessages-indicator").remove();
+    console.log("here");
+    ELEMENTS.Channel.MessageBuffer
+        .mCustomScrollbar("scrollTo", "bottom");
+    //scrollAndIgnoreEvent($("#messagebuffer").prop("scrollHeight"));
+    //$("#newmessages-indicator").remove();
 }
 
 function scrollAndIgnoreEvent(top) {
@@ -1519,18 +1522,23 @@ function addChatMessage(data) {
     }
     
     var div = formatChatMessage(data, LASTCHAT);
-    var msgBuf = $("#messagebuffer");
+    var msgBuf = ELEMENTS.Channel.MessageBuffer;
+    
     // Incoming: a bunch of crap for the feature where if you hover over
     // a message, it highlights messages from that user
     var safeUsername = data.username.replace(/[^\w-]/g, '\\$');
     div.addClass("chat-msg-" + safeUsername);
-    div.appendTo(msgBuf);
+    ELEMENTS.Channel.CSB.append(div);
+    ELEMENTS.Channel.MessageBuffer
+        .mCustomScrollbar("update");
+    
     div.mouseover(function() {
         $(".chat-msg-" + safeUsername).addClass("nick-hover");
     });
     div.mouseleave(function() {
         $(".nick-hover").removeClass("nick-hover");
     });
+    
     var oldHeight = msgBuf.prop("scrollHeight");
     var numRemoved = trimChatBuffer();
     if (SCROLLCHAT) {
@@ -1576,7 +1584,7 @@ function addChatMessage(data) {
             isHighlight = true;
         }
     }
-
+    
     pingMessage(isHighlight);
     
     if(data.meta.addClass != "server-whisper" && !isHighlight) {

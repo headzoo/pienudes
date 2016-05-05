@@ -13,6 +13,7 @@
         </div>
         <div id="channel-buffer-wrap" class="col-xs-12 col-sm-7 col-md-5">
             <div id="channel-buffer">
+                {#
                 <div><a class="timestamp" href="/chat/logs#c=lobby&amp;i=19717">[20:57:06] </a><span><strong class="username">MajesticPANGOLIN: </strong></span><span style="color: rgb(197, 148, 0);">14 people!</span></div>
                 <div><a class="timestamp" href="/chat/logs#c=lobby&amp;i=19718">[20:57:20] </a><span><strong class="username">Rynorocks: </strong></span><span style="color: rgb(164, 94, 234);">WOW!</span></div>
                 <div><a class="timestamp" href="/chat/logs#c=lobby&amp;i=19720">[20:57:22] </a><span><strong class="username">MajesticPANGOLIN: </strong></span><span style="color: rgb(197, 148, 0);">Who is the anonymous?</span></div>
@@ -109,6 +110,7 @@
                 <div><a class="timestamp" href="/chat/logs#c=lobby&amp;i=19832">[21:08:40] </a><span><strong class="username">boogers-in-your-soup: </strong></span><span style="color: rgb(246, 102, 146);">wait so if i gave birth to a child in like, mexico or where ever, the child would still technically be an american citizen because i am?</span></div>
                 <div><a class="timestamp" href="/chat/logs#c=lobby&amp;i=19833">[21:08:51] </a><span><strong class="username">Rynorocks: </strong></span><span style="color: rgb(164, 94, 234);">I mean, it kind of makes sense, because it would rule out kids born on military bases in other countries</span></div>
                 <div><a class="timestamp" href="/chat/logs#c=lobby&amp;i=19834">[21:08:57] </a><span><strong class="username">Rynorocks: </strong></span><span style="color: rgb(164, 94, 234);">Yep</span></div>
+                #}
             </div>
             <div id="channel-buffer-input-wrap">
                 <input id="channel-buffer-input" type="text" placeholder="Say something..." />
@@ -123,4 +125,5 @@
             </div>
         </div>
     </div>
+    <script src="{{ sioSource }}"></script>
 {% endblock %}

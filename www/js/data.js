@@ -180,6 +180,17 @@ var Rank = {
     Siteadmin: 255
 };
 
+var ELEMENTS = {};
+$(function() {
+    ELEMENTS = {
+        Channel: {
+            MessageBuffer: $("#channel-buffer"),
+            Input: $("#channel-buffer-input")
+        }
+    };
+    ELEMENTS.Channel.CSB = ELEMENTS.Channel.MessageBuffer.find(".mCSB_container:first");
+});
+
 function createCookie(name,value,days) {
     if (days) {
         var date = new Date();

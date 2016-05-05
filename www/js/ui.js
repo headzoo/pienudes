@@ -1,31 +1,31 @@
-/* window focus/blur */
-$(window).focus(function() {
-    FOCUSED = true;
-    clearInterval(TITLE_BLINK);
-    TITLE_BLINK = false;
-    document.title = PAGETITLE;
-    UNREAD_MSG_COUNT = 0;
-}).blur(function() {
-    FOCUSED = false;
-});
-
-$("#togglemotd").click(function () {
-    var hidden = $("#motd").css("display") === "none";
-    $("#motd").toggle();
-    if (hidden) {
-        $("#togglemotd").find(".glyphicon-plus")
-            .removeClass("glyphicon-plus")
-            .addClass("glyphicon-minus");
-    } else {
-        $("#togglemotd").find(".glyphicon-minus")
-            .removeClass("glyphicon-minus")
-            .addClass("glyphicon-plus");
-    }
-});
-
-/* chatbox */
-
 $(function() {
+    /* window focus/blur */
+    $(window).focus(function() {
+        FOCUSED = true;
+        clearInterval(TITLE_BLINK);
+        TITLE_BLINK = false;
+        document.title = PAGETITLE;
+        UNREAD_MSG_COUNT = 0;
+    }).blur(function() {
+        FOCUSED = false;
+    });
+    
+    $("#togglemotd").click(function () {
+        var hidden = $("#motd").css("display") === "none";
+        $("#motd").toggle();
+        if (hidden) {
+            $("#togglemotd").find(".glyphicon-plus")
+                .removeClass("glyphicon-plus")
+                .addClass("glyphicon-minus");
+        } else {
+            $("#togglemotd").find(".glyphicon-minus")
+                .removeClass("glyphicon-minus")
+                .addClass("glyphicon-plus");
+        }
+    });
+    
+    /* chatbox */
+    
     if (USEROPTS.show_colors) {
         $("#chatcolor").spectrum({
             color: CHAT_LINE_COLOR,
@@ -75,253 +75,235 @@ $(function() {
         console.log("cleared");
         $("#messagebuffer").empty();
     });
-});
-
-
-$("#modflair").click(function () {
-    var m = $("#modflair");
-    if (m.hasClass("btn-success")) {
-        USEROPTS.modhat = false;
-        m.removeClass("btn-success");
-        if (SUPERADMIN) {
-            USEROPTS.adminhat = true;
-            m.addClass("btn-danger");
+    
+    
+    $("#modflair").click(function () {
+        var m = $("#modflair");
+        if (m.hasClass("btn-success")) {
+            USEROPTS.modhat = false;
+            m.removeClass("btn-success");
+            if (SUPERADMIN) {
+                USEROPTS.adminhat = true;
+                m.addClass("btn-danger");
+            } else {
+                m.addClass("btn-default");
+            }
+        } else if (m.hasClass("btn-danger")) {
+            USEROPTS.adminhat = false;
+            m.removeClass("btn-danger")
+                .addClass("btn-default");
         } else {
-            m.addClass("btn-default");
+            USEROPTS.modhat = true;
+            m.removeClass("btn-default")
+                .addClass("btn-success");
         }
-    } else if (m.hasClass("btn-danger")) {
-        USEROPTS.adminhat = false;
-        m.removeClass("btn-danger")
-            .addClass("btn-default");
-    } else {
-        USEROPTS.modhat = true;
-        m.removeClass("btn-default")
-            .addClass("btn-success");
-    }
-});
-
-$("#usercount").mouseenter(function (ev) {
-    var breakdown = calcUserBreakdown();
-    // re-using profile-box class for convenience
-    var popup = $("<div/>")
-        .addClass("profile-box")
-        .css("top", (ev.clientY + 5) + "px")
-        .css("left", (ev.clientX) + "px")
-        .appendTo($("#usercount"));
-
-    var contents = "";
-    for(var key in breakdown) {
-        contents += "<strong>" + key + ":&nbsp;</strong>" + breakdown[key];
-        contents += "<br>"
-    }
-
-    popup.html(contents);
-});
-
-$("#usercount").mousemove(function (ev) {
-    var popup = $("#usercount").find(".profile-box");
-    if(popup.length == 0)
-        return;
-
-    popup.css("top", (ev.clientY + 5) + "px");
-    popup.css("left", (ev.clientX) + "px");
-});
-
-$("#usercount").mouseleave(function () {
-    $("#usercount").find(".profile-box").remove();
-});
-
-$("#messagebuffer").scroll(function (ev) {
-    if (IGNORE_SCROLL_EVENT) {
-        // Skip event, this was triggered by scrollChat() and not by a user action.
-        // Reset for next event.
-        IGNORE_SCROLL_EVENT = false;
-        return;
-    }
-
-    var m = $("#messagebuffer");
-    var lastChildHeight = 0;
-    var messages = m.children();
-    if (messages.length > 0) {
-        lastChildHeight = messages[messages.length - 1].clientHeight || 0;
-    }
-
-    var isCaughtUp = m.height() + m.scrollTop() >= m.prop("scrollHeight") - lastChildHeight;
-    if (isCaughtUp) {
-        SCROLLCHAT = true;
-        $("#newmessages-indicator").remove();
-    } else {
-        SCROLLCHAT = false;
-    }
-});
-
-$("#guestname").keydown(function (ev) {
-    if (ev.keyCode === 13) {
-        socket.emit("login", {
-            name: $("#guestname").val()
+    });
+    
+    $("#usercount").mouseenter(function (ev) {
+        var breakdown = calcUserBreakdown();
+        // re-using profile-box class for convenience
+        var popup = $("<div/>")
+            .addClass("profile-box")
+            .css("top", (ev.clientY + 5) + "px")
+            .css("left", (ev.clientX) + "px")
+            .appendTo($("#usercount"));
+    
+        var contents = "";
+        for(var key in breakdown) {
+            contents += "<strong>" + key + ":&nbsp;</strong>" + breakdown[key];
+            contents += "<br>"
+        }
+    
+        popup.html(contents);
+    });
+    
+    $("#usercount").mousemove(function (ev) {
+        var popup = $("#usercount").find(".profile-box");
+        if(popup.length == 0)
+            return;
+    
+        popup.css("top", (ev.clientY + 5) + "px");
+        popup.css("left", (ev.clientX) + "px");
+    });
+    
+    $("#usercount").mouseleave(function () {
+        $("#usercount").find(".profile-box").remove();
+    });
+    
+    $("#messagebuffer").scroll(function (ev) {
+        if (IGNORE_SCROLL_EVENT) {
+            // Skip event, this was triggered by scrollChat() and not by a user action.
+            // Reset for next event.
+            IGNORE_SCROLL_EVENT = false;
+            return;
+        }
+    
+        var m = $("#messagebuffer");
+        var lastChildHeight = 0;
+        var messages = m.children();
+        if (messages.length > 0) {
+            lastChildHeight = messages[messages.length - 1].clientHeight || 0;
+        }
+    
+        var isCaughtUp = m.height() + m.scrollTop() >= m.prop("scrollHeight") - lastChildHeight;
+        if (isCaughtUp) {
+            SCROLLCHAT = true;
+            $("#newmessages-indicator").remove();
+        } else {
+            SCROLLCHAT = false;
+        }
+    });
+    
+    $("#guestname").keydown(function (ev) {
+        if (ev.keyCode === 13) {
+            socket.emit("login", {
+                name: $("#guestname").val()
+            });
+        }
+    });
+    
+    function chatTabComplete() {
+        var words = $("#chatline").val().split(" ");
+        var current = words[words.length - 1].toLowerCase();
+        if (!current.match(/^[\w-]{1,20}$/)) {
+            return;
+        }
+    
+        var __slice = Array.prototype.slice;
+        var usersWithCap = __slice.call($("#userlist").children()).map(function (elem) {
+            return elem.children[1].innerHTML;
         });
-    }
-});
-
-function chatTabComplete() {
-    var words = $("#chatline").val().split(" ");
-    var current = words[words.length - 1].toLowerCase();
-    if (!current.match(/^[\w-]{1,20}$/)) {
-        return;
-    }
-
-    var __slice = Array.prototype.slice;
-    var usersWithCap = __slice.call($("#userlist").children()).map(function (elem) {
-        return elem.children[1].innerHTML;
-    });
-    var users = __slice.call(usersWithCap).map(function (user) {
-        return user.toLowerCase();
-    }).filter(function (name) {
-        return name.indexOf(current) === 0;
-    });
-
-    // users now contains a list of names that start with current word
-
-    if (users.length === 0) {
-        return;
-    }
-
-    // trim possible names to the shortest possible completion
-    var min = Math.min.apply(Math, users.map(function (name) {
-        return name.length;
-    }));
-    users = users.map(function (name) {
-        return name.substring(0, min);
-    });
-
-    // continually trim off letters until all prefixes are the same
-    var changed = true;
-    var iter = 21;
-    while (changed) {
-        changed = false;
-        var first = users[0];
-        for (var i = 1; i < users.length; i++) {
-            if (users[i] !== first) {
-                changed = true;
+        var users = __slice.call(usersWithCap).map(function (user) {
+            return user.toLowerCase();
+        }).filter(function (name) {
+            return name.indexOf(current) === 0;
+        });
+    
+        // users now contains a list of names that start with current word
+    
+        if (users.length === 0) {
+            return;
+        }
+    
+        // trim possible names to the shortest possible completion
+        var min = Math.min.apply(Math, users.map(function (name) {
+            return name.length;
+        }));
+        users = users.map(function (name) {
+            return name.substring(0, min);
+        });
+    
+        // continually trim off letters until all prefixes are the same
+        var changed = true;
+        var iter = 21;
+        while (changed) {
+            changed = false;
+            var first = users[0];
+            for (var i = 1; i < users.length; i++) {
+                if (users[i] !== first) {
+                    changed = true;
+                    break;
+                }
+            }
+    
+            if (changed) {
+                users = users.map(function (name) {
+                    return name.substring(0, name.length - 1);
+                });
+            }
+    
+            // In the event something above doesn't generate a break condition, limit
+            // the maximum number of repetitions
+            if (--iter < 0) {
                 break;
             }
         }
-
-        if (changed) {
-            users = users.map(function (name) {
-                return name.substring(0, name.length - 1);
-            });
+    
+        current = users[0].substring(0, min);
+        for (var i = 0; i < usersWithCap.length; i++) {
+            if (usersWithCap[i].toLowerCase() === current) {
+                current = usersWithCap[i];
+                break;
+            }
         }
-
-        // In the event something above doesn't generate a break condition, limit
-        // the maximum number of repetitions
-        if (--iter < 0) {
-            break;
+    
+        if (users.length === 1) {
+            if (words.length === 1) {
+                current += ":";
+            }
+            current += " ";
         }
+        words[words.length - 1] = current;
+        $("#chatline").val(words.join(" "));
     }
-
-    current = users[0].substring(0, min);
-    for (var i = 0; i < usersWithCap.length; i++) {
-        if (usersWithCap[i].toLowerCase() === current) {
-            current = usersWithCap[i];
-            break;
-        }
-    }
-
-    if (users.length === 1) {
-        if (words.length === 1) {
-            current += ":";
-        }
-        current += " ";
-    }
-    words[words.length - 1] = current;
-    $("#chatline").val(words.join(" "));
-}
-
-$("#chatline").keydown(function(ev) {
-    // Enter/return
-    if(ev.keyCode == 13) {
-        if (CHATTHROTTLE) {
+    
+    ELEMENTS.Channel.Input.keydown(function(ev) {
+        // Enter/return
+        if(ev.keyCode == 13) {
+            if (CHATTHROTTLE) {
+                return;
+            }
+            var msg = ELEMENTS.Channel.Input.val();
+            if(msg.trim()) {
+                var meta = {};
+                if (USEROPTS.adminhat && CLIENT.rank >= 255) {
+                    msg = "/a " + msg;
+                } else if (USEROPTS.modhat && CLIENT.rank >= Rank.Moderator) {
+                    meta.modflair = CLIENT.rank;
+                }
+    
+                // The /m command no longer exists, so emulate it clientside
+                if (CLIENT.rank >= 2 && msg.indexOf("/m ") === 0) {
+                    meta.modflair = CLIENT.rank;
+                    msg = msg.substring(3);
+                }
+                meta.color = CHAT_LINE_COLOR;
+                socket.emit("chatMsg", {
+                    msg: msg,
+                    meta: meta
+                });
+    
+                CHATHIST.push(ELEMENTS.Channel.Input.val());
+                CHATHISTIDX = CHATHIST.length;
+                ELEMENTS.Channel.Input.val("");
+            }
             return;
         }
-        var msg = $("#chatline").val();
-        if(msg.trim()) {
-            var meta = {};
-            if (USEROPTS.adminhat && CLIENT.rank >= 255) {
-                msg = "/a " + msg;
-            } else if (USEROPTS.modhat && CLIENT.rank >= Rank.Moderator) {
-                meta.modflair = CLIENT.rank;
+        else if(ev.keyCode == 9) { // Tab completion
+            chatTabComplete();
+            ev.preventDefault();
+            return false;
+        }
+        else if(ev.keyCode == 38) { // Up arrow (input history)
+            if(CHATHISTIDX == CHATHIST.length) {
+                CHATHIST.push(ELEMENTS.Channel.Input.val());
             }
-
-            // The /m command no longer exists, so emulate it clientside
-            if (CLIENT.rank >= 2 && msg.indexOf("/m ") === 0) {
-                meta.modflair = CLIENT.rank;
-                msg = msg.substring(3);
+            if(CHATHISTIDX > 0) {
+                CHATHISTIDX--;
+                ELEMENTS.Channel.Input.val(CHATHIST[CHATHISTIDX]);
             }
-            meta.color = CHAT_LINE_COLOR;
-            socket.emit("chatMsg", {
-                msg: msg,
-                meta: meta
-            });
-
-            CHATHIST.push($("#chatline").val());
-            CHATHISTIDX = CHATHIST.length;
-            $("#chatline").val("");
+    
+            ev.preventDefault();
+            return false;
         }
-        return;
-    }
-    else if(ev.keyCode == 9) { // Tab completion
-        chatTabComplete();
-        ev.preventDefault();
-        return false;
-    }
-    else if(ev.keyCode == 38) { // Up arrow (input history)
-        if(CHATHISTIDX == CHATHIST.length) {
-            CHATHIST.push($("#chatline").val());
+        else if(ev.keyCode == 40) { // Down arrow (input history)
+            if(CHATHISTIDX < CHATHIST.length - 1) {
+                CHATHISTIDX++;
+                ELEMENTS.Channel.Input.val(CHATHIST[CHATHISTIDX]);
+            }
+    
+            ev.preventDefault();
+            return false;
         }
-        if(CHATHISTIDX > 0) {
-            CHATHISTIDX--;
-            $("#chatline").val(CHATHIST[CHATHISTIDX]);
-        }
-
-        ev.preventDefault();
-        return false;
-    }
-    else if(ev.keyCode == 40) { // Down arrow (input history)
-        if(CHATHISTIDX < CHATHIST.length - 1) {
-            CHATHISTIDX++;
-            $("#chatline").val(CHATHIST[CHATHISTIDX]);
-        }
-
-        ev.preventDefault();
-        return false;
-    }
-});
-
-/* poll controls */
-$("#newpollbtn").click(showPollMenu);
-
-$("#biobtn").click(showBio);
-
-/* search controls */
-$("#library_search").click(function() {
-    if (!hasPermission("seeplaylist")) {
-        $("#searchcontrol .alert").remove();
-        var al = makeAlert("Permission Denied",
-            "This channel does not allow you to search its library",
-            "alert-danger");
-        al.find(".alert").insertAfter($("#library_query").parent());
-        return;
-    }
-
-    socket.emit("searchMedia", {
-        source: "library",
-        query: $("#library_query").val().toLowerCase()
     });
-});
-
-$("#library_query").keydown(function(ev) {
-    if(ev.keyCode == 13) {
+    
+    /* poll controls */
+    $("#newpollbtn").click(showPollMenu);
+    
+    $("#biobtn").click(showBio);
+    
+    /* search controls */
+    $("#library_search").click(function() {
         if (!hasPermission("seeplaylist")) {
             $("#searchcontrol .alert").remove();
             var al = makeAlert("Permission Denied",
@@ -330,651 +312,669 @@ $("#library_query").keydown(function(ev) {
             al.find(".alert").insertAfter($("#library_query").parent());
             return;
         }
-
+    
         socket.emit("searchMedia", {
             source: "library",
             query: $("#library_query").val().toLowerCase()
         });
-    }
-});
-
-$("#youtube_search").click(function () {
-    var query = $("#library_query").val().toLowerCase();
-    if(parseMediaLink(query).type !== null) {
-        makeAlert("Media Link", "If you already have the link, paste it " +
-                  "in the 'Media URL' box under Playlist Controls.  This "+
-                  "searchbar works like YouTube's search function.",
-                  "alert-danger")
-            .insertBefore($("#library"));
-    }
-
-    socket.emit("searchMedia", {
-        source: "yt",
-        query: query
     });
-});
-
-/* user playlists */
-
-$("#userpl_save").click(function() {
-    if($("#userpl_name").val().trim() == "") {
-        makeAlert("Invalid Name", "Playlist name cannot be empty", "alert-danger")
-            .insertAfter($("#userpl_save").parent());
-        return;
-    }
-    socket.emit("clonePlaylist", {
-        name: $("#userpl_name").val()
-    });
-});
-
-$("#showuservotes").click(function() {
-    var showing = !$("#uservotes").is(":visible");
-    if (showing) {
-        $("#uservotesloading").show();
-        $("#uservoteslist").hide();
-        socket.emit("userVideoVotes");
-    }
-});
-
-/* video controls */
-
-$("#mediarefresh").click(function() {
-    PLAYER.mediaType = "";
-    PLAYER.mediaId = "";
-    // playerReady triggers the server to send a changeMedia.
-    // the changeMedia handler then reloads the player
-    socket.emit("playerReady");
-});
-
-/* playlist controls */
-
-$("#queue").sortable({
-    start: function(ev, ui) {
-        PL_FROM = ui.item.data("uid");
-    },
-    update: function(ev, ui) {
-        var prev = ui.item.prevAll();
-        if(prev.length == 0)
-            PL_AFTER = "prepend";
-        else
-            PL_AFTER = $(prev[0]).data("uid");
-        socket.emit("moveMedia", {
-            from: PL_FROM,
-            after: PL_AFTER
-        });
-        $("#queue").sortable("cancel");
-    }
-});
-$("#queue").disableSelection();
-
-function queue(pos, src) {
-    if (!src) {
-        src = "url";
-    }
-
-    if (src === "customembed") {
-        var title = $("#customembed-title").val();
-        if (!title) {
-            title = false;
-        }
-        var content = $("#customembed-content").val();
-
-        socket.emit("queue", {
-            id: content,
-            title: title,
-            pos: pos,
-            type: "cu",
-            temp: $(".add-temp").prop("checked")
-        });
-    } else {
-        var linkList = $("#mediaurl").val();
-        var links = linkList.split(",http").map(function (link, i) {
-            if (i > 0) {
-                return "http" + link;
-            } else {
-                return link;
-            }
-        });
-
-        if (pos === "next") links = links.reverse();
-        if (pos === "next" && $("#queue li").length === 0) links.unshift(links.pop());
-        var emitQueue = [];
-        var addTemp = $(".add-temp").prop("checked");
-        var notification = document.getElementById("addfromurl-queue");
-        if (!notification) {
-            notification = document.createElement("div");
-            notification.id = "addfromurl-queue";
-            document.getElementById("addfromurl").appendChild(notification);
-        }
-
-        links.forEach(function (link) {
-            var data = parseMediaLink(link);
-            var duration = undefined;
-            var title = undefined;
-            if (data.type === "fi") {
-                title = $("#addfromurl-title-val").val();
-            }
-
-            if (data.id == null || data.type == null) {
-                makeAlert("Error", "Failed to parse link " + link +
-                          ".  Please check that it is correct",
-                          "alert-danger")
-                    .insertAfter($("#addfromurl"));
-            } else {
-                emitQueue.push({
-                    id: data.id,
-                    type: data.type,
-                    pos: pos,
-                    duration: duration,
-                    title: title,
-                    temp: addTemp,
-                    link: link
-                });
-            }
-        });
-
-        var nextQueueDelay = 1020;
-        function next() {
-            var data = emitQueue.shift();
-            if (!data) {
-                $("#mediaurl").val("");
-                $("#addfromurl-title").remove();
+    
+    $("#library_query").keydown(function(ev) {
+        if(ev.keyCode == 13) {
+            if (!hasPermission("seeplaylist")) {
+                $("#searchcontrol .alert").remove();
+                var al = makeAlert("Permission Denied",
+                    "This channel does not allow you to search its library",
+                    "alert-danger");
+                al.find(".alert").insertAfter($("#library_query").parent());
                 return;
             }
-
-            var link = data.link;
-            delete data.link;
-
-            socket.emit("queue", data);
-            if (emitQueue.length > 0) {
-                notification.textContent = "Waiting to queue " + emitQueue[0].link;
-            } else {
-                notification.textContent = "";
-            }
-
-            setTimeout(next, nextQueueDelay);
+    
+            socket.emit("searchMedia", {
+                source: "library",
+                query: $("#library_query").val().toLowerCase()
+            });
         }
-
-        next();
-    }
-}
-
-$("#queue_next").click(queue.bind(this, "next", "url"));
-$("#queue_end").click(queue.bind(this, "end", "url"));
-$("#ce_queue_next").click(queue.bind(this, "next", "customembed"));
-$("#ce_queue_end").click(queue.bind(this, "end", "customembed"));
-
-$("#mediaurl").keyup(function(ev) {
-    if (ev.keyCode === 13) {
-        queue("end", "url");
-    } else {
-        var url = $("#mediaurl").val().split("?")[0];
-        if (url.match(/^https?:\/\/(.*)?\.(flv|mp4|og[gv]|webm|mp3|mov)$/) ||
-                url.match(/^fi:/)) {
-            var title = $("#addfromurl-title");
-            if (title.length === 0) {
-                title = $("<div/>")
-                    .attr("id", "addfromurl-title")
-                    .appendTo($("#addfromurl"));
-                $("<span/>").text("Title (optional)")
-                    .appendTo(title);
-                $("<input/>").addClass("form-control")
-                    .attr("type", "text")
-                    .attr("id", "addfromurl-title-val")
-                    .keydown(function (ev) {
-                        if (ev.keyCode === 13) {
-                            queue("end", "url");
-                        }
-                    })
-                    .appendTo($("#addfromurl-title"));
-            }
-        } else {
-            $("#addfromurl-title").remove();
+    });
+    
+    $("#youtube_search").click(function () {
+        var query = $("#library_query").val().toLowerCase();
+        if(parseMediaLink(query).type !== null) {
+            makeAlert("Media Link", "If you already have the link, paste it " +
+                      "in the 'Media URL' box under Playlist Controls.  This "+
+                      "searchbar works like YouTube's search function.",
+                      "alert-danger")
+                .insertBefore($("#library"));
         }
-    }
-});
-
-$("#customembed-content").keydown(function(ev) {
-    if (ev.keyCode === 13) {
-        queue("end", "customembed");
-    }
-});
-
-$("#qlockbtn").click(function() {
-    socket.emit("togglePlaylistLock");
-});
-
-$("#voteskip").click(function() {
-    socket.emit("voteskip");
-    $("#voteskip").attr("disabled", true);
-});
-
-$("#getplaylist").click(function() {
-    var callback = function(data) {
-        hidePlayer();
-        var idx = socket.listeners("errorMsg").indexOf(errCallback);
-        if (idx >= 0) {
-            socket.listeners("errorMsg").splice(idx);
-        }
-        idx = socket.listeners("playlist").indexOf(callback);
-        if (idx >= 0) {
-            socket.listeners("playlist").splice(idx);
-        }
-        var list = [];
-        for(var i = 0; i < data.length; i++) {
-            var entry = formatURL(data[i].media);
-            list.push(entry);
-        }
-        var urls = list.join(",");
-
-        var outer = $("<div/>").addClass("modal fade")
-            .appendTo($("body"));
-        modal = $("<div/>").addClass("modal-dialog").appendTo(outer);
-        modal = $("<div/>").addClass("modal-content").appendTo(modal);
-        var head = $("<div/>").addClass("modal-header")
-            .appendTo(modal);
-        $("<button/>").addClass("close")
-            .attr("data-dismiss", "modal")
-            .attr("aria-hidden", "true")
-            .html("&times;")
-            .appendTo(head);
-        $("<h3/>").text("Playlist URLs").appendTo(head);
-        var body = $("<div/>").addClass("modal-body").appendTo(modal);
-        $("<input/>").addClass("form-control").attr("type", "text")
-            .val(urls)
-            .appendTo(body);
-        $("<div/>").addClass("modal-footer").appendTo(modal);
-        outer.on("hidden.bs.modal", function() {
-            outer.remove();
-            unhidePlayer();
+    
+        socket.emit("searchMedia", {
+            source: "yt",
+            query: query
         });
-        outer.modal();
-    };
-    socket.on("playlist", callback);
-    var errCallback = function(data) {
-        if (data.code !== "REQ_PLAYLIST_LIMIT_REACHED") {
+    });
+    
+    /* user playlists */
+    
+    $("#userpl_save").click(function() {
+        if($("#userpl_name").val().trim() == "") {
+            makeAlert("Invalid Name", "Playlist name cannot be empty", "alert-danger")
+                .insertAfter($("#userpl_save").parent());
             return;
         }
-
-        var idx = socket.listeners("errorMsg").indexOf(errCallback);
-        if (idx >= 0) {
-            socket.listeners("errorMsg").splice(idx);
-        }
-
-        idx = socket.listeners("playlist").indexOf(callback);
-        if (idx >= 0) {
-            socket.listeners("playlist").splice(idx);
-        }
-    };
-    socket.on("errorMsg", errCallback);
-    socket.emit("requestPlaylist");
-});
-
-$("#clearplaylist").click(function() {
-    var clear = confirm("Are you sure you want to clear the playlist?");
-    if(clear) {
-        socket.emit("clearPlaylist");
-    }
-});
-
-$("#shuffleplaylist").click(function() {
-    var shuffle = confirm("Are you sure you want to shuffle the playlist?");
-    if(shuffle) {
-        socket.emit("shufflePlaylist");
-    }
-});
-
-/* load channel */
-
-var loc = document.location+"";
-var m = loc.match(/\/r\/([a-zA-Z0-9-_]+)/);
-if(m) {
-    CHANNEL.name = m[1];
-    if (CHANNEL.name.indexOf("#") !== -1) {
-        CHANNEL.name = CHANNEL.name.substring(0, CHANNEL.name.indexOf("#"));
-    }
-}
-
-/* channel ranks stuff */
-function chanrankSubmit(rank) {
-    var name = $("#cs-chanranks-name").val();
-    socket.emit("setChannelRank", {
-        name: name,
-        rank: rank
+        socket.emit("clonePlaylist", {
+            name: $("#userpl_name").val()
+        });
     });
-}
-$("#cs-chanranks-mod").click(chanrankSubmit.bind(this, 2));
-$("#cs-chanranks-adm").click(chanrankSubmit.bind(this, 3));
-$("#cs-chanranks-owner").click(chanrankSubmit.bind(this, 4));
-
-["#showmediaurl", "#showsearch", "#showcustomembed", "#showplaylistmanager"]
-    .forEach(function (id) {
-    $(id).click(function () {
-        var wasActive = $(id).hasClass("active");
-        $(".plcontrol-collapse").collapse("hide");
-        $("#plcontrol button.active").button("toggle");
-        if (!wasActive) {
-            $(id).button("toggle");
+    
+    $("#showuservotes").click(function() {
+        var showing = !$("#uservotes").is(":visible");
+        if (showing) {
+            $("#uservotesloading").show();
+            $("#uservoteslist").hide();
+            socket.emit("userVideoVotes");
         }
     });
-});
-$("#plcontrol button").button();
-$("#plcontrol button").button("hide");
-$(".plcontrol-collapse").collapse();
-$(".plcontrol-collapse").collapse("hide");
-
-$(".cs-checkbox").change(function () {
-    var box = $(this);
-    var key = box.attr("id").replace("cs-", "");
-    var value = box.prop("checked");
-    var data = {};
-    data[key] = value;
-    socket.emit("setOptions", data);
-});
-
-$(".cs-textbox").keyup(function () {
-    var box = $(this);
-    var key = box.attr("id").replace("cs-", "");
-    var value = box.val();
-    var lastkey = Date.now();
-    box.data("lastkey", lastkey);
-
-    setTimeout(function () {
-        if (box.data("lastkey") !== lastkey || box.val() !== value) {
-            return;
+    
+    /* video controls */
+    
+    $("#mediarefresh").click(function() {
+        PLAYER.mediaType = "";
+        PLAYER.mediaId = "";
+        // playerReady triggers the server to send a changeMedia.
+        // the changeMedia handler then reloads the player
+        socket.emit("playerReady");
+    });
+    
+    /* playlist controls */
+    
+    $("#queue").sortable({
+        start: function(ev, ui) {
+            PL_FROM = ui.item.data("uid");
+        },
+        update: function(ev, ui) {
+            var prev = ui.item.prevAll();
+            if(prev.length == 0)
+                PL_AFTER = "prepend";
+            else
+                PL_AFTER = $(prev[0]).data("uid");
+            socket.emit("moveMedia", {
+                from: PL_FROM,
+                after: PL_AFTER
+            });
+            $("#queue").sortable("cancel");
         }
-
-        var data = {};
-        if (key.match(/chat_antiflood_(burst|sustained)/)) {
-            data = {
-                chat_antiflood_params: {
-                    burst: $("#cs-chat_antiflood_burst").val(),
-                    sustained: $("#cs-chat_antiflood_sustained").val()
-                }
-            };
+    });
+    $("#queue").disableSelection();
+    
+    function queue(pos, src) {
+        if (!src) {
+            src = "url";
+        }
+    
+        if (src === "customembed") {
+            var title = $("#customembed-title").val();
+            if (!title) {
+                title = false;
+            }
+            var content = $("#customembed-content").val();
+    
+            socket.emit("queue", {
+                id: content,
+                title: title,
+                pos: pos,
+                type: "cu",
+                temp: $(".add-temp").prop("checked")
+            });
         } else {
-            data[key] = value;
+            var linkList = $("#mediaurl").val();
+            var links = linkList.split(",http").map(function (link, i) {
+                if (i > 0) {
+                    return "http" + link;
+                } else {
+                    return link;
+                }
+            });
+    
+            if (pos === "next") links = links.reverse();
+            if (pos === "next" && $("#queue li").length === 0) links.unshift(links.pop());
+            var emitQueue = [];
+            var addTemp = $(".add-temp").prop("checked");
+            var notification = document.getElementById("addfromurl-queue");
+            if (!notification) {
+                notification = document.createElement("div");
+                notification.id = "addfromurl-queue";
+                document.getElementById("addfromurl").appendChild(notification);
+            }
+    
+            links.forEach(function (link) {
+                var data = parseMediaLink(link);
+                var duration = undefined;
+                var title = undefined;
+                if (data.type === "fi") {
+                    title = $("#addfromurl-title-val").val();
+                }
+    
+                if (data.id == null || data.type == null) {
+                    makeAlert("Error", "Failed to parse link " + link +
+                              ".  Please check that it is correct",
+                              "alert-danger")
+                        .insertAfter($("#addfromurl"));
+                } else {
+                    emitQueue.push({
+                        id: data.id,
+                        type: data.type,
+                        pos: pos,
+                        duration: duration,
+                        title: title,
+                        temp: addTemp,
+                        link: link
+                    });
+                }
+            });
+    
+            var nextQueueDelay = 1020;
+            function next() {
+                var data = emitQueue.shift();
+                if (!data) {
+                    $("#mediaurl").val("");
+                    $("#addfromurl-title").remove();
+                    return;
+                }
+    
+                var link = data.link;
+                delete data.link;
+    
+                socket.emit("queue", data);
+                if (emitQueue.length > 0) {
+                    notification.textContent = "Waiting to queue " + emitQueue[0].link;
+                } else {
+                    notification.textContent = "";
+                }
+    
+                setTimeout(next, nextQueueDelay);
+            }
+    
+            next();
         }
-        socket.emit("setOptions", data);
-    }, 1000);
-});
-
-$(".cs-select").change(function() {
-    var box = $(this);
-    var key = box.attr("id").replace("cs-", "");
-    var data = {};
-    data[key] = box.val();
-    socket.emit("setOptions", data);
-});
-
-$("#cs-chanlog-refresh").click(function () {
-    socket.emit("readChanLog");
-});
-
-$("#cs-chanlog-filter").change(filterChannelLog);
-
-$("#cs-motdsubmit").click(function () {
-    socket.emit("setMotd", {
-        motd: $("#cs-motdtext").val()
-    });
-});
-
-$("#cs-biosubmit").click(function () {
-    socket.emit("setBio", {
-        bio: $("#cs-biotext").val()
-    });
-});
-
-$("#cs-csssubmit").click(function () {
-    socket.emit("setChannelCSS", {
-        css: $("#cs-csstext").val()
-    });
-});
-
-$("#cs-jssubmit").click(function () {
-    socket.emit("setChannelJS", {
-        js: $("#cs-jstext").val()
-    });
-});
-
-$("#cs-chatfilters-newsubmit").click(function () {
-    var name = $("#cs-chatfilters-newname").val();
-    var regex = $("#cs-chatfilters-newregex").val();
-    var flags = $("#cs-chatfilters-newflags").val();
-    var replace = $("#cs-chatfilters-newreplace").val();
-    var entcheck = checkEntitiesInStr(regex);
-    if (entcheck) {
-        alert("Warning: " + entcheck.src + " will be replaced by " +
-              entcheck.replace + " in the message preprocessor.  This " +
-              "regular expression may not match what you intended it to " +
-              "match.");
-    }
-
-    socket.emit("addFilter", {
-        name: name,
-        source: regex,
-        flags: flags,
-        replace: replace,
-        active: true
-    });
-
-    socket.once("addFilterSuccess", function () {
-        $("#cs-chatfilters-newname").val("");
-        $("#cs-chatfilters-newregex").val("");
-        $("#cs-chatfilters-newflags").val("");
-        $("#cs-chatfilters-newreplace").val("");
-    });
-});
-
-$("#cs-emotes-newsubmit").click(function () {
-    var name = $("#cs-emotes-newname").val();
-    var image = $("#cs-emotes-newimage").val();
-
-    socket.emit("updateEmote", {
-        name: name,
-        image: image,
-    });
-
-    $("#cs-emotes-newname").val("");
-    $("#cs-emotes-newimage").val("");
-});
-
-$("#cs-chatfilters-export").click(function () {
-    var callback = function (data) {
-        socket.listeners("chatFilters").splice(
-            socket.listeners("chatFilters").indexOf(callback)
-        );
-
-        $("#cs-chatfilters-exporttext").val(JSON.stringify(data, null, '\t'));
-    };
-
-    socket.on("chatFilters", callback);
-    socket.emit("requestChatFilters");
-});
-
-$("#cs-chatfilters-import").click(function () {
-    var text = $("#cs-chatfilters-exporttext").val();
-    var choose = confirm("You are about to import filters from the contents of the textbox below the import button.  If this is empty, it will clear all of your filters.  Are you sure you want to continue?");
-    if (!choose) {
-        return;
-    }
-
-    if (text.trim() === "") {
-        text = "[]";
-    }
-
-    var data;
-    try {
-        data = JSON.parse(text);
-    } catch (e) {
-        alert("Invalid import data: " + e);
-        return;
-    }
-
-    socket.emit("importFilters", data);
-});
-
-$("#cs-emotes-export").click(function () {
-    var em = CHANNEL.emotes.map(function (f) {
-        return {
-            name: f.name,
-            image: f.image
-        };
-    });
-    $("#cs-emotes-exporttext").val(JSON.stringify(em, null, '\t'));
-});
-
-$("#cs-emotes-import").click(function () {
-    var text = $("#cs-emotes-exporttext").val();
-    var choose = confirm("You are about to import emotes from the contents of the textbox below the import button.  If this is empty, it will clear all of your emotes.  Are you sure you want to continue?");
-    if (!choose) {
-        return;
-    }
-
-    if (text.trim() === "") {
-        text = "[]";
-    }
-
-    var data;
-    try {
-        data = JSON.parse(text);
-    } catch (e) {
-        alert("Invalid import data: " + e);
-        return;
-    }
-
-    socket.emit("importEmotes", data);
-});
-
-var upload_file = $("#cs-uploadoptions input[type=file]");
-upload_file.on("change", function(e) {
-    if (this.files.length == 0) {
-        alert("No file selected.");
-        return;
     }
     
-    $("#cs-uploadoptions label:first").text("Uploading...");
-    var file = this.files[0];
-    var fr   = new FileReader();
-    fr.addEventListener("loadend", function() {
-        socket.emit("uploadFile", {
-            name: file.name,
-            type: file.type,
-            data: fr.result
+    $("#queue_next").click(queue.bind(this, "next", "url"));
+    $("#queue_end").click(queue.bind(this, "end", "url"));
+    $("#ce_queue_next").click(queue.bind(this, "next", "customembed"));
+    $("#ce_queue_end").click(queue.bind(this, "end", "customembed"));
+    
+    $("#mediaurl").keyup(function(ev) {
+        if (ev.keyCode === 13) {
+            queue("end", "url");
+        } else {
+            var url = $("#mediaurl").val().split("?")[0];
+            if (url.match(/^https?:\/\/(.*)?\.(flv|mp4|og[gv]|webm|mp3|mov)$/) ||
+                    url.match(/^fi:/)) {
+                var title = $("#addfromurl-title");
+                if (title.length === 0) {
+                    title = $("<div/>")
+                        .attr("id", "addfromurl-title")
+                        .appendTo($("#addfromurl"));
+                    $("<span/>").text("Title (optional)")
+                        .appendTo(title);
+                    $("<input/>").addClass("form-control")
+                        .attr("type", "text")
+                        .attr("id", "addfromurl-title-val")
+                        .keydown(function (ev) {
+                            if (ev.keyCode === 13) {
+                                queue("end", "url");
+                            }
+                        })
+                        .appendTo($("#addfromurl-title"));
+                }
+            } else {
+                $("#addfromurl-title").remove();
+            }
+        }
+    });
+    
+    $("#customembed-content").keydown(function(ev) {
+        if (ev.keyCode === 13) {
+            queue("end", "customembed");
+        }
+    });
+    
+    $("#qlockbtn").click(function() {
+        socket.emit("togglePlaylistLock");
+    });
+    
+    $("#voteskip").click(function() {
+        socket.emit("voteskip");
+        $("#voteskip").attr("disabled", true);
+    });
+    
+    $("#getplaylist").click(function() {
+        var callback = function(data) {
+            hidePlayer();
+            var idx = socket.listeners("errorMsg").indexOf(errCallback);
+            if (idx >= 0) {
+                socket.listeners("errorMsg").splice(idx);
+            }
+            idx = socket.listeners("playlist").indexOf(callback);
+            if (idx >= 0) {
+                socket.listeners("playlist").splice(idx);
+            }
+            var list = [];
+            for(var i = 0; i < data.length; i++) {
+                var entry = formatURL(data[i].media);
+                list.push(entry);
+            }
+            var urls = list.join(",");
+    
+            var outer = $("<div/>").addClass("modal fade")
+                .appendTo($("body"));
+            modal = $("<div/>").addClass("modal-dialog").appendTo(outer);
+            modal = $("<div/>").addClass("modal-content").appendTo(modal);
+            var head = $("<div/>").addClass("modal-header")
+                .appendTo(modal);
+            $("<button/>").addClass("close")
+                .attr("data-dismiss", "modal")
+                .attr("aria-hidden", "true")
+                .html("&times;")
+                .appendTo(head);
+            $("<h3/>").text("Playlist URLs").appendTo(head);
+            var body = $("<div/>").addClass("modal-body").appendTo(modal);
+            $("<input/>").addClass("form-control").attr("type", "text")
+                .val(urls)
+                .appendTo(body);
+            $("<div/>").addClass("modal-footer").appendTo(modal);
+            outer.on("hidden.bs.modal", function() {
+                outer.remove();
+                unhidePlayer();
+            });
+            outer.modal();
+        };
+        socket.on("playlist", callback);
+        var errCallback = function(data) {
+            if (data.code !== "REQ_PLAYLIST_LIMIT_REACHED") {
+                return;
+            }
+    
+            var idx = socket.listeners("errorMsg").indexOf(errCallback);
+            if (idx >= 0) {
+                socket.listeners("errorMsg").splice(idx);
+            }
+    
+            idx = socket.listeners("playlist").indexOf(callback);
+            if (idx >= 0) {
+                socket.listeners("playlist").splice(idx);
+            }
+        };
+        socket.on("errorMsg", errCallback);
+        socket.emit("requestPlaylist");
+    });
+    
+    $("#clearplaylist").click(function() {
+        var clear = confirm("Are you sure you want to clear the playlist?");
+        if(clear) {
+            socket.emit("clearPlaylist");
+        }
+    });
+    
+    $("#shuffleplaylist").click(function() {
+        var shuffle = confirm("Are you sure you want to shuffle the playlist?");
+        if(shuffle) {
+            socket.emit("shufflePlaylist");
+        }
+    });
+    
+    /* load channel */
+    
+    var loc = document.location+"";
+    var m = loc.match(/\/r\/([a-zA-Z0-9-_]+)/);
+    if(m) {
+        CHANNEL.name = m[1];
+        if (CHANNEL.name.indexOf("#") !== -1) {
+            CHANNEL.name = CHANNEL.name.substring(0, CHANNEL.name.indexOf("#"));
+        }
+    }
+    
+    /* channel ranks stuff */
+    function chanrankSubmit(rank) {
+        var name = $("#cs-chanranks-name").val();
+        socket.emit("setChannelRank", {
+            name: name,
+            rank: rank
+        });
+    }
+    $("#cs-chanranks-mod").click(chanrankSubmit.bind(this, 2));
+    $("#cs-chanranks-adm").click(chanrankSubmit.bind(this, 3));
+    $("#cs-chanranks-owner").click(chanrankSubmit.bind(this, 4));
+    
+    ["#showmediaurl", "#showsearch", "#showcustomembed", "#showplaylistmanager"]
+        .forEach(function (id) {
+        $(id).click(function () {
+            var wasActive = $(id).hasClass("active");
+            $(".plcontrol-collapse").collapse("hide");
+            $("#plcontrol button.active").button("toggle");
+            if (!wasActive) {
+                $(id).button("toggle");
+            }
         });
     });
-    fr.readAsArrayBuffer(file);
-});
-
-var toggleUserlist = function () {
-    var direction = !USEROPTS.layout.match(/synchtube/) ? "glyphicon-chevron-right" : "glyphicon-chevron-left"
-    if ($("#userlist").css("display") === "none") {
-        $("#userlist").show();
-        $("#userlisttoggle").removeClass(direction).addClass("glyphicon-chevron-down");
-    } else {
-        $("#userlist").hide();
-        $("#userlisttoggle").removeClass("glyphicon-chevron-down").addClass(direction);
-    }
-    scrollChat();
-};
-
-$("#usercount").click(toggleUserlist);
-$("#userlisttoggle").click(toggleUserlist);
-
-$(".add-temp").change(function () {
-    $(".add-temp").prop("checked", $(this).prop("checked"));
-});
-
-if ($(window).width() < 700) {
-    toggleUserlist();
-}
-
-/*
- * Fixes #417 which is caused by changes in Bootstrap 3.3.0
- * (see twbs/bootstrap#15136)
- *
- * Whenever the active tab in channel options is changed,
- * the modal must be updated so that the backdrop is resized
- * appropriately.
- */
-$("#channeloptions li > a[data-toggle='tab']").on("shown.bs.tab", function () {
-    $("#channeloptions").data("bs.modal").handleUpdate();
-});
-
-applyOpts();
-
-(function () {
-    var embed = document.querySelector("#videowrap .embed-responsive");
-    if (!embed) {
-        return;
-    }
-
-    if (typeof window.MutationObserver === "function") {
-        var mr = new MutationObserver(function (records) {
-            records.forEach(function (record) {
-                if (record.type !== "childList") return;
-                if (!record.addedNodes || record.addedNodes.length === 0) return;
-
-                var elem = record.addedNodes[0];
-                if (elem.id === "ytapiplayer") handleVideoResize();
-            });
+    $("#plcontrol button").button();
+    $("#plcontrol button").button("hide");
+    $(".plcontrol-collapse").collapse();
+    $(".plcontrol-collapse").collapse("hide");
+    
+    $(".cs-checkbox").change(function () {
+        var box = $(this);
+        var key = box.attr("id").replace("cs-", "");
+        var value = box.prop("checked");
+        var data = {};
+        data[key] = value;
+        socket.emit("setOptions", data);
+    });
+    
+    $(".cs-textbox").keyup(function () {
+        var box = $(this);
+        var key = box.attr("id").replace("cs-", "");
+        var value = box.val();
+        var lastkey = Date.now();
+        box.data("lastkey", lastkey);
+    
+        setTimeout(function () {
+            if (box.data("lastkey") !== lastkey || box.val() !== value) {
+                return;
+            }
+    
+            var data = {};
+            if (key.match(/chat_antiflood_(burst|sustained)/)) {
+                data = {
+                    chat_antiflood_params: {
+                        burst: $("#cs-chat_antiflood_burst").val(),
+                        sustained: $("#cs-chat_antiflood_sustained").val()
+                    }
+                };
+            } else {
+                data[key] = value;
+            }
+            socket.emit("setOptions", data);
+        }, 1000);
+    });
+    
+    $(".cs-select").change(function() {
+        var box = $(this);
+        var key = box.attr("id").replace("cs-", "");
+        var data = {};
+        data[key] = box.val();
+        socket.emit("setOptions", data);
+    });
+    
+    $("#cs-chanlog-refresh").click(function () {
+        socket.emit("readChanLog");
+    });
+    
+    $("#cs-chanlog-filter").change(filterChannelLog);
+    
+    $("#cs-motdsubmit").click(function () {
+        socket.emit("setMotd", {
+            motd: $("#cs-motdtext").val()
         });
-
-        mr.observe(embed, { childList: true });
-    } else {
-        /*
-         * DOMNodeInserted is deprecated.  This code is here only as a fallback
-         * for browsers that do not support MutationObserver
-         */
-        embed.addEventListener("DOMNodeInserted", function (ev) {
-            if (ev.target.id === "ytapiplayer") handleVideoResize();
+    });
+    
+    $("#cs-biosubmit").click(function () {
+        socket.emit("setBio", {
+            bio: $("#cs-biotext").val()
         });
-    }
-})();
-
-var EMOTELISTMODAL = $("#emotelist");
-EMOTELISTMODAL.on("hidden.bs.modal", unhidePlayer);
-$("#emotelistbtn").click(function () {
-    EMOTELISTMODAL.modal();
-});
-
-EMOTELISTMODAL.find(".emotelist-alphabetical").change(function () {
-    USEROPTS.emotelist_sort = this.checked;
-    setOpt("emotelist_sort", USEROPTS.emotelist_sort);
-});
-EMOTELISTMODAL.find(".emotelist-alphabetical").prop("checked", USEROPTS.emotelist_sort);
-
-$("#fullscreenbtn").click(function () {
-    var elem = document.querySelector("#videowrap .embed-responsive");
-    // this shit is why frontend web development sucks
-    var fn = elem.requestFullscreen ||
-        elem.mozRequestFullScreen || // Mozilla has to be different and use a capital 'S'
-        elem.webkitRequestFullscreen ||
-        elem.msRequestFullscreen;
-
-    if (fn) {
-        fn.call(elem);
-    }
-});
-
-function handleCSSJSTooLarge(selector) {
-    if (this.value.length > 20000) {
-        var warning = $(selector);
-        if (warning.length > 0) {
+    });
+    
+    $("#cs-csssubmit").click(function () {
+        socket.emit("setChannelCSS", {
+            css: $("#cs-csstext").val()
+        });
+    });
+    
+    $("#cs-jssubmit").click(function () {
+        socket.emit("setChannelJS", {
+            js: $("#cs-jstext").val()
+        });
+    });
+    
+    $("#cs-chatfilters-newsubmit").click(function () {
+        var name = $("#cs-chatfilters-newname").val();
+        var regex = $("#cs-chatfilters-newregex").val();
+        var flags = $("#cs-chatfilters-newflags").val();
+        var replace = $("#cs-chatfilters-newreplace").val();
+        var entcheck = checkEntitiesInStr(regex);
+        if (entcheck) {
+            alert("Warning: " + entcheck.src + " will be replaced by " +
+                  entcheck.replace + " in the message preprocessor.  This " +
+                  "regular expression may not match what you intended it to " +
+                  "match.");
+        }
+    
+        socket.emit("addFilter", {
+            name: name,
+            source: regex,
+            flags: flags,
+            replace: replace,
+            active: true
+        });
+    
+        socket.once("addFilterSuccess", function () {
+            $("#cs-chatfilters-newname").val("");
+            $("#cs-chatfilters-newregex").val("");
+            $("#cs-chatfilters-newflags").val("");
+            $("#cs-chatfilters-newreplace").val("");
+        });
+    });
+    
+    $("#cs-emotes-newsubmit").click(function () {
+        var name = $("#cs-emotes-newname").val();
+        var image = $("#cs-emotes-newimage").val();
+    
+        socket.emit("updateEmote", {
+            name: name,
+            image: image,
+        });
+    
+        $("#cs-emotes-newname").val("");
+        $("#cs-emotes-newimage").val("");
+    });
+    
+    $("#cs-chatfilters-export").click(function () {
+        var callback = function (data) {
+            socket.listeners("chatFilters").splice(
+                socket.listeners("chatFilters").indexOf(callback)
+            );
+    
+            $("#cs-chatfilters-exporttext").val(JSON.stringify(data, null, '\t'));
+        };
+    
+        socket.on("chatFilters", callback);
+        socket.emit("requestChatFilters");
+    });
+    
+    $("#cs-chatfilters-import").click(function () {
+        var text = $("#cs-chatfilters-exporttext").val();
+        var choose = confirm("You are about to import filters from the contents of the textbox below the import button.  If this is empty, it will clear all of your filters.  Are you sure you want to continue?");
+        if (!choose) {
             return;
         }
-
-        warning = makeAlert("Maximum Size Exceeded", "Inline CSS and JavaScript are " +
-                "limited to 20,000 characters or less.  If you need more room, you " +
-                "need to use the external CSS or JavaScript option.", "alert-danger")
-                .attr("id", selector.replace(/#/, ""));
-        warning.insertBefore(this);
-    } else {
-        $(selector).remove();
+    
+        if (text.trim() === "") {
+            text = "[]";
+        }
+    
+        var data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            alert("Invalid import data: " + e);
+            return;
+        }
+    
+        socket.emit("importFilters", data);
+    });
+    
+    $("#cs-emotes-export").click(function () {
+        var em = CHANNEL.emotes.map(function (f) {
+            return {
+                name: f.name,
+                image: f.image
+            };
+        });
+        $("#cs-emotes-exporttext").val(JSON.stringify(em, null, '\t'));
+    });
+    
+    $("#cs-emotes-import").click(function () {
+        var text = $("#cs-emotes-exporttext").val();
+        var choose = confirm("You are about to import emotes from the contents of the textbox below the import button.  If this is empty, it will clear all of your emotes.  Are you sure you want to continue?");
+        if (!choose) {
+            return;
+        }
+    
+        if (text.trim() === "") {
+            text = "[]";
+        }
+    
+        var data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            alert("Invalid import data: " + e);
+            return;
+        }
+    
+        socket.emit("importEmotes", data);
+    });
+    
+    var upload_file = $("#cs-uploadoptions input[type=file]");
+    upload_file.on("change", function(e) {
+        if (this.files.length == 0) {
+            alert("No file selected.");
+            return;
+        }
+        
+        $("#cs-uploadoptions label:first").text("Uploading...");
+        var file = this.files[0];
+        var fr   = new FileReader();
+        fr.addEventListener("loadend", function() {
+            socket.emit("uploadFile", {
+                name: file.name,
+                type: file.type,
+                data: fr.result
+            });
+        });
+        fr.readAsArrayBuffer(file);
+    });
+    
+    var toggleUserlist = function () {
+        var direction = !USEROPTS.layout.match(/synchtube/) ? "glyphicon-chevron-right" : "glyphicon-chevron-left"
+        if ($("#userlist").css("display") === "none") {
+            $("#userlist").show();
+            $("#userlisttoggle").removeClass(direction).addClass("glyphicon-chevron-down");
+        } else {
+            $("#userlist").hide();
+            $("#userlisttoggle").removeClass("glyphicon-chevron-down").addClass(direction);
+        }
+        scrollChat();
+    };
+    
+    $("#usercount").click(toggleUserlist);
+    $("#userlisttoggle").click(toggleUserlist);
+    
+    $(".add-temp").change(function () {
+        $(".add-temp").prop("checked", $(this).prop("checked"));
+    });
+    
+    if ($(window).width() < 700) {
+        toggleUserlist();
     }
-}
-
-$("#cs-csstext").bind("input", handleCSSJSTooLarge.bind($("#cs-csstext")[0],
-        "#cs-csstext-too-big"));
-$("#cs-jstext").bind("input", handleCSSJSTooLarge.bind($("#cs-jstext")[0],
-        "#cs-jstext-too-big"));
+    
+    /*
+     * Fixes #417 which is caused by changes in Bootstrap 3.3.0
+     * (see twbs/bootstrap#15136)
+     *
+     * Whenever the active tab in channel options is changed,
+     * the modal must be updated so that the backdrop is resized
+     * appropriately.
+     */
+    $("#channeloptions li > a[data-toggle='tab']").on("shown.bs.tab", function () {
+        $("#channeloptions").data("bs.modal").handleUpdate();
+    });
+    
+    applyOpts();
+    
+    (function () {
+        var embed = document.querySelector("#videowrap .embed-responsive");
+        if (!embed) {
+            return;
+        }
+    
+        if (typeof window.MutationObserver === "function") {
+            var mr = new MutationObserver(function (records) {
+                records.forEach(function (record) {
+                    if (record.type !== "childList") return;
+                    if (!record.addedNodes || record.addedNodes.length === 0) return;
+    
+                    var elem = record.addedNodes[0];
+                    if (elem.id === "ytapiplayer") handleVideoResize();
+                });
+            });
+    
+            mr.observe(embed, { childList: true });
+        } else {
+            /*
+             * DOMNodeInserted is deprecated.  This code is here only as a fallback
+             * for browsers that do not support MutationObserver
+             */
+            embed.addEventListener("DOMNodeInserted", function (ev) {
+                if (ev.target.id === "ytapiplayer") handleVideoResize();
+            });
+        }
+    })();
+    
+    var EMOTELISTMODAL = $("#emotelist");
+    EMOTELISTMODAL.on("hidden.bs.modal", unhidePlayer);
+    $("#emotelistbtn").click(function () {
+        EMOTELISTMODAL.modal();
+    });
+    
+    EMOTELISTMODAL.find(".emotelist-alphabetical").change(function () {
+        USEROPTS.emotelist_sort = this.checked;
+        setOpt("emotelist_sort", USEROPTS.emotelist_sort);
+    });
+    EMOTELISTMODAL.find(".emotelist-alphabetical").prop("checked", USEROPTS.emotelist_sort);
+    
+    $("#fullscreenbtn").click(function () {
+        var elem = document.querySelector("#videowrap .embed-responsive");
+        // this shit is why frontend web development sucks
+        var fn = elem.requestFullscreen ||
+            elem.mozRequestFullScreen || // Mozilla has to be different and use a capital 'S'
+            elem.webkitRequestFullscreen ||
+            elem.msRequestFullscreen;
+    
+        if (fn) {
+            fn.call(elem);
+        }
+    });
+    
+    function handleCSSJSTooLarge(selector) {
+        if (this.value.length > 20000) {
+            var warning = $(selector);
+            if (warning.length > 0) {
+                return;
+            }
+    
+            warning = makeAlert("Maximum Size Exceeded", "Inline CSS and JavaScript are " +
+                    "limited to 20,000 characters or less.  If you need more room, you " +
+                    "need to use the external CSS or JavaScript option.", "alert-danger")
+                    .attr("id", selector.replace(/#/, ""));
+            warning.insertBefore(this);
+        } else {
+            $(selector).remove();
+        }
+    }
+    
+    $("#cs-csstext").bind("input", handleCSSJSTooLarge.bind($("#cs-csstext")[0],
+            "#cs-csstext-too-big"));
+    $("#cs-jstext").bind("input", handleCSSJSTooLarge.bind($("#cs-jstext")[0],
+            "#cs-jstext-too-big"));
+});
