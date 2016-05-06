@@ -20,6 +20,7 @@ export default function initialize(app, ioConfig) {
     
         template.send(res, 'channel/index_new', {
             channelName: req.params.channel,
+            pageScripts: ["/build/bundle.min.js"],
             bytes_per_channel: Config.get("uploads.bytes_per_channel"),
             bytes_per_file: Config.get("uploads.bytes_per_file"),
             sioSource: `${socketBaseURL}/socket.io/socket.io.js`

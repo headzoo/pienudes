@@ -10,13 +10,9 @@
         <script src="/js/jquery-ui.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
         <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script src="/js/spectrum.js"></script>
         <script>
-            $("#channelname").keydown(function (ev) {
-                if (ev.keyCode === 13) {
-                    location.href = "/r/" + $("#channelname").val();
-                }
-            });
-
+            
             $(function() {
                 $("#channel-buffer").mCustomScrollbar({
                     theme: "minimal",
@@ -32,9 +28,25 @@
                         scrollAmount: 300
                     }
                 });
+                
+                $("#channel-playlist-items").mCustomScrollbar({
+                    theme: "minimal",
+                    autoHideScrollbar: true,
+                    mouseWheel: {
+                        scrollAmount: 300
+                    }
+                }).mCustomScrollbar("scrollTo", "top");
+            });
+            
+            $(function() {
+                $("#channel-buffer-color").spectrum({
+                    color: "#FFFFFF",
+                    preferredFormat: "hex",
+                    showInput: true,
+                    clickoutFiresChange: true
+                });
             });
         </script>
-        {% include "scripts.html.twig" %}
 
         {% if pageScripts %}
             {% for script in pageScripts %}
