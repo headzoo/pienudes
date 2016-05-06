@@ -263,6 +263,8 @@
   font-size: 12px;
   float: right;
   text-align: right;
+  max-width: 60px;
+  overflow: hidden;
 }
 .card-media-common {
   font-size: 12px;

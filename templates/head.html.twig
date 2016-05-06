@@ -1,27 +1,12 @@
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="{{ siteDescription }}">
 {% if not pageTitle %}
     {% set pageTitle = siteTitle %}
 {% endif %}
 <title>{{ pageTitle }}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{{ siteDescription }}">
 
-<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-<link href="/css/sticky-footer-navbar.css?v={{ cacheBuster }}" rel="stylesheet">
-<link href="/css/cytube.css?v={{ cacheBuster }}" rel="stylesheet">
-<link href="/css/themes/slate.css?v={{ cacheBuster }}" rel="stylesheet" id="usertheme">
-<link href="/css/spectrum.css?v={{ cacheBuster }}" rel="stylesheet">
-<link href="/css/profile.css" rel="stylesheet">
-<link href="/css/chat_logs.css" rel="stylesheet">
-<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet">
-<link href="/css/channel.css" rel="stylesheet">
 <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
 <link href="/favicon.ico" rel="icon" type="image/x-icon">
-
-<!--[if lt IE 9]
-<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
--->
-<!--[endif]-->
-<link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/video-js.css">
+<link href="/build/bundle.min.css?v={{ cacheBuster }}" rel="stylesheet">
+<link href="/css/video-js.css" rel="stylesheet">

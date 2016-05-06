@@ -304,7 +304,7 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     this.sendUserVideoVotes(users);
     
     db_channels.lookup(this.channel.name, function(err, chan) {
-        if (!err && chan) {
+        if (!err && chan && this.current.queueby != undefined) {
             db_chat_logs.insert(chan.id, this.current.queueby, 'media', this.current.media.title, JSON.stringify(this.current.media));
         }
     }.bind(this));
@@ -988,8 +988,8 @@ PlaylistModule.prototype._delete = function (uid) {
         if (self.current && self.current.queueby && self.current.queueby[0] != "@") {
             var media   = self.current.media;
             var queueby = self.current.queueby;
-            db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function(err, media_id) {
-                if (!err) {
+            db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function (err, media_id) {
+                if (!err && media_id != 4291 && media_id != 9562) {
                     db_playlist.insert(media_id, self.channel.name, queueby);
                 }
             });
