@@ -304,7 +304,7 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     this.sendUserVideoVotes(users);
     
     db_channels.lookup(this.channel.name, function(err, chan) {
-        if (!err && chan) {
+        if (!err && chan && this.current.queueby != undefined) {
             db_chat_logs.insert(chan.id, this.current.queueby, 'media', this.current.media.title, JSON.stringify(this.current.media));
         }
     }.bind(this));
