@@ -988,13 +988,11 @@ PlaylistModule.prototype._delete = function (uid) {
         if (self.current && self.current.queueby && self.current.queueby[0] != "@") {
             var media   = self.current.media;
             var queueby = self.current.queueby;
-            if (self.channel.name != "LARGE_STEAMY_DUMPS") {
-                db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function (err, media_id) {
-                    if (!err) {
-                        db_playlist.insert(media_id, self.channel.name, queueby);
-                    }
-                });
-            }
+            db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function (err, media_id) {
+                if (!err && media_id != 4291 && media_id != 9562) {
+                    db_playlist.insert(media_id, self.channel.name, queueby);
+                }
+            });
         }
     }
     
