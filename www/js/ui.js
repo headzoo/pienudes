@@ -857,13 +857,12 @@ upload_file.on("change", function(e) {
 });
 
 var toggleUserlist = function () {
-    var direction = !USEROPTS.layout.match(/synchtube/) ? "glyphicon-chevron-right" : "glyphicon-chevron-left"
     if ($("#userlist").css("display") === "none") {
         $("#userlist").show();
-        $("#userlisttoggle").removeClass(direction).addClass("glyphicon-chevron-down");
+        $("#userlisttoggle").removeClass("glyphicon-chevron-right").addClass("glyphicon-chevron-down");
     } else {
         $("#userlist").hide();
-        $("#userlisttoggle").removeClass("glyphicon-chevron-down").addClass(direction);
+        $("#userlisttoggle").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-right");
     }
     scrollChat();
 };
@@ -926,6 +925,7 @@ var EMOTELISTMODAL = $("#emotelist");
 EMOTELISTMODAL.on("hidden.bs.modal", unhidePlayer);
 $("#emotelistbtn").click(function () {
     EMOTELISTMODAL.modal();
+    console.log("Here");
 });
 
 EMOTELISTMODAL.find(".emotelist-alphabetical").change(function () {
