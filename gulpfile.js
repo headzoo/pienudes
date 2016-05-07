@@ -93,12 +93,8 @@ gulp.task('build-player', function() {
 gulp.task('default', ['less', 'scripts']);
 
 gulp.task('watch', ['default'], function() {
-    var dirs = [
-        pack.paths.source.js,
-        pack.paths.source.less
-    ];
-    
-    gulp.watch(dirs, ['default']);
+    gulp.watch([pack.paths.source.js], ['scripts']);
+    gulp.watch([pack.paths.source.less], ['less']);
     gulp.watch([pack.paths.source.babel], ['babel']);
 });
 

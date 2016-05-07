@@ -19,7 +19,8 @@ var Component = React.createClass({
         
         return (
             <div>
-                <strong className="username">{data.username}: </strong><span style={style}>{data.msg}</span>
+                <strong className="username">{data.username}: </strong>
+                <span style={style} dangerouslySetInnerHTML={{__html: data.msg}}></span>
             </div>
         )
     }

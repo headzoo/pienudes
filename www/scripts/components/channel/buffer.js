@@ -1,10 +1,9 @@
 'use strict';
 
-var React   = require('react');
-var Reflux  = require('reflux');
-var Input   = require('./input');
-var Message = require('./message');
-
+var React         = require('react');
+var Reflux        = require('reflux');
+var Input         = require('./input');
+var Message       = require('./message');
 var MessagesStore = require('../../stores/messages');
 
 var Component = React.createClass({
@@ -12,8 +11,27 @@ var Component = React.createClass({
         Reflux.connect(MessagesStore, "messages")
     ],
     
+    componentDidMount: function() {
+        /*
+        $("#channel-buffer").mCustomScrollbar({
+            theme: "minimal",
+            autoHideScrollbar: true,
+            mouseWheel: {
+                scrollAmount: 300
+            }
+        }).mCustomScrollbar("scrollTo", "bottom");
+        */
+    },
+    
+    componentDidUpdate: function() {
+        /*
+        $("#channel-buffer")
+            .mCustomScrollbar("update")
+            .mCustomScrollbar("scrollTo", "bottom");
+            */
+    },
+    
     render: function () {
-        
         return (
             <div id="channel-buffer-wrap" className="col-xs-12 col-sm-7 col-md-5">
                 <div id="channel-buffer">

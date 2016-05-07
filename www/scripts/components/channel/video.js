@@ -22,7 +22,7 @@ var Component = React.createClass({
         }
         
         return (
-            <div id="channel-video-wrap" className="col-xs-12 col-sm-5 col-md-5">
+            <div id="channel-video-wrap" className="col-xs-12 col-sm-5 col-md-6">
                 <div id="channel-video-frame">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/dmVAmlpbnD4" frameBorder="0" allowFullScreen></iframe>
                 </div>

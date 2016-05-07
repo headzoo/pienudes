@@ -58,6 +58,9 @@
   right: 0;
   bottom: 56px;
 }
+#channel-buffer .embedded-image {
+  max-height: 125px;
+}
 #channel-buffer-input-wrap {
   position: absolute;
   left: 0;
@@ -65,10 +68,8 @@
   bottom: 0;
   height: 44px;
   display: flex;
-  border-top: 1px solid #222;
-  border-right: 1px solid #222;
-  border-radius: 2px;
-  padding: 6px;
+  border-top: 1px solid #1B1B1B;
+  border-right: 1px solid #1B1B1B;
 }
 #channel-buffer-input-wrap ul {
   list-style-type: none;
@@ -88,17 +89,65 @@
   padding: 6px;
 }
 #channel-buffer-input::-webkit-input-placeholder {
-  color: #333;
+  color: #222;
+}
+.channel-buffer-button {
+  background: #1B1B1B !important;
+  border: solid 1px #161A20 !important;
+}
+.channel-buffer-button:focus {
+  outline: none;
 }
 #channel-buffer-send {
-  width: 50px;
+  width: 80px;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
-  background: #34393D !important;
+}
+.sp-replacer {
+  background: #1B1B1B !important;
   border: solid 1px #161A20 !important;
+  padding: 10px 6px !important;
+}
+.sp-replacer:focus {
+  outline: none;
+}
+.sp-container {
+  background: #1B1B1B !important;
+  border: solid 1px #161A20 !important;
+}
+.sp-container:focus {
+  outline: none;
+}
+.sp-picker-container {
+  border-left: none !important;
+}
+.sp-input {
+  border: none !important;
+  background-color: #2D2D2D !important;
+  color: #FFF !important;
+  border-radius: 0 !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+.sp-color,
+.sp-hue {
+  border: solid 1px #3C3C3C !important;
+}
+.sp-slider {
+  background: #1B1B1B !important;
+}
+.sp-button-container button {
+  background: #1B1B1B !important;
+  border: solid 1px #161A20 !important;
+  background: #282828 !important;
+  text-shadow: none !important;
+  color: #FFF !important;
+}
+.sp-button-container button:focus {
+  outline: none;
 }
 #channel-buffer-emote {
   width: 40px;
@@ -107,8 +156,9 @@
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
-  background: #34393D !important;
-  border: solid 1px #161A20 !important;
+}
+#channel-buffer-emote:focus {
+  outline: none;
 }
 #channel-video-wrap {
   height: 100%;

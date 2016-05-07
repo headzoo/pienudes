@@ -738,14 +738,15 @@ input:focus {
 .invalid {
   color: red;
 }
-.sp-replacer {
-  background: #34393D !important;
-  border: solid 1px #161A20 !important;
-}
 .sp-dd {
   color: #fff;
 }
-
+.requeue-icon {
+  font-size: 12px;
+  vertical-align: middle;
+  margin-top: -3px;
+  color: #8D8E8E;
+}
 #voteup,
 .vote-up {
   background-color: #013E01;

@@ -27,7 +27,7 @@ var Component = React.createClass({
         }
         
         return (
-            <div id="channel-user-list" className="hidden-xs hidden-sm col-md-2">
+            <div id="channel-user-list" className="hidden-xs hidden-sm col-md-1">
                 <ul>
                     {items}
                 </ul>

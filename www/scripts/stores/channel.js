@@ -16,7 +16,6 @@ module.exports = Reflux.createStore({
         bio: "",
         name: false,
         usercount: 0,
-        emotes: [],
         uploads: []
     },
     
@@ -29,7 +28,6 @@ module.exports = Reflux.createStore({
         socket.on(Events.SET_MOTD, this.onSetMotd);
         socket.on(Events.SET_BIO, this.onSetBio);
         socket.on(Events.SET_PLAYLIST_LOCKED, this.onSetPlaylistLocked);
-        socket.on(Events.EMOTE_LIST, this.onEmoteList);
         socket.on(Events.CHANNEL_OPTS, this.onChannelOpts);
         socket.on(Events.CHANNEL_CSS_JS, this.onChannelCSSJS);
         socket.on(Events.USER_COUNT, this.onUserCount);
@@ -60,20 +58,6 @@ module.exports = Reflux.createStore({
     
     onSetPlaylistLocked: function(locked) {
         this.data.openqueue = !locked;
-        this.trigger(this.data);
-    },
-    
-    onEmoteList: function(emotes) {
-        this.data.emotes = [];
-        emotes.map(function (e) {
-            if (e.image && e.name) {
-                e.regex = new RegExp(e.source, "gi");
-                this.data.emotes.push(e);
-            } else {
-                console.error("Rejecting invalid emote: " + JSON.stringify(e));
-            }
-        }.bind(this));
-        
         this.trigger(this.data);
     },
     

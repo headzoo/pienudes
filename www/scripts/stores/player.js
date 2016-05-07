@@ -29,8 +29,6 @@ module.exports = Reflux.createStore({
     },
     
     onChangeMedia: function(data) {
-        console.log(data);
-        loadMediaPlayer(data);
-        handleMediaUpdate(data);
+        
     }
 });

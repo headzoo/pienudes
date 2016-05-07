@@ -12,15 +12,7 @@
         <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
         <script src="/js/spectrum.js"></script>
         <script>
-            
             $(function() {
-                $("#channel-buffer").mCustomScrollbar({
-                    theme: "minimal",
-                    autoHideScrollbar: true,
-                    mouseWheel: {
-                        scrollAmount: 300
-                    }
-                }).mCustomScrollbar("scrollTo", "bottom");
                 $("#channel-user-list").mCustomScrollbar({
                     theme: "minimal",
                     autoHideScrollbar: true,
@@ -35,15 +27,6 @@
                         scrollAmount: 300
                     }
                 }).mCustomScrollbar("scrollTo", "top");
-            });
-            
-            $(function() {
-                $("#channel-buffer-color").spectrum({
-                    color: "#FFFFFF",
-                    preferredFormat: "hex",
-                    showInput: true,
-                    clickoutFiresChange: true
-                });
             });
         </script>
 

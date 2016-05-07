@@ -7,9 +7,10 @@ var PlayerActions = Reflux.createActions({
 });
 
 PlayerActions.load.listen(function() {
-    $.getScript("/js/player.js")
-        .done(this.done)
-        .fail(this.fail);
+    //$.getScript("/js/player.js")
+    //    .done(this.done)
+    //    .fail(this.fail);
+    this.done();
 });
 
 
