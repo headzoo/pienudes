@@ -646,8 +646,10 @@ function showUserOptions() {
         $("#us-user-emotes-tab").hide();
         $("#us-user-emotes").hide();
     } else {
-        $("#us-user-emotes-tab").show();
-        $("#us-user-emotes").show();
+        //$("#us-user-emotes-tab").show();
+        //$("#us-user-emotes").show();
+        $("#us-user-emotes-tab").hide();
+        $("#us-user-emotes").hide();
     }
     
     $("#us-no-channelcss").prop("checked", USEROPTS.ignore_channelcss);
