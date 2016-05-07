@@ -1139,6 +1139,8 @@ Callbacks = {
         tbl.data("entries", entries);
         formatUploadsList(false);
         $("#cs-uploadoptions label:first").text("Select file");
+        
+        
     },
     
     removeUpload: function(data) {
@@ -1152,6 +1154,83 @@ Callbacks = {
         });
         tbl.data("entries", cleaned);
         formatUploadsList(false);
+    },
+    
+    userEmoteList: function(data) {
+        var tbl = $("#us-user-emotes table");
+        tbl.data("entries", data);
+        formatUserEmotesList(tbl);
+    
+        loadUserEmotes(data);
+        tbl = $("#cs-emotes table");
+        tbl.data("entries", data);
+        formatCSEmoteList();
+        EMOTELIST.handleChange();
+    },
+    
+    userEmoteComplete: function(data) {
+        var ue = $("#us-user-emotes");
+        ue.find("input[type=text]:first").val("");
+        var el = ue.find("input[type=file]:first");
+        el.replaceWith(el.clone(true));
+    
+        var tbl = ue.find("table:first");
+        var entries = tbl.data("entries") || [];
+        var found   = false;
+        entries.forEach(function(entry) {
+            if (entry.url == data.url) {
+                found = true;
+                return;
+            }
+        });
+        if (!found) {
+            entries.unshift(data);
+        }
+        
+        tbl.data("entries", entries);
+        formatUserEmotesList(tbl);
+        ue.find("button:first").prop("disabled", false).html("Upload");
+    
+        data.source = '(^|\s)' + data.text + '(?!\S)';
+        data.name   = data.text;
+        data.image  = data.url;
+        data.regex = new RegExp(data.source, "gi");
+        
+        found = false;
+        for (var i = 0; i < CLIENT.emotes.length; i++) {
+            if (CLIENT.emotes[i].name === data.name) {
+                found = true;
+                CLIENT.emotes[i] = data;
+                formatCSEmoteList();
+                break;
+            }
+        }
+    
+        if (!found) {
+            CLIENT.emotes.push(data);
+            formatCSEmoteList();
+        }
+    },
+    
+    userEmoteRemove: function(data) {
+        var ue      = $("#us-user-emotes");
+        var tbl     = ue.find("table:first");
+        var entries = tbl.data("entries") || [];
+        var cleaned = [];
+        entries.forEach(function(entry) {
+            if (entry.text != data.text) {
+                cleaned.push(entry);
+            }
+        });
+        
+        tbl.data("entries", cleaned);
+        formatUserEmotesList(tbl);
+    },
+    
+    errorEmote: function(data) {
+        var ue = $("#us-user-emotes");
+        ue.find("button:first").prop("disabled", false).html("Upload");
+        errDialog(data.msg);
     },
 
     warnLargeChandump: function (data) {

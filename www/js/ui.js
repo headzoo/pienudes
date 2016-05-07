@@ -856,6 +856,39 @@ upload_file.on("change", function(e) {
     fr.readAsArrayBuffer(file);
 });
 
+var user_emote        = $("#us-user-emotes");
+var user_emote_button = user_emote.find("button:first");
+user_emote_button.on("click", function(e) {
+    var emote_file = user_emote.find("input[type=file]")[0];
+    
+    if (emote_file.files == undefined || emote_file.files.length == 0) {
+        alert("No file selected.");
+        return;
+    }
+    
+    var emote_text = user_emote.find("input[type=text]").val().trim();
+    if (emote_text.length == 0) {
+        alert("Emote text cannot be empty.");
+        return;
+    }
+    
+    user_emote_button
+        .prop("disabled", true)
+        .html('<img src="/img/spinner.gif" style="width: 16px; height: 16px;" />');
+
+    var file = emote_file.files[0];
+    var fr   = new FileReader();
+    fr.addEventListener("loadend", function() {
+        socket.emit("userEmoteUpload", {
+            name: file.name,
+            type: file.type,
+            data: fr.result,
+            text: emote_text
+        });
+    });
+    fr.readAsArrayBuffer(file);
+});
+
 var toggleUserlist = function () {
     if ($("#userlist").css("display") === "none") {
         $("#userlist").show();
@@ -925,7 +958,6 @@ var EMOTELISTMODAL = $("#emotelist");
 EMOTELISTMODAL.on("hidden.bs.modal", unhidePlayer);
 $("#emotelistbtn").click(function () {
     EMOTELISTMODAL.modal();
-    console.log("Here");
 });
 
 EMOTELISTMODAL.find(".emotelist-alphabetical").change(function () {
