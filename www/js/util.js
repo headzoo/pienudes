@@ -646,10 +646,8 @@ function showUserOptions() {
         $("#us-user-emotes-tab").hide();
         $("#us-user-emotes").hide();
     } else {
-        //$("#us-user-emotes-tab").show();
-        //$("#us-user-emotes").show();
-        $("#us-user-emotes-tab").hide();
-        $("#us-user-emotes").hide();
+        $("#us-user-emotes-tab").show();
+        $("#us-user-emotes").show();
     }
     
     $("#us-no-channelcss").prop("checked", USEROPTS.ignore_channelcss);
@@ -2888,11 +2886,6 @@ function execEmotes(msg) {
         return msg;
     }
     
-    CLIENT.emotes.forEach(function (e) {
-        msg = msg.replace(e.regex, '$1<img class="channel-emote" src="' +
-            e.image + '" title="' + e.name + '">');
-    });
-
     CHANNEL.emotes.forEach(function (e) {
         msg = msg.replace(e.regex, '$1<img class="channel-emote" src="' +
                                    e.image + '" title="' + e.name + '">');

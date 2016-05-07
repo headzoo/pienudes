@@ -9,6 +9,7 @@ var emotes = require('./emotes');
 var counters = require("../counters");
 var db_channels = require('../database/channels');
 var db_chat_logs = require('../database/chat_logs');
+var db_emotes = require('../database/emotes');
 
 const SHADOW_TAG = "[shadow]";
 const LINK = /(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)/ig;
@@ -262,7 +263,7 @@ ChatModule.prototype.processChatMsg = function (user, data) {
         user.setAFK(false);
     }
     
-    var msgobj = this.formatMessage(user.getName(), data);
+    var msgobj = this.formatMessage(user, data);
     var antiflood = MIN_ANTIFLOOD;
     if (this.channel.modules.options &&
         this.channel.modules.options.get("chat_antiflood") &&
@@ -320,17 +321,21 @@ ChatModule.prototype.processChatMsg = function (user, data) {
         }
     });
     
-    this.sendMessage(msgobj);
-    counters.add("chat:sent");
+    emotes.execUser(user.account.id, msgobj.msg, function(m) {
+        msgobj.msg = m;
+        this.sendMessage(msgobj);
+        counters.add("chat:sent");
+    }.bind(this));
 };
 
-ChatModule.prototype.formatMessage = function (username, data) {
+ChatModule.prototype.formatMessage = function (user, data) {
     var msg = XSS.sanitizeText(data.msg);
     if (this.channel.modules.filters) {
         msg = this.filterMessage(msg);
     }
+    
     var obj = {
-        username: username,
+        username: user.getName(),
         msg: msg,
         meta: data.meta,
         time: Date.now()
@@ -345,14 +350,14 @@ ChatModule.prototype.filterMessage = function (msg) {
     var convertLinks = this.channel.modules.options.get("enable_link_regex");
     var links = msg.match(LINK);
     var intermediate = msg.replace(LINK, LINK_PLACEHOLDER);
-
+    
     var result = filters.filter(intermediate, false);
     result = result.replace(LINK_PLACEHOLDER_RE, function () {
         var link = links.shift();
         if (!link) {
             return '';
         }
-
+    
         var filtered = filters.filter(link, true);
         if (filtered !== link) {
             return filtered;
@@ -644,6 +649,5 @@ ChatModule.prototype.handleCmdUnmute = function (user, msg, meta) {
     this.channel.logger.log("[mod] " + user.getName() + " unmuted " + target.getName());
     this.sendModMessage(user.getName() + " unmuted " + target.getName(), muteperm);
 };
-
 
 module.exports = ChatModule;
