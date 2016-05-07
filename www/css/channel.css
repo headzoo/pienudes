@@ -23,6 +23,23 @@
 #channel-user-list ul .glyphicon-time {
   padding-right: 6px;
 }
+#channel-user-list ul li {
+  cursor: pointer;
+}
+.channel-user-list-rank-admin {
+  color: #CC4F4F!important;
+  font-weight: bold!important;
+}
+.channel-user-list-rank-owner {
+  color: #0000cc!important;
+  font-weight: bold!important;
+}
+.channel-user-list-rank-op {
+  color: #00aa00!important;
+}
+.channel-user-list-rank-guest {
+  color: #888888!important;
+}
 #channel-buffer-wrap {
   position: relative;
   height: 100%;
@@ -155,6 +172,13 @@
 }
 .channel-playlist-username {
   font-size: 12px;
+}
+.channel-playlist-requeue-icon {
+  font-size: 12px;
+  vertical-align: middle;
+  margin-top: -3px;
+  margin-left: 4px;
+  color: #8D8E8E;
 }
 .sp-dd {
   display: none;

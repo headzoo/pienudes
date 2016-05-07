@@ -1,28 +1,30 @@
 'use strict';
 
-var React  = require('react');
-var Reflux = require('reflux');
+var React        = require('react');
+var Reflux       = require('reflux');
+var Constants    = require('../../constants');
+var UsersStore = require('../../stores/users');
 
 var Component = React.createClass({
-    propTypes: {
-        users: React.PropTypes.array
-    },
-    
-    getDefaultProps: function() {
-        return {
-            users: []
-        }
-    },
+    mixins: [
+        Reflux.connect(UsersStore, "users")
+    ],
     
     render: function () {
+        var users = this.state.users;
         var items = [];
-        this.props.users.map(function(u, i) {
-            var icon = null;
-            if (u.afk) {
-                icon = <span className="glyphicon glyphicon-time"></span>;
+        for(var username in users) {
+            if (users.hasOwnProperty(username)) {
+                var user   = users[username];
+                var rclass = this.getRankClass(user.rank);
+                var icon   = <span></span>;
+                if (user.meta.afk) {
+                    icon = <span className="glyphicon glyphicon-time"></span>;
+                }
+                
+                items.push(<li key={username}>{icon} <span className={rclass}>{username}</span></li>);
             }
-            items.push(<li key={i}>{icon} {u.username}</li>);
-        });
+        }
         
         return (
             <div id="channel-user-list" className="hidden-xs hidden-sm col-md-2">
@@ -31,6 +33,20 @@ var Component = React.createClass({
                 </ul>
             </div>
         )
+    },
+    
+    getRankClass: function(rank) {
+        if(rank >= Constants.Rank.Siteadmin) {
+            return "channel-user-list-rank-admin";
+        } else if(rank >= Constants.Rank.Admin) {
+            return "channel-user-list-rank-owner";
+        } else if(rank >= Constants.Rank.Moderator) {
+            return "channel-user-list-rank-op";
+        } else if(rank == Constants.Rank.Guest) {
+            return "channel-user-list-rank-guest";
+        } else {
+            return "";
+        }
     }
 });
 

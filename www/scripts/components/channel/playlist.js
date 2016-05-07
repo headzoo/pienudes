@@ -3,87 +3,43 @@
 var React  = require('react');
 var Reflux = require('reflux');
 
+var PlaylistStore = require('../../stores/playlist');
+
 var Component = React.createClass({
+    mixins: [
+        Reflux.connect(PlaylistStore, "playlist")
+    ],
+    
     render: function () {
+        var items = [];
+        this.state.playlist.tracks.map(function(t, i) {
+            var icon    = null;
+            var queueby = t.queueby;
+            if (queueby[0] == "@") {
+                queueby = queueby.substring(1);
+                icon = "glyphicon glyphicon-refresh channel-playlist-requeue-icon";
+            }
+            
+            items.push(
+                <li key={i}>
+                    <div className="channel-playlist-duration pull-right">
+                        {t.media.duration}
+                    </div>
+                    <div className="channel-playlist-title">
+                        {t.media.title}
+                    </div>
+                    <div className="channel-playlist-username">
+                        {queueby}<span className={icon}></span>
+                    </div>
+                </li>
+            );
+        });
+        
         return (
             <div id="channel-playlist">
                 <div id="channel-playlist-items">
                     <ul>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:55</div>
-                            <div className="channel-playlist-title">Flo Rida - Whistle</div>
-                            <div className="channel-playlist-username">nyc_redhead</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:37</div>
-                            <div className="channel-playlist-title">DJ Snake, Lil Jon - Turn Down for What</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:31</div>
-                            <div className="channel-playlist-title">Neon Trees - Animal (Official Video)</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:55</div>
-                            <div className="channel-playlist-title">Flo Rida - Whistle</div>
-                            <div className="channel-playlist-username">nyc_redhead</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:37</div>
-                            <div className="channel-playlist-title">DJ Snake, Lil Jon - Turn Down for What</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:31</div>
-                            <div className="channel-playlist-title">Neon Trees - Animal (Official Video)</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:55</div>
-                            <div className="channel-playlist-title">Flo Rida - Whistle</div>
-                            <div className="channel-playlist-username">nyc_redhead</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:37</div>
-                            <div className="channel-playlist-title">DJ Snake, Lil Jon - Turn Down for What</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:31</div>
-                            <div className="channel-playlist-title">Neon Trees - Animal (Official Video)</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:55</div>
-                            <div className="channel-playlist-title">Flo Rida - Whistle</div>
-                            <div className="channel-playlist-username">nyc_redhead</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:37</div>
-                            <div className="channel-playlist-title">DJ Snake, Lil Jon - Turn Down for What</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:31</div>
-                            <div className="channel-playlist-title">Neon Trees - Animal (Official Video)</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:55</div>
-                            <div className="channel-playlist-title">Flo Rida - Whistle</div>
-                            <div className="channel-playlist-username">nyc_redhead</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:37</div>
-                            <div className="channel-playlist-title">DJ Snake, Lil Jon - Turn Down for What</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
-                        <li>
-                            <div className="channel-playlist-duration pull-right">03:31</div>
-                            <div className="channel-playlist-title">Neon Trees - Animal (Official Video)</div>
-                            <div className="channel-playlist-username">headzoo</div>
-                        </li>
+                        {items}
                     </ul>
                 </div>
             </div>

@@ -24,7 +24,9 @@ var production  = environments.production;
 
 gulp.task('less', function() {
     return gulp.src(pack.paths.source.less)
+        .pipe(development(sourcemaps.init()))
         .pipe(less())
+        .pipe(development(sourcemaps.write()))
         .pipe(concat(pack.paths.build.css))
         .pipe(production(cssmin()))
         .pipe(gulp.dest(pack.paths.build.dir));

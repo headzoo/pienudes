@@ -300,7 +300,7 @@ User.prototype.login = function (name, pw) {
 var lastguestlogin = {};
 User.prototype.guestLogin = function (name) {
     var self = this;
-
+    
     if (self.realip in lastguestlogin) {
         var diff = (Date.now() - lastguestlogin[self.realip]) / 1000;
         if (diff < Config.get("guest-login-delay")) {

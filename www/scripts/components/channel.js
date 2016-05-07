@@ -6,18 +6,50 @@ var Users  = require('./channel/users');
 var Buffer = require('./channel/buffer');
 var Video  = require('./channel/video');
 
+var ConnectionStore = require('../stores/connection');
+var ChannelStore    = require('../stores/channel');
+var ClientStore     = require('../stores/client');
+var SocketActions   = require('../actions/socket');
+
+
 var Component = React.createClass({
+    mixins: [
+        Reflux.connect(ConnectionStore, "connection"),
+        Reflux.listenTo(ChannelStore, "onChannel"),
+        Reflux.connect(ClientStore, "client")
+    ],
+    
+    onChannel: function(data) {
+        this.setState({channel: data});
+        if (data.name) {
+            document.title = data.name;
+        }
+    },
+    
+    getDefaultProps: function() {
+        return {
+            join: ""
+        }
+    },
+    
+    getInitialState: function() {
+        return {
+            channel: ChannelStore.getInitialState()
+        }
+    },
+    
+    componentWillMount: function() {
+        SocketActions.connect(this.props.join);
+    },
+    
     render: function () {
-        var users = [
-            {username: "headzoo", rank: 255, afk: true},
-            {username: "nyc_redhead", rank: 2, afk: true},
-            {username: "boogers-in-your-soup", rank: 1, afk: true},
-            {username: "MajesticPANGOLIN", rank: 1, afk: false}
-        ];
+        if (!this.state.channel.name) {
+            return null;
+        }
         
         return (
             <div id="channel-wrap" className="row">
-                <Users users={users} />
+                <Users />
                 <Buffer />
                 <Video />
             </div>

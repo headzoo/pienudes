@@ -4,27 +4,22 @@ var React  = require('react');
 var Reflux = require('reflux');
 
 var Component = React.createClass({
-    propTypes: {
-        username: React.PropTypes.string.isRequired,
-        text: React.PropTypes.string.isRequired
-    },
-    
+
     getDefaultProps: function() {
         return {
-            username: "",
-            text: "",
-            color: "#FFFFFF"
+            data: {}
         }
     },
     
     render: function () {
+        var data = this.props.data;
         var style = {
-            color: this.props.color
+            color: data.meta.color
         };
         
         return (
             <div>
-                <strong className="username">{this.props.username}: </strong><span style={style}>{this.props.text}</span>
+                <strong className="username">{data.username}: </strong><span style={style}>{data.msg}</span>
             </div>
         )
     }

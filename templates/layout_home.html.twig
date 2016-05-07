@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    {% include "head.html.twig" %}
-</head>
-<body>
-<div id="wrap" class="homepage">
-    {% include "nav/default.html.twig" %}
-    <section id="mainpage">
-        <div class="container">
-            {% block content %}{% endblock %}
+    <head>
+        {% include "head.html.twig" %}
+    </head>
+    <body>
+        <div id="wrap" class="homepage">
+            {% include "nav/default.html.twig" %}
+            <section id="mainpage">
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
+            </section>
         </div>
-    </section>
-</div>
-{% set is_homepage_footer = true %}
-{% include "foot.html.twig" %}
-<script src="/js/ga.js"></script>
-<script src="/js/jquery-1.11.0.min.js"></script>
-<!-- Must be included before jQuery-UI since jQuery-UI overrides jQuery.fn.button-->
-<script src="/js/jquery-ui.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script>
-    $("#channelname").keydown(function (ev) {
-        if (ev.keyCode === 13) {
-            location.href = "/r/" + $("#channelname").val();
-        }
-    });
-</script>
-{% if pageScripts %}
-    {% for script in pageScripts %}
-        <script src="{{ script }}?v={{ cacheBuster }}"></script>
-    {% endfor %}
-{% endif %}
-</body>
+        {% set is_homepage_footer = true %}
+        {% include "foot.html.twig" %}
+        <script src="/js/ga.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script>
+            $("#channelname").keydown(function (ev) {
+                if (ev.keyCode === 13) {
+                    location.href = "/r/" + $("#channelname").val();
+                }
+            });
+        </script>
+        {% if pageScripts %}
+            {% for script in pageScripts %}
+                <script src="{{ script }}?v={{ cacheBuster }}"></script>
+            {% endfor %}
+        {% endif %}
+    </body>
 </html>
