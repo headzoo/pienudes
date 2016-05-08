@@ -108,6 +108,25 @@ module.exports = {
             callback(null, rows[0]);
         });
     },
+    
+    getUserById: function(id, callback) {
+        if (typeof callback !== "function") {
+            return;
+        }
+    
+        db.query("SELECT * FROM `users` WHERE id = ?", [id], function (err, rows) {
+            if (err) {
+                callback(err, true);
+                return;
+            }
+        
+            if (rows.length !== 1) {
+                return callback("User does not exist");
+            }
+        
+            callback(null, rows[0]);
+        });
+    },
 
     /**
      * Registers a new user account

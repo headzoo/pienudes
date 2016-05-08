@@ -16,7 +16,11 @@
             <tbody>
             {% for user in users %}
                 <tr>
-                    <td>{{ user.id }}</td>
+                    <td>
+                        <button class="btn btn-default btn-edit-user" data-id="{{ user.id }}">
+                            {{ user.id }}
+                        </button>
+                    </td>
                     <td>
                         <a href="/user/{{ user.name }}" target="_blank">
                             {{ user.name }}
