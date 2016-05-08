@@ -2,6 +2,7 @@
 
 var React  = require('react');
 var Reflux = require('reflux');
+var Media  = require('../../media');
 
 var PlaylistStore = require('../../stores/playlist');
 
@@ -21,26 +22,38 @@ var Component = React.createClass({
             }
             
             items.push(
-                <li key={i}>
-                    <div className="channel-playlist-duration pull-right">
-                        {t.media.duration}
-                    </div>
-                    <div className="channel-playlist-title">
-                        {t.media.title}
-                    </div>
-                    <div className="channel-playlist-username">
-                        {queueby}<span className={icon}></span>
-                    </div>
-                </li>
+                <tr key={i}  style={{height: "50px", padding: "0"}}>
+                    <td className="channel-playlist-thumbnail">
+                        <a href={Media.clickUrl(t.media)} target="_blank">
+                            <img src={Media.thumbnailUrl(t.media)} />
+                        </a>
+                    </td>
+                    <td style={{verticalAlign: "top"}}>
+                        <div className="channel-playlist-info">
+                            <div className="channel-playlist-duration pull-right">
+                                <img src="/img/equalizer.gif" />
+                                {t.media.duration}
+                            </div>
+                            <div className="channel-playlist-title">
+                                <a href={Media.clickUrl(t.media)} target="_blank">{t.media.title}</a>
+                            </div>
+                            <div className="channel-playlist-username">
+                                {queueby}<span className={icon}></span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
             );
         });
         
         return (
             <div id="channel-playlist">
                 <div id="channel-playlist-items">
-                    <ul>
-                        {items}
-                    </ul>
+                    <table>
+                        <tbody>
+                            {items}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )

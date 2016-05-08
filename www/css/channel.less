@@ -20,7 +20,6 @@
     list-style-type: none;
     margin:0;
     padding:0;
-    font-size: 13px;
     
     .glyphicon-time {
       padding-right: 6px;
@@ -186,10 +185,6 @@
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
-
-  img {
-    width: 100%;
-  }
 }
 
 #channel-video-frame {
@@ -240,19 +235,51 @@
   left: 0;
   bottom: 0;
   right: 0;
+  
+  table {
+    width: 100%;
+    background-color: transparent;
+  }
+}
+
+.channel-playlist-thumbnail {
+  width: 72px;
+  
+  img {
+    height: 50px;
+  }
+}
+
+.channel-playlist-info {
+  vertical-align: top;
 }
 
 .channel-playlist-title {
   color: #CCC;
+  line-height: 14px;
 }
 
 .channel-playlist-duration {
-  font-size: 12px;
+
+  
+  span {
+    font-size: 12px;
+    line-height: 100%;
+    vertical-align: text-bottom;
+  }
+  
+  img {
+    height: 10px;
+    margin-right: 4px;
+    margin-top: -1px;
+    display: inline-block;
+  }
 }
 
 .channel-playlist-username {
   font-size: 12px;
 }
+
 
 .channel-playlist-requeue-icon {
   font-size: 12px;

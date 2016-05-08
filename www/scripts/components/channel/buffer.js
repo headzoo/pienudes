@@ -15,6 +15,7 @@ var Component = React.createClass({
         $(this.refs.buffer).mCustomScrollbar({
             theme: "minimal",
             autoHideScrollbar: true,
+            scrollInertia: 0,
             mouseWheel: {
                 scrollAmount: 300
             }

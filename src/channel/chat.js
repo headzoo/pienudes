@@ -408,7 +408,7 @@ ChatModule.prototype.sendMessage = function (msgobj) {
     this.channel.broadcastAll("chatMsg", msgobj);
 
     this.buffer.push(msgobj);
-    if (this.buffer.length > 15) {
+    if (this.buffer.length > 150) {
         this.buffer.shift();
     }
 
