@@ -1,0 +1,47 @@
+{% extends "admin/layout.html.twig" %}
+{% block content %}
+    <div>
+        <h1>{{ user.name }}</h1>
+        <form method="post" action="/admin/users/edit/{{ user.id }}">
+            <div class="form-group">
+                <label for="form-email">Email</label>
+                <input type="email" class="form-control" name="email" id="form-email" value="{{ user.email }}">
+            </div>
+            <div class="form-group">
+                <label for="form-password">Password</label>
+                <input type="text" class="form-control" name="password" id="form-password">
+                <p class="text-muted">Leave blank to keep existing password.</p>
+            </div>
+            <div class="form-group">
+                <label for="form-image">Avatar Image</label>
+                <input type="text" class="form-control" name="image" id="form-image" value="{{ user.profile.image }}">
+            </div>
+            <div class="form-group">
+                <label for="form-header">Header Image</label>
+                <input type="text" class="form-control" name="header" id="form-header" value="{{ user.profile.header }}">
+            </div>
+            <div class="form-group">
+                <label for="form-color">Color</label>
+                <input type="text" class="form-control" name="color" id="form-color" value="{{ user.profile.color }}">
+            </div>
+            <div class="form-group">
+                <label for="form-text">Tagline</label>
+                <input type="text" class="form-control" name="text" id="form-text" value="{{ user.profile.text }}">
+            </div>
+            <div class="form-group">
+                <label for="form-location">Location</label>
+                <input type="text" class="form-control" name="location" id="form-location" value="{{ user.profile.location }}">
+            </div>
+            <div class="form-group">
+                <label for="form-website">Website</label>
+                <input type="text" class="form-control" name="website" id="form-website" value="{{ user.profile.website }}">
+            </div>
+            <div class="form-group">
+                <label for="form-website">Bio</label>
+                <textarea class="form-control" id="form-bio" name="bio" style="height: 100px;">{{ user.profile.bio }}</textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+{% endblock %}

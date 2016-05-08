@@ -22,7 +22,7 @@ module.exports = {
     max_text: 50,
     max_location: 50,
     max_website: 100,
-    max_bio: 2000,
+    max_bio: 3000,
     
     init: function () {
     },
@@ -105,6 +105,25 @@ module.exports = {
                 return callback("User does not exist");
             }
 
+            callback(null, rows[0]);
+        });
+    },
+    
+    getUserById: function(id, callback) {
+        if (typeof callback !== "function") {
+            return;
+        }
+    
+        db.query("SELECT * FROM `users` WHERE id = ?", [id], function (err, rows) {
+            if (err) {
+                callback(err, true);
+                return;
+            }
+        
+            if (rows.length !== 1) {
+                return callback("User does not exist");
+            }
+        
             callback(null, rows[0]);
         });
     },
