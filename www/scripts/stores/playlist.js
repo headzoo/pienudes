@@ -30,12 +30,19 @@ module.exports = Reflux.createStore({
     },
     
     onPlaylist: function(playlist) {
+        playlist.map(function(p) {
+            p.playing = false;
+        });
         this.data.tracks = playlist;
+        console.log(playlist);
         this.trigger(this.data);
     },
     
-    onSetCurrent: function(index) {
-    
+    onSetCurrent: function(uid) {
+        this.data.tracks.map(function(t) {
+            t.playing = (t.uid == uid);
+        });
+        this.trigger(this.data);
     },
     
     onDelete: function(data) {
@@ -46,6 +53,7 @@ module.exports = Reflux.createStore({
                     tracks.push(t);
                 }
             });
+            
             this.data.tracks = tracks;
             this.trigger(this.data);
         }

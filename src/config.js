@@ -264,7 +264,7 @@ function preprocessConfig(cfg) {
     if (process.env.DEBUG === "1" || process.env.DEBUG === "true") {
         cfg.debug = true;
     } else {
-        cfg.debug = false;
+        cfg.debug = true;
     }
 
     // Strip trailing slashes from domains

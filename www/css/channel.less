@@ -239,6 +239,11 @@
   table {
     width: 100%;
     background-color: transparent;
+    
+    tr {
+      height: 50px;
+      padding: 0;
+    }
   }
 }
 
@@ -260,8 +265,6 @@
 }
 
 .channel-playlist-duration {
-
-  
   span {
     font-size: 12px;
     line-height: 100%;
@@ -277,9 +280,23 @@
 }
 
 .channel-playlist-username {
-  font-size: 12px;
+  font-size: 14px;
 }
 
+.channel-playlist-links {
+  text-transform: uppercase;
+  font-size: 10px;
+  
+  a {
+    color: #4b7ad6;
+    cursor: pointer;
+    
+    &:hover {
+      color: lighten(#4b7ad6, 10%);
+      text-decoration: underline;
+    }
+  }
+}
 
 .channel-playlist-requeue-icon {
   font-size: 12px;

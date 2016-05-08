@@ -61,7 +61,7 @@ function throttleIP(sock) {
         ipThrottle[ip] = $util.newRateLimiter();
     }
 
-    if (ipThrottle[ip].throttle(CONNECT_RATE)) {
+    if (ipThrottle[ip].throttle(CONNECT_RATE) && !Config.debug) {
         Logger.syslog.log("WARN: IP throttled: " + ip);
         sock.emit("kick", {
             reason: "Your IP address is connecting too quickly.  Please "+

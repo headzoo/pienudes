@@ -214,6 +214,10 @@
   width: 100%;
   background-color: transparent;
 }
+#channel-playlist-items table tr {
+  height: 50px;
+  padding: 0;
+}
 .channel-playlist-thumbnail {
   width: 72px;
 }
@@ -239,7 +243,19 @@
   display: inline-block;
 }
 .channel-playlist-username {
-  font-size: 12px;
+  font-size: 14px;
+}
+.channel-playlist-links {
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.channel-playlist-links a {
+  color: #4b7ad6;
+  cursor: pointer;
+}
+.channel-playlist-links a:hover {
+  color: #7599df;
+  text-decoration: underline;
 }
 .channel-playlist-requeue-icon {
   font-size: 12px;
