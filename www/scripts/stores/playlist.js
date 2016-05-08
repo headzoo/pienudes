@@ -34,7 +34,6 @@ module.exports = Reflux.createStore({
             p.playing = false;
         });
         this.data.tracks = playlist;
-        console.log(playlist);
         this.trigger(this.data);
     },
     

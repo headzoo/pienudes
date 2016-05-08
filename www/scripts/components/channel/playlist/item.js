@@ -1,9 +1,11 @@
 'use strict';
 
-var React           = require('react');
-var Reflux          = require('reflux');
-var Media           = require('../../../media');
-var PlaylistActions = require('../../../actions/playlist');
+var React            = require('react');
+var Reflux           = require('reflux');
+var Media            = require('../../../media');
+var PlaylistActions  = require('../../../actions/playlist');
+var PermissionsStore = require('../../../stores/permissions');
+var Permissions      = require('../../../permissions');
 
 var Component = React.createClass({
     getDefaultProps: function() {
@@ -47,12 +49,21 @@ var Component = React.createClass({
                             {queueby}<span className={rng_icon}></span>
                         </div>
                         <div className="channel-playlist-links">
-                            <a onClick={this.handleDelete}>Delete</a>
+                            {this.renderLinks()}
                         </div>
                     </div>
                 </td>
             </tr>
         )
+    },
+    
+    renderLinks: function() {
+        var links = [];
+        if (PermissionsStore.can(Permissions.PLAYLIST_DELETE)) {
+            links.push(<a onClick={this.handleDelete}>Delete</a>);
+        }
+        
+        return links;
     },
     
     handleDelete: function() {

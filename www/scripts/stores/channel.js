@@ -9,7 +9,6 @@ module.exports = Reflux.createStore({
     data: {
         opts: {},
         openqueue: false,
-        perms: {},
         css: "",
         js: "",
         motd: "",
@@ -24,7 +23,6 @@ module.exports = Reflux.createStore({
     },
     
     onConnectDone: function(socket, channel) {
-        socket.on(Events.SET_PERMISSIONS, this.onSetPermissions);
         socket.on(Events.SET_MOTD, this.onSetMotd);
         socket.on(Events.SET_BIO, this.onSetBio);
         socket.on(Events.SET_PLAYLIST_LOCKED, this.onSetPlaylistLocked);
@@ -38,11 +36,6 @@ module.exports = Reflux.createStore({
         });
         
         this.data.name = channel;
-        this.trigger(this.data);
-    },
-    
-    onSetPermissions: function(perms) {
-        this.data.perms = perms;
         this.trigger(this.data);
     },
     
