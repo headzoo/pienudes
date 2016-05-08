@@ -22,7 +22,7 @@ module.exports = {
     max_text: 50,
     max_location: 50,
     max_website: 100,
-    max_bio: 2000,
+    max_bio: 3000,
     
     init: function () {
     },
