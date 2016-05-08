@@ -145,6 +145,15 @@ uploads:
   s3_bucket: uploads.pienudes.com
   # Must contain a trailing slash.
   uploads_url: 'https://uploads.pienudes.com/'
+  
+# User emote settings.
+emotes:
+  # Max bytes per file.
+  bytes_per_file: 200000
+  # Name of the bucket where the files are stored.
+  s3_bucket: emotes.pienudes.com
+  # Must contain a trailing slash.
+  uploads_url: 'https://s3.amazonaws.com/emotes.pienudes.com/'
 
 # YouTube v3 API key
 # See https://developers.google.com/youtube/registering_an_application

@@ -6,6 +6,7 @@ var AWS           = require('aws-sdk');
 var fs            = require('fs');
 var url           = require("url");
 var db_uploads    = require('../database/uploads');
+var db_emotes     = require('../database/emotes');
 
 function UploadModule(channel) {
     ChannelModule.apply(this, arguments);
@@ -17,7 +18,10 @@ UploadModule.prototype = Object.create(ChannelModule.prototype);
 UploadModule.prototype.onUserPostJoin = function (user) {
     user.socket.on("uploadFile", this.handleUpload.bind(this, user));
     user.socket.on("removeUpload", this.handleRemove.bind(this, user));
+    user.socket.on("userEmoteUpload", this.handleUploadEmote.bind(this, user));
+    user.socket.on("userEmoteRemove", this.handleRemoveEmote.bind(this, user));
     this.sendUploads([user]);
+    this.sendEmotes(user);
 };
 
 UploadModule.prototype.sendUploads = function (users) {
@@ -40,6 +44,27 @@ UploadModule.prototype.sendUploads = function (users) {
                 u.socket.emit("uploadList", uploads);
             }
         });
+    });
+};
+
+UploadModule.prototype.sendEmotes = function (user) {
+    if (user.account.guest) {
+        return;
+    }
+    
+    db_emotes.fetchByUserId(user.account.id, function(err, rows) {
+        if (err) {
+            return;
+        }
+        
+        var emotes = [];
+        rows.forEach(function(r) {
+            emotes.push({
+                url: Config.get("emotes.uploads_url") + r.path,
+                text: r.text
+            });
+        });
+        user.socket.emit("userEmoteList", emotes);
     });
 };
 
@@ -180,5 +205,134 @@ UploadModule.prototype.handleRemove = function (user, data) {
         });
     }
 };
+
+UploadModule.prototype.handleUploadEmote = function(user, data) {
+    if (typeof data !== "object" || user.account.guest) {
+        return;
+    }
+    
+    if (data.data.length > Config.get("emotes.bytes_per_file")) {
+        user.socket.emit("errorEmote", {
+            msg: "File exceeds max byte value of " + Config.get("emotes.bytes_per_file") + " bytes",
+            alert: true
+        });
+        return;
+    }
+    
+    var text = data.text.trim();
+    if (text.length == 0) {
+        user.socket.emit("errorEmote", {
+            msg: "Emote text cannot be empty.",
+            alert: true
+        });
+        return;
+    } else if (text.length > 20) {
+        user.socket.emit("errorEmote", {
+            msg: "Emote text cannot exceed 20 characters.",
+            alert: true
+        });
+        return;
+    }
+    
+    db_emotes.fetchByUserIdAndText(user.account.id, data.text, function(err, row) {
+        if (row) {
+            user.socket.emit("errorEmote", {
+                msg: "You are already using " + data.text + " for another emote.",
+                alert: true
+            });
+            return;
+        }
+    
+        var filename = user.account.name + "/" + makeRandom() + "_" + data.name;
+        var bucket   = new AWS.S3({params: {Bucket: Config.get("emotes.s3_bucket")}});
+        var params   = {
+            Key: filename,
+            Body: data.data,
+            ContentType: data.type,
+            ACL:'public-read'
+        };
+    
+        bucket.upload(params, function(err) {
+            if (err) {
+                user.socket.emit("errorEmote", {
+                    msg: "Error uploading file. Try again in a minute.",
+                    alert: true
+                });
+                return;
+            }
+        
+            db_emotes.insert(user.account.id, filename, text, function(err) {
+                if (err) {
+                    user.socket.emit("errorEmote", {
+                        msg: "Error saving emote. Try again in a minute.",
+                        alert: true
+                    });
+                    return;
+                }
+            
+                user.socket.emit("userEmoteComplete", {
+                    url: Config.get("emotes.uploads_url") + filename,
+                    text: text
+                });
+            });
+        });
+    });
+};
+
+UploadModule.prototype.handleRemoveEmote = function(user, data) {
+    if (typeof data !== "object" || user.account.guest) {
+        return;
+    }
+    
+    var text = data.text;
+    db_emotes.fetchByUserIdAndText(user.account.id, text, function(err, row) {
+        if (err) {
+            user.socket.emit("errorEmote", {
+                msg: "Unable to delete emote at this time."
+            });
+            return;
+        }
+        
+        if (row) {
+            try {
+                var d    = url.parse(data.url);
+                var path = d.path.replace(/^\//, "");
+    
+                var bucket = new AWS.S3({params: {Bucket: Config.get("emotes.s3_bucket")}});
+                var params = {
+                    Key: path
+                };
+                bucket.deleteObject(params, function(err) {
+                    if (err) {
+                        user.socket.emit("errorEmote", {
+                            msg: "Error deleting emote."
+                        });
+                    } else {
+                        db_emotes.remove(user.account.id, text, function() {
+                            user.socket.emit("userEmoteRemove", {
+                                url: data.url,
+                                text: text
+                            });
+                        });
+                    }
+                });
+            } catch(e) {
+                user.socket.emit("errorEmote", {
+                    msg: "Unable to delete emote at this time."
+                });
+            }
+        }
+    });
+};
+
+function makeRandom() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    
+    for( var i=0; i < 8; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    
+    return text;
+}
 
 module.exports = UploadModule;

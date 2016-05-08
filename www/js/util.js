@@ -635,11 +635,19 @@ function showUserOptions() {
     $("#useroptions").on("hidden.bs.modal", function () {
         unhidePlayer();
     });
-
+    
     if (CLIENT.rank < 2) {
         $("a[href='#us-mod']").parent().hide();
     } else {
         $("a[href='#us-mod']").parent().show();
+    }
+    
+    if (!CLIENT.logged_in) {
+        $("#us-user-emotes-tab").hide();
+        $("#us-user-emotes").hide();
+    } else {
+        $("#us-user-emotes-tab").show();
+        $("#us-user-emotes").show();
     }
     
     $("#us-no-channelcss").prop("checked", USEROPTS.ignore_channelcss);
@@ -2521,7 +2529,7 @@ function formatCSChatFilterList() {
 function formatCSEmoteList() {
     var tbl = $("#cs-emotes table");
     tbl.find("tbody").remove();
-    var entries = CHANNEL.emotes || [];
+    var entries = CLIENT.emotes.concat(CHANNEL.emotes);
     entries.forEach(function (f) {
         var tr = $("<tr/>").appendTo(tbl);
         var del = $("<button/>").addClass("btn btn-xs btn-danger")
@@ -2642,6 +2650,46 @@ function formatUploadsList(first) {
         var max = $("#cs-uploads-bytes-per-file");
         max.text(humanFileSize(max.text()));
     }
+}
+
+function formatUserEmotesList(tbl) {
+    tbl.find("tbody").remove();
+    
+    var entries = tbl.data("entries");
+    entries.forEach(function (f) {
+        var tr = $("<tr/>")
+            .appendTo(tbl);
+        var td = $("<td/>");
+        td.appendTo(tr);
+        
+        var group = $("<div/>")
+            .addClass("btn-group")
+            .appendTo(td);
+        
+        var del = $("<button/>")
+            .addClass("btn btn-xs btn-danger")
+            .attr("title", "Delete")
+            .appendTo(group);
+        $("<span/>").addClass("glyphicon glyphicon-trash")
+            .appendTo(del);
+        del.click(function () {
+            if (confirm("Are you sure you want to delete this emote?")) {
+                socket.emit("userEmoteRemove", f);
+            }
+        });
+        
+        td = $("<td/>");
+        td.appendTo(tr);
+        td.text(f.text)
+            .addClass("linewrap")
+            .appendTo(td);
+        
+        td = $("<td/>");
+        td.appendTo(tr);
+        td.text(f.url)
+            .addClass("linewrap")
+            .appendTo(td);
+    });
 }
 
 function formatUserVideoVotes(votes) {
@@ -2826,11 +2874,26 @@ function loadEmotes(data) {
     });
 }
 
+function loadUserEmotes(data) {
+    CLIENT.emotes = [];
+    data.forEach(function (e) {
+        if (e.url && e.text) {
+            e.source = '(^|\s)' + e.text + '(?!\S)';
+            e.name   = e.text;
+            e.image  = e.url;
+            e.regex  = new RegExp(e.source, "gi");
+            CLIENT.emotes.push(e);
+        } else {
+            console.error("Rejecting invalid emote: " + JSON.stringify(e));
+        }
+    });
+}
+
 function execEmotes(msg) {
     if (USEROPTS.no_emotes) {
         return msg;
     }
-
+    
     CHANNEL.emotes.forEach(function (e) {
         msg = msg.replace(e.regex, '$1<img class="channel-emote" src="' +
                                    e.image + '" title="' + e.name + '">');
@@ -3196,7 +3259,9 @@ EmoteList.prototype.initSortOption = function () {
 };
 
 EmoteList.prototype.handleChange = function () {
-    this.emotes = CHANNEL.emotes.slice();
+    var user_emotes = CLIENT.emotes.slice();
+    this.emotes = user_emotes.concat(CHANNEL.emotes.slice());
+    
     if (this.sortAlphabetical) {
         this.emotes.sort(function (a, b) {
             var x = a.name.toLowerCase();
@@ -3226,7 +3291,7 @@ EmoteList.prototype.handleChange = function () {
 EmoteList.prototype.loadPage = function (page) {
     var tbody = this.table.children[0];
     tbody.innerHTML = "";
-
+    
     var row;
     var start = page * this.itemsPerPage;
     if (start >= this.emotes.length) return;

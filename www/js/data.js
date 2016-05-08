@@ -5,6 +5,7 @@ var CLIENT = {
     leader: false,
     name: "",
     logged_in: false,
+    emotes: [],
     profile: {
         image: "",
         text: ""

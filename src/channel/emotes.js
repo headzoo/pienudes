@@ -1,12 +1,15 @@
 var ChannelModule = require("./module");
+var Config = require("../config");
 var XSS = require("../xss");
 var db_channels = require('../database/channels');
+var db_emotes   = require('../database/emotes');
+var emotes_url  = Config.get("emotes.uploads_url");
 
 function EmoteList(defaults) {
     if (!defaults) {
         defaults = [];
     }
-
+    
     this.emotes = defaults.map(validateEmote).filter(function (f) {
         return f !== false;
     });
@@ -230,6 +233,20 @@ EmoteModule.exec = function(chan_id, msg, callback) {
             callback(msg);
         }
     });
+};
+
+EmoteModule.execUser = function(user_id, msg, callback) {
+    db_emotes.fetchByUserId(user_id, function(err, emotes) {
+        if (!err) {
+            emotes.forEach(function (e) {
+                msg = msg.replace(
+                    new RegExp('(^|\s)' + e.text + '(?!\S)', "gi"),
+                    '$1<img class="channel-emote" src="' + emotes_url + e.path + '">'
+                );
+            });
+        }
+        callback(msg);
+    }.bind(this));
 };
 
 module.exports = EmoteModule;
