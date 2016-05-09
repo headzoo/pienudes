@@ -7,7 +7,7 @@ var Component = React.createClass({
     render: function () {
         return (
             <div id="channel-video-input-wrap">
-                <input ref="msg" id="channel-video-input" type="text" placeholder="Play something..." onKeyUp={this.handleKeyUp} />
+                <input ref="msg" id="channel-video-input" type="text" placeholder="Play something... (YouTube, SoundCloud)" onKeyUp={this.handleKeyUp} />
                 <button id="channel-video-search" className="channel-video-button">
                     <span className="glyphicon glyphicon-search"></span>
                 </button>
