@@ -240,8 +240,8 @@ EmoteModule.execUser = function(user_id, msg, callback) {
         if (!err) {
             emotes.forEach(function (e) {
                 msg = msg.replace(
-                    new RegExp('(^|\s)' + e.text + '(?!\S)', "gi"),
-                    '$1<img class="channel-emote" src="' + emotes_url + e.path + '">'
+                    new RegExp(e.text, "gi"),
+                    '<img class="channel-emote" src="' + emotes_url + e.path + '">'
                 );
             });
         }
