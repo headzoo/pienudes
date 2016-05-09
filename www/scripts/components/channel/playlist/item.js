@@ -40,11 +40,10 @@ var Component = React.createClass({
                 <td>
                     <div className="channel-playlist-info">
                         <div className="channel-playlist-duration pull-right">
-                            {play_icon}
                             {track.media.duration}
                         </div>
                         <div className="channel-playlist-title">
-                            <a href={Media.clickUrl(track.media)} target="_blank">{track.media.title}</a>
+                            <a href={Media.clickUrl(track.media)} target="_blank">{play_icon} {track.media.title}</a>
                         </div>
                         <div className="channel-playlist-username">
                             {queueby}<span className={rng_icon}></span>

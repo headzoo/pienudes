@@ -7,10 +7,11 @@
   padding: 50px 0 0 0;
   font-family: 'Roboto', sans-serif;
 }
-#channel-user-list {
+#channel-user-list-wrap {
   display: inline-block;
+  position: relative;
   height: 100%;
-  padding: 6px 12px;
+  padding: 12px 18px;
   vertical-align: top;
   background-color: #1B1B1B;
 }
@@ -24,6 +25,20 @@
 }
 #channel-user-list ul li {
   cursor: pointer;
+}
+#channel-user-list-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 46px;
+  background-color: #1D1D1D;
+  text-align: center;
+  padding: 8px 6px 4px 6px;
+  font-size: 12px;
+  -webkit-box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.3);
 }
 .channel-user-list-rank-admin {
   color: #CC4F4F!important;
@@ -96,7 +111,7 @@
 }
 #channel-buffer-input::-webkit-input-placeholder,
 #channel-video-input::-webkit-input-placeholder {
-  color: #222;
+  color: #3E3E3E;
 }
 .channel-buffer-button,
 .channel-video-button {
@@ -114,7 +129,12 @@
 .channel-video-button:focus {
   outline: none;
 }
-#channel-buffer-send {
+.channel-buffer-button:hover,
+.channel-video-button:hover {
+  background: #232323 !important;
+}
+#channel-buffer-send,
+#channel-video-add {
   width: 80px;
   text-transform: uppercase;
   display: flex;
@@ -137,6 +157,9 @@
 .sp-replacer:focus {
   outline: none;
 }
+.sp-replacer:hover {
+  background: #232323 !important;
+}
 @media only screen and (max-width: 768px) {
   .sp-replacer {
     padding: 10px 20px;
@@ -155,8 +178,14 @@
 .sp-container:focus {
   outline: none;
 }
+.sp-container:hover {
+  background: #232323 !important;
+}
 .sp-picker-container {
   border-left: none !important;
+}
+.sp-preview {
+  width: 22px !important;
 }
 .sp-input {
   border: none !important;
@@ -188,8 +217,10 @@
 .sp-button-container button:focus {
   outline: none;
 }
+.sp-button-container button:hover {
+  background: #232323 !important;
+}
 #channel-buffer-emote,
-#channel-video-search,
 #channel-video-catalog {
   width: 40px;
   display: flex;
@@ -199,9 +230,11 @@
   -ms-flex-pack: center;
 }
 #channel-buffer-emote:focus,
-#channel-video-search:focus,
 #channel-video-catalog:focus {
   outline: none;
+}
+#channel-video-catalog {
+  width: 60px;
 }
 #channel-video-wrap {
   height: 100%;
@@ -279,16 +312,13 @@
   color: #CCC;
   line-height: 14px;
 }
-.channel-playlist-duration span {
-  font-size: 12px;
-  line-height: 100%;
-  vertical-align: text-bottom;
-}
-.channel-playlist-duration img {
-  height: 10px;
-  margin-right: 4px;
-  margin-top: -1px;
+.channel-playlist-title img {
+  height: 12px;
+  margin-top: -5px;
   display: inline-block;
+}
+.channel-playlist-duration {
+  font-size: 12px;
 }
 .channel-playlist-username {
   font-size: 14px;

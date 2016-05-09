@@ -27,10 +27,16 @@ var Component = React.createClass({
         }
         
         return (
-            <div id="channel-user-list" className="hidden-xs hidden-sm col-md-1">
-                <ul>
-                    {items}
-                </ul>
+            <div id="channel-user-list-wrap" className="hidden-xs hidden-sm col-md-1">
+                <div id="channel-user-list">
+                    <ul>
+                        {items}
+                    </ul>
+                </div>
+                <div id="channel-user-list-footer">
+                    <a href="/help">Help</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/about">About</a><br />
+                    &copy; 2016 Pienudes
+                </div>
             </div>
         )
     },

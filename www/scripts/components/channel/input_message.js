@@ -32,11 +32,11 @@ var Component = React.createClass({
         return (
             <div id="channel-buffer-input-wrap">
                 <input ref="msg" id="channel-buffer-input" type="text" placeholder="Say something..." onKeyUp={this.handleKeyUp} />
+                <button id="channel-buffer-send" className="channel-buffer-button" onClick={this.handleSendClick}>Send</button>
                 <button id="channel-buffer-emote" className="channel-buffer-button">
                     <img src="https://twemoji.maxcdn.com/16x16/1f600.png" />
                 </button>
                 <input ref="color" id="channel-buffer-color" className="channel-buffer-button" type="color" />
-                <button id="channel-buffer-send" className="channel-buffer-button hidden-lg" onClick={this.handleSendClick}>Send</button>
             </div>
         )
     },
