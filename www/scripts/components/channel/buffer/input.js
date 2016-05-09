@@ -2,9 +2,9 @@
 
 var React  = require('react');
 var Reflux = require('reflux');
-var SocketActions = require('../../actions/socket');
-var EmotesActions = require('../../actions/emotes');
-var Events        = require('../../events');
+var SocketActions = require('../../../actions/socket');
+var EmotesActions = require('../../../actions/emotes');
+var Events        = require('../../../events');
 
 var history = [];
 var history_index = 0;

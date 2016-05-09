@@ -4,7 +4,7 @@ var React         = require('react');
 var Reflux        = require('reflux');
 var Controls      = require('./controls');
 var Playlist      = require('./playlist');
-var Input         = require('./input_video');
+var Input         = require('./video/input');
 var PlayerStore   = require('../../stores/player');
 var PlayerActions = require('../../actions/player');
 

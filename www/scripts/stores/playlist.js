@@ -1,16 +1,30 @@
 'use strict';
 
-var Reflux        = require('reflux');
-var SocketActions = require('../actions/socket');
-var Events        = require('../events');
+var Reflux          = require('reflux');
+var SocketActions   = require('../actions/socket');
+var PlaylistActions = require('../actions/playlist');
+var Events          = require('../events');
+var Media           = require('../media');
 
 module.exports = Reflux.createStore({
-    listenables: [SocketActions],
+    listenables: [SocketActions, PlaylistActions],
     socket: null,
     data: [],
     
     getInitialState() {
         return this.data;
+    },
+    
+    onQueueUrl: function(url) {
+        var m = Media.parseMediaLink(url);
+        if (m.id === null) {
+            // @todo Display error
+            return;
+        }
+        
+        m.pos = "end";
+        m.temp = true;
+        PlaylistActions.queueMedia(m);
     },
     
     onConnectDone: function(socket) {

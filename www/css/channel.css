@@ -118,6 +118,7 @@
   background: #1b1b1b !important;
   border: solid 1px #161A20 !important;
   padding: 4px 15px;
+  text-transform: uppercase;
 }
 @media only screen and (max-width: 768px) {
   .channel-buffer-button,
@@ -147,6 +148,7 @@
   background: #1b1b1b !important;
   border: solid 1px #161A20 !important;
   padding: 4px 15px;
+  text-transform: uppercase;
   padding: 10px !important;
 }
 @media only screen and (max-width: 768px) {
@@ -169,6 +171,7 @@
   background: #1b1b1b !important;
   border: solid 1px #161A20 !important;
   padding: 4px 15px;
+  text-transform: uppercase;
 }
 @media only screen and (max-width: 768px) {
   .sp-container {
@@ -205,6 +208,7 @@
   background: #1b1b1b !important;
   border: solid 1px #161A20 !important;
   padding: 4px 15px;
+  text-transform: uppercase;
   background: #282828 !important;
   text-shadow: none !important;
   color: #FFF !important;
@@ -262,6 +266,14 @@
 }
 #channel-video-catalog {
   width: 60px;
+}
+#channel-video-catalog-menu {
+  position: absolute;
+  right: 0;
+  bottom: 46px;
+  background-color: #000;
+  border: 1px solid #1b1b1b;
+  display: none;
 }
 #channel-video-wrap {
   height: 100%;
