@@ -20,7 +20,7 @@ var Component = React.createClass({
     render: function () {
         var frame = null;
         if (this.state.player.loaded) {
-            frame = <iframe width="560" height="315" src="https://www.youtube.com/embed/YqeW9_5kURI" frameBorder="0" allowFullscreen></iframe>;
+            frame = <iframe width="560" height="315" src="https://www.youtube.com/embed/YqeW9_5kURI" frameBorder="0" allowFullScreen></iframe>;
         }
         
         return (

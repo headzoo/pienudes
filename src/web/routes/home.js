@@ -53,7 +53,7 @@ module.exports = {
                     db_playlists.fetchMostWatched(3, function(err, top_rows) {
                         db_votes.fetchMostUpvoted(3, function(err, voted_rows) {
                             template.send(res, 'home/index', {
-                                pageTitle: "Pienudes - Music and Chat",
+                                pageTitle: "Pienudes - Say something. Play something.",
                                 top_media: top_rows,
                                 recent_media: recent_rows,
                                 voted_rows: voted_rows,

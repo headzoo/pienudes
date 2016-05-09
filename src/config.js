@@ -6,6 +6,7 @@ var net = require("net");
 var YAML = require("yamljs");
 
 var defaults = {
+    debug: false,
     mysql: {
         server: "localhost",
         port: 3306,

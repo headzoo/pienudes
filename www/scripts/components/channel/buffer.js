@@ -4,6 +4,7 @@ var React         = require('react');
 var Reflux        = require('reflux');
 var Input         = require('./input_message');
 var Message       = require('./message');
+var Emotes        = require('./emotes');
 var MessagesStore = require('../../stores/messages');
 
 var Component = React.createClass({
@@ -40,6 +41,7 @@ var Component = React.createClass({
                         </div>
                     </div>
                 </div>
+                <Emotes />
                 <Input />
             </div>
         )

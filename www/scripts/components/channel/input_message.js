@@ -3,6 +3,7 @@
 var React  = require('react');
 var Reflux = require('reflux');
 var SocketActions = require('../../actions/socket');
+var EmotesActions = require('../../actions/emotes');
 var Events        = require('../../events');
 
 var history = [];
@@ -20,7 +21,10 @@ var Component = React.createClass({
             color: color,
             preferredFormat: "hex",
             showInput: true,
-            clickoutFiresChange: true
+            clickoutFiresChange: true,
+            show: function() {
+                EmotesActions.hide();
+            }
         }).on("change", function () {
             color = color_picker.value;
             window.localStorage.setItem("chat_line_color", color);
@@ -33,7 +37,7 @@ var Component = React.createClass({
             <div id="channel-buffer-input-wrap">
                 <input ref="msg" id="channel-buffer-input" type="text" placeholder="Say something..." onKeyUp={this.handleKeyUp} />
                 <button id="channel-buffer-send" className="channel-buffer-button" onClick={this.handleSendClick}>Send</button>
-                <button id="channel-buffer-emote" className="channel-buffer-button">
+                <button id="channel-buffer-emote" className="channel-buffer-button" onClick={this.handleEmotes}>
                     <img src="https://twemoji.maxcdn.com/16x16/1f600.png" />
                 </button>
                 <input ref="color" id="channel-buffer-color" className="channel-buffer-button" type="color" />
@@ -66,6 +70,10 @@ var Component = React.createClass({
     
     handleSendClick: function() {
         this.sendChatMsg(this.refs.msg.value);
+    },
+    
+    handleEmotes: function() {
+        EmotesActions.toggle();
     },
     
     sendChatMsg: function(msg) {

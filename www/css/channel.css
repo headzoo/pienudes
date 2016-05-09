@@ -13,7 +13,7 @@
   height: 100%;
   padding: 12px 18px;
   vertical-align: top;
-  background-color: #1B1B1B;
+  background-color: #1b1b1b;
 }
 #channel-user-list ul {
   list-style-type: none;
@@ -83,8 +83,8 @@
   bottom: 0;
   height: 44px;
   display: flex;
-  border-top: 1px solid #1B1B1B;
-  border-right: 1px solid #1B1B1B;
+  border-top: 1px solid #1b1b1b;
+  border-right: 1px solid #1b1b1b;
 }
 #channel-buffer-input-wrap ul,
 #channel-video-input-wrap ul {
@@ -115,7 +115,7 @@
 }
 .channel-buffer-button,
 .channel-video-button {
-  background: #1B1B1B !important;
+  background: #1b1b1b !important;
   border: solid 1px #161A20 !important;
   padding: 4px 15px;
 }
@@ -144,7 +144,7 @@
   -ms-flex-pack: center;
 }
 .sp-replacer {
-  background: #1B1B1B !important;
+  background: #1b1b1b !important;
   border: solid 1px #161A20 !important;
   padding: 4px 15px;
   padding: 10px !important;
@@ -166,7 +166,7 @@
   }
 }
 .sp-container {
-  background: #1B1B1B !important;
+  background: #1b1b1b !important;
   border: solid 1px #161A20 !important;
   padding: 4px 15px;
 }
@@ -199,10 +199,10 @@
   border: solid 1px #3C3C3C !important;
 }
 .sp-slider {
-  background: #1B1B1B !important;
+  background: #1b1b1b !important;
 }
 .sp-button-container button {
-  background: #1B1B1B !important;
+  background: #1b1b1b !important;
   border: solid 1px #161A20 !important;
   padding: 4px 15px;
   background: #282828 !important;
@@ -232,6 +232,33 @@
 #channel-buffer-emote:focus,
 #channel-video-catalog:focus {
   outline: none;
+}
+#channel-emote-picker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 44px;
+  height: 70px;
+  display: none;
+  width: 100%;
+  padding: 4px;
+  margin: 0;
+  list-style-type: none;
+  background-color: #000;
+  border-top: 1px solid #1b1b1b;
+  border-right: 1px solid #1b1b1b;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+#channel-emote-picker div {
+  display: inline-block;
+  margin-right: 4px;
+}
+#channel-emote-picker div img {
+  max-height: 50px;
+  max-width: 50px;
+  vertical-align: middle;
 }
 #channel-video-catalog {
   width: 60px;
