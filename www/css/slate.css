@@ -3564,14 +3564,6 @@ textarea.input-group-sm > .input-group-btn > .btn {
   display: block;
   padding: 10px 15px;
 }
-.nav > li > a:focus,
-.nav > li > a:hover {
-  text-decoration: none;
-  background-color: #3e444c;
-}
-.nav > li.disabled > a {
-  color: #7a8288;
-}
 .nav > li.disabled > a:focus,
 .nav > li.disabled > a:hover {
   color: #7a8288;

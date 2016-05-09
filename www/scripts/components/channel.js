@@ -8,15 +8,12 @@ var Video  = require('./channel/video');
 
 var ConnectionStore = require('../stores/connection');
 var ChannelStore    = require('../stores/channel');
-var ClientStore     = require('../stores/client');
 var SocketActions   = require('../actions/socket');
-
 
 var Component = React.createClass({
     mixins: [
         Reflux.connect(ConnectionStore, "connection"),
-        Reflux.listenTo(ChannelStore, "onChannel"),
-        Reflux.connect(ClientStore, "client")
+        Reflux.listenTo(ChannelStore, "onChannel")
     ],
     
     onChannel: function(data) {

@@ -8,6 +8,7 @@ var Events        = require('../events');
 
 module.exports = Reflux.createStore({
     listenables: [SocketActions],
+    rank: 0,
     data: {},
     
     getInitialState() {
@@ -18,7 +19,7 @@ module.exports = Reflux.createStore({
         if(key.indexOf("playlist") == 0 && ChannelStore.data.openqueue) {
             var key2 = "o" + key;
             var v = this.data[key2];
-            if(typeof v == "number" && ClientStore.data.rank >= v) {
+            if(typeof v == "number" && this.rank >= v) {
                 return true;
             }
         }
@@ -28,11 +29,16 @@ module.exports = Reflux.createStore({
             return false;
         }
         
-        return ClientStore.data.rank >= v;
+        return this.rank >= v;
     },
     
     onConnectDone: function(socket) {
         socket.on(Events.SET_PERMISSIONS, this.onSetPermissions);
+        socket.on(Events.RANK, this.onRank);
+    },
+    
+    onRank: function(rank) {
+        this.rank = rank;
     },
     
     onSetPermissions: function(perms) {

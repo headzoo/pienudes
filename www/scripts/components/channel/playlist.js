@@ -16,7 +16,7 @@ var Component = React.createClass({
                 <div id="channel-playlist-items">
                     <table>
                         <tbody>
-                            {this.state.playlist.tracks.map(function(t, i) {
+                            {this.state.playlist.map(function(t, i) {
                                 return <PlaylistItem key={i} track={t}/>
                             })}
                         </tbody>

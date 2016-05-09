@@ -8,6 +8,7 @@ var PermissionsStore = require('../../../stores/permissions');
 var Permissions      = require('../../../permissions');
 
 var Component = React.createClass({
+
     getDefaultProps: function() {
         return {
             track: {}
@@ -36,7 +37,7 @@ var Component = React.createClass({
                         <img src={Media.thumbnailUrl(track.media)} />
                     </a>
                 </td>
-                <td style={{verticalAlign: "top"}}>
+                <td>
                     <div className="channel-playlist-info">
                         <div className="channel-playlist-duration pull-right">
                             {play_icon}
@@ -60,7 +61,7 @@ var Component = React.createClass({
     renderLinks: function() {
         var links = [];
         if (PermissionsStore.can(Permissions.PLAYLIST_DELETE)) {
-            links.push(<a onClick={this.handleDelete}>Delete</a>);
+            links.push(<a key="delete" onClick={this.handleDelete}>Delete</a>);
         }
         
         return links;

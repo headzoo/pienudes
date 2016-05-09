@@ -933,13 +933,25 @@ textarea:focus, input:focus{
     margin-bottom: 20px;
 }
 
+@color-nav-bar-inverse: #360B3E;
+
+.nav>li>a:focus,
+.nav>li>a:hover {
+    text-decoration: none;
+    background-color: @color-nav-bar-inverse;
+}
+
+.nav>li.disabled>a {
+    color: #7a8288
+}
+
 .navbar-inverse {
-    background-color: @color-card-bg;
+    background-color: @color-nav-bar-inverse;
     border-color: @color-card-border;
 }
 
 .navbar-nav>li>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
+    background-color: lighten(@color-nav-bar-inverse, 10%);
     border-left-color: transparent
 }
 
@@ -948,7 +960,7 @@ textarea:focus, input:focus{
 .navbar-inverse .navbar-nav>.open>a,
 .navbar-inverse .navbar-nav>.open>a:focus,
 .navbar-inverse .navbar-nav>.open>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
+    background-color: lighten(@color-nav-bar-inverse, 10%);
     color: #fff
 }
 
@@ -988,7 +1000,7 @@ textarea:focus, input:focus{
     color: #fff;
     text-decoration: none;
     outline: 0;
-    background-color: #272b30
+    background-color: @color-nav-bar-inverse;
 }
 
 .dropdown-menu>.disabled>a,
@@ -1002,11 +1014,11 @@ textarea:focus, input:focus{
     text-decoration: none;
     background-color: transparent;
     background-image: none;
-    cursor: not-allowed
+    cursor: not-allowed;
 }
 
 .dropdown-menu {
-    background-color: @color-card-bg;
+    background-color: @color-nav-bar-inverse;
     position: absolute;
     top: 100%;
     left: 0;
@@ -1030,7 +1042,7 @@ textarea:focus, input:focus{
 
 .dropdown-menu>li>a:focus,
 .dropdown-menu>li>a:hover {
-    background-color: lighten(@color-card-bg, 10%);
+    background-color: lighten(@color-nav-bar-inverse, 10%);
     text-decoration: none;
     color: #fff;
 }

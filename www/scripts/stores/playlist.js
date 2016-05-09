@@ -7,38 +7,29 @@ var Events        = require('../events');
 module.exports = Reflux.createStore({
     listenables: [SocketActions],
     socket: null,
-    data: {
-        meta: {},
-        tracks: []
-    },
+    data: [],
     
     getInitialState() {
         return this.data;
     },
     
     onConnectDone: function(socket) {
-        socket.on(Events.SET_PLAYLIST_META, this.onSetPlaylistMeta);
         socket.on(Events.PLAYLIST, this.onPlaylist);
         socket.on(Events.SET_CURRENT, this.onSetCurrent);
         socket.on(Events.DELETE, this.onDelete);
         socket.on(Events.QUEUE, this.onQueue);
     },
     
-    onSetPlaylistMeta: function(meta) {
-        this.data.meta = meta;
-        this.trigger(this.data);
-    },
-    
     onPlaylist: function(playlist) {
         playlist.map(function(p) {
             p.playing = false;
         });
-        this.data.tracks = playlist;
+        this.data = playlist;
         this.trigger(this.data);
     },
     
     onSetCurrent: function(uid) {
-        this.data.tracks.map(function(t) {
+        this.data.map(function(t) {
             t.playing = (t.uid == uid);
         });
         this.trigger(this.data);
@@ -47,22 +38,22 @@ module.exports = Reflux.createStore({
     onDelete: function(data) {
         if (data.uid !== undefined) {
             var tracks = [];
-            this.data.tracks.map(function(t) {
+            this.data.map(function(t) {
                 if (t.uid != data.uid) {
                     tracks.push(t);
                 }
             });
             
-            this.data.tracks = tracks;
+            this.data = tracks;
             this.trigger(this.data);
         }
     },
     
     onQueue: function(data) {
         if (data.after == "prepend") {
-            this.data.tracks.push(data.item);
+            this.data.push(data.item);
         } else {
-            this.data.tracks.splice(data.after, 0, data.item);
+            this.data.splice(data.after, 0, data.item);
         }
         this.trigger(this.data);
     }

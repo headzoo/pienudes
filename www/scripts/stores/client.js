@@ -9,6 +9,7 @@ module.exports = Reflux.createStore({
     socket: null,
     data: {
         rank: -1,
+        super_admin: false,
         leader: false,
         name: "",
         logged_in: false,
@@ -23,19 +24,30 @@ module.exports = Reflux.createStore({
         return this.data;
     },
     
-    onConnectDone: function(socket) {
-        socket.on(Events.LOGIN, this.onLogin);
-        
+    onConnectDone: function() {
         if (this.data.name && this.data.guest) {
             SocketActions.emit(Events.LOGIN, {
                 name: this.data.name
             });
         }
-        
+    },
+    
+    onLoginDone: function(data) {
+        this.data.name      = data.name;
+        this.data.guest     = data.guest;
+        this.data.logged_in = true;
         this.trigger(this.data);
     },
     
-    onLogin: function(data) {
+    onLoginFail: function(data) {
         console.log(data);
+    },
+    
+    onRank: function(rank) {
+        this.data.rank = rank;
+        if (rank >= 255) {
+            this.data.super_admin = true;
+        }
+        this.trigger(this.data);
     }
 });

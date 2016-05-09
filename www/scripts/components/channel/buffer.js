@@ -2,7 +2,7 @@
 
 var React         = require('react');
 var Reflux        = require('reflux');
-var Input         = require('./input');
+var Input         = require('./input_message');
 var Message       = require('./message');
 var MessagesStore = require('../../stores/messages');
 
