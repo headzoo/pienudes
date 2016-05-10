@@ -263,7 +263,7 @@ ChatModule.prototype.processChatMsg = function (user, data) {
         user.setAFK(false);
     }
     
-    var msgobj = this.formatMessage(user, data);
+    var msgobj = this.formatMessage(user.getName(), data);
     var antiflood = MIN_ANTIFLOOD;
     if (this.channel.modules.options &&
         this.channel.modules.options.get("chat_antiflood") &&
@@ -335,7 +335,7 @@ ChatModule.prototype.formatMessage = function (user, data) {
     }
     
     var obj = {
-        username: user.getName(),
+        username: user,
         msg: msg,
         meta: data.meta,
         time: Date.now()
