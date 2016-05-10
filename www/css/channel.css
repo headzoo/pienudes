@@ -389,62 +389,67 @@
   margin: 0 0 20px 0;
   flex: 0 1 30px;
 }
-#channel-video-controls-vote-up {
-  display: inline-block;
+.channel-video-controls-vote-button {
   vertical-align: middle;
+  float: right;
+  cursor: pointer;
+}
+#channel-video-controls-vote-up {
+  vertical-align: middle;
+  float: right;
+  cursor: pointer;
+  margin-right: -4px;
 }
 #channel-video-controls-vote-up .glyphicon-chevron-up {
   vertical-align: middle;
   color: #013E01;
   font-size: 26px;
-  margin-top: -10px;
-  cursor: pointer;
+  margin-top: -9px;
 }
 #channel-video-controls-vote-up .channel-video-controls-vote-value {
-  margin-left: 4px;
-  color: #585858;
-  font-size: 22px;
+  margin-right: 4px;
 }
 #channel-video-controls-vote-up.active .glyphicon-chevron-up {
   color: #019E01;
 }
 #channel-video-controls-vote-up.active .channel-video-controls-vote-value {
-  color: #FFF;
+  color: #7D7D7D;
 }
 #channel-video-controls-vote-up:hover .glyphicon-chevron-up {
   color: #037703;
 }
 #channel-video-controls-vote-up:hover .channel-video-controls-vote-value {
-  color: #FFF;
+  color: #7D7D7D;
 }
 #channel-video-controls-vote-down {
-  float: right;
-  display: inline-block;
   vertical-align: middle;
+  float: right;
+  cursor: pointer;
 }
 #channel-video-controls-vote-down .glyphicon-chevron-down {
   vertical-align: middle;
   color: #5A0902;
   font-size: 26px;
-  margin-top: -6px;
-  cursor: pointer;
+  margin-top: -5px;
 }
 #channel-video-controls-vote-down .channel-video-controls-vote-value {
-  margin-right: 4px;
-  color: #585858;
-  font-size: 22px;
+  margin-left: 4px;
 }
 #channel-video-controls-vote-down.active .glyphicon-chevron-down {
   color: #B31508;
 }
 #channel-video-controls-vote-down.active .channel-video-controls-vote-value {
-  color: #FFF;
+  color: #7D7D7D;
 }
 #channel-video-controls-vote-down:hover .glyphicon-chevron-down {
   color: #9E1004;
 }
 #channel-video-controls-vote-down:hover .channel-video-controls-vote-value {
-  color: #FFF;
+  color: #7D7D7D;
+}
+.channel-video-controls-vote-value {
+  color: #585858;
+  font-size: 18px;
 }
 .playlist-enter {
   opacity: 0.01;

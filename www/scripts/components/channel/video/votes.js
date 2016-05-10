@@ -21,13 +21,13 @@ var Component = React.createClass({
         
         return (
             <div id="channel-video-controls-votes">
-                <div id="channel-video-controls-vote-up" className={up_classes}>
-                    <span className="glyphicon glyphicon-chevron-up" onClick={this.handleUpVote}></span>
-                    <span className="channel-video-controls-vote-value">{this.state.votes.up}</span>
-                </div>
                 <div id="channel-video-controls-vote-down" className={down_classes}>
-                    <span className="channel-video-controls-vote-value">{this.state.votes.down}</span>
                     <span className="glyphicon glyphicon-chevron-down" onClick={this.handleDownVote}></span>
+                    <span className="channel-video-controls-vote-value">{this.state.votes.down}</span>
+                </div>
+                <div id="channel-video-controls-vote-up" className={up_classes}>
+                    <span className="channel-video-controls-vote-value">{this.state.votes.up}</span>
+                    <span className="glyphicon glyphicon-chevron-up" onClick={this.handleUpVote}></span>
                 </div>
             </div>
         )
