@@ -3,13 +3,15 @@
 var Reflux        = require('reflux');
 var SocketActions = require('../actions/socket');
 var EmotesActions = require('../actions/emotes');
+var ScrollActions = require('../actions/scroll');
 var Events        = require('../events');
 
 module.exports = Reflux.createStore({
     listenables: [SocketActions, EmotesActions],
     data: {
         visible: false,
-        items: []
+        items: [],
+        selected: null
     },
     
     getInitialState() {
@@ -19,16 +21,24 @@ module.exports = Reflux.createStore({
     onShow: function() {
         this.data.visible = true;
         this.trigger(this.data);
+        ScrollActions.scroll();
     },
     
     onHide: function() {
         this.data.visible = false;
         this.trigger(this.data);
+        ScrollActions.scroll();
     },
     
     onToggle: function() {
         this.data.visible = !this.data.visible;
         this.trigger(this.data);
+        ScrollActions.scroll();
+    },
+    
+    onSelected: function(emote, send) {
+        this.data.selected = emote;
+        this.trigger(this.data, send);
     },
     
     onConnectDone: function(socket) {

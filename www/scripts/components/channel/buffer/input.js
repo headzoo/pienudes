@@ -4,6 +4,7 @@ var React  = require('react');
 var Reflux = require('reflux');
 var SocketActions = require('../../../actions/socket');
 var EmotesActions = require('../../../actions/emotes');
+var EmotesStore   = require('../../../stores/emotes');
 var Events        = require('../../../events');
 
 var history = [];
@@ -14,6 +15,29 @@ if (!color) {
 }
 
 var Component = React.createClass({
+    mixins: [
+        Reflux.listenTo(EmotesStore, "onEmotes")
+    ],
+    
+    onEmotes: function(emotes, send) {
+        if (!emotes.selected) {
+            return;
+        }
+        
+        var value = this.refs.msg.value;
+        if (value.length == 0) {
+            value = emotes.selected.name;
+        } else {
+            value = value + " " + emotes.selected.name;
+        }
+        this.refs.msg.value = value;
+        
+        if (send) {
+            this.handleSendClick();
+        }
+        EmotesActions.selected(null);
+    },
+    
     componentDidMount: function() {
         
         var color_picker = this.refs.color;

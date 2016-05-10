@@ -5,7 +5,8 @@ var Reflux = require('reflux');
 var EmotesActions = Reflux.createActions({
     show: {},
     hide: {},
-    toggle: {}
+    toggle: {},
+    selected: {}
 });
 
 module.exports = EmotesActions;

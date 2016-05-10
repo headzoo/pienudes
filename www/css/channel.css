@@ -258,6 +258,12 @@
 #channel-emote-picker div {
   display: inline-block;
   margin-right: 4px;
+  cursor: pointer;
+  min-width: 20px;
+  transition: all 0.2s ease-in-out;
+}
+#channel-emote-picker div:hover {
+  transform: scale(1.05);
 }
 #channel-emote-picker div img {
   max-height: 50px;

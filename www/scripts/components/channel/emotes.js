@@ -2,6 +2,7 @@
 
 var React  = require('react');
 var Reflux = require('reflux');
+var Item        = require('./emotes/item');
 var EmotesStore = require('../../stores/emotes');
 
 var Component = React.createClass({
@@ -12,11 +13,7 @@ var Component = React.createClass({
     render: function () {
         var items = [];
         this.state.emotes.items.map(function(emote, i) {
-            items.push(
-                <div key={i}>
-                    <img src={emote.image} />
-                </div>
-            );
+            items.push(<Item key={i} emote={emote} />);
         });
         
         var style = {
