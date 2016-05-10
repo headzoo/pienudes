@@ -61,7 +61,9 @@
   overflow: hidden;
 }
 #channel-buffer-wrap img {
-  vertical-align: baseline;
+  vertical-align: top;
+  margin-bottom: 4px;
+  max-height: 110px;
 }
 #channel-buffer {
   overflow: hidden;

@@ -25,7 +25,7 @@ module.exports = Reflux.createStore({
         if (data.meta.color === undefined) {
             data.meta.color = "#FFF";
         }
-        //data.msg = this.execEmotes(data.msg);
+        data.msg = this.execEmotes(data.msg);
         
         this.data.push(data);
         this.trigger(this.data);
