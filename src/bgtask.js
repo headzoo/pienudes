@@ -59,8 +59,7 @@ function initPasswordResetCleanup(Server) {
 }
 
 function initChannelDumper(Server) {
-    var CHANNEL_SAVE_INTERVAL = parseInt(Config.get("channel-save-interval"))
-                                * 60000;
+    var CHANNEL_SAVE_INTERVAL = parseInt(Config.get("channel-save-interval")) * 1000;
     setInterval(function () {
         Promise.reduce(Server.channels, (_, chan) => {
             if (!chan.dead && chan.users && chan.users.length > 0) {
