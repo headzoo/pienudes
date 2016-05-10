@@ -18,6 +18,19 @@ module.exports = Reflux.createStore({
         return this.data;
     },
     
+    onLoad: function(emotes) {
+        this.data.items = [];
+        emotes.map(function (e) {
+            if (e.image && e.name) {
+                e.regex = new RegExp(e.source, "gi");
+                this.data.items.push(e);
+            } else {
+                console.error("Rejecting invalid emote: " + JSON.stringify(e));
+            }
+        }.bind(this));
+        this.trigger(this.data);
+    },
+    
     onShow: function() {
         this.data.visible = true;
         this.trigger(this.data);

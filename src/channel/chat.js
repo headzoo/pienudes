@@ -98,9 +98,9 @@ ChatModule.prototype.onUserPostJoin = function (user) {
 
     user.socket.typecheckedOn("chatMsg", TYPE_CHAT, this.handleChatMsg.bind(this, user));
     user.socket.typecheckedOn("pm", TYPE_PM, this.handlePm.bind(this, user));
-    this.buffer.forEach(function (msg) {
-        user.socket.emit("chatMsg", msg);
-    });
+    //this.buffer.forEach(function (msg) {
+    //    user.socket.emit("chatMsg", msg);
+    //});
 };
 
 ChatModule.prototype.isMuted = function (name) {

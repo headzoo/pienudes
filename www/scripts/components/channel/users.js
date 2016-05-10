@@ -27,7 +27,7 @@ var Component = React.createClass({
         }
         
         return (
-            <div id="channel-user-list-wrap" className="hidden-xs hidden-sm col-md-1">
+            <section id="channel-user-list-wrap" className="hidden-xs hidden-sm col-md-1">
                 <div id="channel-user-list">
                     <ul>
                         {items}
@@ -37,7 +37,7 @@ var Component = React.createClass({
                     <a href="/help">Help</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/about">About</a><br />
                     &copy; 2016 Pienudes
                 </div>
-            </div>
+            </section>
         )
     },
     

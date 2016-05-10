@@ -68,7 +68,7 @@ CustomizationModule.prototype.setBio = function (bio) {
 };
 
 CustomizationModule.prototype.onUserPostJoin = function (user) {
-    this.sendCSSJS([user]);
+    //this.sendCSSJS([user]);
     this.sendMotd([user]);
     this.sendBio([user]);
     user.socket.typecheckedOn("setChannelCSS", TYPE_SETCSS, this.handleSetCSS.bind(this, user));

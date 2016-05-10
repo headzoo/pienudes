@@ -619,6 +619,22 @@ module.exports = {
         db.query("DELETE FROM `channel_bans` WHERE channel=?", [chan], callback);
     },
     
+    fetchByName: function(name, callback) {
+        if (typeof callback !== "function") {
+            callback = blackHole;
+        }
+    
+        db.query(
+            "SELECT * FROM `channels` WHERE `name` = ? LIMIT 1",
+            [name],
+            function(err, rows) {
+                if (err) return callback(err);
+                if (rows.length == 0) return callback(null, "");
+                callback(null, rows[0]);
+            }
+        );
+    },
+    
     /**
      * Returns a channel data value
      */
@@ -635,6 +651,18 @@ module.exports = {
                 if (rows.length == 0) return callback(null, "");
                 callback(null, rows[0].value);
             }
+        );
+    },
+    
+    fetchData: function(channel_id, callback) {
+        if (typeof callback !== "function") {
+            callback = blackHole;
+        }
+        
+        db.query(
+            "SELECT * FROM `channel_data` WHERE `channel_id` = ?",
+            [channel_id],
+            callback
         );
     },
     

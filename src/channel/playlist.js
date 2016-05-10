@@ -234,7 +234,7 @@ PlaylistModule.prototype.onUserPostJoin = function (user) {
     });
     user.socket.on("requestPlaylist", this.handleRequestPlaylist.bind(this, user));
     user.on("login", function () {
-        self.sendPlaylist([user]);
+        //self.sendPlaylist([user]);
     });
     user.socket.on("clearPlaylist", this.handleClear.bind(this, user));
     user.socket.on("shufflePlaylist", this.handleShuffle.bind(this, user));

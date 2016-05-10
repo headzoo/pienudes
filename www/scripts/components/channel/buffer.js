@@ -45,7 +45,7 @@ var Component = React.createClass({
         };
         
         return (
-            <div id="channel-buffer-wrap" className="col-xs-12 col-sm-7 col-md-5">
+            <section id="channel-buffer-wrap" className="col-xs-12 col-sm-7 col-md-5">
                 <div ref="buffer" id="channel-buffer" style={style_buffer}>
                     <div id="mCSB_1" className="mCustomScrollBox mCS-minimal mCSB_vertical mCSB_outside" style={{maxHeight: "none"}} tabIndex="0">
                         <div id="mCSB_1_container" className="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style={{position:"relative", top:0, left:0}} dir="ltr">
@@ -57,7 +57,7 @@ var Component = React.createClass({
                 </div>
                 <Emotes />
                 <Input />
-            </div>
+            </section>
         )
     }
 });

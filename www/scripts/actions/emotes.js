@@ -3,6 +3,7 @@
 var Reflux = require('reflux');
 
 var EmotesActions = Reflux.createActions({
+    load: {},
     show: {},
     hide: {},
     toggle: {},

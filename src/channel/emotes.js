@@ -126,7 +126,7 @@ EmoteModule.prototype.onUserPostJoin = function (user) {
     user.socket.on("importEmotes", this.handleImportEmotes.bind(this, user));
     user.socket.on("moveEmote", this.handleMoveEmote.bind(this, user));
     user.socket.on("removeEmote", this.handleRemoveEmote.bind(this, user));
-    this.sendEmotes([user]);
+    //this.sendEmotes([user]);
 };
 
 EmoteModule.prototype.sendEmotes = function (users) {

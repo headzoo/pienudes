@@ -24,13 +24,13 @@ var Component = React.createClass({
         }
         
         return (
-            <div id="channel-video-wrap" className="col-xs-12 col-sm-5 col-md-6">
+            <section id="channel-video-wrap" className="col-xs-12 col-sm-5 col-md-6">
                 <div id="channel-video-frame">
                     {frame}
                 </div>
                 <Playlist />
                 <Input />
-            </div>
+            </section>
         )
     }
 });

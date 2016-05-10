@@ -15,6 +15,11 @@ module.exports = Reflux.createStore({
         return this.data;
     },
     
+    onLoad: function(playlist) {
+        this.data = playlist;
+        this.trigger(this.data);
+    },
+    
     onQueueUrl: function(url) {
         var m = Media.parseMediaLink(url);
         if (m.id === null) {

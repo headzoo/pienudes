@@ -5,6 +5,7 @@ var SocketActions = require('./socket');
 var Events        = require('../events');
 
 var PlaylistActions = Reflux.createActions({
+    load: {},
     remove: {},
     queueMedia: {},
     queueUrl: {}

@@ -13,11 +13,13 @@ window.waitUntilDefined = function(obj, key, fn) {
 
 var channel_wrap = document.getElementById("channel-mount");
 if (channel_wrap !== null) {
+    
     ReactDOM.render(
         React.createElement(
             require('./components/channel'),
             {
-                join: channel_wrap.getAttribute("data-join")
+                join: channel_wrap.getAttribute("data-join"),
+                data: window.channel
             }
         ),
         channel_wrap

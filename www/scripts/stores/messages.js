@@ -1,21 +1,36 @@
 'use strict';
 
-var Reflux        = require('reflux');
-var SocketActions = require('../actions/socket');
-var Events        = require('../events');
+var Reflux          = require('reflux');
+var SocketActions   = require('../actions/socket');
+var MessagesActions = require('../actions/messages');
+var EmotesStore     = require('../stores/emotes');
+var Events          = require('../events');
 
 module.exports = Reflux.createStore({
-    listenables: [SocketActions],
-    emotes: [],
+    listenables: [SocketActions, MessagesActions],
     data: [],
     
     getInitialState() {
         return this.data;
     },
     
+    onLoad: function(messages) {
+        messages.map(function(message) {
+            if (message.meta === undefined) {
+                message.meta = {};
+            }
+            if (message.meta.color === undefined) {
+                message.meta.color = "#FFF";
+            }
+            message.msg = this.execEmotes(message.msg);
+        }.bind(this));
+        
+        this.data = messages;
+        this.trigger(this.data);
+    },
+    
     onConnectDone: function(socket) {
         socket.on(Events.CHAT_MSG, this.onChatMsg);
-        socket.on(Events.EMOTE_LIST, this.onEmoteList);
     },
     
     onChatMsg: function(data) {
@@ -31,20 +46,8 @@ module.exports = Reflux.createStore({
         this.trigger(this.data);
     },
     
-    onEmoteList: function(emotes) {
-        this.emotes = [];
-        emotes.map(function (e) {
-            if (e.image && e.name) {
-                e.regex = new RegExp(e.source, "gi");
-                this.emotes.push(e);
-            } else {
-                console.error("Rejecting invalid emote: " + JSON.stringify(e));
-            }
-        }.bind(this));
-    },
-    
     execEmotes: function(msg) {
-        this.emotes.map(function(e) {
+        EmotesStore.data.items.map(function(e) {
             msg = msg.replace(e.regex, '$1<img class="channel-buffer-emote" src="' + e.image + '" title="' + e.name + '">');
         });
         

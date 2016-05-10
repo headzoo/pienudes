@@ -9,6 +9,10 @@ var Video  = require('./channel/video');
 var ConnectionStore = require('../stores/connection');
 var ChannelStore    = require('../stores/channel');
 var SocketActions   = require('../actions/socket');
+var UsersActions    = require('../actions/users');
+var MessagesActions = require('../actions/messages');
+var PlaylistActions = require('../actions/playlist');
+var EmotesActions   = require('../actions/emotes');
 
 var Component = React.createClass({
     mixins: [
@@ -25,7 +29,8 @@ var Component = React.createClass({
     
     getDefaultProps: function() {
         return {
-            join: ""
+            join: "",
+            data: {}
         }
     },
     
@@ -37,6 +42,23 @@ var Component = React.createClass({
     
     componentWillMount: function() {
         SocketActions.connect(this.props.join);
+        UsersActions.load(this.props.data.users);
+        EmotesActions.load(this.props.data.emotes);
+        MessagesActions.load(this.props.data.buffer);
+        PlaylistActions.load(this.props.data.playlist);
+        
+        if (this.props.data.css) {
+            $("<style/>").attr("type", "text/css")
+                .attr("id", "channel-css")
+                .text(this.props.data.css)
+                .appendTo($("head"));
+        }
+        if (this.props.data.js) {
+            $("<script/>").attr("type", "text/javascript")
+                .attr("id", "channel-js")
+                .text(this.props.data.js)
+                .appendTo($("body"));
+        }
     },
     
     render: function () {
