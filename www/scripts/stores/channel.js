@@ -1,8 +1,9 @@
 'use strict';
 
-var Reflux        = require('reflux');
-var SocketActions = require('../actions/socket');
-var Events        = require('../events');
+var Reflux         = require('reflux');
+var ChannelActions = require('../actions/channel');
+var SocketActions  = require('../actions/socket');
+var Events         = require('../events');
 
 module.exports = Reflux.createStore({
     listenables: [SocketActions],
@@ -66,6 +67,10 @@ module.exports = Reflux.createStore({
         if (data.js) {
             this.data.js = data.js;
         }
+        
+        ChannelActions.setCSS(data.css);
+        ChannelActions.setJS(data.js);
+        
         this.trigger(this.data);
     },
     

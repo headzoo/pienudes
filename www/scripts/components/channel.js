@@ -7,6 +7,7 @@ var Buffer = require('./channel/buffer');
 var Video  = require('./channel/video');
 
 var ConnectionStore = require('../stores/connection');
+var ChannelActions  = require('../actions/channel');
 var ChannelStore    = require('../stores/channel');
 var SocketActions   = require('../actions/socket');
 var UsersActions    = require('../actions/users');
@@ -46,19 +47,8 @@ var Component = React.createClass({
         EmotesActions.load(this.props.data.emotes);
         MessagesActions.load(this.props.data.buffer);
         PlaylistActions.load(this.props.data.playlist);
-        
-        if (this.props.data.css) {
-            $("<style/>").attr("type", "text/css")
-                .attr("id", "channel-css")
-                .text(this.props.data.css)
-                .appendTo($("head"));
-        }
-        if (this.props.data.js) {
-            $("<script/>").attr("type", "text/javascript")
-                .attr("id", "channel-js")
-                .text(this.props.data.js)
-                .appendTo($("body"));
-        }
+        ChannelActions.setCSS(this.props.data.css);
+        ChannelActions.setJS(this.props.data.js);
     },
     
     render: function () {
