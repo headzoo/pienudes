@@ -2,8 +2,8 @@
 
 var React         = require('react');
 var Reflux        = require('reflux');
-var Controls      = require('./controls');
 var Playlist      = require('./playlist');
+var Controls      = require('./video/controls');
 var Input         = require('./video/input');
 var PlayerStore   = require('../../stores/player');
 var PlayerActions = require('../../actions/player');
@@ -28,6 +28,7 @@ var Component = React.createClass({
                 <div id="channel-video-frame">
                     {frame}
                 </div>
+                <Controls />
                 <Playlist />
                 <Input />
             </section>

@@ -23,5 +23,8 @@ module.exports = {
     DELETE: "delete",
     QUEUE: "queue",
     SET_CURRENT: "setCurrent",
-    CHANGE_MEDIA: "changeMedia"
+    CHANGE_MEDIA: "changeMedia",
+    CHANGE_VOTES: "changeVotes",
+    CHANGE_USER_VIDEO_VOTE: "changeUserVideoVote",
+    VOTE_VIDEO: "voteVideo"
 };

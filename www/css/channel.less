@@ -302,11 +302,6 @@
   }
 }
 
-#channel-video-controls {
-  margin: 20px 0;
-  flex: 0 1 30px;
-}
-
 #channel-playlist {
   -webkit-flex: 1 1 auto;
   flex: 1 1 auto;
@@ -401,6 +396,86 @@
   margin-top: -3px;
   margin-left: 4px;
   color: #8D8E8E;
+}
+
+#channel-video-controls {
+  margin: 0 0 20px 0;
+  flex: 0 1 30px;
+}
+
+#channel-video-controls-vote-up {
+  display: inline-block;
+  vertical-align: middle;
+
+  .glyphicon-chevron-up {
+    vertical-align: middle;
+    color: #013E01;
+    font-size: 26px;
+    margin-top: -10px;
+    cursor: pointer;
+  }
+  
+  .channel-video-controls-vote-value {
+    margin-left: 4px;
+    color: #585858;
+    font-size: 22px;
+  }
+  
+  &.active {
+    .glyphicon-chevron-up {
+      color: #019E01;
+    }
+    .channel-video-controls-vote-value {
+      color: #FFF;
+    }
+  }
+  
+  &:hover {
+    .glyphicon-chevron-up {
+      color: #037703;
+    }
+    .channel-video-controls-vote-value {
+      color: #FFF;
+    }
+  }
+}
+
+#channel-video-controls-vote-down {
+  float: right;
+  display: inline-block;
+  vertical-align: middle;
+
+  .glyphicon-chevron-down {
+    vertical-align: middle;
+    color: #5A0902;
+    font-size: 26px;
+    margin-top: -6px;
+    cursor: pointer;
+  }
+
+  .channel-video-controls-vote-value {
+    margin-right: 4px;
+    color: #585858;
+    font-size: 22px;
+  }
+  
+  &.active {
+    .glyphicon-chevron-down {
+      color: #B31508;
+    }
+    .channel-video-controls-vote-value {
+      color: #FFF;
+    }
+  }
+  
+  &:hover {
+    .glyphicon-chevron-down {
+      color: #9E1004;
+    }
+    .channel-video-controls-vote-value {
+      color: #FFF;
+    }
+  }
 }
 
 .playlist-enter {
