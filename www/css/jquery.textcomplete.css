@@ -1,0 +1,46 @@
+/* Sample */
+
+.emote-dropdown-menu {
+    border: 1px solid #333;
+    padding: 4px !important;
+    background-color: #000;
+    position: absolute;
+}
+
+.emote-dropdown-menu li {
+    border-top: 1px solid #111;
+    padding: 2px 8px;
+}
+
+.emote-dropdown-menu li:first-child {
+    border-top: none;
+}
+
+.emote-dropdown-menu li:hover,
+.emote-dropdown-menu .active {
+    background-color: #333;
+}
+
+
+/* SHOULD not modify */
+
+.emote-dropdown-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.emote-dropdown-menu a:hover {
+    cursor: pointer;
+}
+
+.dropdown-emote {
+    max-height: 20px;
+    width: 20px;
+    margin-right: 8px;
+    transition: all .2s ease-in-out;
+}
+
+.dropdown-emote:hover {
+    transform: scale(3.5);
+}

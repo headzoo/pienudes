@@ -65,6 +65,32 @@ $(function() {
         console.log("cleared");
         $("#messagebuffer").empty();
     });
+    
+    $('#chatline').textcomplete([
+        {
+            id: 'emoji',
+            match: /\B:([\-+\w]*)$/,
+            search: function (term, callback) {
+                callback($.map(CLIENT.emotes, function (emoji) {
+                    return emoji.text.replace(':', '').indexOf(term) === 0 ? emoji : null;
+                }));
+            },
+            template: function (value) {
+                return '<img src="' + value.image + '" class="dropdown-emote"></img>' + value.text;
+            },
+            replace: function (value) {
+                return value.text + ' ';
+            },
+            index: 1
+        }
+    ], {
+        maxCount: 5,
+        onKeydown: function (e, commands) {
+            if (e.ctrlKey && e.keyCode === 74) { // CTRL-J
+                return commands.KEY_ENTER;
+            }
+        }
+    });
 });
 
 
