@@ -885,14 +885,14 @@ PlaylistModule.prototype.sendVideoVotes = function() {
     }
     
     db_media.fetchByUidAndType(this.current.media.id, this.current.media.type, function(err, media) {
-        if (err || !media) {
+        if (err || !media && this.channel) {
             this.channel.broadcastAll("changeVotes", {
                 up: 0,
                 down: 0
             });
         } else {
             db_votes.fetchVotes(media.id, function(err, votes) {
-                if (!err) {
+                if (!err && this.channel) {
                     this.channel.broadcastAll("changeVotes", votes);
                 }
             }.bind(this));

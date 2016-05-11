@@ -20,6 +20,9 @@
       "dir": "www/build"
     }
   },
+  "scripts": {
+    "server-dev": "babel --watch --source-maps --loose es6.destructuring,es6.forOf --out-dir lib/ src/"
+  },
   "dependencies": {
     "async": "^1.5.2",
     "aws-sdk": "^2.3.3",
