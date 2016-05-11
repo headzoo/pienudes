@@ -485,7 +485,12 @@
                         return false;
                     }
                 });
-                this.$el.css(this._applyPlacement(pos));
+                
+                //this.$el.css(this._applyPlacement(pos));
+                this.$el.css({
+                    bottom: "50px",
+                    left: pos.left
+                });
                 this.$el.css({ position: position }); // Update positioning
                 
                 return this;

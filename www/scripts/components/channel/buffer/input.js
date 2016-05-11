@@ -53,6 +53,28 @@ var Component = React.createClass({
             color = color_picker.value;
             window.localStorage.setItem("chat_line_color", color);
         });
+    
+        $(this.refs.msg).textcomplete([
+            {
+                id: 'emoji',
+                match: /\B:([\-+\w]*)$/,
+                search: function (term, callback) {
+                    callback($.map(EmotesStore.data.items, function (emoji) {
+                        return emoji.name.replace(':', '').indexOf(term) === 0 ? emoji : null;
+                    }));
+                },
+                template: function (value) {
+                    return '<img src="' + value.image + '" class="dropdown-emote"></img>' + value.name;
+                },
+                replace: function (value) {
+                    return value.name + ' ';
+                },
+                index: 1
+            }
+        ], {
+            maxCount: 5,
+            position: "top"
+        });
     },
     
     render: function () {
