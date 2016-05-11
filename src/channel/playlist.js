@@ -985,9 +985,10 @@ PlaylistModule.prototype._delete = function (uid) {
             u.socket.emit("setPlaylistMeta", self.meta);
         });
         
-        if (self.current && self.current.queueby && self.current.queueby[0] != "@") {
+        if (self.current && self.current.queueby && self.current.queueby[0] != "@" && self.channel.name != "CANCER-TIME-WITH-DJ-BOOGS") {
             var media   = self.current.media;
             var queueby = self.current.queueby;
+            
             db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function (err, media_id) {
                 if (!err && media_id != 4291 && media_id != 9562) {
                     db_playlist.insert(media_id, self.channel.name, queueby);
