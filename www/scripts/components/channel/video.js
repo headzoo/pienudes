@@ -24,7 +24,7 @@ var Component = React.createClass({
         }
         
         return (
-            <section id="channel-video-wrap" className="col-xs-12 col-sm-5 col-md-6">
+            <section id="channel-video-wrap" className="col-xs-12 col-sm-5 col-md-5">
                 <div id="channel-video-frame">
                     {frame}
                 </div>

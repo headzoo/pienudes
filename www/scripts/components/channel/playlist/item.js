@@ -46,7 +46,7 @@ var Component = React.createClass({
                             <a href={Media.clickUrl(track.media)} target="_blank">{play_icon} {track.media.title}</a>
                         </div>
                         <div className="channel-playlist-username">
-                            {queueby}<span className={rng_icon}></span>
+                            Queued by {queueby}<span className={rng_icon}></span>
                         </div>
                         <div className="channel-playlist-links">
                             {this.renderLinks()}
