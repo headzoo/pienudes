@@ -10,28 +10,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
         <script src="/js/jquery.textcomplete.js"></script>
-        {% include "scripts.html.twig" %}
         <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
         <script src="/js/spectrum.js"></script>
-        <script>
-            $(function() {
-                $("#channel-user-list").mCustomScrollbar({
-                    theme: "minimal",
-                    autoHideScrollbar: true,
-                    mouseWheel: {
-                        scrollAmount: 300
-                    }
-                });
-                
-                $("#channel-playlist-items").mCustomScrollbar({
-                    theme: "minimal",
-                    mouseWheel: {
-                        scrollAmount: 300
-                    }
-                }).mCustomScrollbar("scrollTo", "top");
-            });
-        </script>
-
         {% if pageScripts %}
             {% for script in pageScripts %}
                 <script src="{{ script }}?v={{ cacheBuster }}"></script>

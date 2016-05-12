@@ -25,6 +25,7 @@ module.exports = {
     SET_CURRENT: "setCurrent",
     CHANGE_MEDIA: "changeMedia",
     CHANGE_VOTES: "changeVotes",
+    MEDIA_UPDATE: "mediaUpdate",
     CHANGE_USER_VIDEO_VOTE: "changeUserVideoVote",
     VOTE_VIDEO: "voteVideo"
 };

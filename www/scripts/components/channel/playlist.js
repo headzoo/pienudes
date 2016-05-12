@@ -10,10 +10,27 @@ var Component = React.createClass({
         Reflux.connect(PlaylistStore, "playlist")
     ],
     
+    componentDidUpdate: function() {
+        $(this.refs.items)
+            .mCustomScrollbar("update")
+            .mCustomScrollbar("scrollTo", "bottom");
+    },
+    
+    componentDidMount: function() {
+        $(this.refs.items).mCustomScrollbar({
+            theme: "minimal",
+            autoHideScrollbar: true,
+            scrollInertia: 0,
+            mouseWheel: {
+                scrollAmount: 300
+            }
+        });
+    },
+    
     render: function () {
         return (
             <div id="channel-playlist">
-                <div id="channel-playlist-items">
+                <div ref="items" id="channel-playlist-items">
                     <table>
                         <tbody>
                             {this.state.playlist.map(function(t, i) {

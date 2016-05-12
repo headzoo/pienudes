@@ -10,6 +10,23 @@ var Component = React.createClass({
         Reflux.connect(UsersStore, "users")
     ],
     
+    componentDidUpdate: function() {
+        $(this.refs.list)
+            .mCustomScrollbar("update")
+            .mCustomScrollbar("scrollTo", "bottom");
+    },
+    
+    componentDidMount: function() {
+        $(this.refs.list).mCustomScrollbar({
+            theme: "minimal",
+            autoHideScrollbar: true,
+            scrollInertia: 0,
+            mouseWheel: {
+                scrollAmount: 300
+            }
+        });
+    },
+    
     render: function () {
         var users = this.state.users;
         var items = [];
@@ -28,7 +45,7 @@ var Component = React.createClass({
         
         return (
             <section id="channel-user-list-wrap" className="hidden-xs hidden-sm col-md-1">
-                <div id="channel-user-list">
+                <div ref="list" id="channel-user-list">
                     <ul>
                         {items}
                     </ul>
