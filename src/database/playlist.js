@@ -91,6 +91,28 @@ module.exports = {
         db.query(sql, [], callback);
     },
     
+    fetchByChannel: function(channel, limit, offset, callback) {
+        callback = callback || noop;
+        
+        limit  = limit || 20;
+        offset = offset || 0;
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 20;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+        
+        var sql = "SELECT *, `playlist_history`.`time` FROM `playlist_history` " +
+            "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+            "WHERE `playlist_history`.`channel` = ? " +
+            "ORDER BY `playlist_history`.`id` DESC " +
+            "LIMIT " + offset + ", " + limit;
+        db.query(sql, [channel], callback);
+    },
+    
     /**
      * Returns every row in the table
      */
@@ -293,6 +315,17 @@ module.exports = {
     countByUser: function(user, callback) {
         callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `user` = ?", [user], function(err, rows) {
+            if (err) {
+                callback(err, []);
+                return;
+            }
+            callback(null, rows[0]["c"]);
+        });
+    },
+    
+    countByChannel: function(channel, callback) {
+        callback = callback || noop;
+        db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `channel` = ?", [channel], function(err, rows) {
             if (err) {
                 callback(err, []);
                 return;

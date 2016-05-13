@@ -23,28 +23,86 @@ function handleHistory(req, res) {
         page = 1;
     }
     
-    db_playlists.count(function(err, count) {
-        var limit  = 50;
-        var pages  = Math.ceil(count / limit);
-        if (page > pages) {
-            page = pages;
-        }
-        var offset = (page - 1) * limit;
+    db_playlists.fetchDistinctChannels(function(err, channels) {
+        db_playlists.count(function (err, count) {
+            var limit = 50;
+            var pages = Math.ceil(count / limit);
+            if (page > pages) {
+                page = pages;
+            }
+            var offset = (page - 1) * limit;
         
-        db_playlists.fetch(limit, offset, function(err, rows) {
-            rows.forEach(function(row) {
-                if (row.user[0] == "@") {
-                    row.user = row.user.substring(1);
-                }
-            });
+            db_playlists.fetch(limit, offset, function (err, rows) {
+                rows.forEach(function (row) {
+                    if (row.user[0] == "@") {
+                        row.user = row.user.substring(1);
+                    }
+                });
             
-            async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
-                template.send(res, 'charts/history', {
-                    pageTitle: "Playlist History",
-                    media: results,
-                    page:  parseInt(page),
-                    pages: parseInt(pages),
-                    pageScripts: ["/js/voting.js"]
+                async.map(rows, mod_voting.attachVotes.bind(this, req), function (err, results) {
+                    template.send(res, 'charts/history', {
+                        pageTitle: "Recently Played",
+                        headTitle: "Recently Played",
+                        media: results,
+                        page: parseInt(page),
+                        pages: parseInt(pages),
+                        channels: channels,
+                        channel: null,
+                        pageScripts: ["/js/voting.js"]
+                    });
+                });
+            });
+        });
+    });
+}
+
+function handleHistoryByChannel(req, res) {
+    var channel = req.params.channel;
+    db_channels.lookup(channel, function(err) {
+        if (err) {
+            return template.send(res, 'error/http', {
+                path: req.path,
+                status: 404,
+                message: "Channel does not exist."
+            });
+        }
+        
+        var page = req.params.page;
+        if (page == undefined) {
+            page = 1;
+        }
+        if (page < 1) {
+            page = 1;
+        }
+    
+        db_playlists.fetchDistinctChannels(function(err, channels) {
+            db_playlists.countByChannel(channel, function (err, count) {
+                var limit = 50;
+                var pages = Math.ceil(count / limit);
+                if (page > pages) {
+                    page = pages;
+                }
+                var offset = (page - 1) * limit;
+            
+                db_playlists.fetchByChannel(channel, limit, offset, function (err, rows) {
+                    rows.forEach(function (row) {
+                        if (row.user[0] == "@") {
+                            row.user = row.user.substring(1);
+                        }
+                    });
+                
+                    async.map(rows, mod_voting.attachVotes.bind(this, req), function (err, results) {
+                        template.send(res, 'charts/history', {
+                            pageTitle: "Recently Played - " + channel,
+                            headTitle: "Recently Played - " + channel,
+                            media: results,
+                            page: parseInt(page),
+                            pages: parseInt(pages),
+                            channels: channels,
+                            channel: channel,
+                            pageScripts: ["/js/voting.js"]
+                        });
+                    });
                 });
             });
         });
@@ -261,6 +319,7 @@ module.exports = {
     init: function (app) {
         app.get('/charts/history/search/:page?', handleHistorySearch);
         app.get('/charts/history/:page?', handleHistory);
+        app.get('/charts/history/r/:channel/:page?', handleHistoryByChannel);
         app.get('/charts/top', handleTop);
         app.get('/charts/top/r/:channel', handleTopByChannel);
         app.get('/charts/top/date/:date([\\d]{4}\\-[\\d]{2}\\-[\\d]{2})', handleTopByDate);
