@@ -207,13 +207,38 @@ function handleTopByChannelAndDate(req, res) {
 }
 
 function handleUpvoted(req, res) {
-    db_votes.fetchMostUpvoted(25, function(err, rows) {
-        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
-            template.send(res, 'charts/upvoted', {
-                pageTitle: "25 Most Upvoted Videos",
-                media: results,
-                count: 25,
-                pageScripts: ["/js/voting.js"]
+    db_votes.fetchDistinctDays(function(err, dates) {
+        db_votes.fetchMostUpvoted(25, function(err, rows) {
+            async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                template.send(res, 'charts/upvoted', {
+                    pageTitle: "25 Most Upvoted Videos",
+                    headTitle: "Most Updated - All Time",
+                    media: results,
+                    count: 25,
+                    dates: dates,
+                    pageScripts: ["/js/voting.js"]
+                });
+            });
+        });
+    });
+}
+
+function handleUpvotedByDate(req, res) {
+    var date          = req.params.date;
+    var day           = moment(date, "YYYY-MM-D");
+    var day_formatted = day.format("MMMM Do YYYY");
+    
+    db_votes.fetchDistinctDays(function(err, dates) {
+        db_votes.fetchMostUpvotedByDate(date, 25, function(err, rows) {
+            async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                template.send(res, 'charts/upvoted', {
+                    pageTitle: "25 Most Upvoted Videos - " + day_formatted,
+                    headTitle: "Most Updated - " + day_formatted,
+                    media: results,
+                    count: 25,
+                    dates: dates,
+                    pageScripts: ["/js/voting.js"]
+                });
             });
         });
     });
@@ -241,6 +266,7 @@ module.exports = {
         app.get('/charts/top/date/:date([\\d]{4}\\-[\\d]{2}\\-[\\d]{2})', handleTopByDate);
         app.get('/charts/top/r/:channel/date/:date([\\d]{4}\\-[\\d]{2}\\-[\\d]{2})', handleTopByChannelAndDate);
         app.get('/charts/upvoted', handleUpvoted);
+        app.get('/charts/upvoted/date/:date([\\d]{4}\\-[\\d]{2}\\-[\\d]{2})', handleUpvotedByDate);
         
         app.get('/playlists/history/:page?', handleHistoryRedirect);
         app.get('/playlists/user/:name/:page?', handleUserRedirect);

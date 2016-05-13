@@ -119,6 +119,47 @@ module.exports = {
         );
     },
     
+    fetchMostUpvotedByDate: function(date, limit, callback) {
+        callback = callback || noop;
+        
+        limit = limit || 25;
+        limit = parseInt(limit);
+        if (isNaN(limit)) {
+            limit = 25;
+        }
+    
+        var start = date + " 00:00:00";
+        var end   = date + " 23:59:59";
+        
+        db.query(
+            "SELECT `media`.*, `votes`.*, SUM(`value`) AS `vote_count` " +
+            "FROM `votes` " +
+            "INNER JOIN `media` ON `media`.`id` = `votes`.`media_id` " +
+            "WHERE FROM_UNIXTIME(`votes`.`time` / 1000) BETWEEN ? AND ? " +
+            "GROUP BY `votes`.`media_id` " +
+            "ORDER BY `vote_count` DESC " +
+            "LIMIT " + limit,
+            [start, end],
+            callback
+        );
+    },
+    
+    fetchDistinctDays: function(callback) {
+        callback = callback || noop;
+        
+        db.query("SELECT DISTINCT(DATE_FORMAT(FROM_UNIXTIME(`time` / 1000), '%M %D %Y')) AS `d`, DATE_FORMAT(FROM_UNIXTIME(`time` / 1000), '%Y-%m-%d') AS `s` FROM `votes` ORDER BY `time` DESC", function(err, rows) {
+            if (err) return callback(err);
+            var dates = [];
+            rows.forEach(function(row) {
+                dates.push({
+                    full: row.d,
+                    short: row.s
+                });
+            });
+            callback(null, dates);
+        });
+    },
+    
     insert: function(user_id, media_id, value, callback) {
         callback = callback || noop;
         
