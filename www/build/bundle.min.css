@@ -45,16 +45,22 @@
 #chat-log-box .embedded-image {
   max-height: 125px;
 }
-#chat-logs-channels {
+#chat-logs-channels,
+.timeline-sidebar-list {
   list-style-type: none;
   margin: 0 0 20px 0;
 }
-#chat-logs-channels li {
+#chat-logs-channels li,
+.timeline-sidebar-list li {
   cursor: pointer;
   text-align: right;
 }
-#chat-logs-channels li:hover {
+#chat-logs-channels li:hover,
+.timeline-sidebar-list li:hover {
   text-decoration: underline;
+}
+.timeline-sidebar-list li {
+  cursor: default;
 }
 #chat-logs-title .form-control {
   float: right;

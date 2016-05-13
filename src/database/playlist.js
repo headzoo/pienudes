@@ -10,7 +10,7 @@ module.exports = {
     /**
      * Adds a video to the playlist history
      */
-    insert(media_id, channel, user, callback) {
+    insert: function(media_id, channel, user, callback) {
         callback = callback || noop;
         
         if (user[0] == "@") {
@@ -29,14 +29,14 @@ module.exports = {
             });
     },
     
-    removeById(pid, callback) {
+    removeById: function(pid, callback) {
         callback = callback || noop;
         
         pid = parseInt(pid);
         db.query("DELETE FROM `playlist_history` WHERE `id` = ? LIMIT 1", [pid], callback);
     },
     
-    fetchById(pid, callback) {
+    fetchById: function(pid, callback) {
         callback = callback || noop;
     
         pid = parseInt(pid);
@@ -51,7 +51,7 @@ module.exports = {
         );
     },
     
-    fetchUsersByMediaId(mid, callback) {
+    fetchUsersByMediaId: function(mid, callback) {
         callback = callback || noop;
     
         mid = parseInt(mid);
@@ -70,7 +70,7 @@ module.exports = {
     /**
      * Returns rows from the playlist history
      */
-    fetch(limit, offset, callback) {
+    fetch: function(limit, offset, callback) {
         callback = callback || noop;
         
         limit  = limit || 20;
@@ -94,7 +94,7 @@ module.exports = {
     /**
      * Returns every row in the table
      */
-    fetchAll(callback) {
+    fetchAll: function(callback) {
         callback = callback || noop;
         db.query("SELECT *, `playlist_history`.`time` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id`", [], callback);
     },
@@ -102,7 +102,7 @@ module.exports = {
     /**
      * Returns rows matching the given user
      */
-    fetchByUser(user, limit, offset, callback) {
+    fetchByUser: function(user, limit, offset, callback) {
         callback = callback || noop;
     
         limit  = limit || 20;
@@ -123,16 +123,46 @@ module.exports = {
     /**
      * Returns the names of each user in the table
      */
-    fetchDistinctUsers(callback) {
+    fetchDistinctUsers: function(callback) {
         callback = callback || noop;
         
         db.query("SELECT `users`.*, COUNT(*) AS `cnt` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` INNER JOIN `users` ON `users`.`name` = `playlist_history`.`user` GROUP BY `playlist_history`.`user` ORDER BY `cnt` DESC", callback);
     },
     
+    fetchDistinctChannels: function(callback) {
+        callback = callback || noop;
+    
+        db.query("SELECT DISTINCT(`channel`) FROM `playlist_history`", function(err, rows) {
+            if (err) return callback(err);
+            var channels = [];
+            rows.forEach(function(row) {
+                channels.push(row.channel);
+            });
+            callback(null, channels);
+        });
+    },
+    
+    fetchDistinctDays: function(callback) {
+        callback = callback || noop;
+    
+        db.query("SELECT DISTINCT(DATE_FORMAT(FROM_UNIXTIME(`time` / 1000), '%M %D %Y')) AS `d`, DATE_FORMAT(FROM_UNIXTIME(`time` / 1000), '%Y-%m-%d') AS `s` FROM `playlist_history` ORDER BY `time` DESC", function(err, rows) {
+            if (err) return callback(err);
+            var dates = [];
+            rows.forEach(function(row) {
+                dates.push({
+                    full: row.d,
+                    short: row.s
+                });
+            });
+            callback(null, dates);
+        });
+    },
+    
     /**
      * Returns the most watch media
      */
-    fetchMostWatched(limit, callback) {
+    fetchMostWatched: function(limit, callback) {
+        callback = callback || noop;
         limit = parseInt(limit);
         if (isNaN(limit)) {
             limit = 25;
@@ -142,10 +172,62 @@ module.exports = {
         db.query(sql, [], callback);
     },
     
+    fetchMostWatchedByChannel: function(channel, limit, callback) {
+        callback = callback || noop;
+        limit = parseInt(limit);
+        if (isNaN(limit)) {
+            limit = 25;
+        }
+    
+        var sql = "SELECT *, COUNT(*) AS `cnt` FROM playlist_history INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `playlist_history`.`channel` = ? GROUP BY `uid` ORDER BY `cnt` DESC, `playlist_history`.`time` ASC LIMIT " + limit;
+        db.query(sql, [channel], callback);
+    },
+    
+    fetchMostWatchedByDate: function(date, limit, callback) {
+        callback = callback || noop;
+        limit = parseInt(limit);
+        if (isNaN(limit)) {
+            limit = 25;
+        }
+        
+        var start = date + " 00:00:00";
+        var end   = date + " 23:59:59";
+    
+        var sql = "SELECT *, COUNT(*) AS `cnt` " +
+        "FROM playlist_history INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+        "WHERE FROM_UNIXTIME(`playlist_history`.`time` / 1000) BETWEEN ? AND ? " +
+        "GROUP BY `uid` " +
+        "ORDER BY `cnt` DESC, `playlist_history`.`time` ASC " +
+        "LIMIT " + limit;
+        
+        db.query(sql, [start, end], callback);
+    },
+    
+    fetchMostWatchedByChannelAndDate: function(channel, date, limit, callback) {
+        callback = callback || noop;
+        limit = parseInt(limit);
+        if (isNaN(limit)) {
+            limit = 25;
+        }
+    
+        var start = date + " 00:00:00";
+        var end   = date + " 23:59:59";
+    
+        var sql = "SELECT *, COUNT(*) AS `cnt` " +
+            "FROM playlist_history INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+            "WHERE `playlist_history`.`channel` = ? " +
+            "AND (FROM_UNIXTIME(`playlist_history`.`time` / 1000) BETWEEN ? AND ?) " +
+            "GROUP BY `uid` " +
+            "ORDER BY `cnt` DESC, `playlist_history`.`time` ASC " +
+            "LIMIT " + limit;
+        
+        db.query(sql, [channel, start, end], callback);
+    },
+    
     /**
      * Returns a random row from the table
      */
-    fetchRandomByChannel(channel, limit, callback) {
+    fetchRandomByChannel: function(channel, limit, callback) {
         callback = callback || noop;
         limit = limit || 1;
         
@@ -197,7 +279,7 @@ module.exports = {
     /**
      * Returns the number of rows in the playlist_history table
      */
-    count(callback) {
+    count: function(callback) {
         callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history`", [], function(err, rows) {
             if (err) {
@@ -208,7 +290,7 @@ module.exports = {
         });
     },
     
-    countByUser(user, callback) {
+    countByUser: function(user, callback) {
         callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `user` = ?", [user], function(err, rows) {
             if (err) {
@@ -219,7 +301,7 @@ module.exports = {
         });
     },
     
-    countDistinctUsersById(pid, callback) {
+    countDistinctUsersById: function(pid, callback) {
         callback = callback || noop;
         
         this.fetchById(pid, function(err, row) {
