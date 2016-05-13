@@ -13,7 +13,7 @@ var Component = React.createClass({
     componentDidUpdate: function() {
         $(this.refs.items)
             .mCustomScrollbar("update")
-            .mCustomScrollbar("scrollTo", "bottom");
+            .mCustomScrollbar("scrollTo", "top");
     },
     
     componentDidMount: function() {
