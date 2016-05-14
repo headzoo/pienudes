@@ -270,7 +270,7 @@ function handleUpvoted(req, res) {
             async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
                 template.send(res, 'charts/upvoted', {
                     pageTitle: "25 Most Upvoted Videos",
-                    headTitle: "Most Updated - All Time",
+                    headTitle: "Most Upvoted - All Time",
                     media: results,
                     count: 25,
                     dates: dates,
@@ -291,7 +291,7 @@ function handleUpvotedByDate(req, res) {
             async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
                 template.send(res, 'charts/upvoted', {
                     pageTitle: "25 Most Upvoted Videos - " + day_formatted,
-                    headTitle: "Most Updated - " + day_formatted,
+                    headTitle: "Most Upvoted - " + day_formatted,
                     media: results,
                     count: 25,
                     dates: dates,
