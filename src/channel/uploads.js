@@ -5,6 +5,7 @@ var XSS           = require("../xss");
 var AWS           = require('aws-sdk');
 var fs            = require('fs');
 var url           = require("url");
+var emotes        = require('./emotes');
 var db_uploads    = require('../database/uploads');
 var db_emotes     = require('../database/emotes');
 
@@ -269,7 +270,8 @@ UploadModule.prototype.handleUploadEmote = function(user, data) {
                     });
                     return;
                 }
-            
+                
+                emotes.clearUser(user.account.id);
                 user.socket.emit("userEmoteComplete", {
                     url: Config.get("emotes.uploads_url") + filename,
                     text: text
@@ -309,6 +311,7 @@ UploadModule.prototype.handleRemoveEmote = function(user, data) {
                         });
                     } else {
                         db_emotes.remove(user.account.id, text, function() {
+                            emotes.clearUser(user.account.id);
                             user.socket.emit("userEmoteRemove", {
                                 url: data.url,
                                 text: text

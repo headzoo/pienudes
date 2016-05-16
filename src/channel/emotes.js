@@ -263,4 +263,10 @@ EmoteModule.execUser = function(user_id, msg, callback) {
     }
 };
 
+EmoteModule.clearUser = function(user_id) {
+    if (user_emotes[user_id] != undefined) {
+        delete user_emotes[user_id];
+    }
+};
+
 module.exports = EmoteModule;
