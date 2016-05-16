@@ -13,6 +13,11 @@ function handleMedia(req, res) {
                 status: 500
             });
         }
+        if (!media) {
+            return template.send(res, 'error/http', {
+                status: 404
+            });
+        }
         
         db_playlists.fetchUsersByMediaId(mid, function(err, users) {
             if (err) {
