@@ -48,16 +48,19 @@ module.exports = {
                 
                     return b.usercount - a.usercount;
                 });
+                
+                var today = (new Date()).toISOString().substring(0, 10);
     
                 db_playlists.fetch(3, 0, function(err, recent_rows) {
-                    db_playlists.fetchMostWatched(3, function(err, top_rows) {
-                        db_votes.fetchMostUpvoted(3, function(err, voted_rows) {
+                    db_playlists.fetchMostWatchedByDate(today, 3, function(err, top_rows) {
+                        db_votes.fetchMostUpvotedByDate(today, 3, function(err, voted_rows) {
                             template.send(res, 'home/index', {
                                 pageTitle: "Pienudes - Music and Chat",
                                 top_media: top_rows,
                                 recent_media: recent_rows,
                                 voted_rows: voted_rows,
-                                channels: channels
+                                channels: channels,
+                                today: today
                             });
                         });
                     });
