@@ -74,7 +74,7 @@
             } else {
                 var el = $('[data-log-id="' + after + '"]');
                 if (el.length > 0) {
-                    $("html, body").animate({scrollTop: el.offset().top - 20}, "slow");
+                    $("html, body").animate({scrollTop: el.offset().top - 40}, "slow");
                 }
             }
         }).fail(function() {
