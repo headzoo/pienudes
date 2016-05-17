@@ -3,6 +3,7 @@ import template from '../template';
 import Config from '../../config';
 import db_playlists from '../../database/playlist';
 import db_votes from '../../database/votes';
+var moment = require('moment');
 
 function handleUserAgreement(req, res) {
     template.send(res, 'home/tos', {
@@ -49,8 +50,7 @@ module.exports = {
                     return b.usercount - a.usercount;
                 });
                 
-                var today = (new Date()).toISOString().substring(0, 10);
-    
+                var today = moment().format("YYYY-MM-DD");
                 db_playlists.fetch(3, 0, function(err, recent_rows) {
                     db_playlists.fetchMostWatchedByDate(today, 3, function(err, top_rows) {
                         db_votes.fetchMostUpvotedByDate(today, 3, function(err, voted_rows) {
