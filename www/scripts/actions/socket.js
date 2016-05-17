@@ -30,7 +30,7 @@ SocketActions.connect.listen(function(channel) {
             return this.fail("Socket.io configuration was unable to find a suitable server.")
         }
         
-        $.getScript('/socket.io/socket.io.js', function() {
+        $.getScript('https://x21.io:8443/socket.io/socket.io.js', function() {
             
             socket = io(chosen.url, {
                 secure: chosen.secure
