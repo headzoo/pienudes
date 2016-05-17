@@ -249,24 +249,44 @@ module.exports = {
     /**
      * Returns a random row from the table
      */
-    fetchRandomByChannel: function(channel, limit, callback) {
+    fetchRandomByChannel: function(channel, limit, callback, must_pick_old) {
         callback = callback || noop;
         limit = limit || 1;
         
-        var sql = "SELECT * FROM `playlist_history` " +
-        "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
-        "INNER JOIN `votes` ON `votes`.`media_id` = `media`.`id` " +
-        "WHERE `channel` = ? " + 
-        "GROUP BY `media`.`id` " +
-        "HAVING SUM(`votes`.`value`) > 0 " +
-        "ORDER BY RAND() " +
-        "LIMIT " + limit;
+        var sql;
+        var rand     = (Math.floor(Math.random() * 10) + 1);
+        var pick_old = rand >= 8;
+        if (pick_old || must_pick_old === true) {
+            sql = "SELECT * FROM `playlist_history` " +
+                "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+                "INNER JOIN `votes` ON `votes`.`media_id` = `media`.`id` " +
+                "WHERE `channel` = ? " +
+                "GROUP BY `media`.`id` " +
+                "HAVING SUM(`votes`.`value`) > 0 " +
+                "ORDER BY RAND() " +
+                "LIMIT " + limit;
+        } else {
+            sql = "SELECT * FROM `playlist_history` " +
+                "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+                "INNER JOIN `votes` ON `votes`.`media_id` = `media`.`id` " +
+                "WHERE `channel` = ? " +
+                "AND FROM_UNIXTIME(`playlist_history`.`time` / 1000) > DATE_SUB(NOW(), INTERVAL 2 WEEK)" +
+                "GROUP BY `media`.`id` " +
+                "HAVING SUM(`votes`.`value`) > 0 " +
+                "ORDER BY RAND() " +
+                "LIMIT " + limit;
+        }
+
         db.query(sql, [channel], function(err, rows) {
             if (err) {
                 return callback(err, null);
             }
-            callback(null, rows);
-        });
+            if (!rows && !pick_old) {
+                this.fetchRandomByChannel(channel, limit, callback, true);
+            } else {
+                callback(null, rows);
+            }
+        }.bind(this));
     },
     
     fetchBySearchTerm: function(term, limit, offset, callback) {
