@@ -1,9 +1,9 @@
 'use strict';
 
-var React        = require('react');
-var Reflux       = require('reflux');
-var Constants    = require('../../constants');
+var React      = require('react');
+var Reflux     = require('reflux');
 var UsersStore = require('../../stores/users');
+var Item       = require('./users/item');
 
 var Component = React.createClass({
     mixins: [
@@ -32,14 +32,7 @@ var Component = React.createClass({
         var items = [];
         for(var username in users) {
             if (users.hasOwnProperty(username)) {
-                var user   = users[username];
-                var rclass = this.getRankClass(user.rank);
-                var icon   = <span></span>;
-                if (user.meta.afk) {
-                    icon = <span className="glyphicon glyphicon-time"></span>;
-                }
-                
-                items.push(<li key={username}>{icon} <span className={rclass}>{username}</span></li>);
+                items.push(<Item key={username} user={users[username]} />);
             }
         }
         
@@ -56,20 +49,6 @@ var Component = React.createClass({
                 </div>
             </section>
         )
-    },
-    
-    getRankClass: function(rank) {
-        if(rank >= Constants.Rank.Siteadmin) {
-            return "channel-user-list-rank-admin";
-        } else if(rank >= Constants.Rank.Admin) {
-            return "channel-user-list-rank-owner";
-        } else if(rank >= Constants.Rank.Moderator) {
-            return "channel-user-list-rank-op";
-        } else if(rank == Constants.Rank.Guest) {
-            return "channel-user-list-rank-guest";
-        } else {
-            return "";
-        }
     }
 });
 
