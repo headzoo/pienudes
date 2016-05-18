@@ -3,6 +3,7 @@ import template from '../template';
 import Config from '../../config';
 import db_playlists from '../../database/playlist';
 import db_votes from '../../database/votes';
+var moment = require('moment');
 
 function handleUserAgreement(req, res) {
     template.send(res, 'home/tos', {
@@ -48,16 +49,18 @@ module.exports = {
                 
                     return b.usercount - a.usercount;
                 });
-    
+                
+                var today = moment().format("YYYY-MM-DD");
                 db_playlists.fetch(3, 0, function(err, recent_rows) {
-                    db_playlists.fetchMostWatched(3, function(err, top_rows) {
-                        db_votes.fetchMostUpvoted(3, function(err, voted_rows) {
+                    db_playlists.fetchMostWatchedByDate(today, 3, function(err, top_rows) {
+                        db_votes.fetchMostUpvotedByDate(today, 3, function(err, voted_rows) {
                             template.send(res, 'home/index', {
                                 pageTitle: "Pienudes - Say something. Play something.",
                                 top_media: top_rows,
                                 recent_media: recent_rows,
                                 voted_rows: voted_rows,
-                                channels: channels
+                                channels: channels,
+                                today: today
                             });
                         });
                     });

@@ -1,8 +1,10 @@
 "use strict";
 
-var async = require('async');
+var async  = require('async');
+var moment = require('moment');
 import template from '../template';
 import Config from '../../config';
+import db_channels from '../../database/channels.js';
 import db_playlists from '../../database/playlist';
 import db_accounts from '../../database/accounts';
 import db_votes from '../../database/votes';
@@ -21,28 +23,86 @@ function handleHistory(req, res) {
         page = 1;
     }
     
-    db_playlists.count(function(err, count) {
-        var limit  = 50;
-        var pages  = Math.ceil(count / limit);
-        if (page > pages) {
-            page = pages;
-        }
-        var offset = (page - 1) * limit;
+    db_playlists.fetchDistinctChannels(function(err, channels) {
+        db_playlists.count(function (err, count) {
+            var limit = 50;
+            var pages = Math.ceil(count / limit);
+            if (page > pages) {
+                page = pages;
+            }
+            var offset = (page - 1) * limit;
         
-        db_playlists.fetch(limit, offset, function(err, rows) {
-            rows.forEach(function(row) {
-                if (row.user[0] == "@") {
-                    row.user = row.user.substring(1);
-                }
-            });
+            db_playlists.fetch(limit, offset, function (err, rows) {
+                rows.forEach(function (row) {
+                    if (row.user[0] == "@") {
+                        row.user = row.user.substring(1);
+                    }
+                });
             
-            async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
-                template.send(res, 'charts/history', {
-                    pageTitle: "Playlist History",
-                    media: results,
-                    page:  parseInt(page),
-                    pages: parseInt(pages),
-                    pageScripts: ["/js/voting.js"]
+                async.map(rows, mod_voting.attachVotes.bind(this, req), function (err, results) {
+                    template.send(res, 'charts/history', {
+                        pageTitle: "Recently Played",
+                        headTitle: "Recently Played",
+                        media: results,
+                        page: parseInt(page),
+                        pages: parseInt(pages),
+                        channels: channels,
+                        channel: null,
+                        pageScripts: ["/js/voting.js"]
+                    });
+                });
+            });
+        });
+    });
+}
+
+function handleHistoryByChannel(req, res) {
+    var channel = req.params.channel;
+    db_channels.lookup(channel, function(err) {
+        if (err) {
+            return template.send(res, 'error/http', {
+                path: req.path,
+                status: 404,
+                message: "Channel does not exist."
+            });
+        }
+        
+        var page = req.params.page;
+        if (page == undefined) {
+            page = 1;
+        }
+        if (page < 1) {
+            page = 1;
+        }
+    
+        db_playlists.fetchDistinctChannels(function(err, channels) {
+            db_playlists.countByChannel(channel, function (err, count) {
+                var limit = 50;
+                var pages = Math.ceil(count / limit);
+                if (page > pages) {
+                    page = pages;
+                }
+                var offset = (page - 1) * limit;
+            
+                db_playlists.fetchByChannel(channel, limit, offset, function (err, rows) {
+                    rows.forEach(function (row) {
+                        if (row.user[0] == "@") {
+                            row.user = row.user.substring(1);
+                        }
+                    });
+                
+                    async.map(rows, mod_voting.attachVotes.bind(this, req), function (err, results) {
+                        template.send(res, 'charts/history', {
+                            pageTitle: "Recently Played - " + channel,
+                            headTitle: "Recently Played - " + channel,
+                            media: results,
+                            page: parseInt(page),
+                            pages: parseInt(pages),
+                            channels: channels,
+                            channel: channel,
+                            pageScripts: ["/js/voting.js"]
+                        });
+                    });
                 });
             });
         });
@@ -91,26 +151,152 @@ function handleTopRedirect(req, res) {
 }
 
 function handleTop(req, res) {
-    db_playlists.fetchMostWatched(25, function(err, rows) {
-        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
-            template.send(res, 'charts/top', {
-                pageTitle: "25 Most Played Videos",
-                media: results,
-                count: 25,
-                pageScripts: ["/js/voting.js"]
+    db_playlists.fetchDistinctChannels(function(err, channels){
+        db_playlists.fetchDistinctDays(function(err, dates) {
+            db_playlists.fetchMostWatched(25, function(err, rows) {
+                async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                    template.send(res, 'charts/top', {
+                        pageTitle: "25 Most Played Videos",
+                        headTitle: "Most Played - All Channels - All Time",
+                        media: results,
+                        count: 25,
+                        channels: channels,
+                        dates: dates,
+                        pageScripts: ["/js/voting.js"]
+                    });
+                });
+            });
+        });
+    });
+}
+
+function handleTopByChannel(req, res) {
+    var channel = req.params.channel;
+    db_channels.lookup(channel, function(err) {
+        if (err) {
+            return template.send(res, 'error/http', {
+                path: req.path,
+                status: 404,
+                message: "Channel does not exist."
+            });
+        }
+    
+        db_playlists.fetchDistinctDays(function(err, dates) {
+            db_playlists.fetchDistinctChannels(function (err, channels) {
+                db_playlists.fetchMostWatchedByChannel(channel, 25, function (err, rows) {
+                    async.map(rows, mod_voting.attachVotes.bind(this, req), function (err, results) {
+                        template.send(res, 'charts/top', {
+                            pageTitle: "25 Most Played Videos - " + channel + " - All Time",
+                            headTitle: "Most Played - " + channel + " - All Time",
+                            media: results,
+                            count: 25,
+                            channels: channels,
+                            channel: channel,
+                            dates: dates,
+                            pageScripts: ["/js/voting.js"]
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
+
+function handleTopByDate(req, res) {
+    var date          = req.params.date;
+    var day           = moment(date, "YYYY-MM-D");
+    var day_formatted = day.format("MMMM Do YYYY");
+    
+    db_playlists.fetchDistinctChannels(function(err, channels){
+        db_playlists.fetchDistinctDays(function(err, dates) {
+            db_playlists.fetchMostWatchedByDate(date, 25, function(err, rows) {
+                async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                    template.send(res, 'charts/top', {
+                        pageTitle: "25 Most Played Videos - All Channels - " + day_formatted,
+                        headTitle: "Most Played - All Channels - " + day_formatted,
+                        media: results,
+                        count: 25,
+                        channels: channels,
+                        dates: dates,
+                        date: date,
+                        pageScripts: ["/js/voting.js"]
+                    });
+                });
+            });
+        });
+    });
+}
+
+function handleTopByChannelAndDate(req, res) {
+    var date          = req.params.date;
+    var day           = moment(date, "YYYY-MM-D");
+    var day_formatted = day.format("MMMM Do YYYY");
+    
+    var channel = req.params.channel;
+    db_channels.lookup(channel, function(err) {
+        if (err) {
+            return template.send(res, 'error/http', {
+                path: req.path,
+                status: 404,
+                message: "Channel does not exist."
+            });
+        }
+        
+        db_playlists.fetchDistinctChannels(function(err, channels){
+            db_playlists.fetchDistinctDays(function(err, dates) {
+                db_playlists.fetchMostWatchedByChannelAndDate(channel, date, 25, function(err, rows) {
+                    async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                        template.send(res, 'charts/top', {
+                            pageTitle: "25 Most Played Videos - " + channel + " - " + day_formatted,
+                            headTitle: "Most Played - " + channel + " - " + day_formatted,
+                            media: results,
+                            count: 25,
+                            channels: channels,
+                            channel: channel,
+                            dates: dates,
+                            date: date,
+                            pageScripts: ["/js/voting.js"]
+                        });
+                    });
+                });
             });
         });
     });
 }
 
 function handleUpvoted(req, res) {
-    db_votes.fetchMostUpvoted(25, function(err, rows) {
-        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
-            template.send(res, 'charts/upvoted', {
-                pageTitle: "25 Most Upvoted Videos",
-                media: results,
-                count: 25,
-                pageScripts: ["/js/voting.js"]
+    db_votes.fetchDistinctDays(function(err, dates) {
+        db_votes.fetchMostUpvoted(25, function(err, rows) {
+            async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                template.send(res, 'charts/upvoted', {
+                    pageTitle: "25 Most Upvoted Videos",
+                    headTitle: "Most Upvoted - All Time",
+                    media: results,
+                    count: 25,
+                    dates: dates,
+                    pageScripts: ["/js/voting.js"]
+                });
+            });
+        });
+    });
+}
+
+function handleUpvotedByDate(req, res) {
+    var date          = req.params.date;
+    var day           = moment(date, "YYYY-MM-D");
+    var day_formatted = day.format("MMMM Do YYYY");
+    
+    db_votes.fetchDistinctDays(function(err, dates) {
+        db_votes.fetchMostUpvotedByDate(date, 25, function(err, rows) {
+            async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                template.send(res, 'charts/upvoted', {
+                    pageTitle: "25 Most Upvoted Videos - " + day_formatted,
+                    headTitle: "Most Upvoted - " + day_formatted,
+                    media: results,
+                    count: 25,
+                    dates: dates,
+                    pageScripts: ["/js/voting.js"]
+                });
             });
         });
     });
@@ -133,8 +319,13 @@ module.exports = {
     init: function (app) {
         app.get('/charts/history/search/:page?', handleHistorySearch);
         app.get('/charts/history/:page?', handleHistory);
+        app.get('/charts/history/r/:channel/:page?', handleHistoryByChannel);
         app.get('/charts/top', handleTop);
+        app.get('/charts/top/r/:channel', handleTopByChannel);
+        app.get('/charts/top/date/:date([\\d]{4}\\-[\\d]{2}\\-[\\d]{2})', handleTopByDate);
+        app.get('/charts/top/r/:channel/date/:date([\\d]{4}\\-[\\d]{2}\\-[\\d]{2})', handleTopByChannelAndDate);
         app.get('/charts/upvoted', handleUpvoted);
+        app.get('/charts/upvoted/date/:date([\\d]{4}\\-[\\d]{2}\\-[\\d]{2})', handleUpvotedByDate);
         
         app.get('/playlists/history/:page?', handleHistoryRedirect);
         app.get('/playlists/user/:name/:page?', handleUserRedirect);

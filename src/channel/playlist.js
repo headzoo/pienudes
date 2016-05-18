@@ -985,7 +985,7 @@ PlaylistModule.prototype._delete = function (uid) {
             u.socket.emit("setPlaylistMeta", self.meta);
         });
         
-        if (self.current && self.current.queueby && self.current.queueby[0] != "@" && self.channel.name != "CANCER-TIME-WITH-DJ-BOOGS") {
+        if (self.current && self.current.queueby && self.current.queueby[0] != "@" && self.channel.name.toLowerCase() != "cancer-time-with-dj-boogs" && self.channel.name.toLowerCase() != "movie") {
             var media   = self.current.media;
             var queueby = self.current.queueby;
             

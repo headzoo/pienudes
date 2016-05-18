@@ -53,6 +53,9 @@ function handleLogsForChannel(req, res) {
             });
         } else {
             if (after != 0) {
+                if (after > 5) {
+                    after = after - 5;
+                }
                 db_chat_logs.fetchTodayByChannelAfterId(chan.id, after, function (err, rows) {
                     if (err) {
                         console.log(err);

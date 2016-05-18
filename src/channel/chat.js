@@ -313,18 +313,18 @@ ChatModule.prototype.processChatMsg = function (user, data) {
         return;
     }
     
-    db_channels.lookup(this.channel.name, function(err, chan) {
-        if (!err && chan) {
-            emotes.exec(chan.id, msgobj.msg, function(msg) {
-                db_chat_logs.insert(chan.id, user.getName(), 'message', msg, JSON.stringify(msgobj.meta));
-            });
-        }
-    });
-    
     emotes.execUser(user.account.id, msgobj.msg, function(m) {
         msgobj.msg = m;
         this.sendMessage(msgobj);
         counters.add("chat:sent");
+        
+        db_channels.lookup(this.channel.name, function(err, chan) {
+            if (!err && chan) {
+                emotes.exec(chan.id, msgobj.msg, function(msg) {
+                    db_chat_logs.insert(chan.id, user.getName(), 'message', msg, JSON.stringify(msgobj.meta));
+                }.bind(this));
+            }
+        });
     }.bind(this));
 };
 

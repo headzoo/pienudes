@@ -70,49 +70,53 @@
             </ul>
         </div>
 
-        <div class="sidebar-widget-empty">
-            <h3 class="sidebar-widget-title">
-                <a href="/charts/upvoted">Most Upvoted</a>
-            </h3>
-            <ul class="sidebar-list">
-                {% for m in voted_rows %}
-                    <div class="card card-media">
-                        <div class="card-media-time">
-                            {{ m.vote_count|comma }} votes
-                        </div>
-                        {{ links.thumbnail(m, "card-media-thumbnail") }}
-                        {{ links.media(m, "card-media-title smaller") }}
-                        {% if m.user %}
-                            <div class="card-media-common">
-                                Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
+        {% if voted_rows|length > 0 %}
+            <div class="sidebar-widget-empty">
+                <h3 class="sidebar-widget-title">
+                    <a href="/charts/upvoted/date/{{ today }}">Most Upvoted Today</a>
+                </h3>
+                <ul class="sidebar-list">
+                    {% for m in voted_rows %}
+                        <div class="card card-media">
+                            <div class="card-media-time">
+                                {{ m.vote_count|comma }} votes
                             </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </ul>
-        </div>
+                            {{ links.thumbnail(m, "card-media-thumbnail") }}
+                            {{ links.media(m, "card-media-title smaller") }}
+                            {% if m.user %}
+                                <div class="card-media-common">
+                                    Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
-        <div class="sidebar-widget-empty">
-            <h3 class="sidebar-widget-title">
-                <a href="/charts/top">Most Played</a>
-            </h3>
-            <ul class="sidebar-list">
-                {% for m in top_media %}
-                    <div class="card card-media">
-                        <div class="card-media-time">
-                            {{ m.cnt|comma }} plays
-                        </div>
-                        {{ links.thumbnail(m, "card-media-thumbnail") }}
-                        {{ links.media(m, "card-media-title smaller") }}
-                        {% if m.user %}
-                            <div class="card-media-common">
-                                Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
+        {% if top_media|length > 0 %}
+            <div class="sidebar-widget-empty">
+                <h3 class="sidebar-widget-title">
+                    <a href="/charts/top/date/{{ today }}">Most Played Today</a>
+                </h3>
+                <ul class="sidebar-list">
+                    {% for m in top_media %}
+                        <div class="card card-media">
+                            <div class="card-media-time">
+                                {{ m.cnt|comma }} plays
                             </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </ul>
-        </div>
+                            {{ links.thumbnail(m, "card-media-thumbnail") }}
+                            {{ links.media(m, "card-media-title smaller") }}
+                            {% if m.user %}
+                                <div class="card-media-common">
+                                    Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
         <div class="sidebar-widget">
             <h3>Notable Quotes</h3>

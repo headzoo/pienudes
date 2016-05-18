@@ -5,10 +5,19 @@
 {% block content %}
     <div id="tracks">
         <div class="header-graphic"></div>
-        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+        <div class="col-xs-12 col-sm-4 col-md-2 col-md-offset-2">
+            <ul class="timeline-sidebar-list">
+                {% for d in dates %}
+                    <li>
+                        <a href="/charts/upvoted/date/{{ d.short }}">{{ d.full }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-4 ">
 
             <div class="timeline">
-                <h1><img src="/img/equalizer.gif" /> Most Upvoted</h1>
+                <h1><img src="/img/equalizer.gif" /> {{ headTitle }}</h1>
                 {% for m in media %}
                     <div class="card card-media">
                         <div class="card-media-time" data-time="{{ m.time }}">

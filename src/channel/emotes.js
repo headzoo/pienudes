@@ -5,6 +5,8 @@ var db_channels = require('../database/channels');
 var db_emotes   = require('../database/emotes');
 var emotes_url  = Config.get("emotes.uploads_url");
 
+var user_emotes = {};
+
 function EmoteList(defaults) {
     if (!defaults) {
         defaults = [];
@@ -236,17 +238,35 @@ EmoteModule.exec = function(chan_id, msg, callback) {
 };
 
 EmoteModule.execUser = function(user_id, msg, callback) {
-    db_emotes.fetchByUserId(user_id, function(err, emotes) {
-        if (!err) {
-            emotes.forEach(function (e) {
-                msg = msg.replace(
-                    new RegExp(e.text, "gi"),
-                    '<img class="channel-emote" src="' + emotes_url + e.path + '">'
-                );
-            });
-        }
+    if (user_emotes[user_id] == undefined) {
+        db_emotes.fetchByUserId(user_id, function(err, emotes) {
+            if (!err) {
+                user_emotes[user_id] = emotes;
+                
+                emotes.forEach(function (e) {
+                    msg = msg.replace(
+                        new RegExp(e.text, "gi"),
+                        '<img class="channel-emote" src="' + emotes_url + e.path + '">'
+                    );
+                });
+            }
+            callback(msg);
+        }.bind(this));
+    } else {
+        user_emotes[user_id].forEach(function(e) {
+            msg = msg.replace(
+                new RegExp(e.text, "gi"),
+                '<img class="channel-emote" src="' + emotes_url + e.path + '">'
+            );
+        });
         callback(msg);
-    }.bind(this));
+    }
+};
+
+EmoteModule.clearUser = function(user_id) {
+    if (user_emotes[user_id] != undefined) {
+        delete user_emotes[user_id];
+    }
 };
 
 module.exports = EmoteModule;

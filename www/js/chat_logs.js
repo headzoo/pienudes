@@ -69,7 +69,14 @@
             }
             
             formatLogs(res);
-            $("html, body").animate({ scrollTop: 0 }, "slow");
+            if (after == 0) {
+                $("html, body").animate({scrollTop: 0}, "slow");
+            } else {
+                var el = $('[data-log-id="' + after + '"]');
+                if (el.length > 0) {
+                    $("html, body").animate({scrollTop: el.offset().top - 60}, "slow");
+                }
+            }
         }).fail(function() {
             box.empty();
             alert("There was an error. Please try again in a minute.")
@@ -89,7 +96,9 @@
                     meta: log.meta,
                     time: log.time
                 };
+                
                 div = formatChatMessage(obj, {name: ""}, "/chat/logs#c=" + channel + "&i=" + log.id);
+                div.attr("data-log-id", log.id);
                 new_box.append(div);
             } else {
                 if (log.meta.id != last_mid) {
