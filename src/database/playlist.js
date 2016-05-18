@@ -256,7 +256,7 @@ module.exports = {
         var sql;
         var rand     = (Math.floor(Math.random() * 10) + 1);
         var pick_old = rand >= 8;
-        if (pick_old || must_pick_old === true) {
+        if (pick_old || must_pick_old) {
             sql = "SELECT * FROM `playlist_history` " +
                 "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
                 "INNER JOIN `votes` ON `votes`.`media_id` = `media`.`id` " +
@@ -281,7 +281,7 @@ module.exports = {
             if (err) {
                 return callback(err, null);
             }
-            if (!rows && !pick_old) {
+            if (rows.length == 0 && !pick_old) {
                 this.fetchRandomByChannel(channel, limit, callback, true);
             } else {
                 callback(null, rows);
