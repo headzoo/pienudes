@@ -5,14 +5,17 @@ var Reflux        = require('reflux');
 var Input         = require('./buffer/input');
 var Message       = require('./message');
 var Emotes        = require('./emotes');
+var GuestLogin    = require('./buffer/guest');
 var MessagesStore = require('../../stores/messages');
 var EmotesStore   = require('../../stores/emotes');
 var ScrollStore   = require('../../stores/scroll');
+var ClientStore   = require('../../stores/client');
 
 var Component = React.createClass({
     mixins: [
         Reflux.connect(MessagesStore, "messages"),
         Reflux.connect(EmotesStore, "emotes"),
+        Reflux.connect(ClientStore, "client"),
         Reflux.listenTo(ScrollStore, "onScroll")
     ],
     
@@ -44,6 +47,13 @@ var Component = React.createClass({
             bottom: (this.state.emotes.visible ? "120px" : "56px")
         };
         
+        var input = null;
+        if (this.state.client.logged_in) {
+            input = <Input />;
+        } else {
+            input = <GuestLogin />;
+        }
+        
         return (
             <section id="channel-buffer-wrap" className="col-xs-12 col-sm-7 col-md-6">
                 <div ref="buffer" id="channel-buffer" style={style_buffer}>
@@ -56,7 +66,7 @@ var Component = React.createClass({
                     </div>
                 </div>
                 <Emotes />
-                <Input />
+                {input}
             </section>
         )
     }

@@ -2,6 +2,7 @@
 
 var Reflux        = require('reflux');
 var SocketActions = require('../actions/socket');
+var ErrorActions  = require('../actions/error');
 var Events        = require('../events');
 
 module.exports = Reflux.createStore({
@@ -24,6 +25,12 @@ module.exports = Reflux.createStore({
         return this.data;
     },
     
+    onGuestLogin: function(username) {
+        SocketActions.emit(Events.LOGIN, {
+            name: username
+        });
+    },
+    
     onConnectDone: function() {
         if (this.data.name && this.data.guest) {
             SocketActions.emit(Events.LOGIN, {
@@ -40,7 +47,7 @@ module.exports = Reflux.createStore({
     },
     
     onLoginFail: function(data) {
-        console.log(data);
+        ErrorActions.alert(data.error);
     },
     
     onRank: function(rank) {

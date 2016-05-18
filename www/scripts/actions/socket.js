@@ -10,6 +10,7 @@ var SocketActions = Reflux.createActions({
     "connect"     : {children: ["done", "fail"]},
     "login"       : {children: ["done", "fail"]},
     "rank"        : {children: ["done", "fail"]},
+    "guestLogin"  : {},
     "emit"        : {}
 });
 

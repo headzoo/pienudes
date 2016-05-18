@@ -8,6 +8,7 @@ module.exports = {
     RANK: "rank",
     CHAT_MSG: "chatMsg",
     USER_LIST: "userlist",
+    ADD_USER: "addUser",
     SET_PERMISSIONS: "setPermissions",
     SET_USER_PROFILE: "setUserProfile",
     SET_MOTD: "setMotd",

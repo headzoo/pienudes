@@ -118,6 +118,14 @@
 #channel-video-input::-webkit-input-placeholder {
   color: #3E3E3E;
 }
+#channel-buffer-input.channel-buffer-guest-login,
+#channel-video-input.channel-buffer-guest-login {
+  border: 1px solid green;
+}
+#channel-buffer-input.channel-buffer-guest-login::-webkit-input-placeholder,
+#channel-video-input.channel-buffer-guest-login::-webkit-input-placeholder {
+  color: #5c5c5c;
+}
 .channel-buffer-button,
 .channel-video-button {
   background: #1b1b1b !important;
@@ -476,4 +484,27 @@
 }
 .sp-dd {
   display: none;
+}
+.ReactModal__Content:focus,
+.ReactModal__Content:active {
+  outline: none;
+}
+.ReactModal__Content.modal-dialog-error {
+  max-width: 400px !important;
+}
+.ReactModal__Content .modal-content {
+  margin: 60px auto;
+  border-radius: 0;
+}
+.ReactModal__Content .modal-content:focus,
+.ReactModal__Content .modal-content:active {
+  outline: none;
+}
+.ReactModal__Content .modal-content .modal-header,
+.ReactModal__Content .modal-content .modal-footer,
+.ReactModal__Content .modal-content .modal-content {
+  padding: 8px;
+}
+.ReactModal__Content .modal-content .modal-header h4 {
+  font-size: 14px;
 }

@@ -139,6 +139,14 @@
   &::-webkit-input-placeholder {
     color: #3E3E3E;
   }
+
+  &.channel-buffer-guest-login {
+    border: 1px solid green;
+    
+    &::-webkit-input-placeholder {
+      color: #5c5c5c;
+    }
+  }
 }
 
 .channel-buffer-button, .channel-video-button {
@@ -509,4 +517,33 @@
 
 .sp-dd {
   display: none;
+}
+
+.ReactModal__Content {
+  &:focus, &:active {
+    outline: none;
+  }
+  
+  &.modal-dialog-error {
+    max-width: 400px !important;
+  }
+  
+  .modal-content {
+    margin: 60px auto;
+    border-radius: 0;
+    
+    &:focus, &:active {
+      outline: none;
+    }
+    
+    .modal-header, .modal-footer, .modal-content {
+      padding: 8px;
+    }
+    
+    .modal-header {
+      h4 {
+        font-size: 14px;
+      }
+    }
+  }
 }

@@ -1,10 +1,12 @@
 'use strict';
 
-var React  = require('react');
-var Reflux = require('reflux');
-var Users  = require('./channel/users');
-var Buffer = require('./channel/buffer');
-var Video  = require('./channel/video');
+var React       = require('react');
+var Reflux      = require('reflux');
+var Modal       = require('react-modal');
+var ModalError  = require('./channel/modal/error');
+var Users       = require('./channel/users');
+var Buffer      = require('./channel/buffer');
+var Video       = require('./channel/video');
 
 var ConnectionStore = require('../stores/connection');
 var ChannelActions  = require('../actions/channel');
@@ -42,6 +44,8 @@ var Component = React.createClass({
     },
     
     componentWillMount: function() {
+        Modal.defaultStyles.overlay.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    
         SocketActions.connect(this.props.join);
         UsersActions.load(this.props.data.users);
         EmotesActions.load(this.props.data.emotes);
@@ -61,6 +65,7 @@ var Component = React.createClass({
                 <Users />
                 <Buffer />
                 <Video />
+                <ModalError />
             </div>
         )
     }

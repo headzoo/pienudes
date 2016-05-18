@@ -28,6 +28,7 @@ module.exports = Reflux.createStore({
     
     onConnectDone: function(socket) {
         socket.on(Events.USER_LIST, this.onUserList);
+        socket.on(Events.ADD_USER, this.onAddUser);
     },
     
     onUserList: function(users) {
@@ -40,6 +41,11 @@ module.exports = Reflux.createStore({
                 }
             }
         }.bind(this));
+        this.trigger(this.data);
+    },
+    
+    onAddUser: function(user) {
+        this.data[user.name] = user;
         this.trigger(this.data);
     }
 });
