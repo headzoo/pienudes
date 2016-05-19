@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://pienudes.com/</loc>
+        <loc>https://upnext.fm/</loc>
         <changefreq>daily</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/charts/top</loc>
+        <loc>https://upnext.fm/charts/top</loc>
         <changefreq>hourly</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/charts/history</loc>
+        <loc>https://upnext.fm/charts/history</loc>
         <changefreq>hourly</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/charts/upvoted</loc>
+        <loc>https://upnext.fm/charts/upvoted</loc>
         <changefreq>hourly</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/users</loc>
+        <loc>https://upnext.fm/users</loc>
         <changefreq>daily</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/chat/logs</loc>
+        <loc>https://upnext.fm/chat/logs</loc>
         <changefreq>daily</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/help</loc>
+        <loc>https://upnext.fm/help</loc>
         <changefreq>monthly</changefreq>
     </url>
     <url>
-        <loc>https://pienudes.com/about</loc>
+        <loc>https://upnext.fm/about</loc>
         <changefreq>monthly</changefreq>
     </url>
 </urlset>

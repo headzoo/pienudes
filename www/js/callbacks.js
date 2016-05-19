@@ -148,7 +148,7 @@ Callbacks = {
             .html("&times;");
         $("<h4/>").appendTo(div).text("Unregistered channel");
         $("<p/>").appendTo(div)
-            .html("This channel is not registered to a Pienudes account.  You can still " +
+            .html("This channel is not registered to a upnext.fm account.  You can still " +
                   "use it, but some features will not be available.  To register a " +
                   "channel to your account, visit your <a href='/account/channels'>" +
                   "channels</a> page.");

@@ -54,7 +54,7 @@ var LASTCHAT = {
 };
 var FOCUSED = true;
 var UNREAD_MSG_COUNT = 0;
-var PAGETITLE = "Pienudes";
+var PAGETITLE = "upnext.fm";
 var TITLE_BLINK;
 var CHATSOUND = new Audio("/boop.wav");
 var KICKED = false;
