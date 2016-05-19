@@ -54,8 +54,24 @@
 .channel-user-list-rank-guest {
   color: #888888!important;
 }
+.channel-user-list-avatar {
+  float: left;
+}
+.channel-user-list-avatar img {
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+.channel-user-list-username {
+  vertical-align: top;
+  margin-left: 36px;
+  line-height: 16px;
+}
 .channel-user-list-tagline {
   font-size: 10px;
+  margin-left: 36px;
 }
 #channel-buffer-wrap {
   position: relative;
@@ -411,7 +427,7 @@
   color: #636262;
 }
 #channel-video-controls {
-  margin: 5px 0 20px 0;
+  margin: 4px 0 2px 0;
   flex: 0 1 30px;
 }
 .channel-video-controls-vote-button {

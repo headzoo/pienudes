@@ -14,17 +14,23 @@ var Component = React.createClass({
     render: function () {
         var user   = this.props.user;
         var rclass = this.getRankClass(user.rank);
-        var icon   = <span></span>;
+        var icon   = null;
         if (user.meta.afk) {
             icon = <span className="glyphicon glyphicon-time"></span>;
         }
         if (user.profile == undefined) {
             user.profile = {text: ""};
         }
+        if (user.profile.image == undefined) {
+            user.profile.image = "/img/avatar.gif";
+        }
         
         return (
             <li key={user.name}>
-                <div>
+                <div className="channel-user-list-avatar">
+                    <img src={user.profile.image} />
+                </div>
+                <div className="channel-user-list-username">
                     {icon} <span className={rclass}>{user.name}</span>
                 </div>
                 <div className="channel-user-list-tagline">
