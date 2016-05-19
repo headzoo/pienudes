@@ -13,7 +13,7 @@ var Component = React.createClass({
                     id="channel-buffer-input"
                     className="channel-buffer-guest-login"
                     type="text"
-                    placeholder="Enter a nickname to join chat"
+                    placeholder="Enter a nickname to join chat."
                     onKeyUp={this.handleKeyUp} />
                 <button
                     id="channel-buffer-send"

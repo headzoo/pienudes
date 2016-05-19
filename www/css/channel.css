@@ -119,7 +119,8 @@
 }
 #channel-buffer-input.channel-buffer-guest-login,
 #channel-video-input.channel-buffer-guest-login {
-  border: 1px solid green;
+  border: 1px solid #194850;
+  margin-top: 0;
 }
 #channel-buffer-input.channel-buffer-guest-login::-webkit-input-placeholder,
 #channel-video-input.channel-buffer-guest-login::-webkit-input-placeholder {
