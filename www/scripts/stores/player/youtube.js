@@ -2,6 +2,7 @@
 
 var Reflux        = require('reflux');
 var YouTubePlayerActions = require('../../actions/player/youtube');
+var PlayerActions = require('../../actions/player');
 var SocketActions = require('../../actions/socket');
 var Events        = require('../../events');
 
@@ -10,9 +11,22 @@ module.exports = Reflux.createStore({
     youtube: null,
     player: null,
     play_w_ready: null,
+    last_percent: 0,
     data: {
         playing: false,
         ready: false
+    },
+    
+    init: function() {
+        setInterval(function() {
+            if (this.player) {
+                var percent = Math.floor((this.player.getCurrentTime() / this.player.getDuration()) * 100);
+                if (percent != this.last_percent) {
+                    PlayerActions.progress(percent);
+                    this.last_percent = percent;
+                }
+            }
+        }.bind(this), 1000);
     },
     
     getInitialState() {
@@ -51,6 +65,10 @@ module.exports = Reflux.createStore({
         if (media.currentTime != undefined) {
             current_time = Math.ceil(media.currentTime);
         }
+        
+        PlayerActions.progress(
+            Math.floor((current_time / media.seconds) * 100)
+        );
         
         if (this.player) {
             this.player.loadVideoById(media.id, current_time);
