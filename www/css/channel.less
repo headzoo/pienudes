@@ -1,3 +1,5 @@
+@import "variables";
+
 @color-border: #1B1B1B;
 
 #channel-mount {
@@ -42,12 +44,12 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 46px;
-  background-color: #1D1D1D;
+  height: 38px;
+  background-color: darken(@color-primary, 10%);
   text-align: center;
-  padding: 8px 6px 4px 6px;
+  padding: 4px 6px 4px 6px;
   font-size: 12px;
-
+  
   -webkit-box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.3);
   -moz-box-shadow:    0px -1px 2px 0px rgba(0, 0, 0, 0.3);
   box-shadow:         0px -1px 2px 0px rgba(0, 0, 0, 0.3);
@@ -83,7 +85,6 @@
   
   img {
     vertical-align: top;
-    margin-bottom: 4px;
     max-height: 100px;
   }
 }
@@ -92,7 +93,7 @@
   overflow: hidden;
   word-wrap: break-word;
   position: absolute;
-  top: 6px;
+  top: 0;
   left: 12px;
   right: 0;
   bottom: 56px;
@@ -109,8 +110,8 @@
   bottom: 0;
   height: 38px;
   display: flex;
-  border-top: 1px solid @color-border;
-  border-right: 1px solid @color-border;
+  border-top: 1px solid darken(@color-primary, 13%);
+  border-right: 1px solid darken(@color-primary, 13%);
   
   ul {
     list-style-type: none;
@@ -150,8 +151,8 @@
 }
 
 .channel-buffer-button, .channel-video-button {
-  background: @color-border !important;
-  border: solid 1px #161A20 !important;
+  background: darken(@color-primary, 10%) !important;
+  border: solid 1px darken(@color-primary, 13%) !important;
   padding: 4px 15px;
   text-transform: uppercase;
 
@@ -164,7 +165,7 @@
   }
   
   &:hover {
-    background: lighten(@color-border, 3%) !important;
+    background: lighten(@color-primary, 3%) !important;
   }
 }
 
@@ -178,9 +179,14 @@
   -ms-flex-pack: center;
 }
 
+#channel-video-add {
+  width: 46px;
+  padding-top: 0;
+}
+
 .sp-replacer {
   .channel-buffer-button;
-  padding: 7px 8px !important;
+  padding: 7px 12px !important;
 
   @media only screen and (max-width : 768px) {
     padding: 10px 20px;
@@ -225,7 +231,7 @@
 }
 
 #channel-buffer-emote, #channel-video-catalog {
-  width: 40px;
+  width: 46px;
   display: flex;
   align-items: center;
   -webkit-box-pack: center;
@@ -292,7 +298,6 @@
   padding-bottom: 56.25%; /* 16:9 */
   padding-top: 5px;
   height: 0;
-  margin-top: 5px;
   -webkit-flex: none;
   flex: none;
   
@@ -322,7 +327,7 @@
     display: block;
     height: 2px;
     width: 100%;
-    background-color: #430550;
+    background-color: @color-primary;
     transition: width 1s linear;
   }
 }
@@ -392,7 +397,7 @@
 }
 
 .channel-playlist-username {
-  color: #CCC;
+  color: #636262;
 }
 
 .channel-playlist-links {
@@ -416,7 +421,7 @@
   vertical-align: middle;
   margin-top: -3px;
   margin-left: 4px;
-  color: #8D8E8E;
+  color: #636262;
 }
 
 #channel-video-controls {

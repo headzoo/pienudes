@@ -82,7 +82,9 @@ var Component = React.createClass({
         return (
             <div id="channel-buffer-input-wrap">
                 <input ref="msg" id="channel-buffer-input" type="text" placeholder="Say something..." onKeyUp={this.handleKeyUp} />
-                <button id="channel-buffer-send" className="channel-buffer-button" onClick={this.handleSendClick}>Send</button>
+                <button id="channel-buffer-send" className="channel-buffer-button" onClick={this.handleSendClick}>
+                    <span className="glyphicon glyphicon-send"></span>
+                </button>
                 <button id="channel-buffer-emote" className="channel-buffer-button" onClick={this.handleEmotes}>
                     <img src="https://twemoji.maxcdn.com/16x16/1f600.png" />
                 </button>

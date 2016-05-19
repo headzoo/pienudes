@@ -23,8 +23,12 @@ var Component = React.createClass({
         return (
             <div id="channel-video-input-wrap">
                 <input ref="msg" id="channel-video-input" type="text" placeholder="Play something... (Links from YouTube, SoundCloud)" onKeyUp={this.handleKeyUp} />
-                <button id="channel-video-add" className="channel-video-button" onClick={this.handleAddClick}>Add</button>
-                <button ref="search" id="channel-video-search" className="channel-video-button" onClick={this.handleSearch}>Search</button>
+                <button id="channel-video-add" className="channel-video-button" onClick={this.handleAddClick}>
+                    <span className="glyphicon glyphicon-plus"></span>
+                </button>
+                <button ref="search" id="channel-video-search" className="channel-video-button" onClick={this.handleSearch}>
+                    <span className="glyphicon glyphicon-search"></span>
+                </button>
             </div>
         )
     },
