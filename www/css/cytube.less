@@ -835,8 +835,15 @@ textarea:focus, input:focus{
 }
 
 .homepage {
-    background: url(https://uploads.pienudes.com/lobby/background4.jpg) top center no-repeat;
-    background-size: contain;
+    background: url(http://image.shutterstock.com/z/stock-vector-discotheque-vector-137537615.jpg) top center no-repeat;
+    background-size: cover;
+    
+    .container {
+        background-color: rgba(0, 0, 0, 0.95);
+        margin-top: 60px;
+        margin-bottom: 80px;
+        padding-top: 22px;
+    }
 }
 
 .homepage input.form-control[type="text"], .homepage input.form-control[type="password"] {
@@ -948,6 +955,12 @@ textarea:focus, input:focus{
 .navbar-inverse {
     background-color: @color-nav-bar-inverse;
     border-color: @color-card-border;
+}
+
+.homepage {
+    .navbar-inverse {
+        background-color: rgba(51, 66, 97, 0.4);
+    }
 }
 
 .navbar-nav>li>a:hover {

@@ -60,11 +60,6 @@
                         </div>
                         {{ links.thumbnail(m, "card-media-thumbnail") }}
                         {{ links.media(m, "card-media-title smaller") }}
-                        {% if m.user %}
-                            <div class="card-media-common">
-                                Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
-                            </div>
-                        {% endif %}
                     </div>
                 {% endfor %}
             </ul>
@@ -83,11 +78,6 @@
                             </div>
                             {{ links.thumbnail(m, "card-media-thumbnail") }}
                             {{ links.media(m, "card-media-title smaller") }}
-                            {% if m.user %}
-                                <div class="card-media-common">
-                                    Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
-                                </div>
-                            {% endif %}
                         </div>
                     {% endfor %}
                 </ul>
@@ -107,11 +97,6 @@
                             </div>
                             {{ links.thumbnail(m, "card-media-thumbnail") }}
                             {{ links.media(m, "card-media-title smaller") }}
-                            {% if m.user %}
-                                <div class="card-media-common">
-                                    Played by <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
-                                </div>
-                            {% endif %}
                         </div>
                     {% endfor %}
                 </ul>
@@ -128,13 +113,6 @@
                     SalmonBaconator: i just always pictured Toto as like a black Freddie Mercury
                 </li>
             </ul>
-        </div>
-
-        <div class="sidebar-widget">
-            <img src="https://images.pienudes.com/sidebarimg.jpg" style="width: 100%;" />
-            <p style="margin: 6px 0 0 0;">
-                Join us on reddit at <a href="https://www.reddit.com/r/pienudes" target="_blank">/r/pienudes</a>.
-            </p>
         </div>
     </div>
 {% endblock %}

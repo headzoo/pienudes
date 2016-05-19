@@ -720,8 +720,14 @@ input:focus {
   font-size: 12px;
 }
 .homepage {
-  background: url(https://uploads.pienudes.com/lobby/background4.jpg) top center no-repeat;
-  background-size: contain;
+  background: url(http://image.shutterstock.com/z/stock-vector-discotheque-vector-137537615.jpg) top center no-repeat;
+  background-size: cover;
+}
+.homepage .container {
+  background-color: rgba(0, 0, 0, 0.95);
+  margin-top: 60px;
+  margin-bottom: 80px;
+  padding-top: 22px;
 }
 .homepage input.form-control[type="text"],
 .homepage input.form-control[type="password"] {
@@ -810,6 +816,9 @@ input:focus {
 .navbar-inverse {
   background-color: #334261;
   border-color: #000000;
+}
+.homepage .navbar-inverse {
+  background-color: rgba(51, 66, 97, 0.4);
 }
 .navbar-nav > li > a:hover {
   background-color: #455982;
