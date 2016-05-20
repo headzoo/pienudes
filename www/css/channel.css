@@ -25,6 +25,8 @@
 }
 #channel-user-list ul li {
   cursor: pointer;
+  margin-bottom: 4px;
+  min-height: 30px;
 }
 #channel-user-list-footer {
   position: absolute;

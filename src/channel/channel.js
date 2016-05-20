@@ -13,6 +13,18 @@ import { ChannelStateSizeError } from '../errors';
 import Promise from 'bluebird';
 import { EventEmitter } from 'events';
 
+var random_avatars = [
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_1_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_2_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_3_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_4_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_5_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_6_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_7_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_8_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_9_md.jpg"
+];
+
 class ReferenceCounter {
     constructor(channel) {
         this.channel = channel;
@@ -452,10 +464,15 @@ Channel.prototype.partUser = function (user) {
 };
 
 Channel.prototype.packUserData = function (user) {
+    var profile = user.account.profile;
+    if (profile.image == undefined || profile.image == "") {
+        profile.image = random_avatars[Math.floor(Math.random() * random_avatars.length)];
+    }
+    
     var base = {
         name: user.getName(),
         rank: user.account.effectiveRank,
-        profile: user.account.profile,
+        profile: profile,
         meta: {
             afk: user.is(Flags.U_AFK),
             muted: user.is(Flags.U_MUTED) && !user.is(Flags.U_SMUTED)
@@ -465,7 +482,7 @@ Channel.prototype.packUserData = function (user) {
     var mod = {
         name: user.getName(),
         rank: user.account.effectiveRank,
-        profile: user.account.profile,
+        profile: profile,
         meta: {
             afk: user.is(Flags.U_AFK),
             muted: user.is(Flags.U_MUTED),
@@ -478,7 +495,7 @@ Channel.prototype.packUserData = function (user) {
     var sadmin = {
         name: user.getName(),
         rank: user.account.effectiveRank,
-        profile: user.account.profile,
+        profile: profile,
         meta: {
             afk: user.is(Flags.U_AFK),
             muted: user.is(Flags.U_MUTED),

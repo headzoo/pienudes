@@ -12,9 +12,10 @@ var Component = React.createClass({
     },
     
     render: function () {
-        var user   = this.props.user;
-        var rclass = this.getRankClass(user.rank);
-        var icon   = null;
+        var user    = this.props.user;
+        var rclass  = this.getRankClass(user.rank);
+        var icon    = null;
+        var tagline = null;
         if (user.meta.afk) {
             icon = <span className="glyphicon glyphicon-time"></span>;
         }
@@ -25,6 +26,20 @@ var Component = React.createClass({
             user.profile.image = "/img/avatar.gif";
         }
         
+        if (user.profile.text) {
+            tagline = (
+                <div className="channel-user-list-tagline">
+                    {user.profile.text}
+                </div>
+            );
+        } else if (user.rank == 0) {
+            tagline = (
+                <div className="channel-user-list-tagline">
+                    Guest
+                </div>
+            );
+        }
+        
         return (
             <li key={user.name}>
                 <div className="channel-user-list-avatar">
@@ -33,9 +48,7 @@ var Component = React.createClass({
                 <div className="channel-user-list-username">
                     {icon} <span className={rclass}>{user.name}</span>
                 </div>
-                <div className="channel-user-list-tagline">
-                    {user.profile.text}
-                </div>
+                {tagline}
             </li>
         )
     },
