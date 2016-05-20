@@ -8,22 +8,11 @@ var fs = require("graceful-fs");
 var path = require("path");
 var sio = require("socket.io");
 var db = require("../database");
+var random_avatars = require('../avatars');
 import * as ChannelStore from '../channel-storage/channelstore';
 import { ChannelStateSizeError } from '../errors';
 import Promise from 'bluebird';
 import { EventEmitter } from 'events';
-
-var random_avatars = [
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_1_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_2_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_3_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_4_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_5_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_6_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_7_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_8_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_9_md.jpg"
-];
 
 class ReferenceCounter {
     constructor(channel) {

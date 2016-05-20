@@ -3,21 +3,10 @@ var bcrypt = require("bcrypt");
 var db = require("../database");
 var Config = require("../config");
 var Logger = require("../logger");
+var random_avatars = require('../avatars');
 
 var registrationLock = {};
 var blackHole = function () { };
-
-var random_avatars = [
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_1_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_2_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_3_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_4_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_5_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_6_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_7_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_8_md.jpg",
-    "https://s3.amazonaws.com/images.upnext.fm/emotes_9_md.jpg"
-];
 
 /**
  * Replaces look-alike characters with "_" (single character wildcard) for
