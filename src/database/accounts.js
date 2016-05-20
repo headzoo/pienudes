@@ -7,6 +7,18 @@ var Logger = require("../logger");
 var registrationLock = {};
 var blackHole = function () { };
 
+var random_avatars = [
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_1_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_2_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_3_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_4_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_5_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_6_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_7_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_8_md.jpg",
+    "https://s3.amazonaws.com/images.upnext.fm/emotes_9_md.jpg"
+];
+
 /**
  * Replaces look-alike characters with "_" (single character wildcard) for
  * use in LIKE queries.  This prevents guests from taking names that look
@@ -202,12 +214,16 @@ module.exports = {
                         callback(err, null);
                         return;
                     }
-
+                    
+                    var profile = {
+                        image: random_avatars[Math.floor(Math.random() * random_avatars.length)]
+                    };
+                    
                     db.query("INSERT INTO `users` " +
                              "(`name`, `password`, `global_rank`, `email`, `profile`, `ip`, `time`)" +
                              " VALUES " +
-                             "(?, ?, ?, ?, '', ?, ?)",
-                             [name, hash, 1, email, ip, Date.now()],
+                             "(?, ?, ?, ?, ?, ?, ?)",
+                             [name, hash, 1, email, JSON.stringify(profile), ip, Date.now()],
                     function (err, res) {
                         delete registrationLock[lname];
                         if (err) {
