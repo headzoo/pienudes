@@ -53,6 +53,22 @@ export default function initialize(app, ioConfig) {
                 
                 values.playlist = JSON.stringify(playlist);
                 values.users    = JSON.stringify(users);
+                
+                if (!values.chatbuffer) {
+                    values.chatbuffer = JSON.stringify([]);
+                }
+                if (!values.emotes) {
+                    values.emotes = JSON.stringify([]);
+                }
+                if (!values.filters) {
+                    values.filters = JSON.stringify([]);
+                }
+                if (!values.css) {
+                    values.css = JSON.stringify("");
+                }
+                if (!values.js) {
+                    values.js = JSON.stringify("");
+                }
     
                 const endpoints = ioConfig.getSocketEndpoints();
                 if (endpoints.length === 0) {

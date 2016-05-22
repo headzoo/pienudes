@@ -16,8 +16,10 @@ module.exports = Reflux.createStore({
     },
     
     onLoad: function(playlist) {
-        this.data = playlist;
-        this.trigger(this.data);
+        if (playlist) {
+            this.data = playlist;
+            this.trigger(this.data);
+        }
     },
     
     onQueueUrl: function(url) {

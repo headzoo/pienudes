@@ -15,17 +15,19 @@ module.exports = Reflux.createStore({
     },
     
     onLoad: function(messages) {
-        messages.map(function(message) {
-            if (message.meta === undefined) {
-                message.meta = {};
-            }
-            if (message.meta.color === undefined) {
-                message.meta.color = "#FFF";
-            }
-            message.msg = this.execEmotes(message.msg);
-        }.bind(this));
+        if (messages) {
+            messages.map(function (message) {
+                if (message.meta === undefined) {
+                    message.meta = {};
+                }
+                if (message.meta.color === undefined) {
+                    message.meta.color = "#FFF";
+                }
+                message.msg = this.execEmotes(message.msg);
+            }.bind(this));
+            this.data = messages;
+        }
         
-        this.data = messages;
         this.trigger(this.data);
     },
     

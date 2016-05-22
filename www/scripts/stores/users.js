@@ -15,13 +15,15 @@ module.exports = Reflux.createStore({
     
     onLoad: function(users) {
         this.data = [];
-        users.map(function(u) {
-            if (u.name.length > 0 && !this._hasUser(u)) {
-                this.data.push(u);
-            }
-        }.bind(this));
+        if (users) {
+            users.map(function (u) {
+                if (u.name.length > 0 && !this._hasUser(u)) {
+                    this.data.push(u);
+                }
+            }.bind(this));
+            this.data.sort(this._sortUsersByRank);
+        }
         
-        this.data.sort(this._sortUsersByRank);
         this.trigger(this.data);
     },
     

@@ -9,7 +9,7 @@ var ChannelActions = Reflux.createActions({
 
 ChannelActions.setCSS.listen(function(css) {
     $("#channel-css").remove();
-    if (css.length > 0) {
+    if (css != undefined && css.length > 0) {
         $("<style/>").attr("type", "text/css")
             .attr("id", "channel-css")
             .text(css)
@@ -19,7 +19,7 @@ ChannelActions.setCSS.listen(function(css) {
 
 ChannelActions.setJS.listen(function(js) {
     $("#channel-js").remove();
-    if (js.length > 0) {
+    if (js != undefined && js.length > 0) {
         $("<script/>").attr("type", "text/javascript")
             .attr("id", "channel-js")
             .text(js)
