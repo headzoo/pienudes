@@ -28,13 +28,10 @@ var Component = React.createClass({
     },
     
     render: function () {
-        var users = this.state.users;
         var items = [];
-        for(var username in users) {
-            if (users.hasOwnProperty(username)) {
-                items.push(<Item key={username} user={users[username]} />);
-            }
-        }
+        this.state.users.map(function(user) {
+            items.push(<Item key={user.name} user={user} />);
+        });
         
         return (
             <section id="channel-user-list-wrap" className="hidden-xs hidden-sm col-md-1">

@@ -7,22 +7,21 @@ var Events        = require('../events');
 
 module.exports = Reflux.createStore({
     listenables: [SocketActions, UsersActions],
-    data: {},
+    data: [],
     
     getInitialState() {
         return this.data;
     },
     
     onLoad: function(users) {
-        this.data = {};
+        this.data = [];
         users.map(function(u) {
-            if (u.name.length > 0) {
-                if (this.data[u.name] === undefined) {
-                    this.data[u.name] = u;
-                    this.trigger(this.data);
-                }
+            if (u.name.length > 0 && !this._hasUser(u)) {
+                this.data.push(u);
             }
         }.bind(this));
+        
+        this.data.sort(this._sortUsersByRank);
         this.trigger(this.data);
     },
     
@@ -32,20 +31,42 @@ module.exports = Reflux.createStore({
     },
     
     onUserList: function(users) {
-        this.data = {};
+        this.data = [];
         users.map(function(u) {
-            if (u.name.length > 0) {
-                if (this.data[u.name] === undefined) {
-                    this.data[u.name] = u;
-                    this.trigger(this.data);
-                }
+            if (u.name.length > 0 && !this._hasUser(u)) {
+                this.data.push(u);
             }
         }.bind(this));
+    
+        this.data.sort(this._sortUsersByRank);
         this.trigger(this.data);
     },
     
     onAddUser: function(user) {
-        this.data[user.name] = user;
-        this.trigger(this.data);
+        if (!this._hasUser(user)) {
+            this.data.push(user);
+            this.data.sort(this._sortUsersByRank);
+            this.trigger(this.data);
+        }
+    },
+    
+    _hasUser: function(user) {
+        this.data.map(function(u) {
+            if (u.name == user.name) {
+                return true;
+            }
+        });
+        
+        return false;
+    },
+    
+    _sortUsersByRank: function(a, b) {
+        if (a.rank == b.rank) {
+            return 0;
+        } else if (a.rank > b.rank) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 });
