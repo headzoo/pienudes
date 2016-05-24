@@ -13,7 +13,6 @@ var Component = React.createClass({
     ],
     
     onMessage: function() {
-        console.log(MessageStore.curr_buffer, this.props.user);
         if (MessageStore.curr_buffer == "#channel" && typeof this.props.user == "string") {
             this.setState({active: true, unread: 0});
         } else if (MessageStore.curr_buffer == this.props.user.name) {
@@ -37,6 +36,12 @@ var Component = React.createClass({
         return {
             active: false,
             unread: 0
+        }
+    },
+    
+    componentDidMount: function() {
+        if (MessageStore.curr_buffer == "#channel" && typeof this.props.user == "string") {
+            this.setState({active: true, unread: 0});
         }
     },
     
