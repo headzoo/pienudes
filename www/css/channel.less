@@ -17,7 +17,7 @@
   display: inline-block;
   position: relative;
   height: 100%;
-  padding: 12px 6px;
+  padding: 6px 0 6px 0;
   vertical-align: top;
   background-color: @color-border;
 }
@@ -30,13 +30,19 @@
     padding:0;
     
     .glyphicon-time {
-      padding-right: 6px;
+      font-size: 12px;
     }
     
     li {
       cursor: pointer;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      padding-left: 2px;
       min-height: 30px;
+      
+      &.active {
+        background-color: @color-primary;
+        border-right: 4px solid lighten(@color-primary, 20%);
+      }
     }
   }
 }
@@ -93,9 +99,24 @@
   line-height: 16px;
 }
 
+.channel-user-list-unread {
+  float: right;
+  padding-right: 5px;
+  font-size: 12px;
+}
+
 .channel-user-list-tagline {
   font-size: 10px;
   margin-left: 36px;
+}
+
+.channel-user-list-channel-name {
+  padding-top: 1px !important;
+  
+  .channel-user-list-username {
+    margin-left: 6px;
+    padding-top: 8px;
+  }
 }
 
 #channel-buffer-wrap {

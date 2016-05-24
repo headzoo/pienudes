@@ -11,7 +11,7 @@
   display: inline-block;
   position: relative;
   height: 100%;
-  padding: 12px 6px;
+  padding: 6px 0 6px 0;
   vertical-align: top;
   background-color: #1b1b1b;
 }
@@ -21,12 +21,17 @@
   padding: 0;
 }
 #channel-user-list ul .glyphicon-time {
-  padding-right: 6px;
+  font-size: 12px;
 }
 #channel-user-list ul li {
   cursor: pointer;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  padding-left: 2px;
   min-height: 30px;
+}
+#channel-user-list ul li.active {
+  background-color: #334261;
+  border-right: 4px solid #566fa4;
 }
 #channel-user-list-footer {
   position: absolute;
@@ -71,9 +76,21 @@
   margin-left: 36px;
   line-height: 16px;
 }
+.channel-user-list-unread {
+  float: right;
+  padding-right: 5px;
+  font-size: 12px;
+}
 .channel-user-list-tagline {
   font-size: 10px;
   margin-left: 36px;
+}
+.channel-user-list-channel-name {
+  padding-top: 1px !important;
+}
+.channel-user-list-channel-name .channel-user-list-username {
+  margin-left: 6px;
+  padding-top: 8px;
 }
 #channel-buffer-wrap {
   position: relative;

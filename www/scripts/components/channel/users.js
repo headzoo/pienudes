@@ -27,8 +27,15 @@ var Component = React.createClass({
         });
     },
     
+    getDefaultProps: function() {
+        return {
+            channel: ""
+        }
+    },
+    
     render: function () {
         var items = [];
+        items.push(<Item key={'#' + this.props.channel} user={'/r/' + this.props.channel} />)
         this.state.users.map(function(user) {
             items.push(<Item key={user.name} user={user} />);
         });

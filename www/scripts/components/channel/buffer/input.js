@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 var SocketActions = require('../../../actions/socket');
 var EmotesActions = require('../../../actions/emotes');
 var EmotesStore   = require('../../../stores/emotes');
+var MessageStore  = require('../../../stores/messages');
 var Events        = require('../../../events');
 
 var history = [];
@@ -129,12 +130,22 @@ var Component = React.createClass({
         history_index = history.length;
         this.refs.msg.value = "";
         
-        SocketActions.emit(Events.CHAT_MSG, {
-            msg: msg,
-            meta: {
-                color: color
-            }
-        });
+        if (MessageStore.curr_buffer == "#channel") {
+            SocketActions.emit(Events.CHAT_MSG, {
+                msg: msg,
+                meta: {
+                    color: color
+                }
+            });
+        } else {
+            SocketActions.emit(Events.PM, {
+                to: MessageStore.curr_buffer,
+                msg: msg,
+                meta: {
+                    color: color
+                }
+            });
+        }
     }
 });
 

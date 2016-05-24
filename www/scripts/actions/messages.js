@@ -3,7 +3,8 @@
 var Reflux = require('reflux');
 
 var MessagesActions = Reflux.createActions({
-    load: {}
+    load: {},
+    switchBuffer: {}
 });
 
 module.exports = MessagesActions;

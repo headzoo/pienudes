@@ -62,7 +62,7 @@ var Component = React.createClass({
         
         return (
             <div id="channel-wrap" className="row">
-                <Users />
+                <Users channel={this.props.join} />
                 <Buffer />
                 <Video />
                 <ModalError />
