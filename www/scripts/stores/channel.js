@@ -19,7 +19,7 @@ module.exports = Reflux.createStore({
         uploads: []
     },
     
-    getInitialState() {
+    getInitialState: function() {
         return this.data;
     },
     

@@ -9,7 +9,7 @@ module.exports = Reflux.createStore({
         progress: 0
     },
     
-    getInitialState() {
+    getInitialState: function() {
         return this.data;
     },
     

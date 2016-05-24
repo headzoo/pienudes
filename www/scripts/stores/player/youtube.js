@@ -29,7 +29,7 @@ module.exports = Reflux.createStore({
         }.bind(this), 1000);
     },
     
-    getInitialState() {
+    getInitialState: function() {
         return this.data;
     },
     

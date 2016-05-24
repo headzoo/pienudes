@@ -7,7 +7,7 @@ module.exports = Reflux.createStore({
     listenables: [ScrollActions],
     data: {},
     
-    getInitialState() {
+    getInitialState: function() {
         return this.data;
     },
     

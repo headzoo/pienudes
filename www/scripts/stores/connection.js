@@ -11,7 +11,7 @@ module.exports = Reflux.createStore({
         connected: false
     },
     
-    getInitialState() {
+    getInitialState: function() {
         return this.data;
     },
     

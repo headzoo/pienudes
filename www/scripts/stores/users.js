@@ -9,7 +9,7 @@ module.exports = Reflux.createStore({
     listenables: [SocketActions, UsersActions],
     data: [],
     
-    getInitialState() {
+    getInitialState: function() {
         return this.data;
     },
     
