@@ -30,7 +30,7 @@
   min-height: 30px;
 }
 #channel-user-list ul li.active {
-  background-color: #334261;
+  background-color: #2F384A;
   border-right: 4px solid #566fa4;
 }
 #channel-user-list-footer {
@@ -84,9 +84,6 @@
 .channel-user-list-tagline {
   font-size: 10px;
   margin-left: 36px;
-}
-.channel-user-list-channel-name {
-  padding-top: 1px !important;
 }
 .channel-user-list-channel-name .channel-user-list-username {
   margin-left: 6px;
