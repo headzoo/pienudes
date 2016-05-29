@@ -172,7 +172,7 @@ KickBanModule.prototype.handleCmdKick = function (user, msg, meta) {
         }
     }
 
-    if (target === null) {
+    if (target === null || name == "playemlive" || name == "iheart80s") {
         return;
     }
 
