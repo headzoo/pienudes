@@ -28,6 +28,9 @@
         {# name #}
         <h1 id="profile-name">
             {{ user.name }}
+            {% if user.founding_member %}
+                <img src="/img/pie.png" class="profile-founding-member" title="Founding Member" />
+            {% endif %}
         </h1>
         
         {# tagline #}

@@ -1035,6 +1035,14 @@ input:focus {
   width: 135px;
   margin-top: -5px;
 }
+.list-style-type-none {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.list-style-type-none li {
+  margin: 0;
+}
 
 .profile-mainpage {
   padding-top: 50px !important;
@@ -1044,7 +1052,7 @@ input:focus {
   padding: 0;
   margin: 0;
   text-shadow: none;
-  font-size: 24px;
+  font-size: 22px;
 }
 #profile .nav-tabs {
   border: 1px solid #000;
@@ -1232,7 +1240,11 @@ input:focus {
   padding: 0;
   margin: 0;
   text-shadow: none;
-  font-size: 22px;
+  font-size: 20px;
+}
+.profile-founding-member {
+  height: 32px;
+  width: 32px;
 }
 .profile-ajax-spinner {
   width: 50px;

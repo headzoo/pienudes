@@ -1,18 +1,23 @@
 {% extends "layout.html.twig" %}
 {% block content %}
     <div class="col-lg-10 col-md-10">
-        <h3>Help</h3>
+        <h1>Help</h1>
+        <ul class="list-style-type-none">
+            <li><a href="#topic-formatting">Formatting</a></li>
+            <li><a href="#topic-commands">Standard Commands</a></li>
+            <li><a href="#topic-mod-commands">Moderator Commands</a></li>
+        </ul>
         
-        <h4>Formatting</h4>
-        <ul>
-            <li>_message_ - <i>message</i></li>
-            <li>*message* - <strong>message</strong></li>
-            <li>`message` - <code>message</code></li>
-            <li>~~message~~ - <del>message</del></li>
+        <h2 id="topic-formatting">Formatting</h2>
+        <ul class="list-style-type-none">
+            <li><code>_message_</code> - <i>message</i></li>
+            <li><code>*message*</code> - <strong>message</strong></li>
+            <li><code>`message`</code> - <code>message</code></li>
+            <li><code>~~message~~</code> - <del>message</del></li>
         </ul>
 
-        <h4>Standard Commands</h4>
-        <ul>
+        <h2 id="topic-commands">Standard Commands</h2>
+        <ul class="list-style-type-none">
             <li>
                 <code>/me &lt;message&gt;</code> - Sends a message as an action, for example headzoo gets a snack.
             </li>
@@ -24,8 +29,8 @@
             </li>
         </ul>
         
-        <h4>Moderator commands</h4>
-        <ul>
+        <h2 id="topic-mod-commands">Moderator Commands</h2>
+        <ul class="list-style-type-none">
             <li>
                 <code>/say &lt;message&gt;</code> - Sends a message in big red text.
             </li>

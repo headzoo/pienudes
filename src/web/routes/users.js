@@ -95,6 +95,8 @@ function handleProfile(req, res) {
             }
         }
         
+        user.founding_member = (user.id < 37);
+        
         db_votes.countLikesByUser(user.name, function(err, likes) {
             if (err) {
                 return template.send(res, 'error/http', {
