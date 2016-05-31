@@ -8,6 +8,7 @@ var async      = require('async');
 var Redis      = require('../../redis');
 var striptags  = require('striptags');
 var mod_voting = require('../../voting');
+var moment     = require('moment');
 
 import template from '../template';
 import Config from '../../config';
@@ -96,6 +97,12 @@ function handleProfile(req, res) {
         }
         
         user.founding_member = (user.id < 37);
+        user.date_joined = moment(user.time).format("MMMM Do YYYY");
+        if (user.time_login == 0) {
+            user.date_login = user.date_joined;
+        } else {
+            user.date_login = moment(user.time_login).format("MMMM Do YYYY");
+        }
         
         db_votes.countLikesByUser(user.name, function(err, likes) {
             if (err) {

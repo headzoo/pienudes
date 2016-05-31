@@ -88,6 +88,8 @@ function handleLogin(req, res) {
                     signed: true
                 });
             }
+            
+            db.users.updateTimeLogin(user.name);
 
             if (dest) {
                 res.redirect(dest);

@@ -83,6 +83,11 @@
         <li>{{ likes|comma }} Likes</li>
     </ul>
     
+    <div id="profile-date-joined">
+        <div>Joined: {{ user.date_joined }}</div>
+        <div>Last Seen: {{ user.date_login }}</div>
+    </div>
+    
     {# bio #}
     <div id="profile-bio">{{ user.profile.bio|nl2p|safe }}</div>
     {% if loggedIn and loginName == user.name %}
