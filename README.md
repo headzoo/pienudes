@@ -6,7 +6,7 @@ Installing
 ----------
 ```
 sudo npm install gulp -g
-git clone git@github.com:headzoo/pienudes.git
+git clone git@github.com:upnextfm/pienudes.git
 cd pidenudes
 npm install
 gulp

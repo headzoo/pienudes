@@ -1171,6 +1171,7 @@ Callbacks = {
     userEmoteComplete: function(data) {
         var ue = $("#us-user-emotes");
         ue.find("input[type=text]:first").val("");
+        ue.find("#cs-uploads-url").val("");
         var el = ue.find("input[type=file]:first");
         el.replaceWith(el.clone(true));
     

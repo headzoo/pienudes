@@ -886,8 +886,9 @@ var user_emote        = $("#us-user-emotes");
 var user_emote_button = user_emote.find("button:first");
 user_emote_button.on("click", function(e) {
     var emote_file = user_emote.find("input[type=file]")[0];
+    var emote_url  = user_emote.find("#cs-uploads-url").val().trim();
     
-    if (emote_file.files == undefined || emote_file.files.length == 0) {
+    if (emote_url.length == 0 && (emote_file.files == undefined || emote_file.files.length == 0)) {
         alert("No file selected.");
         return;
     }
@@ -901,18 +902,25 @@ user_emote_button.on("click", function(e) {
     user_emote_button
         .prop("disabled", true)
         .html('<img src="/img/spinner.gif" style="width: 16px; height: 16px;" />');
-
-    var file = emote_file.files[0];
-    var fr   = new FileReader();
-    fr.addEventListener("loadend", function() {
+        
+    if (emote_url.length > 0) {
         socket.emit("userEmoteUpload", {
-            name: file.name,
-            type: file.type,
-            data: fr.result,
+            url: emote_url,
             text: emote_text
         });
-    });
-    fr.readAsArrayBuffer(file);
+    } else {
+        var file = emote_file.files[0];
+        var fr   = new FileReader();
+        fr.addEventListener("loadend", function () {
+            socket.emit("userEmoteUpload", {
+                name: file.name,
+                type: file.type,
+                data: fr.result,
+                text: emote_text
+            });
+        });
+        fr.readAsArrayBuffer(file);
+    }
 });
 
 var toggleUserlist = function () {

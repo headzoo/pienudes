@@ -5,7 +5,9 @@ var XSS           = require("../xss");
 var AWS           = require('aws-sdk');
 var fs            = require('fs');
 var url           = require("url");
+var path          = require("path");
 var emotes        = require('./emotes');
+var request       = require('request');
 var db_uploads    = require('../database/uploads');
 var db_emotes     = require('../database/emotes');
 
@@ -212,14 +214,6 @@ UploadModule.prototype.handleUploadEmote = function(user, data) {
         return;
     }
     
-    if (data.data.length > Config.get("emotes.bytes_per_file")) {
-        user.socket.emit("errorEmote", {
-            msg: "File exceeds max byte value of " + Config.get("emotes.bytes_per_file") + " bytes",
-            alert: true
-        });
-        return;
-    }
-    
     var text = data.text.trim();
     if (text.length == 0) {
         user.socket.emit("errorEmote", {
@@ -235,24 +229,8 @@ UploadModule.prototype.handleUploadEmote = function(user, data) {
         return;
     }
     
-    db_emotes.fetchByUserIdAndText(user.account.id, data.text, function(err, row) {
-        if (row) {
-            user.socket.emit("errorEmote", {
-                msg: "You are already using " + data.text + " for another emote.",
-                alert: true
-            });
-            return;
-        }
-    
-        var filename = user.account.name + "/" + makeRandom() + "_" + data.name;
-        var bucket   = new AWS.S3({params: {Bucket: Config.get("emotes.s3_bucket")}});
-        var params   = {
-            Key: filename,
-            Body: data.data,
-            ContentType: data.type,
-            ACL:'public-read'
-        };
-    
+    var bucket = new AWS.S3({params: {Bucket: Config.get("emotes.s3_bucket")}});
+    var upload = function(filename, params) {
         bucket.upload(params, function(err) {
             if (err) {
                 user.socket.emit("errorEmote", {
@@ -261,7 +239,7 @@ UploadModule.prototype.handleUploadEmote = function(user, data) {
                 });
                 return;
             }
-        
+            
             db_emotes.insert(user.account.id, filename, text, function(err) {
                 if (err) {
                     user.socket.emit("errorEmote", {
@@ -270,7 +248,7 @@ UploadModule.prototype.handleUploadEmote = function(user, data) {
                     });
                     return;
                 }
-                
+            
                 emotes.clearUser(user.account.id);
                 user.socket.emit("userEmoteComplete", {
                     url: Config.get("emotes.uploads_url") + filename,
@@ -278,6 +256,71 @@ UploadModule.prototype.handleUploadEmote = function(user, data) {
                 });
             });
         });
+    };
+    
+    db_emotes.fetchByUserIdAndText(user.account.id, data.text, function(err, row) {
+        if (row) {
+            user.socket.emit("errorEmote", {
+                msg: "You are already using " + data.text + " for another emote.",
+                alert: true
+            });
+            return;
+        }
+        
+        if (data.url != undefined) {
+            request.get({url: data.url, timeout: 3000, encoding: null, maxRedirects: 2}, function(err, response, body) {
+                if (err || body.length == 0 || response.statusCode != 200) {
+                    user.socket.emit("errorEmote", {
+                        msg: "Failed to download remote file.",
+                        alert: true
+                    });
+                    return;
+                }
+    
+                if (body.length > Config.get("emotes.bytes_per_file")) {
+                    user.socket.emit("errorEmote", {
+                        msg: "File exceeds max byte value of " + Config.get("emotes.bytes_per_file") + " bytes",
+                        alert: true
+                    });
+                    return;
+                }
+                
+                var mime = response.headers['content-type'].toLowerCase();
+                if (mime != "image/gif" && mime != "image/png" && mime != "image/jpg" && mime != "image/jpeg") {
+                    user.socket.emit("errorEmote", {
+                        msg: "The remote file is not an image. Must be jpg, png, or gif.",
+                        alert: true
+                    });
+                    return;
+                }
+            
+                var url_parsed = url.parse(data.url);
+                var basename   = path.basename(url_parsed.path);
+                var filename   = user.account.name + "/" + makeRandom() + "_" + basename;
+                upload(filename, {
+                    Key: filename,
+                    Body: body,
+                    ContentType: mime,
+                    ACL: 'public-read'
+                });
+            });
+        } else {
+            if (data.data.length > Config.get("emotes.bytes_per_file")) {
+                user.socket.emit("errorEmote", {
+                    msg: "File exceeds max byte value of " + Config.get("emotes.bytes_per_file") + " bytes",
+                    alert: true
+                });
+                return;
+            }
+        
+            var filename = user.account.name + "/" + makeRandom() + "_" + data.name;
+            upload(filename, {
+                Key: filename,
+                Body: data.data,
+                ContentType: data.type,
+                ACL: 'public-read'
+            });
+        }
     });
 };
 

@@ -6,7 +6,7 @@
   padding: 0;
   margin: 0;
   text-shadow: none;
-  font-size: 24px;
+  font-size: 22px;
 }
 #profile .nav-tabs {
   border: 1px solid #000;
@@ -157,6 +157,10 @@
   display: inline-block;
   margin-right: 8px;
 }
+#profile-date-joined {
+  text-transform: uppercase;
+  color: #FFF;
+}
 #profile-bio {
   margin-top: 10px;
   color: #FFF;
@@ -194,7 +198,11 @@
   padding: 0;
   margin: 0;
   text-shadow: none;
-  font-size: 22px;
+  font-size: 20px;
+}
+.profile-founding-member {
+  height: 32px;
+  width: 32px;
 }
 .profile-ajax-spinner {
   width: 50px;

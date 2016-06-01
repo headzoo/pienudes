@@ -319,6 +319,21 @@ module.exports = {
             });
         });
     },
+    
+    updateTimeLogin: function(name, callback) {
+        callback = callback || blackHole;
+        
+        this.getUser(name, function(err, u) {
+            if (!err && u) {
+                console.log(u);
+                db.query(
+                    "UPDATE `users` SET `time_login` = ? WHERE `id` = ? LIMIT 1",
+                    [Date.now(), u.id],
+                    callback
+                );
+            }
+        });
+    },
 
     /**
      * Change a user's password

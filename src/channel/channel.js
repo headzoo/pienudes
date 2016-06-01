@@ -9,6 +9,7 @@ var path = require("path");
 var sio = require("socket.io");
 var db = require("../database");
 var random_avatars = require('../avatars');
+var db_users = require('../database/accounts');
 import * as ChannelStore from '../channel-storage/channelstore';
 import { ChannelStateSizeError } from '../errors';
 import Promise from 'bluebird';
@@ -398,7 +399,8 @@ Channel.prototype.acceptUser = function (user) {
     });
 
     this.users.push(user);
-
+    db_users.updateTimeLogin(user.account.name);
+    
     user.socket.on("disconnect", this.partUser.bind(this, user));
     Object.keys(this.modules).forEach(function (m) {
         if (user.dead) return;

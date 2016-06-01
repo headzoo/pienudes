@@ -8,6 +8,7 @@ const TBL_USERS = "" +
         "`profile` TEXT CHARACTER SET utf8mb4 NOT NULL," +
         "`ip` VARCHAR(39) NOT NULL," +
         "`time` BIGINT NOT NULL," +
+        "`time_login` BIGINT NOT NULL, " +
         "PRIMARY KEY(`id`)," +
         "UNIQUE(`name`)) " +
     "CHARACTER SET utf8";
