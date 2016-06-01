@@ -1204,7 +1204,6 @@ input:focus {
   margin-right: 8px;
 }
 #profile-date-joined {
-  text-transform: uppercase;
   color: #FFF;
 }
 #profile-bio {
