@@ -30,5 +30,6 @@ module.exports = {
     CHANGE_VOTES: "changeVotes",
     MEDIA_UPDATE: "mediaUpdate",
     CHANGE_USER_VIDEO_VOTE: "changeUserVideoVote",
-    VOTE_VIDEO: "voteVideo"
+    VOTE_VIDEO: "voteVideo",
+    VOTE_SKIP: "voteskip"
 };

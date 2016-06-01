@@ -508,6 +508,27 @@
   color: #585858;
   font-size: 18px;
 }
+#channel-video-controls-skip {
+  vertical-align: middle;
+}
+#channel-video-controls-skip .glyphicon-ban-circle {
+  vertical-align: middle;
+  color: #5A0902;
+  font-size: 26px;
+  cursor: pointer;
+}
+#channel-video-controls-skip .glyphicon-ban-circle:hover {
+  color: #8c0e03;
+}
+#channel-video-controls-skip .glyphicon-ban-circle.active {
+  color: #B31508;
+}
+.channel-video-controls-skip-value {
+  vertical-align: middle;
+  color: #7D7D7D;
+  font-size: 16px;
+  margin-left: 4px;
+}
 .playlist-enter {
   opacity: 0.01;
 }

@@ -10,7 +10,9 @@ module.exports = Reflux.createStore({
     data: {
         up: 0,
         down: 0,
-        user: 0
+        user: 0,
+        skip: 0,
+        need: 0
     },
     
     getInitialState: function() {
@@ -29,6 +31,7 @@ module.exports = Reflux.createStore({
     onConnectDone: function(socket) {
         socket.on(Events.CHANGE_VOTES, this.onChangeVotes);
         socket.on(Events.CHANGE_USER_VIDEO_VOTE, this.onChangeUserVideoVote);
+        socket.on(Events.VOTE_SKIP, this.onVoteSkip);
     },
     
     onChangeVotes: function(votes) {
@@ -39,6 +42,12 @@ module.exports = Reflux.createStore({
     
     onChangeUserVideoVote: function(vote) {
         this.data.user = vote;
+        this.trigger(this.data);
+    },
+    
+    onVoteSkip: function(data) {
+        this.data.skip = data.count;
+        this.data.need = data.need;
         this.trigger(this.data);
     }
 });
