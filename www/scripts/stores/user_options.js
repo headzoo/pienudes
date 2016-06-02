@@ -32,14 +32,9 @@ module.exports = Reflux.createStore({
     
     /*
     USEROPTS.secure_connection    = $("#us-ssl").prop("checked");
-    USEROPTS.synch                = $("#us-synch").prop("checked");
-    USEROPTS.sync_accuracy        = parseFloat($("#us-synch-accuracy").val()) || 2;
-    USEROPTS.wmode_transparent    = $("#us-wmode-transparent").prop("checked");
     USEROPTS.hidevid              = $("#us-hidevideo").prop("checked");
     USEROPTS.qbtn_hide            = $("#us-playlistbuttons").prop("checked");
     USEROPTS.qbtn_idontlikechange = $("#us-oldbtns").prop("checked");
-    USEROPTS.default_quality      = $("#us-default-quality").val();
-    USEROPTS.chatbtn              = $("#us-sendbtn").prop("checked");
     USEROPTS.no_emotes            = $("#us-no-emotes").prop("checked");
     if (CLIENT.rank >= 2) {
         USEROPTS.modhat      = $("#us-modflair").prop("checked");
@@ -58,7 +53,28 @@ module.exports = Reflux.createStore({
         sort_rank: true,
         sort_afk: true,
         blink_title: "onlyping",
-        boop: "onlyping"
+        boop: "onlyping",
+        sync_accuracy: 2,
+        default_quality: "auto",
+        synch: true,
+        wmode_transparent: true,
+        chatbtn: true
+    },
+    
+    qualities: {
+        "auto": "Auto",
+        "240": "240p",
+        "360": "360p",
+        "480": "480p",
+        "720": "720p",
+        "1080": "1080p",
+        "best": "Highest Available"
+    },
+
+    notifications: {
+        "never": "Never",
+        "onlyping": "Only when I am mentioned or PMed",
+        "always": "Always"
     },
     
     init: function() {
@@ -83,7 +99,6 @@ module.exports = Reflux.createStore({
     
     onSetValue: function(key, value) {
         this.data[key] = value;
-        this.trigger(this.data);
     },
     
     onSave: function() {
@@ -94,6 +109,8 @@ module.exports = Reflux.createStore({
                 NO_STORAGE ? createCookie(key, value, 1000) : localStorage.setItem(key, value);
             }
         }
+    
+        this.trigger(this.data);
     },
     
     onShow: function() {
