@@ -21,5 +21,21 @@ module.exports = Reflux.createStore({
     onHide: function() {
         this.data.is_open = false;
         this.trigger(this.data);
+    },
+    
+    onTabShow: function(pane) {
+        console.log("Show", pane);
+    },
+    
+    onTabShown: function(pane) {
+        console.log("Shown", pane);
+    },
+    
+    onTabHide: function(pane) {
+        console.log("Hide", pane);
+    },
+    
+    onTabHidden: function(pane) {
+        console.log("Hidden", pane);
     }
 });

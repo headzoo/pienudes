@@ -17,14 +17,14 @@ var Component = React.createClass({
     
     render: function () {
         return (
-            <Modal className="Modal__Bootstrap modal-dialog" onRequestClose={this.handleClose} isOpen={this.state.options.is_open} shouldCloseOnOverlayClick={true}>
+            <Modal className="Modal__Bootstrap modal-dialog modal-dialog-user-options" shouldCloseOnOverlayClick={true} onAfterOpen={this.handleOpen} onRequestClose={this.handleClose} isOpen={this.state.options.is_open}>
                 <div className="modal-content">
                     <div className="modal-header">
                         <button type="button" className="close" onClick={this.handleClose}>
                             <span aria-hidden="true">&times;</span>
                             <span className="sr-only">Close</span>
                         </button>
-                        <ul className="nav nav-tabs">
+                        <ul ref="tabs" className="nav nav-tabs">
                             <li role="presentation" className="active">
                                 <a href="#modal-options-pane-chat" aria-controls="modal-options-pane-chat" role="tab" data-toggle="tab">Chat</a>
                             </li>
@@ -32,7 +32,7 @@ var Component = React.createClass({
                                 <a href="#modal-options-pane-playback" aria-controls="modal-options-pane-playback" role="tab" data-toggle="tab">Playback</a>
                             </li>
                             <li role="presentation">
-                                <a href="#modal-options-pane-user-emotes" aria-controls="modal-options-pane-emotes" role="tab" data-toggle="tab">Emotes</a>
+                                <a href="#modal-options-pane-emotes" aria-controls="modal-options-pane-emotes" role="tab" data-toggle="tab">Emotes</a>
                             </li>
                             <li role="presentation">
                                 <a href="#modal-options-pane-mod" aria-controls="modal-options-pane-mod" role="tab" data-toggle="tab">Moderator</a>
@@ -52,8 +52,37 @@ var Component = React.createClass({
         )
     },
     
+    handleOpen: function() {
+        UserOptionsActions.tabShow("chat");
+        UserOptionsActions.tabShown("chat");
+        
+        var links = $(this.refs.tabs).find('a[data-toggle="tab"]');
+        links.on("show.bs.tab", function(e) {
+            var pane = e.target.getAttribute("href").replace("#modal-options-pane-", "");
+            UserOptionsActions.tabShow(pane);
+        });
+        links.on("shown.bs.tab", function(e) {
+            var pane = e.target.getAttribute("href").replace("#modal-options-pane-", "");
+            UserOptionsActions.tabShown(pane);
+        });
+        links.on("hide.bs.tab", function(e) {
+            var pane = e.target.getAttribute("href").replace("#modal-options-pane-", "");
+            UserOptionsActions.tabHide(pane);
+        });
+        links.on("hidden.bs.tab", function(e) {
+            var pane = e.target.getAttribute("href").replace("#modal-options-pane-", "");
+            UserOptionsActions.tabHidden(pane);
+        });
+    },
+    
     handleClose: function() {
         UserOptionsActions.hide();
+    
+        var links = $(this.refs.tabs).find('a[data-toggle="tab"]');
+        links.off("show.bs.tab");
+        links.off("shown.bs.tab");
+        links.off("hide.bs.tab");
+        links.off("hidden.bs.tab");
     }
 });
 

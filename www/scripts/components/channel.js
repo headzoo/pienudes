@@ -1,15 +1,14 @@
 'use strict';
 
-var React        = require('react');
-var Reflux       = require('reflux');
-var Modal        = require('react-modal');
-var ModalError   = require('./channel/modal/error');
-var ModalOptions = require('./channel/modal/user_options');
-var ModalSettings = require('./channel/modal/chan_settings');
-var Users        = require('./channel/users');
-var Buffer       = require('./channel/buffer');
-var Video        = require('./channel/video');
-
+var React               = require('react');
+var Reflux              = require('reflux');
+var Modal               = require('react-modal');
+var ModalError          = require('./channel/modal/error');
+var ModalOptions        = require('./channel/modal/user_options');
+var ModalSettings       = require('./channel/modal/chan_settings');
+var Users               = require('./channel/users');
+var Buffer              = require('./channel/buffer');
+var Video               = require('./channel/video');
 var ConnectionStore     = require('../stores/connection');
 var ChannelActions      = require('../actions/channel');
 var ChannelStore        = require('../stores/channel');

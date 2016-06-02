@@ -26,14 +26,14 @@ var Component = React.createClass({
     
     render: function () {
         return (
-            <Modal className="Modal__Bootstrap modal-dialog" onRequestClose={this.handleClose} isOpen={this.state.options.is_open} shouldCloseOnOverlayClick={true}>
+            <Modal className="Modal__Bootstrap modal-dialog modal-dialog-chan-settings" shouldCloseOnOverlayClick={true} onAfterOpen={this.handleOpen} onRequestClose={this.handleClose} isOpen={this.state.options.is_open}>
                 <div className="modal-content">
                     <div className="modal-header">
                         <button type="button" className="close" onClick={this.handleClose}>
                             <span aria-hidden="true">&times;</span>
                             <span className="sr-only">Close</span>
                         </button>
-                        <ul className="nav nav-tabs">
+                        <ul ref="tabs" className="nav nav-tabs">
                             <li className="active">
                                 <a href="#modal-settings-pane-general" aria-controls="modal-settings-pane-general" role="tab" data-toggle="tab">General Settings</a>
                             </li>
@@ -102,8 +102,37 @@ var Component = React.createClass({
         )
     },
     
+    handleOpen: function() {
+        ChanSettingsActions.tabShow("general");
+        ChanSettingsActions.tabShown("general");
+        
+        var links = $(this.refs.tabs).find('a[data-toggle="tab"]');
+        links.on("show.bs.tab", function(e) {
+            var pane = e.target.getAttribute("href").replace("#modal-settings-pane-", "");
+            ChanSettingsActions.tabShow(pane);
+        });
+        links.on("shown.bs.tab", function(e) {
+            var pane = e.target.getAttribute("href").replace("#modal-settings-pane-", "");
+            ChanSettingsActions.tabShown(pane);
+        });
+        links.on("hide.bs.tab", function(e) {
+            var pane = e.target.getAttribute("href").replace("#modal-settings-pane-", "");
+            ChanSettingsActions.tabHide(pane);
+        });
+        links.on("hidden.bs.tab", function(e) {
+            var pane = e.target.getAttribute("href").replace("#modal-settings-pane-", "");
+            ChanSettingsActions.tabHidden(pane);
+        });
+    },
+    
     handleClose: function() {
         ChanSettingsActions.hide();
+        
+        var links = $(this.refs.tabs).find('a[data-toggle="tab"]');
+        links.off("show.bs.tab");
+        links.off("shown.bs.tab");
+        links.off("hide.bs.tab");
+        links.off("hidden.bs.tab");
     }
 });
 

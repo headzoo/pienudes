@@ -4,7 +4,11 @@ var Reflux = require('reflux');
 
 var ChanSettingsActions = Reflux.createActions({
     show: {},
-    hide: {}
+    hide: {},
+    tabShow: {},
+    tabShown: {},
+    tabHide: {},
+    tabHidden: {}
 });
 
 module.exports = ChanSettingsActions;
