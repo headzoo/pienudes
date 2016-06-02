@@ -14,16 +14,21 @@ var Component = React.createClass({
     ],
     
     render: function () {
+        var common = {
+            prefix: "modal-options-option-",
+            onChange: this.handleChange
+        };
+        
         return (
             <div role="tabpanel" className="tab-pane" id="modal-options-pane-playback">
                 <form className="form-horizontal">
-                    <Select name="default_quality" prefix="model-options-option-" options={UserOptionsStore.qualities} value={this.state.options.default_quality} onChange={this.handleChange}>
+                    <Select name="default_quality" options={UserOptionsStore.qualities} value={this.state.options.default_quality} {...common}>
                         Default video quality
                     </Select>
-                    <Input name="sync_accuracy" prefix="model-options-option-" value={this.state.options.sync_accuracy} onChange={this.handleChange}>
+                    <Input name="sync_accuracy" value={this.state.options.sync_accuracy} {...common}>
                         Synchronization threshold (seconds)
                     </Input>
-                    <CheckBox name="wmode_transparent" prefix="modal-options-option-" checked={this.state.options.wmode_transparent} onChange={this.handleCheckboxChange}>
+                    <CheckBox name="wmode_transparent" checked={this.state.options.wmode_transparent} {...common}>
                         Set wmode=transparent
                     </CheckBox>
                 </form>
