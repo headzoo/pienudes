@@ -1,21 +1,25 @@
 'use strict';
 
-var React       = require('react');
-var Reflux      = require('reflux');
-var Modal       = require('react-modal');
-var ModalError  = require('./channel/modal/error');
-var Users       = require('./channel/users');
-var Buffer      = require('./channel/buffer');
-var Video       = require('./channel/video');
+var React        = require('react');
+var Reflux       = require('reflux');
+var Modal        = require('react-modal');
+var ModalError   = require('./channel/modal/error');
+var ModalOptions = require('./channel/modal/user_options');
+var ModalSettings = require('./channel/modal/chan_settings');
+var Users        = require('./channel/users');
+var Buffer       = require('./channel/buffer');
+var Video        = require('./channel/video');
 
-var ConnectionStore = require('../stores/connection');
-var ChannelActions  = require('../actions/channel');
-var ChannelStore    = require('../stores/channel');
-var SocketActions   = require('../actions/socket');
-var UsersActions    = require('../actions/users');
-var MessagesActions = require('../actions/messages');
-var PlaylistActions = require('../actions/playlist');
-var EmotesActions   = require('../actions/emotes');
+var ConnectionStore     = require('../stores/connection');
+var ChannelActions      = require('../actions/channel');
+var ChannelStore        = require('../stores/channel');
+var SocketActions       = require('../actions/socket');
+var UsersActions        = require('../actions/users');
+var MessagesActions     = require('../actions/messages');
+var PlaylistActions     = require('../actions/playlist');
+var EmotesActions       = require('../actions/emotes');
+var UserOptionsActions  = require('../actions/user_options');
+var ChanSettingsActions = require('../actions/chan_settings');
 
 var Component = React.createClass({
     mixins: [
@@ -53,6 +57,13 @@ var Component = React.createClass({
         PlaylistActions.load(this.props.data.playlist);
         ChannelActions.setCSS(this.props.data.css);
         ChannelActions.setJS(this.props.data.js);
+        
+        $("#channel-nav-link-options").on("click", function() {
+            UserOptionsActions.show();
+        });
+        $("#channel-nav-link-settings").on("click", function() {
+            ChanSettingsActions.show();
+        });
     },
     
     render: function () {
@@ -66,6 +77,8 @@ var Component = React.createClass({
                 <Buffer />
                 <Video />
                 <ModalError />
+                <ModalOptions />
+                <ModalSettings />
             </div>
         )
     }

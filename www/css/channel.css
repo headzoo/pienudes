@@ -568,11 +568,26 @@
 .ReactModal__Content .modal-content:active {
   outline: none;
 }
-.ReactModal__Content .modal-content .modal-header,
 .ReactModal__Content .modal-content .modal-footer,
 .ReactModal__Content .modal-content .modal-content {
-  padding: 8px;
+  padding: 8px 18px;
+}
+.ReactModal__Content .modal-content .modal-header {
+  padding: 0;
+}
+.ReactModal__Content .modal-content .modal-header {
+  background-color: #334261;
+  color: #FFF;
 }
 .ReactModal__Content .modal-content .modal-header h4 {
   font-size: 14px;
+}
+.ReactModal__Content .modal-content .modal-header .close {
+  color: #FFF;
+  opacity: 0.5;
+  margin-top: 8px;
+  margin-right: 12px;
+}
+.ReactModal__Content .modal-content .modal-header .close:hover {
+  opacity: 1.0;
 }

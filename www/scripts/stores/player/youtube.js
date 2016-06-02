@@ -19,7 +19,7 @@ module.exports = Reflux.createStore({
     
     init: function() {
         setInterval(function() {
-            if (this.player) {
+            if (this.player && this.player.getCurrentTime != undefined) {
                 var percent = Math.floor((this.player.getCurrentTime() / this.player.getDuration()) * 100);
                 if (percent != this.last_percent) {
                     PlayerActions.progress(percent);
