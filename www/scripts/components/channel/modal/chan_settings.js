@@ -97,6 +97,10 @@ var Component = React.createClass({
                             <PaneUploads />
                         </div>
                     </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.handleClose}>Close</button>
+                        <button type="button" className="btn btn-primary" onClick={this.handleSave}>Save</button>
+                    </div>
                 </div>
             </Modal>
         )
@@ -133,6 +137,10 @@ var Component = React.createClass({
         links.off("shown.bs.tab");
         links.off("hide.bs.tab");
         links.off("hidden.bs.tab");
+    },
+    
+    handleSave: function() {
+        ChanSettingsActions.save();
     }
 });
 
