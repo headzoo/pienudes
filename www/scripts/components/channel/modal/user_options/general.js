@@ -6,6 +6,7 @@ var UserOptionsStore   = require('../../../../stores/user_options');
 var UserOptionsActions = require('../../../../actions/user_options');
 var CheckBox           = require('../../../forms/checkbox');
 var Select             = require('../../../forms/select');
+var Input              = require('../../../forms/input');
 
 var Component = React.createClass({
     mixins: [
@@ -19,7 +20,7 @@ var Component = React.createClass({
         };
         
         return (
-            <div role="tabpanel" className="tab-pane active" id="modal-options-pane-chat">
+            <div role="tabpanel" className="tab-pane active" id="modal-options-pane-general">
                 <form className="form-horizontal">
                     <CheckBox name="show_colors" checked={this.state.options.show_colors} {...common}>
                         Show text colors
@@ -48,6 +49,15 @@ var Component = React.createClass({
                     <Select name="boop" value={this.state.options.boop} options={UserOptionsStore.notifications} {...common}>
                         Notification sound on new messages
                     </Select>
+                    <Select name="default_quality" options={UserOptionsStore.qualities} value={this.state.options.default_quality} {...common}>
+                        Default video quality
+                    </Select>
+                    <Input name="sync_accuracy" value={this.state.options.sync_accuracy} {...common}>
+                        Synchronization threshold (seconds)
+                    </Input>
+                    <CheckBox name="wmode_transparent" checked={this.state.options.wmode_transparent} {...common}>
+                        Set wmode=transparent
+                    </CheckBox>
                 </form>
             </div>
         )
