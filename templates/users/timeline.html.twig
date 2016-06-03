@@ -5,6 +5,9 @@
         <li{% if pageTab == "home" %} class="active"{% endif %}>
             <a href="/user/{{ user.name }}">Played</a>
         </li>
+        <li{% if pageTab == "favorites" %} class="active"{% endif %}>
+            <a href="/user/{{ user.name }}/favorites">Favorites</a>
+        </li>
         <li{% if pageTab == "upvotes" %} class="active"{% endif %}>
             <a href="/user/{{ user.name }}/liked">Liked</a>
         </li>
@@ -13,7 +16,7 @@
         </li>
     </ul>
 
-    {% if media_count == 0 %}
+    {% if media|length == 0 %}
         <div class="card card-media">
             <div class="profile-empty">
                 {{ empty_msg }}
@@ -35,8 +38,14 @@
                     </div>
                 {% endif %}
 
-                {% if is_owner %}
-                    <span class="card-media-remove-btn glyphicon glyphicon-remove" title="Delete" data-pid="{{ m.pid }}"></span>
+                {% if is_owner and pageTab == "home" %}
+                    <button class="btn btn-xs card-media-remove-btn card-media-remove-play" title="Remove from play history" data-pid="{{ m.pid }}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                {% elif is_owner and pageTab == "favorites" %}
+                    <button class="btn btn-xs card-media-remove-btn card-media-remove-favorites" title="Remove from favorites" data-favorite-id="{{ m.favorite_id }}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
                 {% endif %}
 
                 {% include "voting.html.twig" %}

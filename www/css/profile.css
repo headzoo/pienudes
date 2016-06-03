@@ -149,7 +149,7 @@
   list-style-type: none;
   padding: 0;
   margin-bottom: 0;
-  margin-top: 2px;
+  margin-top: 10px;
   text-transform: uppercase;
   color: #FFF;
 }
@@ -200,8 +200,8 @@
   font-size: 20px;
 }
 .profile-founding-member {
-  height: 32px;
-  width: 32px;
+  height: 26px;
+  width: 26px;
 }
 .profile-ajax-spinner {
   width: 50px;
@@ -231,20 +231,22 @@
   background: #282828;
 }
 .card-media:hover .card-media-remove-btn {
-  color: #4e4e4e;
-}
-.card-media:hover .card-media-remove-btn:hover {
-  color: #686868;
+  opacity: 1.0;
 }
 .card-media:hover .card-media-thumbnail {
   border: 1px solid #303030;
 }
 .card-media .card-media-remove-btn {
   position: absolute;
-  top: 80px;
-  left: 130px;
+  top: 74px;
+  left: 132px;
   cursor: pointer;
   color: #1b1b1b;
+  opacity: 0;
+  background-color: #5A0902;
+}
+.card-media .card-media-remove-btn .glyphicon {
+  color: #FFF;
 }
 .card-media-thumbnail {
   float: left;

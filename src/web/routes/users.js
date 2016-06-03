@@ -16,6 +16,7 @@ import db from '../../database';
 import db_playlists from '../../database/playlist';
 import db_accounts from '../../database/accounts';
 import db_votes from '../../database/votes';
+import db_favorites from '../../database/favorites';
 import xss from '../../xss';
 
 const ONEMB = (1024 * 1024);
@@ -445,6 +446,112 @@ function handleProfileHeaderUpload(req, res) {
     });
 }
 
+function handleFavorites(req, res) {
+    var name = req.params.name;
+    var page = req.params.page;
+    if (page == undefined) {
+        page = 1;
+    }
+    if (page < 1) {
+        page = 1;
+    }
+    
+    db_accounts.getUser(name, function(err, user) {
+        if (err == "User does not exist") {
+            return template.send(res, 'error/http', {
+                path: req.path,
+                status: 404,
+                message: err
+            });
+        }
+        
+        if (user.profile == "") {
+            user.profile = {image: "", text: "", bio: "", header: "", color: HEADER_COLOR};
+        } else {
+            user.profile = JSON.parse(user.profile);
+            if (!user.profile.color) {
+                user.profile.color = HEADER_COLOR;
+            }
+        }
+    
+        user.founding_member = (user.id < 37);
+        user.date_joined = moment(user.time).format("MMMM Do YYYY");
+        if (user.time_login == 0) {
+            user.date_login = user.date_joined;
+        } else {
+            user.date_login = moment(user.time_login).format("MMMM Do YYYY");
+        }
+        
+        db_votes.countLikesByUser(user.name, function(err, likes) {
+            if (err) {
+                return template.send(res, 'error/http', {
+                    status: 500
+                });
+            }
+    
+            db_playlists.countByUser(name, function(err, media_count) {
+                if (err) {
+                    return template.send(res, 'error/http', {
+                        status: 500
+                    });
+                }
+                
+                db_favorites.countByUser(user.id, function(err, count) {
+                    if (err) {
+                        return template.send(res, 'error/http', {
+                            status: 500
+                        });
+                    }
+        
+                    if (count == 0) {
+                        return template.send(res, 'users/favorites', {
+                            pageTitle: name + "'s Favorites",
+                            pageTab: "favorites",
+                            user: user,
+                            media: [],
+                            media_count: media_count,
+                            likes: likes,
+                            page:  1,
+                            pages: 1,
+                            input_maxes: getInputMaxes()
+                        });
+                    }
+        
+                    var limit  = 100;
+                    var pages  = Math.ceil(count / limit);
+                    if (page > pages) {
+                        page = pages;
+                    }
+                    var offset = (page - 1) * limit;
+        
+                    db_favorites.fetchByUser(user.id, limit, offset, function(err, rows) {
+                        if (err) {
+                            return template.send(res, 'error/http', {
+                                status: 500
+                            });
+                        }
+            
+                        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                            template.send(res, 'users/favorites', {
+                                pageTitle: name + "'s Favorites",
+                                pageTab: "favorites",
+                                user: user,
+                                media: results,
+                                media_count: media_count,
+                                likes: likes,
+                                page:  parseInt(page),
+                                pages: parseInt(pages),
+                                input_maxes: getInputMaxes(),
+                                pageScripts: ["/js/voting.js"]
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
+
 function handleUpvotes(req, res) {
     var name = req.params.name;
     var page = req.params.page;
@@ -473,6 +580,14 @@ function handleUpvotes(req, res) {
             }
         }
     
+        user.founding_member = (user.id < 37);
+        user.date_joined = moment(user.time).format("MMMM Do YYYY");
+        if (user.time_login == 0) {
+            user.date_login = user.date_joined;
+        } else {
+            user.date_login = moment(user.time_login).format("MMMM Do YYYY");
+        }
+    
         db_votes.countLikesByUser(user.name, function(err, likes) {
             if (err) {
                 return template.send(res, 'error/http', {
@@ -480,53 +595,61 @@ function handleUpvotes(req, res) {
                 });
             }
     
-            db_votes.countUpvotedByUser(user.id, function(err, count) {
+            db_playlists.countByUser(name, function(err, media_count) {
                 if (err) {
                     return template.send(res, 'error/http', {
                         status: 500
                     });
                 }
-        
-                if (count == 0) {
-                    return template.send(res, 'users/upvotes', {
-                        pageTitle: name + "'s Up Votes",
-                        pageTab: "upvotes",
-                        user: user,
-                        media: [],
-                        media_count: 0,
-                        likes: likes,
-                        page:  1,
-                        pages: 1,
-                        input_maxes: getInputMaxes()
-                    });
-                }
-        
-                var limit  = 100;
-                var pages  = Math.ceil(count / limit);
-                if (page > pages) {
-                    page = pages;
-                }
-                var offset = (page - 1) * limit;
-        
-                db_votes.fetchUpvotedByUser(user.id, limit, offset, function(err, rows) {
+    
+                db_votes.countUpvotedByUser(user.id, function(err, count) {
                     if (err) {
                         return template.send(res, 'error/http', {
                             status: 500
                         });
                     }
-    
-                    async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
-                        template.send(res, 'users/upvotes', {
+        
+                    if (count == 0) {
+                        return template.send(res, 'users/upvotes', {
                             pageTitle: name + "'s Up Votes",
                             pageTab: "upvotes",
                             user: user,
-                            media: results,
-                            media_count: count,
+                            media: [],
+                            media_count: media_count,
                             likes: likes,
-                            page:  parseInt(page),
-                            pages: parseInt(pages),
-                            input_maxes: getInputMaxes(),
-                            pageScripts: ["/js/voting.js"]
+                            page:  1,
+                            pages: 1,
+                            input_maxes: getInputMaxes()
+                        });
+                    }
+        
+                    var limit  = 100;
+                    var pages  = Math.ceil(count / limit);
+                    if (page > pages) {
+                        page = pages;
+                    }
+                    var offset = (page - 1) * limit;
+        
+                    db_votes.fetchUpvotedByUser(user.id, limit, offset, function(err, rows) {
+                        if (err) {
+                            return template.send(res, 'error/http', {
+                                status: 500
+                            });
+                        }
+            
+                        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                            template.send(res, 'users/upvotes', {
+                                pageTitle: name + "'s Up Votes",
+                                pageTab: "upvotes",
+                                user: user,
+                                media: results,
+                                media_count: media_count,
+                                likes: likes,
+                                page:  parseInt(page),
+                                pages: parseInt(pages),
+                                input_maxes: getInputMaxes(),
+                                pageScripts: ["/js/voting.js"]
+                            });
                         });
                     });
                 });
@@ -563,6 +686,14 @@ function handleDownvotes(req, res) {
             }
         }
     
+        user.founding_member = (user.id < 37);
+        user.date_joined = moment(user.time).format("MMMM Do YYYY");
+        if (user.time_login == 0) {
+            user.date_login = user.date_joined;
+        } else {
+            user.date_login = moment(user.time_login).format("MMMM Do YYYY");
+        }
+    
         db_votes.countLikesByUser(user.name, function(err, likes) {
             if (err) {
                 return template.send(res, 'error/http', {
@@ -570,53 +701,61 @@ function handleDownvotes(req, res) {
                 });
             }
     
-            db_votes.countDownvotedByUser(user.id, function(err, count) {
+            db_playlists.countByUser(name, function(err, media_count) {
                 if (err) {
                     return template.send(res, 'error/http', {
                         status: 500
                     });
                 }
-        
-                if (count == 0) {
-                    return template.send(res, 'users/downvotes', {
-                        pageTitle: name + "'s Down Votes",
-                        pageTab: "downvotes",
-                        user: user,
-                        media: [],
-                        media_count: 0,
-                        likes: likes,
-                        page:  1,
-                        pages: 1,
-                        input_maxes: getInputMaxes()
-                    });
-                }
-        
-                var limit  = 100;
-                var pages  = Math.ceil(count / limit);
-                if (page > pages) {
-                    page = pages;
-                }
-                var offset = (page - 1) * limit;
-        
-                db_votes.fetchDownvotedByUser(user.id, limit, offset, function(err, rows) {
+    
+                db_votes.countDownvotedByUser(user.id, function(err, count) {
                     if (err) {
                         return template.send(res, 'error/http', {
                             status: 500
                         });
                     }
-    
-                    async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
-                        template.send(res, 'users/downvotes', {
+        
+                    if (count == 0) {
+                        return template.send(res, 'users/downvotes', {
                             pageTitle: name + "'s Down Votes",
                             pageTab: "downvotes",
                             user: user,
-                            media: results,
-                            media_count: count,
+                            media: [],
+                            media_count: media_count,
                             likes: likes,
-                            page:  parseInt(page),
-                            pages: parseInt(pages),
-                            input_maxes: getInputMaxes(),
-                            pageScripts: ["/js/voting.js"]
+                            page:  1,
+                            pages: 1,
+                            input_maxes: getInputMaxes()
+                        });
+                    }
+        
+                    var limit  = 100;
+                    var pages  = Math.ceil(count / limit);
+                    if (page > pages) {
+                        page = pages;
+                    }
+                    var offset = (page - 1) * limit;
+        
+                    db_votes.fetchDownvotedByUser(user.id, limit, offset, function(err, rows) {
+                        if (err) {
+                            return template.send(res, 'error/http', {
+                                status: 500
+                            });
+                        }
+            
+                        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                            template.send(res, 'users/downvotes', {
+                                pageTitle: name + "'s Down Votes",
+                                pageTab: "downvotes",
+                                user: user,
+                                media: results,
+                                media_count: media_count,
+                                likes: likes,
+                                page:  parseInt(page),
+                                pages: parseInt(pages),
+                                input_maxes: getInputMaxes(),
+                                pageScripts: ["/js/voting.js"]
+                            });
                         });
                     });
                 });
@@ -646,6 +785,27 @@ function handleTrackDelete(req, res) {
     });
 }
 
+function handleFavoritesDelete(req, res) {
+    var fav_id = req.body.favorite_id;
+    
+    db_favorites.fetchById(fav_id, function(err, favorite) {
+        if (err || !favorite) {
+            return res.json({status: "error"}, 500);
+        }
+        if (favorite.user_id != req.user.id) {
+            return res.json({status: "error"}, 403);
+        }
+        
+        db_favorites.removeById(fav_id, function(err) {
+            if (err) {
+                return res.json({status: "error"}, 500);
+            }
+    
+            res.json({status: "ok"});
+        });
+    });
+}
+
 function findPlayedByCount(pid, callback) {
     db_playlists.countDistinctUsersById(pid, function(err, num) {
         if (err) return callback(err);
@@ -670,6 +830,7 @@ module.exports = {
      */
     init: function (app) {
         app.get('/users', handleIndex);
+        app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/favorites/:page?', handleFavorites);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/liked/:page?', handleUpvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/disliked/:page?', handleDownvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/:page?', handleProfile);
@@ -677,5 +838,6 @@ module.exports = {
         app.post('/user/profile/avatar/save', upload_avatar.single("avatar"), handleProfileAvatarUpload);
         app.post('/user/profile/header/save', upload_header.single("header"), handleProfileHeaderUpload);
         app.post('/user/profile/track/delete', handleTrackDelete);
+        app.post('/user/profile/favorites/delete', handleFavoritesDelete);
     }
 };

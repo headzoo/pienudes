@@ -7,8 +7,8 @@
                 {% include "users/info.html.twig" %}
             </div>
             <div class="col-md-4">
-                {% set empty_msg = "User has not up voted any videos." %}
-                {% set page_base_url = "/user/" + user.name + "/liked" %}
+                {% set empty_msg = "User has not favorited any videos." %}
+                {% set page_base_url = "/user/" + user.name + "/favorites" %}
                 {% include "users/timeline.html.twig" %}
             </div>
         </div>

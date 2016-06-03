@@ -30,7 +30,8 @@ $(function() {
         bio_e             = $("#profile-bio-edit"),
         header            = $("#profile-header"),
         header_e          = $("#profile-header-edit"),
-        track_deletes     = $(".card-media-remove-btn");
+        track_deletes     = $(".card-media-remove-play"),
+        favorite_deletes  = $(".card-media-remove-favorites");
     
     setState();
     
@@ -190,6 +191,24 @@ $(function() {
             type: "post",
             data: {
                 pid: pid
+            }
+        }).done(function() {
+            parent.fadeOut("fast");
+        }).fail(function() {
+            alert("Error. Please try that again in a minute.");
+        });
+    });
+    
+    favorite_deletes.on("click", function() {
+        var target      = $(this),
+            parent      = target.parents(".card:first"),
+            favorite_id = target.data("favorite-id");
+    
+        $.ajax({
+            url: "/user/profile/favorites/delete",
+            type: "post",
+            data: {
+                favorite_id: favorite_id
             }
         }).done(function() {
             parent.fadeOut("fast");
