@@ -4,6 +4,7 @@ var Reflux        = require('reflux');
 var SocketActions = require('../actions/socket');
 var EmotesActions = require('../actions/emotes');
 var ScrollActions = require('../actions/scroll');
+var ErrorActions  = require('../actions/error');
 var Events        = require('../events');
 
 module.exports = Reflux.createStore({
@@ -11,7 +12,9 @@ module.exports = Reflux.createStore({
     data: {
         visible: false,
         items: [],
-        selected: null
+        user: [],
+        selected: null,
+        is_uploading: false
     },
     
     getInitialState: function() {
@@ -57,12 +60,51 @@ module.exports = Reflux.createStore({
         this.trigger(this.data, send);
     },
     
+    onUploadUserStart: function() {
+        this.data.is_uploading = true;
+        this.trigger(this.data);
+    },
+    
+    onDeleteUserDone: function(emote) {
+        var index = -1;
+        this.data.user.map(function(ue, i) {
+            if (ue.text == emote.text) {
+                index = i;
+            }
+        });
+        
+        if (index != -1) {
+            this.data.user.splice(index, 1);
+            this.trigger(this.data);
+        }
+    },
+    
     onConnectDone: function(socket) {
         socket.on(Events.EMOTE_LIST, this.onEmoteList);
+        socket.on(Events.USER_EMOTE_LIST, this.onUserEmoteList);
+        socket.on(Events.USER_EMOTE_COMPLETE, this.onUserEmoteComplete);
+        socket.on(Events.ERROR_EMOTE, this.onErrorEmote);
     },
     
     onEmoteList: function(emotes) {
         this.data.items = emotes;
         this.trigger(this.data);
+    },
+    
+    onUserEmoteList: function(emotes) {
+        this.data.user = emotes;
+        this.trigger(this.data);
+    },
+    
+    onUserEmoteComplete: function(data) {
+        this.data.user.push(data);
+        this.data.is_uploading = false;
+        this.trigger(this.data);
+    },
+    
+    onErrorEmote: function(err) {
+        this.data.is_uploading = false;
+        this.trigger(this.data);
+        alert(err.msg);
     }
 });
