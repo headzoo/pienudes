@@ -35,10 +35,10 @@ var Component = React.createClass({
                         </button>
                         <ul ref="tabs" className="nav nav-tabs">
                             <li className="active">
-                                <a href="#modal-settings-pane-general" aria-controls="modal-settings-pane-general" role="tab" data-toggle="tab">General Settings</a>
+                                <a href="#modal-settings-pane-general" aria-controls="modal-settings-pane-general" role="tab" data-toggle="tab">General</a>
                             </li>
                             <li>
-                                <a href="#modal-settings-pane-admin" aria-controls="modal-settings-pane-admin" role="tab" data-toggle="tab">Admin Settings</a>
+                                <a href="#modal-settings-pane-admin" aria-controls="modal-settings-pane-admin" role="tab" data-toggle="tab">Admin</a>
                             </li>
                             <li>
                                 <a href="#modal-settings-pane-uploads" aria-controls="modal-settings-pane-uploads" role="tab" data-toggle="tab">Uploads</a>

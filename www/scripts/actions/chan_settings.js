@@ -6,6 +6,7 @@ var ChanSettingsActions = Reflux.createActions({
     show: {},
     hide: {},
     save: {},
+    setValue: {},
     tabShow: {},
     tabShown: {},
     tabHide: {},
