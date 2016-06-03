@@ -26,7 +26,7 @@ var Component = React.createClass({
         
         return (
             <div role="tabpanel" className="tab-pane" id="modal-options-pane-emotes">
-                <form className="form-horizontal" action="javascript:void(0)">
+                <form className="form-horizontal">
                     <div className="form-group">
                         <label className="control-label col-sm-4" htmlFor="cs-uploads-file">Emote text</label>
                         <div className="col-sm-8">
