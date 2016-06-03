@@ -184,6 +184,37 @@ const TBL_VOTES = "" +
     "FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE," +
     "FOREIGN KEY (`media_id`) REFERENCES `media`(`id`) ON DELETE CASCADE" +
     ") CHARACTER SET utf8";
+    
+const TBL_FAVORITES = "" +
+    "CREATE TABLE IF NOT EXISTS `favorites` (" +
+        "`id` INT NOT NULL AUTO_INCREMENT, " +
+        "`user_id` INT NOT NULL, " +
+        "`media_id` BIGINT NOT NULL, " +
+        "`time` BIGINT NOT NULL," +
+    "PRIMARY KEY (`id`)," +
+    "UNIQUE INDEX(`user_id`, `media_id`), " +
+    "FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE," +
+    "FOREIGN KEY (`media_id`) REFERENCES `media`(`id`) ON DELETE CASCADE" +
+    ") CHARACTER SET utf8";
+
+const TBL_TAGS = "" +
+    "CREATE TABLE IF NOT EXISTS `tags` (" +
+        "`id` INT NOT NULL AUTO_INCREMENT, " +
+        "`name` VARCHAR(25) NOT NULL, " +
+    "PRIMARY KEY (`id`), " +
+    "UNIQUE INDEX(`name`) " +
+    ") CHARACTER SET utf8";
+    
+const TBL_TAGS_TO_FAVORITES = "" +
+    "CREATE TABLE IF NOT EXISTS `tags_to_favorites` (" +
+        "`id` BIGINT NOT NULL AUTO_INCREMENT, " +
+        "`favorite_id` INT NOT NULL, " +
+        "`tag_id` INT NOT NULL, " +
+    "PRIMARY KEY (`id`)," +
+    "UNIQUE INDEX(`favorite_id`, `tag_id`), " +
+    "FOREIGN KEY (`favorite_id`) REFERENCES `favorites`(`id`) ON DELETE CASCADE," +
+    "FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON DELETE CASCADE" +
+    ") CHARACTER SET utf8";
 
 module.exports.init = function (queryfn, cb) {
     var tables = {
@@ -204,7 +235,10 @@ module.exports.init = function (queryfn, cb) {
         uploads: TBL_UPLOADS,
         emotes: TBL_EMOTES,
         chat_logs: TBL_CHAT_LOGS,
-        votes: TBL_VOTES
+        votes: TBL_VOTES,
+        favorites: TBL_FAVORITES,
+        tags: TBL_TAGS,
+        tags_to_favorites: TBL_TAGS_TO_FAVORITES
     };
 
     var AsyncQueue = require("../asyncqueue");

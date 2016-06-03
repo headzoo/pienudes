@@ -998,8 +998,11 @@ Callbacks = {
         }
     },
     
-    userVideoVotes: function(data) {
-        formatUserVideoVotes(data);
+    favoriteAdded: function(data) {
+        var el = $("#showfavorites");
+        if ($("#favorites").is(":visible")) {
+            el.click();
+        }
     },
 
     /* REGION Polls */

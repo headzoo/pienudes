@@ -5,6 +5,7 @@ var util = require("../utilities");
 var InfoGetter = require("../get-info");
 var Config = require("../config");
 var Flags = require("../flags");
+var async  = require('async');
 var db = require("../database");
 var db_accounts = require('../database/accounts');
 var db_channels = require('../database/channels');
@@ -12,6 +13,8 @@ var db_playlist = require('../database/playlist');
 var db_media    = require('../database/media');
 var db_votes    = require('../database/votes');
 var db_chat_logs = require('../database/chat_logs');
+var db_tags      = require('../database/tags');
+var db_favorites = require('../database/favorites');
 var mod_votes    = require('../voting');
 var Logger = require("../logger");
 var CustomEmbedFilter = require("../customembed").filter;
@@ -225,7 +228,7 @@ PlaylistModule.prototype.onUserPostJoin = function (user) {
     user.socket.on("jumpTo", this.handleJumpTo.bind(this, user));
     user.socket.on("playNext", this.handlePlayNext.bind(this, user));
     user.socket.on("voteVideo", this.handleVoteVideo.bind(this, user));
-    user.socket.on("userVideoVotes", this.handleUserVideoVotes.bind(this, user));
+    user.socket.on("favoritesAdd", this.handleFavoritesAdd.bind(this, user));
     user.socket.typecheckedOn("assignLeader", TYPE_ASSIGN_LEADER, this.handleAssignLeader.bind(this, user));
     user.socket.typecheckedOn("mediaUpdate", TYPE_MEDIA_UPDATE, this.handleUpdate.bind(this, user));
     var self = this;
@@ -933,29 +936,52 @@ PlaylistModule.prototype.sendUserVideoVotes = function(users) {
     });
 };
 
-PlaylistModule.prototype.handleUserVideoVotes = function(user) {
+PlaylistModule.prototype.handleFavoritesAdd = function(user, tags) {
+    if (!this.current) {
+        return;
+    }
     if (user.account.guest) {
         return user.socket.emit("errorMsg", {
-            msg: "Only registered users can vote for favorites."
+            msg: "Only registered users can add to favorites."
         });
     }
     
     db_accounts.getUser(user.account.name, function(err, u) {
         if (err || !u) {
             return user.socket.emit("errorMsg", {
-                msg: "There was an error fetching your votes. Try again in a minute."
+                msg: "There was an error fetching your account. Try again in a minute."
             });
         }
-        
-        db_votes.fetchUpvotedByUser(u.id, 100, 0, function(err, rows) {
+    
+        async.map(tags, db_tags.create.bind(db_tags), function(err, tag_ids) {
             if (err) {
                 return user.socket.emit("errorMsg", {
-                    msg: "There was an error fetching your votes. Try again in a minute."
+                    msg: "There was an error processing your request. Try again in a minute."
                 });
             }
-            user.socket.emit("userVideoVotes", rows);
-        });
-    });
+            
+            db_media.fetchByUidAndType(this.current.media.id, this.current.media.type, function(err, media) {
+                if (err) {
+                    return user.socket.emit("errorMsg", {
+                        msg: "Unable to fetch media information. Try again in a minute."
+                    });
+                } else if (media && media.id) {
+                    db_favorites.create(u.id, media.id, tag_ids, function(err, res) {
+                        if (err) {
+                            return user.socket.emit("errorMsg", {
+                                msg: "Unable to save media information. Try again in a minute."
+                            });
+                        }
+                        
+                        user.socket.emit("favoriteAdded", {
+                            media: media,
+                            tags: tags
+                        });
+                    });
+                }
+            }.bind(this));
+        }.bind(this));
+    }.bind(this));
 };
 
 /**

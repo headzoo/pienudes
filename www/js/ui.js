@@ -383,13 +383,30 @@ $("#userpl_save").click(function() {
     });
 });
 
-$("#showuservotes").click(function() {
-    var showing = !$("#uservotes").is(":visible");
-    if (showing) {
-        $("#uservotesloading").show();
-        $("#uservoteslist").hide();
-        socket.emit("userVideoVotes");
+var favorite_tags = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    prefetch: {
+        url: "/tags.json",
+        filter: function(list) {
+            return $.map(list, function(tag) {
+                return { name: tag }; });
+        }
     }
+});
+favorite_tags.initialize();
+
+$('#favorites-tags').tagsinput({
+    typeaheadjs: {
+        name: "favorite_tags",
+        displayKey: "name",
+        valueKey: "name",
+        source: favorite_tags.ttAdapter()
+    }
+});
+
+$("#favorites-add").click(function() {
+    socket.emit("favoritesAdd", $("#favorites-tags").tagsinput("items"));
 });
 
 /* video controls */
