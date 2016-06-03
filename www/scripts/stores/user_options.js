@@ -31,7 +31,7 @@ module.exports = Reflux.createStore({
     listenables: [UserOptionsActions],
     
     data: {
-        is_open: true,
+        is_open: false,
         ignore_channelcss: false,
         ignore_channeljs: false,
         show_colors: true,
