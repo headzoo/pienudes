@@ -30,19 +30,6 @@ function readCookie(name) {
 module.exports = Reflux.createStore({
     listenables: [UserOptionsActions],
     
-    /*
-    USEROPTS.secure_connection    = $("#us-ssl").prop("checked");
-    USEROPTS.hidevid              = $("#us-hidevideo").prop("checked");
-    USEROPTS.qbtn_hide            = $("#us-playlistbuttons").prop("checked");
-    USEROPTS.qbtn_idontlikechange = $("#us-oldbtns").prop("checked");
-    USEROPTS.no_emotes            = $("#us-no-emotes").prop("checked");
-    if (CLIENT.rank >= 2) {
-        USEROPTS.modhat      = $("#us-modflair").prop("checked");
-        USEROPTS.joinmessage = $("#us-joinmessage").prop("checked");
-        USEROPTS.show_shadowchat = $("#us-shadowchat").prop("checked");
-    }
-    */
-    
     data: {
         is_open: true,
         ignore_channelcss: false,
@@ -58,7 +45,10 @@ module.exports = Reflux.createStore({
         default_quality: "auto",
         synch: true,
         wmode_transparent: true,
-        chatbtn: true
+        chatbtn: true,
+        modhat: false,
+        joinmessage: true,
+        show_shadowchat: true
     },
     
     qualities: {
@@ -121,21 +111,5 @@ module.exports = Reflux.createStore({
     onHide: function() {
         this.data.is_open = false;
         this.trigger(this.data);
-    },
-    
-    onTabShow: function(pane) {
-        
-    },
-    
-    onTabShown: function(pane) {
-        
-    },
-    
-    onTabHide: function(pane) {
-        
-    },
-    
-    onTabHidden: function(pane) {
-        
     }
 });

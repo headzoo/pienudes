@@ -17,7 +17,7 @@ var Component = React.createClass({
     
     render: function () {
         return (
-            <Modal className="Modal__Bootstrap modal-dialog modal-dialog-user-options" shouldCloseOnOverlayClick={true} onAfterOpen={this.handleOpen} onRequestClose={this.handleClose} isOpen={this.state.options.is_open}>
+            <Modal className="Modal__Bootstrap modal-dialog modal-dialog-user-options" shouldCloseOnOverlayClick={true} onRequestClose={this.handleClose} isOpen={this.state.options.is_open}>
                 <div className="modal-content">
                     <div className="modal-header">
                         <button type="button" className="close" onClick={this.handleClose}>
@@ -56,37 +56,8 @@ var Component = React.createClass({
         )
     },
     
-    handleOpen: function() {
-        UserOptionsActions.tabShow("chat");
-        UserOptionsActions.tabShown("chat");
-        
-        var links = $(this.refs.tabs).find('a[data-toggle="tab"]');
-        links.on("show.bs.tab", function(e) {
-            var pane = e.target.getAttribute("href").replace("#modal-options-pane-", "");
-            UserOptionsActions.tabShow(pane);
-        });
-        links.on("shown.bs.tab", function(e) {
-            var pane = e.target.getAttribute("href").replace("#modal-options-pane-", "");
-            UserOptionsActions.tabShown(pane);
-        });
-        links.on("hide.bs.tab", function(e) {
-            var pane = e.target.getAttribute("href").replace("#modal-options-pane-", "");
-            UserOptionsActions.tabHide(pane);
-        });
-        links.on("hidden.bs.tab", function(e) {
-            var pane = e.target.getAttribute("href").replace("#modal-options-pane-", "");
-            UserOptionsActions.tabHidden(pane);
-        });
-    },
-    
     handleClose: function() {
         UserOptionsActions.hide();
-    
-        var links = $(this.refs.tabs).find('a[data-toggle="tab"]');
-        links.off("show.bs.tab");
-        links.off("shown.bs.tab");
-        links.off("hide.bs.tab");
-        links.off("hidden.bs.tab");
     },
     
     handleSave: function() {
