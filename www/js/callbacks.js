@@ -865,7 +865,8 @@ Callbacks = {
         if ($("body").hasClass("chatOnly") || $("#videowrap").length === 0) {
             return;
         }
-
+        socket.emit("userTags");
+        
         // Failsafe
         if (isNaN(VOLUME) || VOLUME > 1 || VOLUME < 0) {
             VOLUME = 1;
@@ -998,10 +999,29 @@ Callbacks = {
         }
     },
     
-    favoriteAdded: function(data) {
-        var el = $("#showfavorites");
-        if ($("#favorites").is(":visible")) {
-            el.click();
+    favoriteAdded: function() {
+        toastr.options.preventDuplicates = true;
+        toastr.options.closeButton = true;
+        toastr.options.timeOut = 1500;
+        toastr.success('Favorite completed!');
+        $("#favorites-add").text("Update");
+    },
+    
+    userTags: function(data) {
+        var input = $("#favorites-tags");
+        input.tagsinput('removeAll');
+        if (data.tags.length == 0) {
+            input.tagsinput('add', input.data('default-value'));
+        } else {
+            for (var i = 0; i < data.tags.length; i++) {
+                input.tagsinput('add', data.tags[i]);
+            }
+        }
+        
+        if (data.favorited) {
+            $("#favorites-add").text("Update");
+        } else {
+            $("#favorites-add").text("Favorite");
         }
     },
 

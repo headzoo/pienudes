@@ -7,6 +7,15 @@ module.exports = {
     init: function () {
     },
     
+    fetchAll: function(callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "SELECT * FROM `tags`",
+            callback
+        );
+    },
+    
     fetchByName: function(name, callback) {
         callback = callback || noop;
         
@@ -25,9 +34,23 @@ module.exports = {
         );
     },
     
+    fetchByUserAndMedia: function(user_id, media_id, callback) {
+        callback = callback || noop;
+        
+        db.query(
+            "SELECT tags.* " +
+            "FROM `tags_to_favorites` " +
+            "INNER JOIN `tags` ON `tags`.`id` = tags_to_favorites.tag_id " +
+            "INNER JOIN `favorites` ON `favorites`.`id` = `tags_to_favorites`.`favorite_id` " +
+            "WHERE `user_id` = ? AND `media_id` = ?",
+            [user_id, media_id],
+            callback
+        );
+    },
+    
     create: function(name, callback) {
         callback = callback || noop;
-        name = name.toLowerCase();
+        name = name.toLowerCase().trim();
         
         this.fetchByName(name, function(err, tag) {
             if (err) return callback(err);

@@ -229,6 +229,7 @@ PlaylistModule.prototype.onUserPostJoin = function (user) {
     user.socket.on("playNext", this.handlePlayNext.bind(this, user));
     user.socket.on("voteVideo", this.handleVoteVideo.bind(this, user));
     user.socket.on("favoritesAdd", this.handleFavoritesAdd.bind(this, user));
+    user.socket.on("userTags", this.handleUserTags.bind(this, user));
     user.socket.typecheckedOn("assignLeader", TYPE_ASSIGN_LEADER, this.handleAssignLeader.bind(this, user));
     user.socket.typecheckedOn("mediaUpdate", TYPE_MEDIA_UPDATE, this.handleUpdate.bind(this, user));
     var self = this;
@@ -980,6 +981,64 @@ PlaylistModule.prototype.handleFavoritesAdd = function(user, tags) {
                     });
                 }
             }.bind(this));
+        }.bind(this));
+    }.bind(this));
+};
+
+PlaylistModule.prototype.handleUserTags = function(user) {
+    if (!this.current) {
+        user.socket.emit("userTags", {
+            favorited: false,
+            tags: []
+        });
+        return;
+    }
+    if (user.account.guest) {
+        user.socket.emit("userTags", {
+            favorited: false,
+            tags: []
+        });
+        return;
+    }
+    
+    db_accounts.getUser(user.account.name, function(err, u) {
+        if (err || !u) {
+            user.socket.emit("userTags", {
+                favorited: false,
+                tags: []
+            });
+            return;
+        }
+        
+        db_media.fetchByUidAndType(this.current.media.id, this.current.media.type, function(err, media) {
+            if (err) {
+                user.socket.emit("userTags", {
+                    favorited: false,
+                    tags: []
+                });
+                return;
+            } else if (media && media.id) {
+                db_favorites.fetchByUserAndMedia(u.id, media.id, function(err, favorite) {
+                    if (err) {
+                        user.socket.emit("userTags", {
+                            favorited: false,
+                            tags: []
+                        });
+                        return;
+                    }
+
+                    db_tags.fetchByUserAndMedia(u.id, media.id, function(err, tags) {
+                        var names = [];
+                        tags.forEach(function(tag) {
+                            names.push(tag.name);
+                        });
+                        user.socket.emit("userTags", {
+                            favorited: (favorite != undefined),
+                            tags: names
+                        });
+                    });
+                }.bind(this));
+            }
         }.bind(this));
     }.bind(this));
 };

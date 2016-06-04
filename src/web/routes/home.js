@@ -3,6 +3,7 @@ import template from '../template';
 import Config from '../../config';
 import db_playlists from '../../database/playlist';
 import db_votes from '../../database/votes';
+import db_tags from '../../database/tags';
 var moment = require('moment');
 
 function handleUserAgreement(req, res) {
@@ -31,6 +32,21 @@ function handleAbout(req, res) {
     });
 }
 
+function handleTags(req, res) {
+    db_tags.fetchAll(function(err, tags) {
+        if (err || !tags) {
+            return res.json([]);
+        }
+        
+        var names = [];
+        tags.forEach(function(tag) {
+            names.push(tag.name);
+        });
+        
+        res.json(names);
+    });
+}
+
 module.exports = {
     /**
      * Initializes auth callbacks
@@ -40,6 +56,7 @@ module.exports = {
         app.get('/privacy', handlePrivacyPolicy);
         app.get('/help', handleHelp);
         app.get('/about', handleAbout);
+        app.get('/tags', handleTags);
         app.get('/', (req, res) => {
             channelIndex.listPublicChannels().then((channels) => {
                 channels.sort((a, b) => {

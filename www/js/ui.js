@@ -387,7 +387,8 @@ var favorite_tags = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     prefetch: {
-        url: "/tags.json",
+        url: "/tags",
+        cache: false,
         filter: function(list) {
             return $.map(list, function(tag) {
                 return { name: tag }; });
@@ -401,6 +402,9 @@ $('#favorites-tags').tagsinput({
         name: "favorite_tags",
         displayKey: "name",
         valueKey: "name",
+        maxTags: 6,
+        maxChars: 25,
+        trimValue: true,
         source: favorite_tags.ttAdapter()
     }
 });
@@ -680,7 +684,7 @@ $("#cs-chanranks-mod").click(chanrankSubmit.bind(this, 2));
 $("#cs-chanranks-adm").click(chanrankSubmit.bind(this, 3));
 $("#cs-chanranks-owner").click(chanrankSubmit.bind(this, 4));
 
-["#showmediaurl", "#showsearch", "#showcustomembed", "#showplaylistmanager"]
+["#showmediaurl", "#showsearch", "#showcustomembed", "#showplaylistmanager", "#showfavorites"]
     .forEach(function (id) {
     $(id).click(function () {
         var wasActive = $(id).hasClass("active");

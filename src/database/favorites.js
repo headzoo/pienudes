@@ -54,7 +54,7 @@ module.exports = {
             "FROM `favorites` " +
             "INNER JOIN `media` ON `media`.`id` = `favorites`.`media_id` " +
             "WHERE `user_id` = ? " +
-            "ORDER BY `favorites`.`id` DESC LIMIT " + offset + "," + limit,
+            "ORDER BY `favorites`.`time` DESC LIMIT " + offset + "," + limit,
             [user_id],
             function(err, rows) {
                 if (err) return callback(err);
@@ -80,17 +80,25 @@ module.exports = {
             if (err) return callback(err);
             if (favorite) {
                 db.query(
-                    "DELETE FROM `tags_to_favorites` WHERE `favorite_id` = ?",
-                    [favorite.id],
+                    "UPDATE `favorites` SET `time` = ? WHERE `id` = ? LIMIT 1",
+                    [Date.now(), favorite.id],
                     function(err) {
                         if (err) return callback(err);
-                        async.map(tag_ids, this.linkFavoriteToTag.bind(this, favorite.id), function(err, results) {
-                            if (err) return callback(err);
-                            callback(null, favorite.id);
-                        });
+                        
+                        db.query(
+                            "DELETE FROM `tags_to_favorites` WHERE `favorite_id` = ?",
+                            [favorite.id],
+                            function(err) {
+                                if (err) return callback(err);
+                                async.map(tag_ids, this.linkFavoriteToTag.bind(this, favorite.id), function(err, results) {
+                                    if (err) return callback(err);
+                                    callback(null, favorite.id);
+                                });
+                            }.bind(this)
+                        );
                     }.bind(this)
                 );
-
+                
                 return;
             }
     
