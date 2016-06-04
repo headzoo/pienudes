@@ -18,14 +18,14 @@
     addOnBlur: true,
     maxTags: undefined,
     maxChars: undefined,
-    confirmKeys: [13, 44],
+    confirmKeys: [13, 32],
     delimiter: ',',
     delimiterRegex: null,
     cancelConfirmKeysOnEmpty: true,
     onTagExists: function(item, $tag) {
       $tag.hide().fadeIn();
     },
-    trimValue: false,
+    trimValue: true,
     allowDuplicates: false
   };
 
