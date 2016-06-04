@@ -221,7 +221,7 @@ $(function() {
     });
     
     remove_tag_btns.on("click", function() {
-        if (!confirm('Are you sure you want to remove this tag?')) {
+        if (!confirm('Are you sure you want to remove this tag? Removing the tag does not remove the videos from your favorites, but it does remove the tag from the videos.')) {
             return;
         }
         
