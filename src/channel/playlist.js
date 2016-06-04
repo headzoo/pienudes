@@ -947,6 +947,12 @@ PlaylistModule.prototype.handleFavoritesAdd = function(user, tags) {
         });
     }
     
+    var sanitized = [];
+    tags.forEach(function(tag) {
+        sanitized.push(XSS.sanitizeText(tag));
+    });
+    tags = sanitized;
+    
     db_accounts.getUser(user.account.name, function(err, u) {
         if (err || !u) {
             return user.socket.emit("errorMsg", {

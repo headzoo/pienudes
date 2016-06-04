@@ -404,6 +404,7 @@ $('#favorites-tags').tagsinput({
         valueKey: "name",
         maxTags: 6,
         maxChars: 25,
+        confirmKeys: [13, 32],
         trimValue: true,
         source: favorite_tags.ttAdapter()
     }
