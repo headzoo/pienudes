@@ -973,3 +973,9 @@ input:focus {
 .list-style-type-none li {
   margin: 0;
 }
+#showfavorites .glyphicon-star {
+  color: #FFF;
+}
+#showfavorites.favorited .glyphicon-star {
+  color: #DFE26C;
+}
