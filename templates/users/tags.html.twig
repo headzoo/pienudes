@@ -1,0 +1,9 @@
+{% if tags|length > 0 %}
+    <ul id="profile-tags" class="card auto-height">
+        {% for tag in tags %}
+            <li class="tag label{% if tag.name == tag_name %} active{% endif %}">
+                <a href="{{ page_base_url }}/tags/{{ tag.name|urlencode }}">{{ tag.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -17,6 +17,7 @@ import db_playlists from '../../database/playlist';
 import db_accounts from '../../database/accounts';
 import db_votes from '../../database/votes';
 import db_favorites from '../../database/favorites';
+import db_tags from '../../database/tags';
 import xss from '../../xss';
 
 const ONEMB = (1024 * 1024);
@@ -447,8 +448,9 @@ function handleProfileHeaderUpload(req, res) {
 }
 
 function handleFavorites(req, res) {
-    var name = req.params.name;
-    var page = req.params.page;
+    var name      = req.params.name;
+    var tag_name  = req.params.tag;
+    var page      = req.params.page;
     if (page == undefined) {
         page = 1;
     }
@@ -496,53 +498,65 @@ function handleFavorites(req, res) {
                     });
                 }
                 
-                db_favorites.countByUser(user.id, function(err, count) {
+                db_tags.fetchByUser(user.id, function(err, tags) {
                     if (err) {
                         return template.send(res, 'error/http', {
                             status: 500
                         });
                     }
-        
-                    if (count == 0) {
-                        return template.send(res, 'users/favorites', {
-                            pageTitle: name + "'s Favorites",
-                            pageTab: "favorites",
-                            user: user,
-                            media: [],
-                            media_count: media_count,
-                            likes: likes,
-                            page:  1,
-                            pages: 1,
-                            input_maxes: getInputMaxes()
-                        });
-                    }
-        
-                    var limit  = 100;
-                    var pages  = Math.ceil(count / limit);
-                    if (page > pages) {
-                        page = pages;
-                    }
-                    var offset = (page - 1) * limit;
-        
-                    db_favorites.fetchByUser(user.id, limit, offset, function(err, rows) {
+    
+                    db_favorites.countByUser(user.id, tag_name, function(err, count) {
                         if (err) {
                             return template.send(res, 'error/http', {
                                 status: 500
                             });
                         }
-            
-                        async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
-                            template.send(res, 'users/favorites', {
+        
+                        if (count == 0) {
+                            return template.send(res, 'users/favorites', {
                                 pageTitle: name + "'s Favorites",
                                 pageTab: "favorites",
                                 user: user,
-                                media: results,
+                                media: [],
                                 media_count: media_count,
+                                tags: tags,
+                                tag_name: tag_name,
                                 likes: likes,
-                                page:  parseInt(page),
-                                pages: parseInt(pages),
-                                input_maxes: getInputMaxes(),
-                                pageScripts: ["/js/voting.js"]
+                                page:  1,
+                                pages: 1,
+                                input_maxes: getInputMaxes()
+                            });
+                        }
+        
+                        var limit  = 100;
+                        var pages  = Math.ceil(count / limit);
+                        if (page > pages) {
+                            page = pages;
+                        }
+                        var offset = (page - 1) * limit;
+        
+                        db_favorites.fetchByUser(user.id, tag_name, limit, offset, function(err, rows) {
+                            if (err) {
+                                return template.send(res, 'error/http', {
+                                    status: 500
+                                });
+                            }
+            
+                            async.map(rows, mod_voting.attachVotes.bind(this, req), function(err, results) {
+                                template.send(res, 'users/favorites', {
+                                    pageTitle: name + "'s Favorites",
+                                    pageTab: "favorites",
+                                    user: user,
+                                    media: results,
+                                    media_count: media_count,
+                                    tags: tags,
+                                    tag_name: tag_name,
+                                    likes: likes,
+                                    page:  parseInt(page),
+                                    pages: parseInt(pages),
+                                    input_maxes: getInputMaxes(),
+                                    pageScripts: ["/js/voting.js"]
+                                });
                             });
                         });
                     });
@@ -831,6 +845,7 @@ module.exports = {
     init: function (app) {
         app.get('/users', handleIndex);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/favorites/:page?', handleFavorites);
+        app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/favorites/tags/:tag/:page?', handleFavorites);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/liked/:page?', handleUpvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/disliked/:page?', handleDownvotes);
         app.get('/user/:name([a-zA-Z0-9_\-]{1,20})/:page?', handleProfile);

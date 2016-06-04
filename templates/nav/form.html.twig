@@ -9,6 +9,9 @@
                 <li>
                     <a href="{{ loginDomain }}/user/{{ loginName }}"{% if channelName %} target="_blank"{% endif %}>Profile</a>
                 </li>
+                <li>
+                    <a href="{{ loginDomain }}/user/{{ loginName }}/favorites"{% if channelName %} target="_blank"{% endif %}>Favorites</a>
+                </li>
                 <li role="separator" class="divider"></li>
                 {% if isSuperAdmin %}
                     <li>

@@ -99,6 +99,51 @@
   }
 }
 
+#profile-tags {
+  list-style-type: none;
+  margin: 0;
+  padding: 8px;
+  
+  .tag {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 2px;
+    margin-bottom: 6px;
+    color: white;
+    padding: 6px 8px;
+    background-color: @color-tag;
+    
+    &.active {
+      background-color: lighten(@color-tag, 5%);
+      a {
+        text-decoration: underline;
+      }
+    }
+    
+    &:hover {
+      background-color: lighten(@color-tag, 5%);
+      a {
+        color: #fff;
+      }
+    }
+
+    [data-role="remove"] {
+      margin-left:8px;
+      cursor:pointer;
+      &:after{
+        content: "x";
+        padding:0px 2px;
+      }
+      &:hover {
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        &:active {
+          box-shadow: inset 0 3px 5px rgba(0,0,0,0.125);
+        }
+      }
+    }
+  }
+}
+
 #profile-timeline {
   margin-top: -48px;
 
@@ -252,6 +297,10 @@
   border-right: 1px solid @color-card-border;
   border-top: 1px solid @color-card-border-lite;
   transition: all 0.2s ease-out;
+  
+  &.auto-height {
+    min-height: inherit;
+  }
 }
 
 .card-media {

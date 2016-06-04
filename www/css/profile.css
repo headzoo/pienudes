@@ -84,6 +84,46 @@
   text-align: center;
   margin-bottom: 18px;
 }
+#profile-tags {
+  list-style-type: none;
+  margin: 0;
+  padding: 8px;
+}
+#profile-tags .tag {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 2px;
+  margin-bottom: 6px;
+  color: white;
+  padding: 6px 8px;
+  background-color: #5ea05e;
+}
+#profile-tags .tag.active {
+  background-color: #6eaa6e;
+}
+#profile-tags .tag.active a {
+  text-decoration: underline;
+}
+#profile-tags .tag:hover {
+  background-color: #6eaa6e;
+}
+#profile-tags .tag:hover a {
+  color: #fff;
+}
+#profile-tags .tag [data-role="remove"] {
+  margin-left: 8px;
+  cursor: pointer;
+}
+#profile-tags .tag [data-role="remove"]:after {
+  content: "x";
+  padding: 0px 2px;
+}
+#profile-tags .tag [data-role="remove"]:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+#profile-tags .tag [data-role="remove"]:hover:active {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
 #profile-timeline {
   margin-top: -48px;
 }
@@ -223,6 +263,9 @@
   border-right: 1px solid #000000;
   border-top: 1px solid #232323;
   transition: all 0.2s ease-out;
+}
+.card.auto-height {
+  min-height: inherit;
 }
 .card-media {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);

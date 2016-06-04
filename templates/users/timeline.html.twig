@@ -24,6 +24,9 @@
         </div>
     {% else %}
         {% set is_owner = (loggedIn and loginName == user.name) %}
+        {% if pageTab == "favorites" %}
+            {% include "users/tags.html.twig" %}
+        {% endif %}
         {% for m in media %}
             <div class="card card-media">
                 <div class="card-media-time" data-time="{{ m.time }}">
@@ -60,7 +63,11 @@
                     </li>
                 {% else %}
                     <li class="previous">
-                        <a href="{{ page_base_url }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                        {% if tag_name %}
+                            <a href="{{ page_base_url }}/tags/{{ tag_name }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                        {% else %}
+                            <a href="{{ page_base_url }}/{{ page - 1 }}"><span aria-hidden="true">&larr;</span> Newer</a>
+                        {% endif %}
                     </li>
                 {% endif %}
                 {% if page == pages %}
@@ -69,7 +76,11 @@
                     </li>
                 {% else %}
                     <li class="next">
-                        <a href="{{ page_base_url }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                        {% if tag_name %}
+                            <a href="{{ page_base_url }}/tags/{{ tag_name }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                        {% else %}
+                            <a href="{{ page_base_url }}/{{ page + 1 }}">Older <span aria-hidden="true">&rarr;</span></a>
+                        {% endif %}
                     </li>
                 {% endif %}
             </ul>
