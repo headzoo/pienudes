@@ -50,6 +50,21 @@ module.exports = {
         );
     },
     
+    fetchByUserAndName: function(user_id, name, callback) {
+        callback = callback || noop;
+    
+        db.query(
+            "SELECT `tags_to_favorites`.`id` AS `t2f_id`, tags.* " +
+            "FROM `tags_to_favorites` " +
+            "INNER JOIN `tags` ON `tags`.`id` = tags_to_favorites.tag_id " +
+            "INNER JOIN `favorites` ON `favorites`.`id` = `tags_to_favorites`.`favorite_id` " +
+            "WHERE `user_id` = ? " +
+            "AND `tags`.`name` = ?",
+            [user_id, name],
+            callback
+        );
+    },
+    
     fetchByUserAndMedia: function(user_id, media_id, callback) {
         callback = callback || noop;
         
@@ -83,5 +98,15 @@ module.exports = {
                 callback(null, tag.id);
             }
         });
+    },
+    
+    removeAssociation: function(t2f_id, callback) {
+        callback = callback || noop;
+        
+        db.query(
+            "DELETE FROM `tags_to_favorites` WHERE `id` = ? LIMIT 1",
+            [t2f_id],
+            callback
+        );
     }
 };

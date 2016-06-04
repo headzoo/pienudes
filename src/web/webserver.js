@@ -11,7 +11,7 @@ import serveStatic from 'serve-static';
 import morgan from 'morgan';
 import csrf from './csrf';
 import * as HTTPStatus from './httpstatus';
-import { CSRFError, HTTPError } from '../errors';
+import { CSRFError, CSRFJSONError, HTTPError } from '../errors';
 import counters from "../counters";
 
 function initializeLog(app) {
@@ -90,6 +90,9 @@ function initializeErrorHandlers(app) {
                     path: req.path,
                     referer: req.header('referer')
                 });
+            } else if (err instanceof CSRFJSONError) {
+                res.status(HTTPStatus.FORBIDDEN);
+                return res.json({status: "error"});
             }
 
             let { message, status } = err;

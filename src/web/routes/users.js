@@ -9,6 +9,7 @@ var Redis      = require('../../redis');
 var striptags  = require('striptags');
 var mod_voting = require('../../voting');
 var moment     = require('moment');
+var csrf       = require("../csrf");
 
 import template from '../template';
 import Config from '../../config';
@@ -71,8 +72,8 @@ function handleIndex(req, res) {
 }
 
 function handleProfile(req, res) {
-    var name = req.params.name;
-    var page = req.params.page;
+    var name  = req.params.name;
+    var page  = req.params.page;
     if (page == undefined) {
         page = 1;
     }
@@ -779,7 +780,16 @@ function handleDownvotes(req, res) {
 }
 
 function handleTrackDelete(req, res) {
+    csrf.verify(req, true);
+    if (!req.user) {
+        return res.json({status: "error"}, 401);
+    }
+    
     var pid = req.body.pid;
+    if (!pid) {
+        return res.json({status: "error"}, 400);
+    }
+    pid = parseInt(pid, 10);
     
     db_playlists.fetchById(pid, function(err, row) {
         if (err || !row) {
@@ -800,7 +810,16 @@ function handleTrackDelete(req, res) {
 }
 
 function handleFavoritesDelete(req, res) {
+    csrf.verify(req, true);
+    if (!req.user) {
+        return res.json({status: "error"}, 401);
+    }
+    
     var fav_id = req.body.favorite_id;
+    if (!fav_id) {
+        return res.json({status: "error"}, 400);
+    }
+    fav_id = parseInt(fav_id, 10);
     
     db_favorites.fetchById(fav_id, function(err, favorite) {
         if (err || !favorite) {
@@ -815,6 +834,40 @@ function handleFavoritesDelete(req, res) {
                 return res.json({status: "error"}, 500);
             }
     
+            res.json({status: "ok"});
+        });
+    });
+}
+
+function handleTagsDelete(req, res) {
+    csrf.verify(req, true);
+    if (!req.user) {
+        return res.json({status: "error"}, 401);
+    }
+    
+    var tag_name = req.body.tag;
+    if (!tag_name) {
+        return res.json({status: "error"}, 400);
+    }
+    tag_name = tag_name.trim();
+    if (!tag_name) {
+        return res.json({status: "error"}, 400);
+    }
+    
+    db_tags.fetchByUserAndName(req.user.id, tag_name, function(err, rows) {
+        if (err) {
+            return res.json({status: "error"}, 500);
+        }
+        
+        var t2f_ids = [];
+        rows.forEach(function(row) {
+            t2f_ids.push(row.t2f_id);
+        });
+        async.map(t2f_ids, db_tags.removeAssociation, function(err) {
+            if (err) {
+                return res.json({status: "error"}, 500);
+            }
+            
             res.json({status: "ok"});
         });
     });
@@ -854,5 +907,6 @@ module.exports = {
         app.post('/user/profile/header/save', upload_header.single("header"), handleProfileHeaderUpload);
         app.post('/user/profile/track/delete', handleTrackDelete);
         app.post('/user/profile/favorites/delete', handleFavoritesDelete);
+        app.post('/user/profile/tags/delete', handleTagsDelete);
     }
 };

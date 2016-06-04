@@ -2,7 +2,7 @@
  * Adapted from https://github.com/expressjs/csurf
  */
 
-import { CSRFError } from '../errors';
+import { CSRFError, CSRFJSONError } from '../errors';
 
 var csrf = require("csrf");
 
@@ -35,11 +35,15 @@ exports.init = function csrfInit (domain) {
     };
 };
 
-exports.verify = function csrfVerify(req) {
+exports.verify = function csrfVerify(req, is_json) {
     var secret = req.signedCookies._csrf;
     var token = req.body._csrf || req.query._csrf;
 
     if (!tokens.verify(secret, token)) {
-        throw new CSRFError('Invalid CSRF token');
+        if (is_json) {
+            throw new CSRFJSONError('Invalid CSRF token');
+        } else {
+            throw new CSRFError('Invalid CSRF token');
+        }
     }
 };

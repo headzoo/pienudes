@@ -1157,6 +1157,7 @@ input:focus {
   background-color: transparent;
   border: none;
   border-bottom: 2px solid #fff;
+  cursor: pointer;
 }
 #profile .nav > li > a:focus,
 #profile .nav > li > a:hover {
@@ -1249,7 +1250,7 @@ input:focus {
   color: #fff;
 }
 #profile-tags .tag [data-role="remove"] {
-  margin-left: 8px;
+  margin-left: 6px;
   cursor: pointer;
 }
 #profile-tags .tag [data-role="remove"]:after {

@@ -31,7 +31,8 @@ $(function() {
         header            = $("#profile-header"),
         header_e          = $("#profile-header-edit"),
         track_deletes     = $(".card-media-remove-play"),
-        favorite_deletes  = $(".card-media-remove-favorites");
+        favorite_deletes  = $(".card-media-remove-favorites"),
+        remove_tag_btns   = $(".profile-tags-remove-btn");
     
     setState();
     
@@ -190,7 +191,8 @@ $(function() {
             url: "/user/profile/track/delete",
             type: "post",
             data: {
-                pid: pid
+                pid: pid,
+                _csrf: csrfToken
             }
         }).done(function() {
             parent.fadeOut("fast");
@@ -208,7 +210,31 @@ $(function() {
             url: "/user/profile/favorites/delete",
             type: "post",
             data: {
-                favorite_id: favorite_id
+                favorite_id: favorite_id,
+                _csrf: csrfToken
+            }
+        }).done(function() {
+            parent.fadeOut("fast");
+        }).fail(function() {
+            alert("Error. Please try that again in a minute.");
+        });
+    });
+    
+    remove_tag_btns.on("click", function() {
+        if (!confirm('Are you sure you want to remove this tag?')) {
+            return;
+        }
+        
+        var target = $(this),
+            parent = target.parents(".tag:first"),
+            tag    = target.data("tag");
+    
+        $.ajax({
+            url: "/user/profile/tags/delete",
+            type: "post",
+            data: {
+                tag: tag,
+                _csrf: csrfToken
             }
         }).done(function() {
             parent.fadeOut("fast");
