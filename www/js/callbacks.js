@@ -1005,7 +1005,6 @@ Callbacks = {
         toastr.options.timeOut = 1500;
         toastr.success('Favorite completed!');
         $("#favorites-add").text("Update");
-        $("#showfavorites").addClass("favorited");
     },
     
     userTags: function(data) {
@@ -1021,10 +1020,8 @@ Callbacks = {
         
         if (data.favorited) {
             $("#favorites-add").text("Update");
-            $("#showfavorites").addClass("favorited");
         } else {
             $("#favorites-add").text("Favorite");
-            $("#showfavorites").removeClass("favorited");
         }
     },
 
