@@ -410,8 +410,12 @@ $('#favorites-tags').tagsinput({
     }
 });
 
-$("#favorites-add").click(function() {
+$("#favorites-add").on("click", function() {
     socket.emit("favoritesAdd", $("#favorites-tags").tagsinput("items"));
+});
+
+$("#showfavorites").on("click", function() {
+    socket.emit("favoritesGet");
 });
 
 /* video controls */

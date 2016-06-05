@@ -3291,3 +3291,83 @@ function secondsToTime(seconds) {
         return d_minutes + ':' + d_seconds;
     }
 }
+
+function mediaUrl(media) {
+    switch(media.type) {
+        case "yt":
+            return "http://youtube.com/watch?v=" + media.uid;
+            break;
+        case "sc":
+            return media.uid;
+            break;
+        case "vi":
+            return "http://vimeo.com/" + media.uid;
+            break;
+        case "dm":
+            return "http://dailymotion.com/video/" + media.uid;
+            break;
+        case "li":
+            return "http://livestream.com/" + media.uid;
+            break;
+        case "tw":
+            return "http://twitch.tv/" + media.uid;
+            break;
+        case "im":
+            return "http://imgur.com/a/" + media.uid;
+            break;
+        case "us":
+            return "http://imgur.com/a/" + media.uid;
+            break;
+        case "gd":
+            return "https://docs.google.com/file/d/" + media.uid;
+            break;
+        case "hb":
+            return "http://hitbox.tv/" + media.uid;
+            break;
+        default:
+            return media.uid;
+            break;
+        
+    }
+}
+
+function thumbnailUrl(media, size) {
+    size = size || "default";
+    switch(media.type) {
+        case "yt":
+            var file = (size == "default") ? "/default.jpg" : "/mqdefault.jpg";
+            return "https://i.ytimg.com/vi/" + media.uid + file;
+            break;
+        case "sc":
+            return "/img/thumbs/sc.png";
+            break;
+        case "vi":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "dm":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "li":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "tw":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "im":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "us":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "gd":
+            return "/img/thumbs/missing.jpg";
+            break;
+        case "hb":
+            return "/img/thumbs/missing.jpg";
+            break;
+        default:
+            return "/img/thumbs/missing.jpg";
+            break;
+        
+    }
+}

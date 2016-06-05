@@ -1007,6 +1007,65 @@ Callbacks = {
         $("#favorites-add").text("Update");
     },
     
+    favoritesGet: function(favorites) {
+        var list = $("#favorites-thumbs");
+        list.empty();
+        
+        for(var i = 0; i < favorites.length; i++) {
+            (function(fav) {
+    
+                var col = $('<div class="col-xs-3">');
+                list.append(col);
+    
+                var thumb = $('<div class="thumbnail">');
+                col.append(thumb);
+    
+                var a_img = $('<a target="_blank">');
+                a_img.attr("href", mediaUrl(fav));
+                thumb.append(a_img);
+    
+                var img = $('<img />');
+                img.attr("src", thumbnailUrl(fav, "mq"));
+                a_img.append(img);
+    
+                var title = $('<h4/>');
+                thumb.append(title);
+    
+                var a_title = $('<a target="_blank"/>');
+                a_title.attr("href", mediaUrl(fav));
+                a_title.text(fav.title);
+                title.append(a_title);
+    
+                var btn_group = $('<div class="btn-group">');
+                thumb.append(btn_group);
+    
+                if(hasPermission("playlistnext")) {
+                    var btn_next = $('<button class="btn btn-xs btn-default">Next</button>');
+                    btn_group.append(btn_next);
+                    btn_next.on("click", function() {
+                        socket.emit("queue", {
+                            id: fav.uid,
+                            pos: "next",
+                            type: fav.type,
+                            temp: $(".add-temp").prop("checked")
+                        });
+                    });
+                }
+    
+                var btn_end = $('<button class="btn btn-xs btn-default">End</button>');
+                btn_group.append(btn_end);
+                btn_end.on("click", function() {
+                    socket.emit("queue", {
+                        id: fav.uid,
+                        pos: "end",
+                        type: fav.type,
+                        temp: $(".add-temp").prop("checked")
+                    });
+                });
+            })(favorites[i]);
+        }
+    },
+    
     userTags: function(data) {
         var input = $("#favorites-tags");
         input.tagsinput('removeAll');
