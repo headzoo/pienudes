@@ -400,9 +400,11 @@ $("#favorites-add").on("click", function() {
 });
 
 $("#showfavorites").on("click", function() {
-    if (!$("#favorites").is(":visible")) {
+    var faves = $("#favorites");
+    if (!faves.data("showFavorites")) {
         socket.emit("favoritesGet");
         socket.emit("userTagsGet");
+        faves.data("showFavorites", true);
     }
 });
 
