@@ -176,6 +176,7 @@ module.exports = {
         require('./routes/chat').init(app);
         require('./routes/voting').init(app);
         require('./routes/proxy').init(app);
+        require('./routes/redirects').init(app);
         require('./routes/admin/index').init(app, channelIndex);
         require('./routes/admin/users').init(app);
         //require('./routes/acp').init(app);
