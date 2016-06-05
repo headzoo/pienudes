@@ -84,10 +84,12 @@
     </div>
     
     {# stats #}
+    {#
     <ul id="profile-stats">
         <li>{{ media_count|comma }} Plays</li>
         <li>{{ likes|comma }} Likes</li>
     </ul>
+    #}
     
     {# bio #}
     <div id="profile-bio">{{ user.profile.bio|nl2p|safe }}</div>
