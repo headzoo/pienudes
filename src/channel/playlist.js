@@ -943,7 +943,7 @@ PlaylistModule.prototype.handleFavoritesAdd = function(user, tags) {
     if (!this.current) {
         return;
     }
-    if (user.account.guest) {
+    if (user.account.guest || user.account.id == 0) {
         return user.socket.emit("errorMsg", {
             msg: "Only registered users can add to favorites."
         });
