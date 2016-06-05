@@ -383,20 +383,6 @@ $("#userpl_save").click(function() {
     });
 });
 
-var favorite_tags = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: {
-        url: "/tags",
-        cache: false,
-        filter: function(list) {
-            return $.map(list, function(tag) {
-                return { name: tag }; });
-        }
-    }
-});
-favorite_tags.initialize();
-
 $('#favorites-tags').tagsinput({
     typeaheadjs: {
         name: "favorite_tags",
@@ -406,7 +392,7 @@ $('#favorites-tags').tagsinput({
         maxChars: 25,
         confirmKeys: [13, 32],
         trimValue: true,
-        source: favorite_tags.ttAdapter()
+        source: FAVORITE_TAGS.ttAdapter()
     }
 });
 
@@ -415,7 +401,10 @@ $("#favorites-add").on("click", function() {
 });
 
 $("#showfavorites").on("click", function() {
-    socket.emit("favoritesGet");
+    if (!$("#favorites").is(":visible")) {
+        socket.emit("favoritesGet");
+        socket.emit("userTagsGet");
+    }
 });
 
 /* video controls */

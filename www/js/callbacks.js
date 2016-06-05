@@ -1000,7 +1000,8 @@ Callbacks = {
     },
     
     favoriteAdded: function(data) {
-        console.log(data);
+        formatFavorites([data.media], true);
+        formatTags(data.tags);
         toastr.options.preventDuplicates = true;
         toastr.options.closeButton = true;
         toastr.options.timeOut = 1500;
@@ -1030,6 +1031,12 @@ Callbacks = {
         } else {
             $("#favorites-add").text("Favorite");
         }
+    },
+    
+    userTagsGet: function(tags) {
+        var list = $("#favorites-tag-list");
+        list.empty();
+        formatTags(tags);
     },
 
     /* REGION Polls */

@@ -181,6 +181,20 @@ var Rank = {
     Siteadmin: 255
 };
 
+var FAVORITE_TAGS = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    prefetch: {
+        url: "/tags",
+        cache: false,
+        filter: function(list) {
+            return $.map(list, function(tag) {
+                return { name: tag }; });
+        }
+    }
+});
+FAVORITE_TAGS.initialize();
+
 function createCookie(name,value,days) {
     if (days) {
         var date = new Date();

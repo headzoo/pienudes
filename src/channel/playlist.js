@@ -231,6 +231,7 @@ PlaylistModule.prototype.onUserPostJoin = function (user) {
     user.socket.on("favoritesAdd", this.handleFavoritesAdd.bind(this, user));
     user.socket.on("favoritesGet", this.handleFavoritesGet.bind(this, user));
     user.socket.on("userTags", this.handleUserTags.bind(this, user));
+    user.socket.on("userTagsGet", this.handleUserTagsGet.bind(this, user));
     user.socket.typecheckedOn("assignLeader", TYPE_ASSIGN_LEADER, this.handleAssignLeader.bind(this, user));
     user.socket.typecheckedOn("mediaUpdate", TYPE_MEDIA_UPDATE, this.handleUpdate.bind(this, user));
     var self = this;
@@ -1002,7 +1003,7 @@ PlaylistModule.prototype.handleFavoritesGet = function(user, tag_name) {
             return user.socket.emit("favoritesGet", []);
         }
     
-        db_favorites.fetchByUser(u.id, tag_name, 24, 0, function(err, rows) {
+        db_favorites.fetchByUser(u.id, tag_name, 40, 0, function(err, rows) {
             if (err) {
                 return user.socket.emit("favoritesGet", []);
             }
@@ -1068,6 +1069,34 @@ PlaylistModule.prototype.handleUserTags = function(user) {
             }
         }.bind(this));
     }.bind(this));
+};
+
+PlaylistModule.prototype.handleUserTagsGet = function(user) {
+    if (user.account.guest) {
+        user.socket.emit("userTagsGet", {
+            favorited: false,
+            tags: []
+        });
+        return;
+    }
+    
+    db_accounts.getUser(user.account.name, function(err, u) {
+        if (err || !u) {
+            return user.socket.emit("userTagsGet", {
+                favorited: false,
+                tags: []
+            });
+        }
+    
+        db_tags.fetchByUser(u.id, function(err, rows) {
+            var tags = [];
+            rows.forEach(function(row) {
+                tags.push(row.name);
+            });
+            
+            user.socket.emit("userTagsGet", tags);
+        });
+    });
 };
 
 /**

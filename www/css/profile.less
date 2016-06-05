@@ -100,7 +100,7 @@
   }
 }
 
-#profile-tags {
+#profile-tags, #favorites-tag-list {
   list-style-type: none;
   margin: 0;
   padding: 8px;
@@ -116,16 +116,20 @@
     
     &.active {
       background-color: lighten(@color-tag, 5%);
-      a {
+      a, span {
         text-decoration: underline;
       }
     }
     
     &:hover {
       background-color: lighten(@color-tag, 5%);
-      a {
+      a, span {
         color: #fff;
       }
+    }
+    
+    span {
+      cursor: pointer;
     }
 
     [data-role="remove"] {

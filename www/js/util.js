@@ -2684,14 +2684,24 @@ function formatUserEmotesList(tbl) {
     });
 }
 
-function formatFavorites(favorites) {
+function formatFavorites(favorites, prepend) {
     var list = $("#favorites-thumbs");
+    var items = list.find("div.col-xs-3");
+    prepend = prepend || false;
     
     for(var i = 0; i < favorites.length; i++) {
         (function(fav) {
+            if (favoriteExists(items, fav)) {
+                return;
+            }
             
             var col = $('<div class="col-xs-3">');
-            list.append(col);
+            col.data("tid", fav.type + fav.uid);
+            if (prepend) {
+                list.prepend(col);
+            } else {
+                list.append(col);
+            }
             
             var thumb = $('<div class="thumbnail">');
             col.append(thumb);
@@ -2740,6 +2750,46 @@ function formatFavorites(favorites) {
             });
         })(favorites[i]);
     }
+}
+
+function favoriteExists(items, media) {
+    var found = false;
+    items.each(function(i, item) {
+        console.log($(item).data("tid"));
+        if ($(item).data("tid") == (media.type + media.uid)) {
+            found = true;
+        }
+    });
+    return found;
+}
+
+function formatTags(tags) {
+    var list  = $("#favorites-tag-list");
+    var items = list.find("li");
+    for(var i = 0; i < tags.length; i++) {
+        (function(tag) {
+            if (!tagExists(items, tag)) {
+                var item = $('<li class="tag label"/>');
+                var name = $('<span/>');
+                name.text(tag);
+                item.append(name);
+                item.on("click", function() {
+                    socket.emit("favoritesGet", tag);
+                });
+                list.append(item);
+            }
+        })(tags[i]);
+    }
+}
+
+function tagExists(items, tag) {
+    var found = false;
+    items.each(function(i, item) {
+        if ($(item).find("span:first").text() == tag) {
+            found = true;
+        }
+    });
+    return found;
 }
 
 function formatTime(sec) {
