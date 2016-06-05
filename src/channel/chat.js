@@ -346,7 +346,6 @@ ChatModule.prototype.formatMessage = function (user, data) {
 
 ChatModule.prototype.filterMessage = function (msg) {
     var filters = this.channel.modules.filters.filters;
-    var chan = this.channel;
     var convertLinks = this.channel.modules.options.get("enable_link_regex");
     var links = msg.match(LINK);
     var intermediate = msg.replace(LINK, LINK_PLACEHOLDER);

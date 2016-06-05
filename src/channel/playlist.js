@@ -20,6 +20,9 @@ var Logger = require("../logger");
 var CustomEmbedFilter = require("../customembed").filter;
 var XSS = require("../xss");
 
+const LINK = /(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)/ig;
+const LINK_PLACEHOLDER = '\ueeee';
+const LINK_PLACEHOLDER_RE = /\ueeee/g;
 const MAX_ITEMS = Config.get("playlist.max-items");
 // Limit requestPlaylist to once per 60 seconds
 const REQ_PLAYLIST_THROTTLE = {
@@ -872,13 +875,28 @@ PlaylistModule.prototype.handleVoteVideo = function(user, value) {
                     msg: "Unable to fetch media information. Try again in a minute."
                 });
             } else if (media && media.id) {
-                mod_votes.vote(media.id, u.id, value, function(err, votes) {
+                mod_votes.vote(media.id, u.id, value, function(err, votes, created) {
                     if (err) {
                         return user.socket.emit("errorMsg", {
                             msg: "Unable to fetch vote information. Try again in a minute."
                         });
                     }
                     this.channel.broadcastAll("changeVotes", votes);
+                    
+                    if (created && value == 1 && this.current.queueby[0] != "@") {
+                        var qdby = this.current.queueby.toLowerCase();
+                        if (user.account.name.toLowerCase() != qdby) {
+                            for (var i = 0; i < this.channel.users.length; i++) {
+                                if (this.channel.users[i].getLowerName() == qdby) {
+                                    this.channel.users[i].socket.emit("notice", {
+                                        msg: this.filterMessage(user.account.name + " liked your video **" + this.current.media.title + "**."),
+                                        time: Date.now()
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }.bind(this));
             }
         }.bind(this));
@@ -986,7 +1004,22 @@ PlaylistModule.prototype.handleFavoritesAdd = function(user, tags) {
                             media: media,
                             tags: tags
                         });
-                    });
+    
+                        if (this.current.queueby[0] != "@") {
+                            var qdby = this.current.queueby.toLowerCase();
+                            if (user.account.name.toLowerCase() != qdby) {
+                                for (var i = 0; i < this.channel.users.length; i++) {
+                                    if (this.channel.users[i].getLowerName() == qdby) {
+                                        this.channel.users[i].socket.emit("notice", {
+                                            msg: this.filterMessage(user.account.name + " favorited your video **" + this.current.media.title + "**."),
+                                            time: Date.now()
+                                        });
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }.bind(this));
                 }
             }.bind(this));
         }.bind(this));
@@ -1097,6 +1130,36 @@ PlaylistModule.prototype.handleUserTagsGet = function(user) {
             user.socket.emit("userTagsGet", tags);
         });
     });
+};
+
+PlaylistModule.prototype.filterMessage = function (msg) {
+    var filters = this.channel.modules.filters.filters;
+    var convertLinks = this.channel.modules.options.get("enable_link_regex");
+    var links = msg.match(LINK);
+    var intermediate = msg.replace(LINK, LINK_PLACEHOLDER);
+    
+    var result = filters.filter(intermediate, false);
+    result = result.replace(LINK_PLACEHOLDER_RE, function () {
+        var link = links.shift();
+        if (!link) {
+            return '';
+        }
+        
+        var filtered = filters.filter(link, true);
+        if (filtered !== link) {
+            return filtered;
+        } else if (convertLinks) {
+            if (link.match(/(https?:\/\/.*\.(?:png|jpe?g|gif))\b/i)) {
+                return "<a href=\"" + link + "\" target=\"_blank\"><img src=\"/proxy/image?u=" + link + "\" class=\"embedded-image\" /></a>";
+            } else {
+                return "<a href=\"" + link + "\" target=\"_blank\">" + link + "</a>";
+            }
+        } else {
+            return link;
+        }
+    });
+    
+    return XSS.sanitizeHTML(result);
 };
 
 /**

@@ -15,10 +15,10 @@ module.exports = {
             return callback("Invalid vote value.");
         }
     
-        var success  = function() {
+        var success  = function(created) {
             db_votes.fetchVotes(media_id, function(err, votes) {
                 if (err) return callback(err);
-                callback(null, votes);
+                callback(null, votes, created);
             });
         };
         
@@ -34,18 +34,18 @@ module.exports = {
                     if (vote.value == value) {
                         db_votes.remove(user_id, media_id, function(err) {
                             if (err) return callback(err);
-                            success();
+                            success(false);
                         });
                     } else {
                         db_votes.update(user_id, media_id, value, function(err) {
                             if (err) return callback(err);
-                            success();
+                            success(true);
                         });
                     }
                 } else {
                     db_votes.insert(user_id, media_id, value, function(err) {
                         if (err) return callback(err);
-                        success();
+                        success(true);
                     });
                 }
             });

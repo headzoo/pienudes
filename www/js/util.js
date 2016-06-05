@@ -665,6 +665,7 @@ function showUserOptions() {
     $("#us-chat-colors").prop("checked", USEROPTS.show_colors);
     $("#us-chat-timestamp").prop("checked", USEROPTS.show_timestamps);
     $("#us-chat-joins").prop("checked", USEROPTS.show_joins);
+    $("#us-chat-notices").prop("checked", USEROPTS.show_notices);
     $("#us-sort-rank").prop("checked", USEROPTS.sort_rank);
     $("#us-sort-afk").prop("checked", USEROPTS.sort_afk);
     $("#us-blink-title").val(USEROPTS.blink_title);
@@ -699,6 +700,7 @@ function saveUserOptions() {
     USEROPTS.show_colors          = $("#us-chat-colors").prop("checked");
     USEROPTS.show_timestamps      = $("#us-chat-timestamp").prop("checked");
     USEROPTS.show_joins           = $("#us-chat-joins").prop("checked");
+    USEROPTS.show_notices         = $("#us-chat-notices").prop("checked");
     USEROPTS.sort_rank            = $("#us-sort-rank").prop("checked");
     USEROPTS.sort_afk             = $("#us-sort-afk").prop("checked");
     USEROPTS.blink_title          = $("#us-blink-title").val();
@@ -1612,6 +1614,30 @@ function addUserJoinMessage(data) {
     
     var message = $("<span/>").appendTo(div);
     message.html(msg);
+    if (SCROLLCHAT) {
+        scrollChat();
+    }
+}
+
+function addNotice(data) {
+    if (!USEROPTS.show_notices) {
+        return;
+    }
+    
+    var timestamp = new Date(data.time).toTimeString().split(" ")[0];
+    var msg = "[" + timestamp + "] " + data.msg;
+    
+    var div = $("<div/>");
+    div.addClass("notice-message");
+    
+    var message = $("<span/>").appendTo(div);
+    message.html(msg);
+    
+    var msgBuf = $("#messagebuffer");
+    msgBuf.append(div);
+    if (SCROLLCHAT) {
+        scrollChat();
+    }
 }
 
 function trimChatBuffer() {

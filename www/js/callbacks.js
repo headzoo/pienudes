@@ -552,6 +552,10 @@ Callbacks = {
     userJoin: function(data) {
         addUserJoinMessage(data);
     },
+    
+    notice: function(data) {
+        addNotice(data);
+    },
 
     joinMessage: function(data) {
         if(USEROPTS.joinmessage)

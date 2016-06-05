@@ -983,3 +983,7 @@ input:focus {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.notice-message {
+  font-size: 12px;
+  color: #A2A126;
+}
