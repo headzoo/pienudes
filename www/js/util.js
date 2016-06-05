@@ -2755,7 +2755,6 @@ function formatFavorites(favorites, prepend) {
 function favoriteExists(items, media) {
     var found = false;
     items.each(function(i, item) {
-        console.log($(item).data("tid"));
         if ($(item).data("tid") == (media.type + media.uid)) {
             found = true;
         }

@@ -1002,6 +1002,7 @@ Callbacks = {
     favoriteAdded: function(data) {
         formatFavorites([data.media], true);
         formatTags(data.tags);
+        
         toastr.options.preventDuplicates = true;
         toastr.options.closeButton = true;
         toastr.options.timeOut = 1500;

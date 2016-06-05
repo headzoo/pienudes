@@ -385,12 +385,11 @@ $("#userpl_save").click(function() {
 
 $('#favorites-tags').tagsinput({
     typeaheadjs: {
-        name: "favorite_tags",
+        name: "FAVORITE_TAGS",
         displayKey: "name",
         valueKey: "name",
         maxTags: 6,
         maxChars: 25,
-        confirmKeys: [13, 32],
         trimValue: true,
         source: FAVORITE_TAGS.ttAdapter()
     }
