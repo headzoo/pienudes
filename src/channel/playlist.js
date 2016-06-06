@@ -889,7 +889,7 @@ PlaylistModule.prototype.handleVoteVideo = function(user, value) {
                             for (var i = 0; i < this.channel.users.length; i++) {
                                 if (this.channel.users[i].getLowerName() == qdby) {
                                     this.channel.users[i].socket.emit("notice", {
-                                        msg: this.filterMessage(user.account.name + " liked your video **" + this.current.media.title + "**."),
+                                        msg: this.filterMessage(user.account.name + " liked your video, **" + this.current.media.title + "**."),
                                         time: Date.now()
                                     });
                                     break;
@@ -1011,7 +1011,7 @@ PlaylistModule.prototype.handleFavoritesAdd = function(user, tags) {
                                 for (var i = 0; i < this.channel.users.length; i++) {
                                     if (this.channel.users[i].getLowerName() == qdby) {
                                         this.channel.users[i].socket.emit("notice", {
-                                            msg: this.filterMessage(user.account.name + " favorited your video **" + this.current.media.title + "**."),
+                                            msg: this.filterMessage(user.account.name + " favorited your video, **" + this.current.media.title + "**."),
                                             time: Date.now()
                                         });
                                         break;
