@@ -196,6 +196,9 @@ var FAVORITE_TAGS = new Bloodhound({
 });
 FAVORITE_TAGS.initialize();
 
+var CHAT_WRAP = null;
+var CHAT_WRAP_MEDIA = null;
+
 function createCookie(name,value,days) {
     if (days) {
         var date = new Date();

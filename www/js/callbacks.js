@@ -866,6 +866,7 @@ Callbacks = {
     },
 
     changeMedia: function(data) {
+        CHAT_WRAP_MEDIA = data;
         if ($("body").hasClass("chatOnly") || $("#videowrap").length === 0) {
             return;
         }

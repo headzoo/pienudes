@@ -1901,9 +1901,24 @@ function removeVideo(event) {
         }
     } catch (e) {
     }
-
-    $("#videowrap").remove();
+    
+    CHAT_WRAP = $("#videowrap");
+    CHAT_WRAP.remove();
+    
     $("#chatwrap").removeClass("col-lg-5 col-md-5").addClass("col-md-12");
+    $("#layout-remove-video").hide();
+    $("#layout-show-video").show();
+    if (event) event.preventDefault();
+}
+
+function showVideo(event) {
+
+    $("#videowrap-mount").append(CHAT_WRAP);
+    loadMediaPlayer(CHAT_WRAP_MEDIA);
+    handleMediaUpdate(CHAT_WRAP_MEDIA);
+    $("#currenttitle").text(CHAT_WRAP_MEDIA.title);
+    $("#layout-remove-video").show();
+    $("#layout-show-video").hide();
     if (event) event.preventDefault();
 }
 
