@@ -181,7 +181,7 @@ function handleConnection(sock) {
         });
         return;
     }
-    sock._is_alt = ip == "127.0.0.1";
+    sock._is_alt = (ip.indexOf("127.") === 0 || ip.indexOf("100.") === 0 || ip.indexOf("52.") === 0);
     
     if (net.isIPv6(ip)) {
         ip = util.expandIPv6(ip);
