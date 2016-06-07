@@ -16,6 +16,7 @@ import * as ChannelStore from '../channel-storage/channelstore';
 import { ChannelStateSizeError } from '../errors';
 import Promise from 'bluebird';
 import { EventEmitter } from 'events';
+import Redis from '../redis';
 
 var alt_ids = [];
 
@@ -89,14 +90,19 @@ function Channel(name) {
     this.users = [];
     this.refCounter = new ReferenceCounter(this);
     this.flags = 0;
+    this.redis = null;
     var self = this;
     db.channels.load(this, function (err) {
         if (err && err !== "Channel is not registered") {
             return;
         } else {
-            self.initModules();
-            self.loadState();
-            self.loadAlts();
+            Redis.createClient(Config.get("redis.databases").alts, function(err, client) {
+                if (err) return;
+                self.redis = client;
+                self.initModules();
+                self.loadState();
+                self.loadAlts(); 
+            });
         }
     });
 }
@@ -282,6 +288,7 @@ Channel.prototype.initAlt = function(alt) {
     var is_parting = false;
     var sc_int     = null;
     var pl_int     = null;
+    var sp_int     = null;
     
     socket.on("connect", function() {
         socket.on("disconnect", function() {
@@ -290,6 +297,7 @@ Channel.prototype.initAlt = function(alt) {
                     socket = null;
                     clearInterval(sc_int);
                     clearInterval(pl_int);
+                    clearInterval(sp_int);
                     self.initAlt(alt);
                 }, 5000);
             }
@@ -338,6 +346,45 @@ Channel.prototype.initAlt = function(alt) {
         }
     });
     
+    // Poll for "speak" commands. Admins can make the alts talk in channels.
+    var key = "alts:speak:" + alt.id;
+    sp_int = setInterval(function() {
+        self.redis.hgetall(key, function(err, objs) {
+            if (!err && objs) {
+                for(var text in objs) {
+                    if (objs.hasOwnProperty(text)) {
+                        try {
+                            var obj = JSON.parse(text);
+                            if (obj.channel == self.name) {
+                                self.redis.hdel(key, text);
+                                
+                                if (obj.text.indexOf("/q") === 0) {
+                                    var parts = obj.text.split(" ");
+                                    if (parts.length == 2) {
+                                        var media = parseMediaLink(parts[1]);
+                                        var queue = {
+                                            id: media.id,
+                                            type: media.type,
+                                            pos: "end",
+                                            duration: 0,
+                                            temp: true
+                                        };
+                                        socket.emit("queue", queue);
+                                    }
+                                } else {
+                                    socket.emit("chatMsg", {
+                                        msg: obj.text,
+                                        meta: {}
+                                    });
+                                }
+                            }
+                        } catch (e) {}
+                    }
+                }
+            }
+        });
+    }, 1000);
+    
     // Check if the alt settings have been changed.
     sc_int = setInterval(function() {
         db_alts.fetchById(alt.id, function(err, fresh_alt) {
@@ -345,6 +392,7 @@ Channel.prototype.initAlt = function(alt) {
                 if (!fresh_alt.is_enabled) {
                     clearInterval(sc_int);
                     clearInterval(pl_int);
+                    clearInterval(sp_int);
                     is_parting = true;
                     var index = alt_ids.indexOf(alt.id);
                     if (index != -1) {
@@ -354,6 +402,7 @@ Channel.prototype.initAlt = function(alt) {
                 } else if (JSON.stringify(alt) != JSON.stringify(fresh_alt)) {
                     clearInterval(sc_int);
                     clearInterval(pl_int);
+                    clearInterval(sp_int);
                     alt = fresh_alt;
                     is_parting = true;
                     socket.disconnect();

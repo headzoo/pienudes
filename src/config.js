@@ -17,7 +17,8 @@ var defaults = {
         host: "127.0.0.1",
         port: 6379,
         databases: {
-            uploads: 0
+            uploads: 0,
+            alts: 1
         }
     },
     logs: {

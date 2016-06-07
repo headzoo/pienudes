@@ -4,11 +4,18 @@ import security from './security';
 import template from '../../template';
 import db_alts from '../../../database/alts';
 import db_accounts from '../../../database/accounts';
+import Redis from '../../../redis';
+import Config from '../../../config';
 
 function handleIndex(req, res) {
     db_alts.fetch(100, 0, function (err, rows) {
+        rows.forEach(function(row) {
+            var channels = row.channels.split(",");
+            row.channels_split = channels.map(Function.prototype.call, String.prototype.trim);
+        });
+        
         template.send(res, 'admin/alts/index', {
-            pageTitle: "Alt Accounts",
+            pageTitle: "ALT Accounts",
             alts: rows
         });
     });
@@ -24,7 +31,7 @@ function handleEdit(req, res) {
         }
         
         template.send(res, 'admin/alts/edit', {
-            pageTitle: "Editing Alt Account",
+            pageTitle: "Editing ALT Account",
             alt: alt,
             is_editing: true,
             action: "/admin/alts/edit/" + alt.id
@@ -54,7 +61,7 @@ function handleEditSave(req, res) {
         
         if (fresh.name.length == 0 || fresh.channels.length == 0) {
             return template.send(res, 'admin/alts/edit', {
-                pageTitle: "Editing Alt Account",
+                pageTitle: "Editing ALT Account",
                 alt: fresh,
                 is_editing: true,
                 action: "/admin/alts/edit/" + alt.id,
@@ -66,7 +73,7 @@ function handleEditSave(req, res) {
             if (err) return res.send(500);
             if (is_taken) {
                 return template.send(res, 'admin/alts/edit', {
-                    pageTitle: "Editing Alt Account",
+                    pageTitle: "Editing ALT Account",
                     alt: fresh,
                     is_editing: true,
                     action: "/admin/alts/edit/" + alt.id,
@@ -80,7 +87,7 @@ function handleEditSave(req, res) {
                 }
                 if (row && row.id != alt.id) {
                     return template.send(res, 'admin/alts/edit', {
-                        pageTitle: "Editing Alt Account",
+                        pageTitle: "Editing ALT Account",
                         alt: fresh,
                         is_editing: true,
                         action: "/admin/alts/edit/" + alt.id,
@@ -94,7 +101,7 @@ function handleEditSave(req, res) {
                     }
             
                     template.send(res, 'admin/alts/edit', {
-                        pageTitle: "Editing Alt Account",
+                        pageTitle: "Editing ALT Account",
                         alt: fresh,
                         is_editing: true,
                         action: "/admin/alts/edit/" + alt.id
@@ -117,7 +124,7 @@ function handleCreate(req, res) {
     };
     
     template.send(res, 'admin/alts/edit', {
-        pageTitle: "Creating Alt Account",
+        pageTitle: "Creating ALT Account",
         alt: alt,
         is_editing: false,
         action: "/admin/alts/create"
@@ -137,7 +144,7 @@ function handleCreateSave(req, res) {
     
     if (fresh.name.length == 0 || fresh.channels.length == 0) {
         return template.send(res, 'admin/alts/edit', {
-            pageTitle: "Creating Alt Account",
+            pageTitle: "Creating ALT Account",
             alt: fresh,
             is_editing: false,
             action: "/admin/alts/create",
@@ -149,7 +156,7 @@ function handleCreateSave(req, res) {
         if (err) return res.send(500);
         if (is_taken) {
             return template.send(res, 'admin/alts/edit', {
-                pageTitle: "Creating Alt Account",
+                pageTitle: "Creating ALT Account",
                 alt: fresh,
                 is_editing: false,
                 action: "/admin/alts/create",
@@ -161,7 +168,7 @@ function handleCreateSave(req, res) {
             if (err) return res.send(500);
             if (row) {
                 return template.send(res, 'admin/alts/edit', {
-                    pageTitle: "Creating Alt Account",
+                    pageTitle: "Creating ALT Account",
                     alt: fresh,
                     is_editing: false,
                     action: "/admin/alts/create",
@@ -176,6 +183,35 @@ function handleCreateSave(req, res) {
         
                 res.redirect('/admin/alts');
             });
+        });
+    });
+}
+
+function handleSpeak(req, res) {
+    var alt_id  = req.body.alt_id;
+    var text    = req.body.text;
+    var channel = req.body.channel;
+    
+    Redis.createClient(Config.get("redis.databases").alts, function(err, client) {
+        if (err) {
+            client.quit();
+            return res.json({
+                message: "Redis connection failed."
+            }, 500);
+        }
+    
+        var key = "alts:speak:" + alt_id;
+        var value = JSON.stringify({text: text, channel: channel});
+        client.hset(key, value, Date.now(), function(err) {
+            if (err) {
+                client.quit();
+                return res.json({
+                    message: "Redis hset failed."
+                }, 500);
+            }
+    
+            client.quit();
+            res.json({status: "ok"});
         });
     });
 }
@@ -212,5 +248,6 @@ module.exports = {
         app.post('/admin/alts/edit/:id', security, handleEditSave);
         app.get('/admin/alts/create', security, handleCreate);
         app.post('/admin/alts/create', security, handleCreateSave);
+        app.post('/admin/alts/speak', security, handleSpeak);
     }
 };

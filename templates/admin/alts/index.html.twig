@@ -13,6 +13,7 @@
                 <th>Enabled</th>
                 <th>Guest</th>
                 <th>Channels</th>
+                <th>Speak</th>
             </tr>
             </thead>
             <tbody>
@@ -43,9 +44,31 @@
                     <td>
                         {{ alt.channels }}
                     </td>
+                    <td>
+                        <div class="form-group alt-speak-form" data-alt-id="{{ alt.id }}">
+                            <input type="text" class="form-control alt-speak-text" placeholder="Say something..." style="display: inline-block; width: 250px;">
+                            <select class="form-control alt-speak-channel" style="display: inline-block; width: 100px;">
+                                {% for c in alt.channels_split %}
+                                    <option value="{{ c }}">{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-default alt-speak-submit">Submit</button>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        <div>
+            <h5>Speaking</h5>
+            <p>
+                The alts can be made to speak in a channel using the text input in each row. Simply enter the text
+                you want the alt to say, the channel where it should be said, and click the submit button.
+            </p>
+            <p>
+                The alts can also be made to queue a song using the same text input. Type the command
+                <code>/q [media url]</code> (e.g. <code>/q https://www.youtube.com/watch?v=_eCJOj4NLlg</code>) and click submit.
+            </p>
+        </div>
     </div>
 {% endblock %}
