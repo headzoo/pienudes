@@ -113,10 +113,10 @@ function PlaylistModule(channel) {
     this._counter = 0;
     this._refreshing = false;
 
-    if (this.channel.modules.chat) {
-        this.channel.modules.chat.registerCommand("/clean", this.handleClean.bind(this));
-        this.channel.modules.chat.registerCommand("/cleantitle", this.handleClean.bind(this));
-    }
+    //if (this.channel.modules.chat) {
+    //    this.channel.modules.chat.registerCommand("/clean", this.handleClean.bind(this));
+    //    this.channel.modules.chat.registerCommand("/cleantitle", this.handleClean.bind(this));
+    //}
 }
 
 PlaylistModule.prototype = Object.create(ChannelModule.prototype);
@@ -1166,7 +1166,7 @@ PlaylistModule.prototype.filterMessage = function (msg) {
  * == Internal playlist manipulation ==
  */
 
-PlaylistModule.prototype._delete = function (uid) {
+PlaylistModule.prototype._delete = function (uid, is_clean) {
     var self = this;
     var perms = this.channel.modules.permissions;
 
@@ -1189,7 +1189,7 @@ PlaylistModule.prototype._delete = function (uid) {
             u.socket.emit("setPlaylistMeta", self.meta);
         });
         
-        if (self.current && self.current.queueby && self.current.queueby[0] != "@") {
+        if (!is_clean && self.current && self.current.queueby && self.current.queueby[0] != "@") {
             var media   = self.current.media;
             var queueby = self.current.queueby;
             
@@ -1527,7 +1527,7 @@ PlaylistModule.prototype.clean = function (test) {
     var self = this;
     var matches = self.items.findAll(test);
     matches.forEach(function (m) {
-        self._delete(m.uid);
+        self._delete(m.uid, true);
     });
 };
 
