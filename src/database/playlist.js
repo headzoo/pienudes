@@ -318,6 +318,19 @@ module.exports = {
         );
     },
     
+    fetchLast: function(callback) {
+        callback = callback || noop;
+        
+        db.query(
+            "SELECT * FROM `playlist_history` ORDER BY `id` DESC LIMIT 1",
+            function(err, rows) {
+                if (err) return callback(err);
+                if (!rows) return callback(null, null);
+                callback(null, rows[0]);
+            }
+        );
+    },
+    
     /**
      * Returns the number of rows in the playlist_history table
      */
