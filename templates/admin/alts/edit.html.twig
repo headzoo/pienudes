@@ -1,0 +1,63 @@
+{% extends "admin/layout.html.twig" %}
+{% block content %}
+    <div>
+        {% if errors %}
+            <div class="alert alert-danger" role="alert">{{ errors }}</div>
+        {% endif %}
+        <h1>{{ alt.name }}</h1>
+        <form method="post" action="{{ action }}">
+            <div class="form-group">
+                <label for="form-name">Name</label>
+                <input type="text" class="form-control" name="name" id="form-name" value="{{ alt.name }}">
+                <p class="text-muted">
+                    The alt username. Either a registered username, or guest username.
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="form-password">Password</label>
+                <input type="text" class="form-control" name="password" id="form-name" value="{{ alt.password }}">
+                <p class="text-muted">
+                    Leave blank to have the alt join as a guest, otherwise must be the password for a
+                    registered account.
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="form-name">Channels</label>
+                <input type="text" class="form-control" name="channels" id="form-name" value="{{ alt.channels }}">
+                <p class="text-muted">
+                    Comma separated list of channels the alt should join, eg 'lobby,kpop'.
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="form-responses">Canned Responses</label>
+                <textarea name="responses" class="form-control" id="form-responses" style="height: 150px;">{{ alt.responses }}</textarea>
+                <p class="text-muted">
+                    Random responses said by the alt when mentioned. One response per line.
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="form-playlist">Media URLs</label>
+                <textarea name="playlist" class="form-control" id="form-playlist" style="height: 150px;">{{ alt.playlist }}</textarea>
+                <p class="text-muted">
+                    Songs the alt will randomly add to the playlist queue. One media url per line.
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="form-queue_interval">Queue Interval</label>
+                <input type="text" class="form-control" name="queue_interval" id="form-queue_interval" value="{{ alt.queue_interval }}">
+                <p class="text-muted">
+                    How often the alt adds a song to the playlist in seconds.
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="form-is_enabled">Enabled</label>
+                <select name="is_enabled" class="form-control" id="form-is_enabled">
+                    <option value="0"{% if alt.is_enabled == 0 %} selected{% endif %}>No</option>
+                    <option value="1"{% if alt.is_enabled == 1 %} selected{% endif %}>Yes</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+{% endblock %}

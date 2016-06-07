@@ -215,6 +215,20 @@ const TBL_TAGS_TO_FAVORITES = "" +
     "FOREIGN KEY (`favorite_id`) REFERENCES `favorites`(`id`) ON DELETE CASCADE," +
     "FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON DELETE CASCADE" +
     ") CHARACTER SET utf8";
+    
+const TBL_ALTS = "" +
+    "CREATE TABLE IF NOT EXISTS `alts` (" +
+    "`id` INT NOT NULL AUTO_INCREMENT, " +
+    "`name` VARCHAR(20) NOT NULL, " +
+    "`password` VARCHAR(50) NOT NULL DEFAULT '', " +
+    "`channels` VARCHAR(100) NOT NULL, " +
+    "`responses` TEXT NOT NULL DEFAULT '', " +
+    "`playlist` TEXT NOT NULL DEFAULT '', " +
+    "`queue_interval` INT NOT NULL DEFAULT 0, " +
+    "`is_enabled` TINYINT NOT NULL DEFAULT 0, " +
+    "PRIMARY KEY (`id`), " +
+    "UNIQUE INDEX (`name`) " +
+    ") CHARACTER SET utf8";
 
 module.exports.init = function (queryfn, cb) {
     var tables = {
@@ -238,7 +252,8 @@ module.exports.init = function (queryfn, cb) {
         votes: TBL_VOTES,
         favorites: TBL_FAVORITES,
         tags: TBL_TAGS,
-        tags_to_favorites: TBL_TAGS_TO_FAVORITES
+        tags_to_favorites: TBL_TAGS_TO_FAVORITES,
+        alts: TBL_ALTS
     };
 
     var AsyncQueue = require("../asyncqueue");

@@ -88,7 +88,7 @@ gulp.task('build-player', function() {
     fs.writeFileSync(path.join('www', 'js', 'player.js'), coffee.compile(buffer));
 });
 
-gulp.task('default', ['less', 'scripts', 'babel']);
+gulp.task('default', ['less', 'scripts']);
 
 gulp.task('watch', ['default'], function() {
     var dirs = [
@@ -97,6 +97,5 @@ gulp.task('watch', ['default'], function() {
     ];
     
     gulp.watch(dirs, ['default']);
-    gulp.watch([pack.paths.source.babel], ['babel']);
 });
 

@@ -16,13 +16,14 @@ function User(socket) {
     self.realip = socket._realip;
     self.displayip = socket._displayip;
     self.hostmask = socket._hostmask;
+    self.is_alt = socket._is_alt;
     self.account = Account.default(self.realip);
     self.channel = null;
     self.queueLimiter = util.newRateLimiter();
     self.chatLimiter = util.newRateLimiter();
     self.reqPlaylistLimiter = util.newRateLimiter();
     self.awaytimer = false;
-
+    
     var announcement = Server.getServer().announcement;
     if (announcement != null) {
         self.socket.emit("announcement", announcement);
@@ -87,7 +88,7 @@ function User(socket) {
         if (self.is(Flags.U_LOGGING_IN) || self.is(Flags.U_LOGGED_IN)) {
             return;
         }
-
+        
         if (!pw) {
             self.guestLogin(name);
         } else {
@@ -300,8 +301,8 @@ User.prototype.login = function (name, pw) {
 var lastguestlogin = {};
 User.prototype.guestLogin = function (name) {
     var self = this;
-
-    if (self.realip in lastguestlogin) {
+    
+    if (!self.is_alt && self.realip in lastguestlogin) {
         var diff = (Date.now() - lastguestlogin[self.realip]) / 1000;
         if (diff < Config.get("guest-login-delay")) {
             self.socket.emit("login", {
@@ -356,7 +357,9 @@ User.prototype.guestLogin = function (name) {
         }
 
         // Login succeeded
-        lastguestlogin[self.realip] = Date.now();
+        if (!self.is_alt) {
+            lastguestlogin[self.realip] = Date.now();
+        }
 
         var opts = { name: name };
         if (self.inChannel()) {
@@ -427,6 +430,11 @@ User.prototype.refreshAccount = function (opts, cb) {
                 if (self.account[key] !== old[key]) {
                     account[key] = self.account[key];
                 }
+            }
+            
+            account.is_alt = self.is_alt;
+            if (self.is_alt) {
+                account.aliases = [];
             }
             self.account = account;
             if (account.effectiveRank !== old.effectiveRank) {

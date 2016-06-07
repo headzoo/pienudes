@@ -1,0 +1,51 @@
+{% extends "admin/layout.html.twig" %}
+{% block content %}
+    <div>
+        <h1>Alt Accounts</h1>
+        <div style="margin-bottom: 15px;">
+            <button id="btn-create-alt" class="btn btn-primary">Create</button>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Enabled</th>
+                <th>Guest</th>
+                <th>Channels</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for alt in alts %}
+                <tr>
+                    <td>
+                        <button class="btn btn-default btn-edit-alt" data-id="{{ alt.id }}">
+                            {{ alt.id }}
+                        </button>
+                    </td>
+                    <td>
+                        {{ alt.name }}
+                    </td>
+                    <td>
+                        {% if alt.is_enabled %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if alt.password != "" %}
+                            No
+                        {% else %}
+                            Yes
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ alt.channels }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

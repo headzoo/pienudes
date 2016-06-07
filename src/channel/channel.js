@@ -3,16 +3,21 @@ var ChannelModule = require("./module");
 var Flags = require("../flags");
 var XSS = require("../xss");
 var Account = require("../account");
+var Config = require("../config");
 var util = require("../utilities");
 var fs = require("graceful-fs");
 var path = require("path");
 var sio = require("socket.io");
+var io = require('socket.io-client');
 var db = require("../database");
 var db_users = require('../database/accounts');
+var db_alts  = require('../database/alts');
 import * as ChannelStore from '../channel-storage/channelstore';
 import { ChannelStateSizeError } from '../errors';
 import Promise from 'bluebird';
 import { EventEmitter } from 'events';
+
+var alt_ids = [];
 
 class ReferenceCounter {
     constructor(channel) {
@@ -20,6 +25,7 @@ class ReferenceCounter {
         this.channelName = channel.name;
         this.refCount = 0;
         this.references = {};
+        this.alts = [];
     }
 
     ref(caller) {
@@ -90,6 +96,7 @@ function Channel(name) {
         } else {
             self.initModules();
             self.loadState();
+            self.loadAlts();
         }
     });
 }
@@ -233,6 +240,128 @@ Channel.prototype.loadState = function () {
             errorLoad(message);
         }
     });
+};
+
+Channel.prototype.loadAlts = function() {
+    var self = this;
+    
+    self.waitFlag(Flags.C_READY, function () {
+        db_alts.fetchByChannel(self.name, function (err, alts) {
+            if (!err && alts) {
+                alts.forEach(function(alt) {
+                    if (alt.is_enabled) {
+                        alt_ids.push(alt.id);
+                        self.initAlt(alt);
+                    }
+                });
+            }
+        });
+        
+        // Check for alts recently added to the database.
+        setInterval(function() {
+            db_alts.fetchByChannel(self.name, function (err, fresh_alts) {
+                if (!err && fresh_alts) {
+                    fresh_alts.forEach(function(fresh_alt) {
+                        if (fresh_alt.is_enabled) {
+                            if (alt_ids.indexOf(fresh_alt.id) === -1) {
+                                alt_ids.push(fresh_alt.id);
+                                self.initAlt(fresh_alt);
+                            }
+                        }
+                    });
+                }
+            });
+        }, 10000);
+    });
+};
+
+Channel.prototype.initAlt = function(alt) {
+    var self       = this;
+    var hostname   = Config.get("io.domain") + ":" + Config.get("io.default-port");
+    var socket     = io.connect(hostname);
+    var is_parting = false;
+    var sc_int     = null;
+    var pl_int     = null;
+    
+    socket.on("connect", function() {
+        socket.on("disconnect", function() {
+            if (!is_parting) {
+                setTimeout(function () {
+                    socket = null;
+                    clearInterval(sc_int);
+                    clearInterval(pl_int);
+                    self.initAlt(alt);
+                }, 5000);
+            }
+        });
+        
+        socket.emit("joinChannel", {
+            name: self.name
+        });
+        
+        socket.emit("login", {
+            name: alt.name,
+            pw: alt.password
+        });
+        
+        if (alt.responses) {
+            setTimeout(function() {
+                socket.on("chatMsg", function (data) {
+                    if (data.msg.indexOf(alt.name) !== -1) {
+                        setTimeout(function () {
+                            var responses = alt.responses.split(/\r?\n/);
+                            var response  = responses[Math.floor(Math.random() * responses.length)].trim();
+                            socket.emit("chatMsg", {
+                                msg: response,
+                                meta: {}
+                            });
+                        }, 2000);
+                    }
+                });
+            }, 5000);
+        }
+        
+        if (alt.queue_interval != 0 && alt.playlist) {
+            pl_int = setInterval(function() {
+                var urls  = alt.playlist.split(/\r?\n/);
+                var url   = urls[Math.floor(Math.random() * urls.length)].trim();
+                var media = parseMediaLink(url);
+                var queue = {
+                    id: media.id,
+                    type: media.type,
+                    pos: "end",
+                    duration: 0,
+                    temp: true
+                };
+                socket.emit("queue", queue);
+            }, alt.queue_interval * 1000);
+        }
+    });
+    
+    // Check if the alt settings have been changed.
+    sc_int = setInterval(function() {
+        db_alts.fetchById(alt.id, function(err, fresh_alt) {
+            if (!err && fresh_alt) {
+                if (!fresh_alt.is_enabled) {
+                    clearInterval(sc_int);
+                    clearInterval(pl_int);
+                    is_parting = true;
+                    var index = alt_ids.indexOf(alt.id);
+                    if (index != -1) {
+                        alt_ids.splice(index, 1);
+                    }
+                    socket.disconnect();
+                } else if (JSON.stringify(alt) != JSON.stringify(fresh_alt)) {
+                    clearInterval(sc_int);
+                    clearInterval(pl_int);
+                    alt = fresh_alt;
+                    is_parting = true;
+                    socket.disconnect();
+                    self.initAlt(fresh_alt);
+                }
+            }
+        });
+    }, 10000);
 };
 
 Channel.prototype.saveState = function () {
@@ -707,5 +836,186 @@ Channel.prototype.packInfo = function (isAdmin) {
 
     return data;
 };
+
+function extractQueryParam(query, param) {
+    var params = {};
+    query.split("&").forEach(function (kv) {
+        kv = kv.split("=");
+        params[kv[0]] = kv[1];
+    });
+    
+    return params[param];
+}
+
+function parseMediaLink(url) {
+    if(typeof url != "string") {
+        return {
+            id: null,
+            type: null
+        };
+    }
+    url = url.trim();
+    url = url.replace("feature=player_embedded&", "");
+    
+    if(url.indexOf("jw:") == 0) {
+        return {
+            id: url.substring(3),
+            type: "fi"
+        };
+    }
+    
+    if(url.indexOf("rtmp://") == 0) {
+        return {
+            id: url,
+            type: "rt"
+        };
+    }
+    
+    var m;
+    if((m = url.match(/youtube\.com\/watch\?([^#]+)/))) {
+        return {
+            id: extractQueryParam(m[1], "v"),
+            type: "yt"
+        };
+    }
+    
+    if((m = url.match(/youtu\.be\/([^\?&#]+)/))) {
+        return {
+            id: m[1],
+            type: "yt"
+        };
+    }
+    
+    if((m = url.match(/youtube\.com\/playlist\?([^#]+)/))) {
+        return {
+            id: extractQueryParam(m[1], "list"),
+            type: "yp"
+        };
+    }
+    
+    if((m = url.match(/twitch\.tv\/([^\?&#]+)/))) {
+        return {
+            id: m[1],
+            type: "tw"
+        };
+    }
+    
+    if((m = url.match(/livestream\.com\/([^\?&#]+)/))) {
+        return {
+            id: m[1],
+            type: "li"
+        };
+    }
+    
+    if((m = url.match(/ustream\.tv\/([^\?&#]+)/))) {
+        return {
+            id: m[1],
+            type: "us"
+        };
+    }
+    
+    if ((m = url.match(/hitbox\.tv\/([^\?&#]+)/))) {
+        return {
+            id: m[1],
+            type: "hb"
+        };
+    }
+    
+    if((m = url.match(/vimeo\.com\/([^\?&#]+)/))) {
+        return {
+            id: m[1],
+            type: "vi"
+        };
+    }
+    
+    if((m = url.match(/dailymotion\.com\/video\/([^\?&#_]+)/))) {
+        return {
+            id: m[1],
+            type: "dm"
+        };
+    }
+    
+    if((m = url.match(/imgur\.com\/a\/([^\?&#]+)/))) {
+        return {
+            id: m[1],
+            type: "im"
+        };
+    }
+    
+    if((m = url.match(/soundcloud\.com\/([^\?&#]+)/))) {
+        return {
+            id: url,
+            type: "sc"
+        };
+    }
+    
+    if ((m = url.match(/(?:docs|drive)\.google\.com\/file\/d\/([^\/]*)/)) ||
+        (m = url.match(/drive\.google\.com\/open\?id=([^&]*)/))) {
+        return {
+            id: m[1],
+            type: "gd"
+        };
+    }
+    
+    if ((m = url.match(/plus\.google\.com\/(?:u\/\d+\/)?photos\/(\d+)\/albums\/(\d+)\/(\d+)/))) {
+        return {
+            id: m[1] + "_" + m[2] + "_" + m[3],
+            type: "gp"
+        };
+    }
+    
+    /*  Shorthand URIs  */
+    // To catch Google Plus by ID alone
+    if ((m = url.match(/^(?:gp:)?(\d{21}_\d{19}_\d{19})/))) {
+        return {
+            id: m[1],
+            type: "gp"
+        };
+    }
+    // So we still trim DailyMotion URLs
+    if((m = url.match(/^dm:([^\?&#_]+)/))) {
+        return {
+            id: m[1],
+            type: "dm"
+        };
+    }
+    // Raw files need to keep the query string
+    if ((m = url.match(/^fi:(.*)/))) {
+        return {
+            id: m[1],
+            type: "fi"
+        };
+    }
+    // Generic for the rest.
+    if ((m = url.match(/^([a-z]{2}):([^\?&#]+)/))) {
+        return {
+            id: m[2],
+            type: m[1]
+        };
+    }
+    
+    /* Raw file */
+    var tmp = url.split("?")[0];
+    if (tmp.match(/^https?:\/\//)) {
+        if (tmp.match(/\.(mp4|flv|webm|og[gv]|mp3|mov)$/)) {
+            return {
+                id: url,
+                type: "fi"
+            };
+        } else {
+            Callbacks.queueFail({
+                link: url,
+                msg: "The file you are attempting to queue does not match the supported " +
+                "file extensions mp4, flv, webm, ogg, ogv, mp3, mov."
+            });
+            throw new Error("ERROR_QUEUE_UNSUPPORTED_EXTENSION");
+        }
+    }
+    
+    return {
+        id: null,
+        type: null
+    };
+}
 
 module.exports = Channel;

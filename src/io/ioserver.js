@@ -56,6 +56,9 @@ function handleAuth(socket, accept) {
 
 function throttleIP(sock) {
     var ip = sock._realip;
+    if (sock._is_alt) {
+        return;
+    }
 
     if (!(ip in ipThrottle)) {
         ipThrottle[ip] = $util.newRateLimiter();
@@ -76,6 +79,9 @@ function throttleIP(sock) {
 
 function ipLimitReached(sock) {
     var ip = sock._realip;
+    if (sock._is_alt) {
+        return;
+    }
 
     sock.on("disconnect", function () {
         counters.add("socket.io:disconnect", 1);
@@ -175,7 +181,8 @@ function handleConnection(sock) {
         });
         return;
     }
-
+    sock._is_alt = ip == "127.0.0.1";
+    
     if (net.isIPv6(ip)) {
         ip = util.expandIPv6(ip);
         sock._realip = ip;
