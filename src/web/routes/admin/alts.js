@@ -154,7 +154,7 @@ function handleCreateSave(req, res) {
     
     db_accounts.isUsernameTaken(fresh.name, function(err, is_taken) {
         if (err) return res.send(500);
-        if (is_taken) {
+        if (is_taken && fresh.password == "") {
             return template.send(res, 'admin/alts/edit', {
                 pageTitle: "Creating ALT Account",
                 alt: fresh,
