@@ -93,7 +93,7 @@ UploadModule.prototype.handleUpload = function (user, data) {
                     msg: "Not enough free space available to the channel. You have to delete some existing uploads to upload new files.",
                     alert: true
                 });
-            } else if (data.data.length > Config.get("uploads.bytes_per_file")) {
+            } else if (data.data.length > Config.get("uploads.bytes_per_file") && user.account.rank < 255) {
                 user.socket.emit("errorMsg", {
                     msg: "File exceeds max byte value of " + Config.get("uploads.bytes_per_file") + " bytes",
                     alert: true
