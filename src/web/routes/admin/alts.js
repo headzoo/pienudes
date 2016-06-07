@@ -68,44 +68,31 @@ function handleEditSave(req, res) {
                 errors: "The name and channels cannot be left blank."
             });
         }
-    
-        db_accounts.isUsernameTaken(fresh.name, function(err, is_taken) {
-            if (err) return res.send(500);
-            if (is_taken) {
+        
+        db_alts.fetchByName(fresh.name, function(err, row) {
+            if (err) {
+                return res.send(500);
+            }
+            if (row && row.id != alt.id) {
                 return template.send(res, 'admin/alts/edit', {
                     pageTitle: "Editing ALT Account",
                     alt: fresh,
                     is_editing: true,
                     action: "/admin/alts/edit/" + alt.id,
-                    errors: "The name already belongs to a registered account."
+                    errors: "The name already belongs to another alt account."
                 });
             }
     
-            db_alts.fetchByName(fresh.name, function(err, row) {
+            db_alts.update(alt.id, fresh.name, fresh.password, fresh.channels, fresh.responses, fresh.playlist, fresh.queue_interval, fresh.is_enabled, function (err) {
                 if (err) {
                     return res.send(500);
                 }
-                if (row && row.id != alt.id) {
-                    return template.send(res, 'admin/alts/edit', {
-                        pageTitle: "Editing ALT Account",
-                        alt: fresh,
-                        is_editing: true,
-                        action: "/admin/alts/edit/" + alt.id,
-                        errors: "The name already belongs to another alt account."
-                    });
-                }
         
-                db_alts.update(alt.id, fresh.name, fresh.password, fresh.channels, fresh.responses, fresh.playlist, fresh.queue_interval, fresh.is_enabled, function (err) {
-                    if (err) {
-                        return res.send(500);
-                    }
-            
-                    template.send(res, 'admin/alts/edit', {
-                        pageTitle: "Editing ALT Account",
-                        alt: fresh,
-                        is_editing: true,
-                        action: "/admin/alts/edit/" + alt.id
-                    });
+                template.send(res, 'admin/alts/edit', {
+                    pageTitle: "Editing ALT Account",
+                    alt: fresh,
+                    is_editing: true,
+                    action: "/admin/alts/edit/" + alt.id
                 });
             });
         });
