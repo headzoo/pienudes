@@ -275,10 +275,13 @@ $("#chatline").keydown(function(ev) {
                 msg = msg.substring(3);
             }
             meta.color = CHAT_LINE_COLOR;
-            socket.emit("chatMsg", {
+            var payload = ChatAPI._send({
                 msg: msg,
                 meta: meta
             });
+            if (typeof payload == "object") {
+                socket.emit("chatMsg", payload);
+            }
 
             CHATHIST.push($("#chatline").val());
             CHATHISTIDX = CHATHIST.length;
@@ -397,15 +400,6 @@ $('#favorites-tags').tagsinput({
 
 $("#favorites-add").on("click", function() {
     socket.emit("favoritesAdd", $("#favorites-tags").tagsinput("items"));
-});
-
-$("#showfavorites").on("click", function() {
-    var faves = $("#favorites");
-    if (!faves.data("showFavorites")) {
-        socket.emit("favoritesGet");
-        socket.emit("userTagsGet");
-        faves.data("showFavorites", true);
-    }
 });
 
 /* video controls */

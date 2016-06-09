@@ -80,8 +80,12 @@ function getOpt(k) {
 }
 
 function setOpt(k, v) {
-    v = JSON.stringify(v);
-    NO_STORAGE ? createCookie(k, v, 1000) : localStorage.setItem(k, v);
+    if (k === "scripting") {
+        socket.emit("setUserScripting", v);
+    } else {
+        v = JSON.stringify(v);
+        NO_STORAGE ? createCookie(k, v, 1000) : localStorage.setItem(k, v);
+    }
 }
 
 function getOrDefault(k, def) {
@@ -126,7 +130,8 @@ var USEROPTS = {
     secure_connection    : getOrDefault("secure_connection", false),
     show_shadowchat      : getOrDefault("show_shadowchat", false),
     emotelist_sort       : getOrDefault("emotelist_sort", true),
-    no_emotes            : getOrDefault("no_emotes", false)
+    no_emotes            : getOrDefault("no_emotes", false),
+    scripting            : ""
 };
 
 /* Backwards compatibility check */

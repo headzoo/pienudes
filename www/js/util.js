@@ -643,11 +643,8 @@ function showUserOptions() {
     }
     
     if (!CLIENT.logged_in) {
-        $("#us-user-emotes-tab").hide();
-        $("#us-user-emotes").hide();
-    } else {
-        $("#us-user-emotes-tab").show();
-        $("#us-user-emotes").show();
+        $("#us-user-emotes-tab").remove();
+        $("#us-user-emotes").remove();
     }
     
     $("#us-no-channelcss").prop("checked", USEROPTS.ignore_channelcss);
@@ -707,7 +704,8 @@ function saveUserOptions() {
     USEROPTS.boop                 = $("#us-ping-sound").val();
     USEROPTS.chatbtn              = $("#us-sendbtn").prop("checked");
     USEROPTS.no_emotes            = $("#us-no-emotes").prop("checked");
-
+    USEROPTS.scripting            = $("#us-scripting-text").val();
+    
     if (CLIENT.rank >= 2) {
         USEROPTS.modhat      = $("#us-modflair").prop("checked");
         USEROPTS.joinmessage = $("#us-joinmessage").prop("checked");
@@ -1022,6 +1020,9 @@ function handlePermissionChange() {
     }
 
     fixWeirdButtonAlignmentIssue();
+    
+    setVisible("#us-scripting-tab", hasPermission("scripting"));
+    setVisible("#us-scripting", hasPermission("scripting"));
 
     setVisible("#newpollbtn", hasPermission("pollctl"));
     $("#voteskip").attr("disabled", !hasPermission("voteskip") ||
@@ -2041,6 +2042,7 @@ function genPermissionsEditor() {
     makeOption("Drink calls", "drink", modleader, CHANNEL.perms.drink+"");
     makeOption("Chat", "chat", noanon, CHANNEL.perms.chat+"");
     makeOption("Clear Chat", "chatclear", modleader, CHANNEL.perms.chatclear+"");
+    makeOption("User Scripting", "scripting", standard, CHANNEL.perms.scripting+"");
 
     var sgroup = $("<div/>").addClass("form-group").appendTo(form);
     var sgroupinner = $("<div/>").addClass("col-sm-8 col-sm-offset-4").appendTo(sgroup);

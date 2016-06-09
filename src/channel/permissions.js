@@ -44,7 +44,8 @@ const DEFAULT_PERMISSIONS = {
     drink: 1.5,               // Use the /d command
     chat: 0,                  // Send chat messages
     chatclear: 2,             // Use the /clear command
-    exceedmaxitems: 2         // Exceed maximum items per user limit
+    exceedmaxitems: 2,        // Exceed maximum items per user limit
+    scripting: 1
 };
 
 function PermissionsModule(channel) {
@@ -364,6 +365,10 @@ PermissionsModule.prototype.canUncache = function (actor) {
 
 PermissionsModule.prototype.canExceedMaxItemsPerUser = function (actor) {
     return this.hasPermission(actor, "exceedmaxitems");
+};
+
+PermissionsModule.prototype.canUserScripting = function (actor) {
+    return this.hasPermission(actor, "scripting");
 };
 
 PermissionsModule.prototype.loadUnregistered = function () {

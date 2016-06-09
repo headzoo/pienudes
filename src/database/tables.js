@@ -13,6 +13,16 @@ const TBL_USERS = "" +
         "UNIQUE(`name`)) " +
     "CHARACTER SET utf8";
 
+const TBL_USER_SCRIPTS = "" +
+    "CREATE TABLE IF NOT EXISTS `user_scripts` (" +
+    "`id` INT NOT NULL AUTO_INCREMENT," +
+    "`user_id` INT NOT NULL," +
+    "`script` TEXT NOT NULL DEFAULT ''," +
+    "PRIMARY KEY (`id`)," +
+    "UNIQUE INDEX (`user_id`)," +
+    "FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE" +
+    ") CHARACTER SET utf8";
+
 const TBL_CHANNELS = "" +
     "CREATE TABLE IF NOT EXISTS `channels` (" +
         "`id` INT NOT NULL AUTO_INCREMENT," +
@@ -233,6 +243,7 @@ const TBL_ALTS = "" +
 module.exports.init = function (queryfn, cb) {
     var tables = {
         users: TBL_USERS,
+        user_scripts: TBL_USER_SCRIPTS,
         channels: TBL_CHANNELS,
         channel_libraries: TBL_LIBRARIES,
         channel_ranks: TBL_RANKS,

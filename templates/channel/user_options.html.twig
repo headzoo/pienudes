@@ -45,7 +45,7 @@
                     <li><a href="#us-chat" data-toggle="tab">Chat</a></li>
                     <li><a href="#us-playback" data-toggle="tab">Playback</a></li>
                     <li id="us-user-emotes-tab"><a href="#us-user-emotes" data-toggle="tab">Emotes</a></li>
-                    <li><a href="#us-scriptcontrol" data-toggle="tab">Script Access</a></li>
+                    <li id="us-scripting-tab"><a href="#us-scripting" data-toggle="tab">Scripting</a></li>
                     <li><a href="#us-mod" data-toggle="tab" style="">Moderator</a></li>
                 </ul>
             </div>
@@ -90,6 +90,40 @@
                                         <option value="never">Never</option>
                                         <option value="onlyping">Only when I am mentioned or PMed</option>
                                         <option value="always">Always</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Playback preferences -->
+                    <div id="us-playback" class="tab-pane">
+                        <h4>Playback Preferences</h4>
+                        <form class="form-horizontal" action="javascript:void(0)">
+                            {{ rcheckbox("us-synch", "Synchronize video playback") }}
+                            {{ textbox("us-synch-accuracy", "Synch threshold (seconds)", "2") }}
+                            {{ rcheckbox("us-wmode-transparent", "Set wmode=transparent") }}
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-8">
+                                <p class="text-info">
+                                    Setting <code>wmode=transparent</code> allows objects to be displayed above the
+                                    video player, but may cause performance issues on some systems.
+                                </p>
+                            </div>
+                            {{ rcheckbox("us-hidevideo", "Remove the video player") }}
+                            {{ rcheckbox("us-playlistbuttons", "Hide playlist buttons by default") }}
+                            {{ rcheckbox("us-oldbtns", "Old style playlist buttons") }}
+                            <div class="form-group">
+                                <label class="control-label col-sm-4" for="us-default-quality">Quality Preference</label>
+                                <div class="col-sm-8">
+                                    <select id="us-default-quality" class="form-control">
+                                        <option value="auto">Auto</option>
+                                        <option value="240">240p</option>
+                                        <option value="360">360p</option>
+                                        <option value="480">480p</option>
+                                        <option value="720">720p</option>
+                                        <option value="1080">1080p</option>
+                                        <option value="best"> Highest Available</option>
                                     </select>
                                 </div>
                             </div>
@@ -145,53 +179,10 @@
                         </table>
                     </div>
 
-                    <!-- Script access -->
-                    <div id="us-scriptcontrol" class="tab-pane">
-                        <h4>Script Access</h4>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Channel</th>
-                                    <th>Type</th>
-                                    <th>Preference</th>
-                                    <th>Clear</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-
-                    <!-- Playback preferences -->
-                    <div id="us-playback" class="tab-pane">
-                        <h4>Playback Preferences</h4>
-                        <form class="form-horizontal" action="javascript:void(0)">
-                            {{ rcheckbox("us-synch", "Synchronize video playback") }}
-                            {{ textbox("us-synch-accuracy", "Synch threshold (seconds)", "2") }}
-                            {{ rcheckbox("us-wmode-transparent", "Set wmode=transparent") }}
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-8">
-                                <p class="text-info">
-                                    Setting <code>wmode=transparent</code> allows objects to be displayed above the
-                                    video player, but may cause performance issues on some systems.
-                                </p>
-                            </div>
-                            {{ rcheckbox("us-hidevideo", "Remove the video player") }}
-                            {{ rcheckbox("us-playlistbuttons", "Hide playlist buttons by default") }}
-                            {{ rcheckbox("us-oldbtns", "Old style playlist buttons") }}
-                            <div class="form-group">
-                                <label class="control-label col-sm-4" for="us-default-quality">Quality Preference</label>
-                                <div class="col-sm-8">
-                                    <select id="us-default-quality" class="form-control">
-                                        <option value="auto">Auto</option>
-                                        <option value="240">240p</option>
-                                        <option value="360">360p</option>
-                                        <option value="480">480p</option>
-                                        <option value="720">720p</option>
-                                        <option value="1080">1080p</option>
-                                        <option value="best"> Highest Available</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
+                    <!-- Scripting -->
+                    <div id="us-scripting" class="tab-pane">
+                        <h4>Scripting</h4>
+                        <textarea id="us-scripting-text" class="form-control" rows="10"></textarea>
                     </div>
 
                     <!-- Moderator preferences -->

@@ -20,7 +20,7 @@ Callbacks = {
                 name: CLIENT.name
             });
         }
-
+        
         //$("<div/>").addClass("server-msg-reconnect")
         //    .text("Connected")
         //    .appendTo($("#messagebuffer"));
@@ -337,6 +337,35 @@ Callbacks = {
             });
         }
     },
+    
+    setUserScripting: function(script) {
+        USEROPTS.scripting = script;
+        $("#us-scripting-text").val(script);
+        $("#user-script").remove();
+        
+        if (script.length != 0) {
+            var imports  = [];
+            var pattern  = /\/\*\*\s+import:\s+(https?:\/\/(.*?)\.js) \*\*\//g;
+            while (match = pattern.exec(script)) {
+                imports.push(match[1]);
+            }
+    
+            script = "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket);";
+            if (imports) {
+                ChatAPI._getScripts(imports, function() {
+                    $("<script/>").attr("type", "text/javascript")
+                        .attr("id", "user-script")
+                        .text(script)
+                        .appendTo($("body"));
+                });
+            } else {
+                $("<script/>").attr("type", "text/javascript")
+                    .attr("id", "user-script")
+                    .text(script)
+                    .appendTo($("body"));
+            }
+        }
+    },
 
     banlist: function(entries) {
         var tbl = $("#cs-banlist table");
@@ -508,7 +537,10 @@ Callbacks = {
     },
 
     chatMsg: function(data) {
-        addChatMessage(data);
+        data = ChatAPI._receive(data);
+        if (typeof data == "object") {
+            addChatMessage(data);
+        }
     },
 
     pm: function (data) {
@@ -554,6 +586,11 @@ Callbacks = {
     },
     
     notice: function(data) {
+        data = ChatAPI._notice(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         addNotice(data);
     },
 
@@ -575,6 +612,11 @@ Callbacks = {
     },
 
     addUser: function(data) {
+        data = ChatAPI._userJoin(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         var user = findUserlistItem(data.name);
         // Remove previous instance of user, if there was one
         if(user !== null)
@@ -719,6 +761,11 @@ Callbacks = {
     },
 
     userLeave: function(data) {
+        data = ChatAPI._userLeave(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         var user = findUserlistItem(data.name);
         if(user !== null)
             user.remove();
@@ -740,6 +787,14 @@ Callbacks = {
 
     /* REGION Playlist Stuff */
     playlist: function(data) {
+        socket.emit("favoritesGet");
+        socket.emit("userTagsGet");
+        
+        data = ChatAPI._playlist(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         PL_QUEUED_ACTIONS = [];
         // Clear the playlist first
         var q = $("#queue");
@@ -765,6 +820,11 @@ Callbacks = {
     },
 
     queue: function(data) {
+        data = ChatAPI._queue(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         PL_ACTION_QUEUE.queue(function (plq) {
             var li = makeQueueEntry(data.item, true);
             if (data.item.uid === PL_CURRENT)
@@ -872,6 +932,11 @@ Callbacks = {
         }
         socket.emit("userTags");
         
+        data = ChatAPI._mediaChange(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         // Failsafe
         if (isNaN(VOLUME) || VOLUME > 1 || VOLUME < 0) {
             VOLUME = 1;
@@ -925,7 +990,10 @@ Callbacks = {
         }
 
         if (PLAYER) {
-            handleMediaUpdate(data);
+            data = ChatAPI._mediaUpdate(data);
+            if (typeof data == "object") {
+                handleMediaUpdate(data);
+            }
         }
     },
 
@@ -989,6 +1057,11 @@ Callbacks = {
     },
     
     changeVotes: function(data) {
+        data = ChatAPI._votes(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         $("#voteupvalue").text(data.up);
         $("#votedownvalue").text(data.down);
     },
@@ -1005,6 +1078,11 @@ Callbacks = {
     },
     
     favoriteAdded: function(data) {
+        data = ChatAPI._favoriteAdd(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         formatFavorites([data.media], true);
         formatTags(data.tags);
         
@@ -1016,6 +1094,11 @@ Callbacks = {
     },
     
     favoritesGet: function(favorites) {
+        favorites = ChatAPI._favorites(favorites);
+        if (typeof favorites != "object") {
+            return;
+        }
+        
         var list = $("#favorites-thumbs");
         list.empty();
         formatFavorites(favorites);
@@ -1040,6 +1123,11 @@ Callbacks = {
     },
     
     userTagsGet: function(tags) {
+        tags = ChatAPI._tags(tags);
+        if (typeof tags != "object") {
+            return;
+        }
+        
         var list = $("#favorites-tag-list");
         list.empty();
         formatTags(tags);
@@ -1200,6 +1288,11 @@ Callbacks = {
     },
     
     userEmoteList: function(data) {
+        data = ChatAPI._emotes(data);
+        if (typeof data != "object") {
+            return;
+        }
+        
         var tbl = $("#us-user-emotes table");
         tbl.data("entries", data);
         formatUserEmotesList(tbl);
