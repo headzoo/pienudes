@@ -349,9 +349,9 @@ Callbacks = {
             while (match = pattern.exec(script)) {
                 imports.push(match[1]);
             }
-    
+            
             script = "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket);";
-            if (imports) {
+            if (imports.length > 0) {
                 ChatAPI._getScripts(imports, function() {
                     $("<script/>").attr("type", "text/javascript")
                         .attr("id", "user-script")
