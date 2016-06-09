@@ -1078,7 +1078,7 @@ Callbacks = {
     },
     
     favoritesGet: function(favorites) {
-        if (!ChatAPI.trigger("favorites", favorites).isCancelled()) {
+        if (ChatAPI.trigger("favorites", favorites).isCancelled()) {
             return;
         }
         var list = $("#favorites-thumbs");
