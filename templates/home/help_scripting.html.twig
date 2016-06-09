@@ -1,0 +1,304 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <style type="text/css">
+        #help-page a {
+            text-decoration: underline;
+        }
+        #help-page ul > li > ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0 8px;
+        }
+        #help-page h3, #help-page h4 {
+            color: #DD9A2F;
+            margin: 22px 0;
+        }
+    </style>
+    <div id="help-page" class="col-lg-10 col-md-10">
+        <h1>Scripting</h1>
+        <p>
+            The site supports user scripting, which allows you to inject your own Javascript into <i>your</i>
+            browser when you are inside of a channel. In addition, a light-weight API is provided so that
+            you may build "bots" with user scripts.
+        </p>
+        
+        <div class="alert alert-warning" role="alert">
+            Use at your own risk! Improperly written scripts may render your page unresponsive.
+        </div>
+        
+        <h3>Table of Contents</h3>
+        <ul class="list-style-type-none">
+            <li><a href="#topic-overview">Overview</a></li>
+            <li>
+                <a href="#topic-api">API</a>
+                <ul>
+                    <li><a href="#topic-api-events">Events</a></li>
+                    <li><a href="#topic-api-methods">Methods</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3 id="topic-overview">Overview</h3>
+        <div>
+            <p>
+                User scripts are created from the Options -> Scripting dialog. Simply type (or paste) your
+                script into the text area, and click the Save button. Your script is immediately executed,
+                and will be executed any time you enter a channel.
+            </p>
+            <p>
+                <img src="/img/help/scripting/nav_options.png" style="margin-bottom: 10px;width:100%" />
+                <img src="/img/help/scripting/user_options.png" style="width:100%" />
+            </p>
+            <div class="alert alert-info" role="alert">
+                User scripts are automatically wrapped by an anonymous function, which prevents your variables from
+                leaking into the global scope.
+            </div>
+            <p>
+                Four variables are made available to your user script: <code>$api</code>, <code>$user</code>,
+                <code>$channel</code>, and <code>$socket</code>. Other global variables may be available to
+                your script, but only those four are guaranteed to exist.
+            </p>
+            <ul style="margin:0;padding:0;list-style-type:none;">
+                <li>
+                    <code>$api</code>
+                    Provides an interface to the chat software. The API is covered
+                    <a href="#topic-api">further along in this documentation</a>.
+                </li>
+                <li>
+                    <code>$socket</code>
+                    Raw socket used to commentate with the server. Only required for advanced scripting, and not covered
+                    in this documentation. See the <a href="http://socket.io/" target="_blank">socket.io documentation</a>
+                    for more information on emitting events to the server, and receiving events.
+                </li>
+                <li>
+                    <code>$channel</code>
+                    An object containing information about the channel you are in. The object contains several properties.
+                    <pre style="margin-top: 12px;">
+                        <code class="language-javascript">
+                        {
+                            bio: String,            // The channel bio/information.
+                            css: String,            // The channel CSS.
+                            js: String,             // The channel Javascript.
+                            emotes: Array,          // An array of channel emotes.
+                            motd: String,           // The channel message of the day.
+                            name: String,           // The name of the channel.
+                            usercount: Number       // The number of users in the channel.
+                        }
+                        </code>
+                    </pre>
+                    <div class="alert alert-info" role="alert">
+                        The object may contain other properties, but only those listed above are guaranteed to exist.
+                    </div>
+                </li>
+                <li>
+                    <code>$user</code>
+                    An object containing information about you. The object contains several properties.
+                    <pre style="margin-top: 12px;">
+                        <code class="language-javascript">
+                        {
+                            emotes: Array,          // An array of your personal emotes.
+                            name: String,           // Your username.
+                            profile: Object,        // Your profile information.
+                            rank: Number            // Your channel rank.
+                        }
+                        </code>
+                    </pre>
+                    <div class="alert alert-info" role="alert">
+                        The object may contain other properties, but only those listed above are guaranteed to exist.
+                    </div>
+                </li>
+            </ul>
+            <p>
+                Try the following user script. Type (or paste) this code into the user script text area and click save.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                alert("Your username is " + $user.name + " and you are in the channel " + $channel.name);
+                </code>
+            </pre>
+        </div>
+
+        <h3 id="topic-api">API</h3>
+        <div>
+            <div class="alert alert-info" role="alert">
+                All examples in this documentation needs to be typed (or pasted) into the scripting text area,
+                which is covered in the <a href="#topic-overview">overview</a>. User scripts are executed the moment
+                they are saved, and each time you enter a channel.
+            </div>
+            
+            <h4 id="topic-api-events">Events</h4>
+            <p>
+                The <code>$api</code> object contains a number of methods which can be used to interact with
+                the channel and other users. Such as sending messages and queuing videos. Interacting with the
+                channel is mostly done through the use of callbacks. The following code demonstrates the use
+                of callbacks to CAPITALIZE every message you send.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // Registers a callback which filters every message you send _before_ it gets sent
+                    // to the server, and subsequently broadcast to each user in the channel.
+                    $api.on("send", function(e, data) {
+                        // Every message you send will be automatically capitalized.
+                        data.msg = data.msg.toUpperCase();
+                    });
+                </code>
+            </pre>
+            <p>
+                Upon sending a message your registered callbacks are called. Two values are passed to the callback
+                function: an event object, and a message object. The message object typically contains the following
+                properties.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                {
+                    msg: String, // The message you are sending
+                    meta: Object // Additional meta information, such as text color
+                }
+                </code>
+            </pre>
+            <p>
+                The message object (with your changes) are sent to the server. Other users in the channel will
+                receive the same object, which includes the changes you made. The following user script
+                capitalizes every message you <i>receive</i>.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // Registers a callback which filters every message you received from the server.
+                    $api.on("receive", function(e, data) {
+                        // Every message you receive will be automatically capitalized.
+                        data.msg = data.msg.toUpperCase();
+                    });
+                </code>
+            </pre>
+            <p>
+                Every message displayed in the chat buffer will be capitalized.
+                <img src="/img/help/scripting/receive_caps.png" style="margin-top: 16px;" />
+            </p>
+            <p>
+                Each time a registered callback is invoked, it receives an event object as the first
+                parameter. The event contains two methods which may be useful: <code>Event.stop()</code>,
+                and <code>Event.cancel()</code>.
+            </p>
+            <p>
+                Calling <code>Event.stop()</code> inside your callback will stop any other callbacks from
+                processing the event. For example if you have three callbacks registered with the "receive"
+                event, and the first callback calls <code>Event.stop()</code>, the other two registered callbacks
+                will not be invoked.
+            </p>
+            <p>
+                Calling <code>Event.cancel()</code> inside your callback stops the channel from processing
+                the message. For instance, the following code will prevent ALL messages from appearing in the
+                chat buffer.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.on("receive", function(e, data) {
+                        // This causes the channel to completely discard the message, and it won't
+                        // be shown in your chat buffer.
+                        e.cancel();
+                    });
+                </code>
+            </pre>
+            <p>
+                The following is a list of events for which callbacks may be registered.
+            </p>
+            <ul>
+                <li>
+                    <code>receive</code>
+                    Triggered when a chat message is received from the server.
+                </li>
+                <li>
+                    <code>send</code>
+                    Triggered before sending your messages to the server.
+                </li>
+                <li>
+                    <code>notice</code>
+                    Triggered when a notice is received from the server.
+                </li>
+                <li>
+                    <code>user_join</code>
+                    Triggered when a user joins the channel.
+                </li>
+                <li>
+                    <code>user_leave</code>
+                    Triggered when a user leaves the channel.
+                </li>
+                <li>
+                    <code>playlist</code>
+                    Triggered when the channel receives the list of videos in the playlist.
+                </li>
+                <li>
+                    <code>queue</code>
+                    Triggered before a video gets added to the playlist.
+                </li>
+                <li>
+                    <code>media_change</code>
+                    Triggered before the next song in the playlist begins to play.
+                </li>
+                <li>
+                    <code>media_update</code>
+                    Triggered when the time information for the currently playing video updates.
+                </li>
+                <li>
+                    <code>favorites</code>
+                    Triggered when you receive your list of favorited videos.
+                </li>
+                <li>
+                    <code>favorite_add</code>
+                    Triggered when you have favorited a video.
+                </li>
+                <li>
+                    <code>tags</code>
+                    Triggered when you receive your list of tags.
+                </li>
+                <li>
+                    <code>votes</code>
+                    Triggered when the votes for the currently playing video have changed.
+                </li>
+                <li>
+                    <code>emotes</code>
+                    Triggered when you receive your list of personal emotes, and after updating
+                    your list of emotes.
+                </li>
+            </ul>
+            <div class="alert alert-info" role="alert">
+                Most events are triggered <i>before</i> the channel uses the data, which means the callbacks
+                can be used to modify the data. For instance like the examples where we capitalized each message
+                before they are sent to the server, or displayed in the chat buffer.
+            </div>
+
+            <h4 id="topic-api-methods">Methods</h4>
+            <p>
+                The API contains a few methods for interacting with the channel. For instance to send messages,
+                queue songs, and vote skip videos.
+            </p>
+            <p>
+                The following example uses the <code>$api.send()</code> method to send a message to
+                everyone in the channel.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // Will send the message "Hey everyone, headzoo has arrived!" or whatever
+                    // your username is.
+                    $api.send("Hey everyone, " + $user.name + " has arrived!");
+                </code>
+            </pre>
+            <p>
+                This example uses the <code>$api.queue()</code> method to add a video to the end of the playlist.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.queue("https://www.youtube.com/watch?v=Tv9YoYCKNoE");
+                </code>
+            </pre>
+            <p>
+                This example uses the <code>$api.voteSkip()</code> method to vote skip the currently playing video.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.voteSkip();
+                </code>
+            </pre>
+        </div>
+    </div>
+{% endblock %}

@@ -275,11 +275,11 @@ $("#chatline").keydown(function(ev) {
                 msg = msg.substring(3);
             }
             meta.color = CHAT_LINE_COLOR;
-            var payload = ChatAPI._send({
+            var payload = {
                 msg: msg,
                 meta: meta
-            });
-            if (typeof payload == "object") {
+            };
+            if (!ChatAPI.trigger("send", payload).isCancelled()) {
                 socket.emit("chatMsg", payload);
             }
 
@@ -287,7 +287,6 @@ $("#chatline").keydown(function(ev) {
             CHATHISTIDX = CHATHIST.length;
             $("#chatline").val("");
         }
-        return;
     }
     else if(ev.keyCode == 9) { // Tab completion
         chatTabComplete();

@@ -350,6 +350,7 @@ Callbacks = {
                 imports.push(match[1]);
             }
             
+            ChatAPI._reset();
             script = "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket);";
             if (imports.length > 0) {
                 ChatAPI._getScripts(imports, function() {
@@ -537,8 +538,7 @@ Callbacks = {
     },
 
     chatMsg: function(data) {
-        data = ChatAPI._receive(data);
-        if (typeof data == "object") {
+        if (!ChatAPI.trigger("receive", data).isCancelled()) {
             addChatMessage(data);
         }
     },
@@ -586,12 +586,9 @@ Callbacks = {
     },
     
     notice: function(data) {
-        data = ChatAPI._notice(data);
-        if (typeof data != "object") {
-            return;
+        if (!ChatAPI.trigger("notice", data).isCancelled()) {
+            addNotice(data);
         }
-        
-        addNotice(data);
     },
 
     joinMessage: function(data) {
@@ -612,8 +609,7 @@ Callbacks = {
     },
 
     addUser: function(data) {
-        data = ChatAPI._userJoin(data);
-        if (typeof data != "object") {
+        if (ChatAPI.trigger("user_join", data).isCancelled()) {
             return;
         }
         
@@ -761,11 +757,9 @@ Callbacks = {
     },
 
     userLeave: function(data) {
-        data = ChatAPI._userLeave(data);
-        if (typeof data != "object") {
+        if (ChatAPI.trigger("user_leave", data).isCancelled()) {
             return;
         }
-        
         var user = findUserlistItem(data.name);
         if(user !== null)
             user.remove();
@@ -790,8 +784,7 @@ Callbacks = {
         socket.emit("favoritesGet");
         socket.emit("userTagsGet");
         
-        data = ChatAPI._playlist(data);
-        if (typeof data != "object") {
+        if (ChatAPI.trigger("playlist", data).isCancelled()) {
             return;
         }
         
@@ -820,8 +813,7 @@ Callbacks = {
     },
 
     queue: function(data) {
-        data = ChatAPI._queue(data);
-        if (typeof data != "object") {
+        if (ChatAPI.trigger("queue", data).isCancelled()) {
             return;
         }
         
@@ -931,9 +923,7 @@ Callbacks = {
             return;
         }
         socket.emit("userTags");
-        
-        data = ChatAPI._mediaChange(data);
-        if (typeof data != "object") {
+        if (ChatAPI.trigger("media_change", data).isCancelled()) {
             return;
         }
         
@@ -990,8 +980,7 @@ Callbacks = {
         }
 
         if (PLAYER) {
-            data = ChatAPI._mediaUpdate(data);
-            if (typeof data == "object") {
+            if (!ChatAPI.trigger("media_update", data).isCancelled()) {
                 handleMediaUpdate(data);
             }
         }
@@ -1057,13 +1046,10 @@ Callbacks = {
     },
     
     changeVotes: function(data) {
-        data = ChatAPI._votes(data);
-        if (typeof data != "object") {
-            return;
+        if (!ChatAPI.trigger("votes", data).isCancelled()) {
+            $("#voteupvalue").text(data.up);
+            $("#votedownvalue").text(data.down);
         }
-        
-        $("#voteupvalue").text(data.up);
-        $("#votedownvalue").text(data.down);
     },
     
     changeUserVideoVote: function(data) {
@@ -1078,11 +1064,9 @@ Callbacks = {
     },
     
     favoriteAdded: function(data) {
-        data = ChatAPI._favoriteAdd(data);
-        if (typeof data != "object") {
+        if (ChatAPI.trigger("favorite_add", data).isCancelled()) {
             return;
         }
-        
         formatFavorites([data.media], true);
         formatTags(data.tags);
         
@@ -1094,11 +1078,9 @@ Callbacks = {
     },
     
     favoritesGet: function(favorites) {
-        favorites = ChatAPI._favorites(favorites);
-        if (typeof favorites != "object") {
+        if (!ChatAPI.trigger("favorites", favorites).isCancelled()) {
             return;
         }
-        
         var list = $("#favorites-thumbs");
         list.empty();
         formatFavorites(favorites);
@@ -1123,11 +1105,9 @@ Callbacks = {
     },
     
     userTagsGet: function(tags) {
-        tags = ChatAPI._tags(tags);
-        if (typeof tags != "object") {
+        if (ChatAPI.trigger("tags", tags).isCancelled()) {
             return;
         }
-        
         var list = $("#favorites-tag-list");
         list.empty();
         formatTags(tags);
@@ -1288,11 +1268,10 @@ Callbacks = {
     },
     
     userEmoteList: function(data) {
-        data = ChatAPI._emotes(data);
-        if (typeof data != "object") {
+        if (ChatAPI.trigger("emotes", data).isCancelled()) {
             return;
         }
-        
+
         var tbl = $("#us-user-emotes table");
         tbl.data("entries", data);
         formatUserEmotesList(tbl);

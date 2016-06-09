@@ -26,6 +26,14 @@ function handleHelp(req, res) {
     });
 }
 
+function handleHelpScripting(req, res) {
+    template.send(res, 'home/help_scripting', {
+        pageTitle: "Scripting",
+        pageStylesheets: ["/css/prism.css"],
+        pageScripts: ["/js/prism.js"]
+    });
+}
+
 function handleAbout(req, res) {
     template.send(res, 'home/about', {
         pageTitle: "About Us"
@@ -131,6 +139,7 @@ module.exports = {
         app.get('/terms', handleUserAgreement);
         app.get('/privacy', handlePrivacyPolicy);
         app.get('/help', handleHelp);
+        app.get('/help/scripting', handleHelpScripting);
         app.get('/about', handleAbout);
         app.get('/tags', handleTags);
         app.get('/', (req, res) => {
