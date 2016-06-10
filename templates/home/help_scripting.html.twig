@@ -36,6 +36,12 @@
                     <li><a href="#topic-api-methods">Methods</a></li>
                 </ul>
             </li>
+            <li>
+                <a href="#topic-examples">Examples</a>
+                <ul>
+                    <li><a href="#topic-api-examples-favorites">Queuing Favorites</a></li>
+                </ul>
+            </li>
         </ul>
 
         <h3 id="topic-overview">Overview</h3>
@@ -297,6 +303,31 @@
             <pre>
                 <code class="language-javascript line-numbers">
                     $api.voteSkip();
+                </code>
+            </pre>
+        </div>
+        
+        <h3 id="topic-examples">Examples</h3>
+        <div>
+            <h4 id="topic-api-examples-favorites">Queuing Favorites</h4>
+            This tiny user script adds one of your favorited videos to the playlist every 30
+            minutes.
+            
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // The "favorites" event is called when you enter chat. Save the favorites to a local variable.
+                    var favorites = [];
+                    $api.on("favorites", function(e, data) {
+                        favorites = data;
+                    });
+
+                    // Every 30 minutes, grab one of the favorites at random, and add it to the playlist.
+                    setInterval(function() {
+                        var item = favorites[Math.floor(Math.random() * favorites.length)];
+                        if (item) {
+                            $api.queue(item);
+                        }
+                    }, 1800000); // 30 minutes in milliseconds
                 </code>
             </pre>
         </div>
