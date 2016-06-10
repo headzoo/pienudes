@@ -1498,6 +1498,7 @@ function formatChatMessage(data, last, permalink) {
     if (USEROPTS.show_colors) {
         message.css("color", data.meta.color);
         data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
+        data.msg = data.msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');
     } else {
         data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
     }
