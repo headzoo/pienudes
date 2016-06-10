@@ -749,6 +749,10 @@ Callbacks = {
     },
 
     setAFK: function (data) {
+        if (ChatAPI.trigger("afk", data).isCancelled()) {
+            return;
+        }
+        
         var user = findUserlistItem(data.name);
         if(user === null)
             return;

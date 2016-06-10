@@ -126,7 +126,8 @@ var ChatAPI = null;
                 favorite_add: [],
                 tags: [],
                 votes: [],
-                emotes: []
+                emotes: [],
+                afk: []
             };
         }
     };
