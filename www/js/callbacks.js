@@ -365,6 +365,8 @@ Callbacks = {
                     .text(script)
                     .appendTo($("body"));
             }
+        } else {
+            ChatAPI._reset();
         }
     },
 
