@@ -63,8 +63,18 @@ var ChatAPI = null;
         },
         
         queue: function(url) {
-            $("#mediaurl").val(url);
-            queue("end", "src");
+            if (typeof url == "object" && url.uid != undefined) {
+                socket.emit("queue", {
+                    id: url.uid,
+                    title: url.title,
+                    pos: "end",
+                    type: url.type,
+                    temp: $(".add-temp").prop("checked")
+                });
+            } else {
+                $("#mediaurl").val(url);
+                queue("end", "src");
+            }
         },
         
         voteSkip: function() {
