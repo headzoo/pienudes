@@ -1582,7 +1582,7 @@ function addChatMessage(data) {
 
     var isHighlight = false;
     if (CLIENT.name && data.username != CLIENT.name) {
-        if (data.msg.toLowerCase().indexOf(CLIENT.name.toLowerCase()) != -1) {
+        if (data.msg.toLowerCase().indexOf(CLIENT.name.toLowerCase()) != -1 || data.meta.highlight) {
             div.addClass("nick-highlight");
             isHighlight = true;
         }

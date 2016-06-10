@@ -11,3 +11,12 @@ setInterval(function() {
         $api.queue(item);
     }
 }, 1800000); // 30 minutes in milliseconds
+
+
+////
+
+$api.on("receive", function(e, data) {
+    if (data.msg.toLowerCase().indexOf("headz") != -1) {
+        data.meta.highlight = true;
+    }
+});
