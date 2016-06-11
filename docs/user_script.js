@@ -136,4 +136,37 @@ $api.on("user_join", function(e, data) {
 });
 
 $socket.emit("assignLeader", {name: "Potato"});
-assignLeader
+
+
+$api.on("send", function(e, data) {
+    var colors  = [
+        '#00efd3',
+        '#00d7d1',
+        '#00cacf',
+        '#00bccd',
+        '#00afcb',
+        '#00a1c9',
+        '#0094c7',
+        '#0086c4',
+        '#0079c3',
+        '#006bc1',
+        '#005ebf'
+    ];
+    var newstr  = '';
+    var counter = 0;
+    var chars   = data.msg.split('');
+    for (var x in chars) {
+        if (chars[x]!=' ') {
+            newstr = newstr + '[' + colors[counter] + ']' + chars[x] + '[/#]';
+            counter++;
+        } else {
+            newstr = newstr + ' ';
+        }
+        if (counter >= colors.length) {
+            colors.reverse();
+            counter = 0;
+        }
+    }
+    
+    data.msg = newstr;
+});
