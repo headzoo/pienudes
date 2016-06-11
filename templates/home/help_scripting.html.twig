@@ -210,6 +210,11 @@
             </p>
             <ul>
                 <li>
+                    <code>loaded</code>
+                    Triggered after all page elements have been loaded. Page elements include the user list,
+                    chat buffer, and video player.
+                </li>
+                <li>
                     <code>receive</code>
                     Triggered when a chat message is received from the server.
                 </li>
@@ -266,6 +271,10 @@
                     Triggered when you receive your list of personal emotes, and after updating
                     your list of emotes.
                 </li>
+                <li>
+                    <code>afk</code>
+                    Triggered when a user goes afk or comes back from afk.
+                </li>
             </ul>
             <div class="alert alert-info" role="alert">
                 Most events are triggered <i>before</i> the channel uses the data, which means the callbacks
@@ -319,6 +328,11 @@
                     var favorites = [];
                     $api.on("favorites", function(e, data) {
                         favorites = data;
+                    });
+
+                    // Called when you add a new favorite. Add it to the list of favorites we're keeping track of.
+                    $api.on("favorite_add", function(e, data) {
+                        favorites.push(data.media);
                     });
 
                     // Every 30 minutes, grab one of the favorites at random, and add it to the playlist.

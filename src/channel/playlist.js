@@ -305,6 +305,9 @@ PlaylistModule.prototype.sendPlaylist = function (users) {
 
 PlaylistModule.prototype.sendChangeMedia = function (users) {
     if (!this.current || !this.current.media || this._refreshing) {
+        users.forEach(function (u) {
+            u.socket.emit("changeMedia", null);
+        });
         return;
     }
     

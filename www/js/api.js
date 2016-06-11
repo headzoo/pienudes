@@ -30,6 +30,7 @@ var ChatAPI = null;
     
     ChatAPI = {
         _callbacks: {},
+        _load_count: 0,
         
         on: function(event, callback) {
             if (this._callbacks[event] == undefined) {
@@ -129,6 +130,13 @@ var ChatAPI = null;
                 emotes: [],
                 afk: []
             };
+        },
+    
+        _pushLoaded: function() {
+            this._load_count++;
+            if (this._load_count == 3) {
+                this.trigger("loaded", {});
+            }
         }
     };
 })();

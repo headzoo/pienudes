@@ -10,7 +10,6 @@ var counters = require("../counters");
 var db_channels = require('../database/channels');
 var db_chat_logs = require('../database/chat_logs');
 var db_emotes = require('../database/emotes');
-var db_user_scripts = require('../database/user_scripts');
 
 const SHADOW_TAG = "[shadow]";
 const LINK = /(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)/ig;
@@ -99,11 +98,7 @@ ChatModule.prototype.onUserPostJoin = function (user) {
 
     user.socket.typecheckedOn("chatMsg", TYPE_CHAT, this.handleChatMsg.bind(this, user));
     user.socket.typecheckedOn("pm", TYPE_PM, this.handlePm.bind(this, user));
-    user.socket.on("setUserScripting", this.handleSetUserScripting.bind(this, user));
-    this.buffer.forEach(function (msg) {
-        user.socket.emit("chatMsg", msg);
-    });
-    this.sendUserScripting(user);
+    user.socket.emit("chatBuffer", this.buffer);
 };
 
 ChatModule.prototype.isMuted = function (name) {
@@ -422,28 +417,6 @@ ChatModule.prototype.sendMessage = function (msgobj) {
 ChatModule.prototype.registerCommand = function (cmd, cb) {
     cmd = cmd.replace(/^\//, "");
     this.commandHandlers[cmd] = cb;
-};
-
-ChatModule.prototype.handleSetUserScripting = function(user, script) {
-    if (!user.account.id || !this.channel.modules.permissions.canUserScripting(user)) {
-        return;
-    }
-    db_user_scripts.insertOrUpdate(user.account.id, script, function(err) {
-        if (!err) {
-            user.socket.emit("setUserScripting", script);
-        }
-    });
-};
-
-ChatModule.prototype.sendUserScripting = function(user) {
-    if (!user.account.id || !this.channel.modules.permissions.canUserScripting(user)) {
-        return;
-    }
-    db_user_scripts.findByUser(user.account.id, function(err, row) {
-        if (!err && row) {
-            user.socket.emit("setUserScripting", row.script);
-        }
-    });
 };
 
 /**

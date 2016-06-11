@@ -12,6 +12,7 @@ var io = require('socket.io-client');
 var db = require("../database");
 var db_users = require('../database/accounts');
 var db_alts  = require('../database/alts');
+var db_user_scripts = require('../database/user_scripts');
 import * as ChannelStore from '../channel-storage/channelstore';
 import { ChannelStateSizeError } from '../errors';
 import Promise from 'bluebird';
@@ -244,6 +245,31 @@ Channel.prototype.loadState = function () {
 
             Logger.errlog.log(err.stack);
             errorLoad(message);
+        }
+    });
+};
+
+Channel.prototype.sendUserScripting = function(user, cb) {
+    cb = cb || function() {};
+    
+    if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
+        return cb();
+    }
+    db_user_scripts.findByUser(user.account.id, function(err, row) {
+        if (!err && row) {
+            user.socket.emit("setUserScripting", row.script);
+        }
+        cb();
+    });
+};
+
+Channel.prototype.handleSetUserScripting = function(user, script) {
+    if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
+        return;
+    }
+    db_user_scripts.insertOrUpdate(user.account.id, script, function(err) {
+        if (!err) {
+            user.socket.emit("setUserScripting", script);
         }
     });
 };
@@ -538,66 +564,70 @@ Channel.prototype.joinUser = function (user, data) {
 
 Channel.prototype.acceptUser = function (user) {
     user.channel = this;
-    user.setFlag(Flags.U_IN_CHANNEL);
-    user.socket.join(this.name);
-    user.autoAFK();
-    user.socket.on("readChanLog", this.handleReadLog.bind(this, user));
-
-    Logger.syslog.log(user.realip + " joined " + this.name);
-    if (user.socket._isUsingTor) {
-        if (this.modules.options && this.modules.options.get("torbanned")) {
-            user.kick("This channel has banned connections from Tor.");
-            this.logger.log("[login] Blocked connection from Tor exit at " +
-                            user.displayip);
-            return;
-        }
-
-        this.logger.log("[login] Accepted connection from Tor exit at " +
-                        user.displayip);
-    } else {
-        this.logger.log("[login] Accepted connection from " + user.displayip);
-    }
-
-    var self = this;
-    user.waitFlag(Flags.U_LOGGED_IN, function () {
-        for (var i = 0; i < self.users.length; i++) {
-            if (self.users[i] !== user &&
-                self.users[i].getLowerName() === user.getLowerName()) {
-                self.users[i].kick("Duplicate login");
+    
+    this.sendUserScripting(user, function() {
+        user.setFlag(Flags.U_IN_CHANNEL);
+        user.socket.join(this.name);
+        user.autoAFK();
+        user.socket.on("readChanLog", this.handleReadLog.bind(this, user));
+        user.socket.on("setUserScripting", this.handleSetUserScripting.bind(this, user));
+    
+        Logger.syslog.log(user.realip + " joined " + this.name);
+        if (user.socket._isUsingTor) {
+            if (this.modules.options && this.modules.options.get("torbanned")) {
+                user.kick("This channel has banned connections from Tor.");
+                this.logger.log("[login] Blocked connection from Tor exit at " +
+                    user.displayip);
+                return;
             }
+        
+            this.logger.log("[login] Accepted connection from Tor exit at " +
+                user.displayip);
+        } else {
+            this.logger.log("[login] Accepted connection from " + user.displayip);
         }
-
-        var loginStr = "[login] " + user.displayip + " logged in as " + user.getName();
-        if (user.account.globalRank === 0) loginStr += " (guest)";
-        loginStr += " (aliases: " + user.account.aliases.join(",") + ")";
-        self.logger.log(loginStr);
-
-        self.sendUserJoin(self.users, user);
-    });
-
-    this.users.push(user);
-    db_users.updateTimeLogin(user.account.name);
     
-    user.socket.on("disconnect", this.partUser.bind(this, user));
-    Object.keys(this.modules).forEach(function (m) {
-        if (user.dead) return;
-        self.modules[m].onUserPostJoin(user);
-    });
-
-    this.sendUserlist([user]);
-    this.sendUsercount(this.users);
-    if (!this.is(Flags.C_REGISTERED)) {
-        user.socket.emit("channelNotRegistered");
-    }
-    
-    var join_msg = self.modules.options.get("join_msg").trim();
-    if (join_msg.length != 0) {
-        user.socket.emit("chatMsg", {
-            msg: XSS.sanitizeHTML(join_msg),
-            time: Date.now(),
-            username: "chmod"
+        var self = this;
+        user.waitFlag(Flags.U_LOGGED_IN, function () {
+            for (var i = 0; i < self.users.length; i++) {
+                if (self.users[i] !== user &&
+                    self.users[i].getLowerName() === user.getLowerName()) {
+                    self.users[i].kick("Duplicate login");
+                }
+            }
+        
+            var loginStr = "[login] " + user.displayip + " logged in as " + user.getName();
+            if (user.account.globalRank === 0) loginStr += " (guest)";
+            loginStr += " (aliases: " + user.account.aliases.join(",") + ")";
+            self.logger.log(loginStr);
+        
+            self.sendUserJoin(self.users, user);
         });
-    }
+    
+        this.users.push(user);
+        db_users.updateTimeLogin(user.account.name);
+    
+        user.socket.on("disconnect", this.partUser.bind(this, user));
+        Object.keys(this.modules).forEach(function (m) {
+            if (user.dead) return;
+            self.modules[m].onUserPostJoin(user);
+        });
+    
+        this.sendUserlist([user]);
+        this.sendUsercount(this.users);
+        if (!this.is(Flags.C_REGISTERED)) {
+            user.socket.emit("channelNotRegistered");
+        }
+    
+        var join_msg = self.modules.options.get("join_msg").trim();
+        if (join_msg.length != 0) {
+            user.socket.emit("chatMsg", {
+                msg: XSS.sanitizeHTML(join_msg),
+                time: Date.now(),
+                username: "chmod"
+            });
+        }
+    }.bind(this));
 };
 
 Channel.prototype.partUser = function (user) {
