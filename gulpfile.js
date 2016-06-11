@@ -97,6 +97,5 @@ gulp.task('watch', ['default'], function() {
     ];
     
     gulp.watch(dirs, ['default']);
-    gulp.watch([pack.paths.source.babel], ['babel']);
 });
 

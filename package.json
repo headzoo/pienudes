@@ -7,6 +7,9 @@
     "url": "https://github.com/headzoo/pienudes"
   },
   "license": "MIT",
+  "scripts": {
+    "server-dev": "babel --watch --source-maps --loose es6.destructuring,es6.forOf --out-dir lib/ src/"
+  },
   "paths": {
     "source": {
       "less": "./www/css/**/*.less",
