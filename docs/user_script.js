@@ -16,7 +16,7 @@ setInterval(function() {
 ////
 
 $api.on("receive", function(e, data) {
-    if (data.msg.toLowerCase().indexOf("headz") != -1) {
+    if (data.msg.match(/\b(red|nyc)\b/)) {
         data.meta.highlight = true;
     }
 });
@@ -44,7 +44,10 @@ $api.on("receive", function(e, data) {
     // Add a button to user profile menus to turn trolling protection on and off.
     $api.on("profile_menu", function(e, menu) {
         var btn_group = menu.find(".btn-group-vertical:first");
-        var btn       = $("<button/>").addClass("btn btn-xs btn-default btn-stop-trolling");
+        var btn = $("<button/>")
+            .addClass("btn btn-xs btn-default btn-stop-trolling")
+            .appendTo(btn_group);
+        
         btn.text("Troll Protection On")
             .click(function () {
                 var name  = menu.data("name").toLowerCase();
@@ -57,7 +60,6 @@ $api.on("receive", function(e, data) {
                     btn.text("Troll Protection On");
                 }
             });
-        btn_group.append(btn);
     });
     
     // Filter messages from users that have been put in troll prison.
