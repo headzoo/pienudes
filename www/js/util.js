@@ -147,7 +147,9 @@ function formatUserlistItem(div) {
         $("<p/>").text(data.profile.text).appendTo(profile);
 
         if ($("body").hasClass("synchtube")) horiz -= profile.outerWidth();
-        profile.css("left", horiz + "px")
+        profile.css("left", horiz + "px");
+        
+        
     });
     name.mousemove(function(ev) {
         var top = ev.clientY + 5;
@@ -196,6 +198,7 @@ function addUserDropdown(entry) {
     entry.find(".user-dropdown").remove();
     var menu = $("<div/>")
         .addClass("user-dropdown")
+        .data("name", name)
         .appendTo(entry)
         .hide();
 
@@ -371,6 +374,8 @@ function addUserDropdown(entry) {
     };
     entry.contextmenu(showdd);
     entry.click(showdd);
+    
+    ChatAPI.trigger("profile_menu", menu);
 }
 
 function calcUserBreakdown() {
@@ -1446,7 +1451,9 @@ function formatChatMessage(data, last, permalink) {
     if (data.meta.forceShowName)
         skip = false;
 
-    data.msg = execEmotes(data.msg);
+    if (data.meta.no_emotes == undefined || data.meta.no_emotes == false) {
+        data.msg = execEmotes(data.msg);
+    }
 
     last.name = data.username;
     var div = $("<div/>");

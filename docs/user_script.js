@@ -21,6 +21,70 @@ $api.on("receive", function(e, data) {
     }
 });
 
+/**
+ * Script: Troll Protection
+ *
+ * Prevents trolls from showing images and emotes in the channel, and
+ * converts their messages to lower case letters.
+ * 
+ * To use, copy this script into the Options->Scripting box, and then
+ * REFRESH YOUR BROWSER. When you click on a name in the user list a
+ * button appears to turn troll protection on or off for that user.
+ */
+(function() {
+    var troll_settings = {
+        no_images: true,
+        no_emotes: true,
+        no_upper_case: true
+    };
+    var trolls = [];
+    
+    $(".btn-stop-trolling").remove();
+    
+    // Add a button to user profile menus to turn trolling protection on and off.
+    $api.on("profile_menu", function(e, menu) {
+        var btn_group = menu.find(".btn-group-vertical:first");
+        var btn       = $("<button/>").addClass("btn btn-xs btn-default btn-stop-trolling");
+        btn.text("Troll Protection On")
+            .click(function () {
+                var name  = menu.data("name").toLowerCase();
+                var index = trolls.indexOf(name);
+                if (index == -1) {
+                    trolls.push(name);
+                    btn.text("Troll Protection Off");
+                } else {
+                    trolls.splice(index, 1);
+                    btn.text("Troll Protection On");
+                }
+            });
+        btn_group.append(btn);
+    });
+    
+    // Filter messages from users that have been put in troll prison.
+    $api.on("receive", function(e, data) {
+        if (trolls.indexOf(data.username.toLowerCase()) !== -1) {
+            data.meta.no_emotes = troll_settings.no_emotes;
+            if (troll_settings.no_upper_case) {
+                data.msg = data.msg.toLowerCase();
+            }
+            if (troll_settings.no_images) {
+                var regex = /<img src="([^"]+)".*\/>/g;
+                var match = regex.exec(data.msg);
+                while(match != null) {
+                    if (match[1].indexOf("/proxy/image?u=") === 0) {
+                        match[1] = match[1].replace("/proxy/image?u=", "")
+                    }
+                    data.msg = data.msg.replace(match[0], match[1]);
+                    match = regex.exec(data.msg);
+                }
+            }
+        }
+    });
+})();
+/**
+ * End: Troll Protection
+ */
+
 
 $api.on("send", function(e, data) {
     var colors  = [
