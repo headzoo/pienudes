@@ -1,5 +1,6 @@
 var Logger = require("../logger");
 var ChannelModule = require("./module");
+var Server = require("../server");
 var Flags = require("../flags");
 var XSS = require("../xss");
 var Account = require("../account");
@@ -269,7 +270,9 @@ Channel.prototype.handleSetUserScripting = function(user, script) {
     }
     db_user_scripts.insertOrUpdate(user.account.id, script, function(err) {
         if (!err) {
-            user.socket.emit("setUserScripting", script);
+            Server.getServer().getUserAll(user.account.name).forEach(function(u) {
+                u.socket.emit("setUserScripting", script);
+            });
         }
     });
 };

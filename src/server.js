@@ -194,6 +194,21 @@ Server.prototype.getChannel = function (name) {
     return c;
 };
 
+Server.prototype.getUserAll = function(name) {
+    var users = [];
+    for(var i = 0; i < this.channels.length; i++) {
+        var channel = this.channels[i];
+        for(var y = 0; y < channel.users.length; y++) {
+            var user = channel.users[y];
+            if (user.account.name == name) {
+                users.push(user);
+            }
+        }
+    }
+    
+    return users;
+};
+
 Server.prototype.unloadChannel = function (chan) {
     if (chan.dead) {
         return;
