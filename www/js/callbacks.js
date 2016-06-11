@@ -620,7 +620,7 @@ Callbacks = {
         if(user !== null)
             user.remove();
         var div = $("<div/>")
-            .addClass("userlist_item");
+            .addClass("userlist_item userlist_item_" + data.name);
         var icon = $("<span/>").appendTo(div);
         var nametag = $("<span/>").text(data.name).appendTo(div);
         div.data("name", data.name);
