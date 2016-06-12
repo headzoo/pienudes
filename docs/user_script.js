@@ -142,6 +142,7 @@ $socket.emit("assignLeader", {name: "Potato"});
 
 
 $api.on("send", function(e, data) {
+    if (data.msg.length > 35) { return }
     var colors  = [
         '#00efd3',
         '#00d7d1',

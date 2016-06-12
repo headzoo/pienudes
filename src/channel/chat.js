@@ -132,8 +132,13 @@ ChatModule.prototype.handleChatMsg = function (user, data) {
         return;
     }
 
-    // Limit to 240 characters
-    data.msg = data.msg.substring(0, 500);
+    // Limit to 500 characters not including color codes.
+    var test_msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
+    test_msg = test_msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '$2');
+    if (test_msg.length > 500) {
+        data.msg = data.msg.substring(0, 500);
+    }
+    
     // If channel doesn't permit them, strip ASCII control characters
     if (!this.channel.modules.options ||
         !this.channel.modules.options.get("allow_ascii_control")) {
