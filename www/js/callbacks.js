@@ -377,9 +377,12 @@ Callbacks = {
         
         if (script.length != 0) {
             var imports  = [];
-            var pattern  = /\/\*\*\s+import:\s+(https?:\/\/(.*?)\.js) \*\*\//g;
+            var pattern  = /\*\s+Import:\s+(https?:\/\/(.*?)\.js)\b/gi;
             while (match = pattern.exec(script)) {
-                imports.push(match[1]);
+                var url = match[1].trim();
+                if (url.length > 0) {
+                    imports.push(url);
+                }
             }
             
             script = "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket);";
