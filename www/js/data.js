@@ -140,8 +140,7 @@ var USEROPTS = {
     secure_connection    : getOrDefault("secure_connection", false),
     show_shadowchat      : getOrDefault("show_shadowchat", false),
     emotelist_sort       : getOrDefault("emotelist_sort", true),
-    no_emotes            : getOrDefault("no_emotes", false),
-    scripting            : ""
+    no_emotes            : getOrDefault("no_emotes", false)
 };
 
 /* Backwards compatibility check */
@@ -213,6 +212,7 @@ FAVORITE_TAGS.initialize();
 
 var CHAT_WRAP = null;
 var CHAT_WRAP_MEDIA = null;
+var USER_SCRIPTS_INIT = false;
 
 function createCookie(name,value,days) {
     if (days) {

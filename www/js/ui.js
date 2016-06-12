@@ -62,7 +62,6 @@ $(function() {
     });
     
     $("#clearbtn").click(function() {
-        console.log("cleared");
         $("#messagebuffer").empty();
     });
     
@@ -724,7 +723,10 @@ $(".cs-checkbox").change(function () {
     var value = box.prop("checked");
     var data = {};
     data[key] = value;
-    socket.emit("setOptions", data);
+    
+    if (!ChatAPI.trigger("channel_option_save", data).isCancelled()) {
+        socket.emit("setOptions", data);
+    }
 });
 
 $(".cs-textbox").keyup(function () {
@@ -750,7 +752,9 @@ $(".cs-textbox").keyup(function () {
         } else {
             data[key] = value;
         }
-        socket.emit("setOptions", data);
+        if (!ChatAPI.trigger("channel_option_save", data).isCancelled()) {
+            socket.emit("setOptions", data);
+        }
     }, 1000);
 });
 
@@ -759,7 +763,10 @@ $(".cs-select").change(function() {
     var key = box.attr("id").replace("cs-", "");
     var data = {};
     data[key] = box.val();
-    socket.emit("setOptions", data);
+    
+    if (!ChatAPI.trigger("channel_option_save", data).isCancelled()) {
+        socket.emit("setOptions", data);
+    }
 });
 
 $("#cs-chanlog-refresh").click(function () {

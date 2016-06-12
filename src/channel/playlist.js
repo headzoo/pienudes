@@ -885,6 +885,7 @@ PlaylistModule.prototype.handleVoteVideo = function(user, value) {
                         });
                     }
                     this.channel.broadcastAll("changeVotes", votes);
+                    this.sendUserVideoVotes(this.channel.users);
                     
                     if (created && value == 1 && this.current.queueby[0] != "@") {
                         var qdby = this.current.queueby.toLowerCase();
@@ -928,8 +929,6 @@ PlaylistModule.prototype.sendVideoVotes = function() {
 };
 
 PlaylistModule.prototype.sendUserVideoVotes = function(users) {
-    var uid = this.current.uid;
-    
     db_media.fetchByUidAndType(this.current.media.id, this.current.media.type, function(err, media) {
         if (err) {
             console.log(err);

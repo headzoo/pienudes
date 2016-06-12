@@ -78,8 +78,37 @@ var ChatAPI = null;
             }
         },
         
-        voteSkip: function() {
+        skip: function() {
             $("#voteskip").trigger("click");
+        },
+        
+        vote: function(value) {
+            if (value != -1 && value != 1) {
+                throw "Vote value invalid. Must -1, or 1.";
+            }
+            socket.emit("voteVideo", value);
+        },
+    
+        playlistClear: function() {
+            socket.emit("clearPlaylist");
+        },
+        
+        playlistShuffle: function() {
+            socket.emit("shufflePlaylist");
+        },
+        
+        search: function(query, type) {
+            if (type != undefined && type != "yt") {
+                throw "Type must be value 'yt'.";
+            }
+            socket.emit("searchMedia", {
+                source: type,
+                query: query
+            });
+        },
+        
+        clear: function() {
+            $("#messagebuffer").empty();
         },
         
         trigger: function(name, data) {
@@ -114,6 +143,7 @@ var ChatAPI = null;
         
         _reset: function() {
             this._callbacks = {
+                reloading: [],
                 receive: [],
                 send: [],
                 notice: [],
@@ -127,8 +157,12 @@ var ChatAPI = null;
                 favorite_add: [],
                 tags: [],
                 votes: [],
+                vote_value: [],
                 emotes: [],
-                afk: []
+                afk: [],
+                user_options_save: [],
+                channel_option_save: [],
+                search_results: []
             };
         },
     

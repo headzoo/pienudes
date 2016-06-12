@@ -709,16 +709,18 @@ function saveUserOptions() {
     USEROPTS.boop                 = $("#us-ping-sound").val();
     USEROPTS.chatbtn              = $("#us-sendbtn").prop("checked");
     USEROPTS.no_emotes            = $("#us-no-emotes").prop("checked");
-    USEROPTS.scripting            = $("#us-scripting-text").val();
     
     if (CLIENT.rank >= 2) {
         USEROPTS.modhat      = $("#us-modflair").prop("checked");
         USEROPTS.joinmessage = $("#us-joinmessage").prop("checked");
         USEROPTS.show_shadowchat = $("#us-shadowchat").prop("checked");
     }
-
-    storeOpts();
-    applyOpts();
+    
+    setOpt("scripting");
+    if (!ChatAPI.trigger("user_options_save", USEROPTS).isCancelled()) {
+        storeOpts();
+        applyOpts();
+    }
 }
 
 function storeOpts() {

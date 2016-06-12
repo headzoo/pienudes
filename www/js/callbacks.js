@@ -339,6 +339,10 @@ Callbacks = {
     },
     
     setUserScripts: function(scripts) {
+        if (USER_SCRIPTS_INIT) {
+            ChatAPI.trigger("reloading");
+        }
+        
         $("script").each(function(i, el) {
             el = $(el);
             if (el.attr("id") != undefined && el.attr("id").indexOf("user-script-exec") == 0) {
@@ -350,6 +354,7 @@ Callbacks = {
         for(var i = 0; i < scripts.length; i++) {
             Callbacks.addUserScript(scripts[i]);
         }
+        USER_SCRIPTS_INIT = true;
     },
     
     addUserScript: function(data) {
@@ -1062,6 +1067,13 @@ Callbacks = {
     },
 
     searchResults: function(data) {
+        for(var i = 0; i < data.results.length; i++) {
+            data.results[i].uid = data.results[i].id;
+        }
+        if (ChatAPI.trigger("search_results", data).isCancelled()) {
+            return;
+        }
+        
         $("#search_clear").remove();
         clearSearchResults();
         $("#library").data("entries", data.results);
@@ -1107,6 +1119,10 @@ Callbacks = {
     },
     
     changeUserVideoVote: function(data) {
+        if (ChatAPI.trigger("vote_value", data).isCancelled()) {
+            return;
+        }
+        
         if (data == 1) {
             $("#voteup").addClass("active");
         } else if (data == -1) {
