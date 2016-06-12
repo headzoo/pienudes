@@ -13,17 +13,21 @@
             browser when you are inside of a channel. In addition, a light-weight API is provided so that
             you may build "bots" with user scripts.
         </p>
+        <p>
+            User scripts are created from the Options -> Scripting dialog. Your script are executed after clicking
+            save, and when you enter the channel. You can put all of your code into the "Default" text box, or you
+            can organize your scripts in multiple files. Which are shown as multiple tabs in on the scripting
+            dialog.
+        </p>
+        <p>
+            <img src="/img/help/scripting/nav_options.png" style="margin-bottom: 10px;width:100%" />
+            <img src="/img/help/scripting/user_options.png" style="width:100%" />
+        </p>
         
         <h3 id="top">Table of Contents</h3>
         <ul class="list-style-type-none">
             <li>
-                <a href="#topic-overview">Overview</a>
-            </li>
-            <li>
-                <a href="#topic-overview-variables">Variables</a>
-            </li>
-            <li>
-                <a href="#topic-overview-first-script">First Script</a>
+                <a href="#topic-overview-api">API</a>
             </li>
             <li>
                 <a href="#topic-api-events">Events</a>
@@ -75,42 +79,19 @@
             </li>
         </ul>
 
-        <h3 id="topic-overview">Overview</h3>
+        <h3 id="topic-overview-api">API</h3>
         <section>
             <p>
-                User scripts are created from the Options -> Scripting dialog. Simply type (or paste) your
-                script into the text area, and click the Save button. Your script is immediately executed,
-                and will be executed any time you enter a channel.
-            </p>
-            <p>
-                <img src="/img/help/scripting/nav_options.png" style="margin-bottom: 10px;width:100%" />
-                <img src="/img/help/scripting/user_options.png" style="width:100%" />
-            </p>
-
-            {{ top() }}
-        </section>
-
-        <h3 id="topic-overview-variables">Variables</h3>
-        <section>
-            <p>
-                Four variables are made available to your user script: <code>$api</code>, <code>$user</code>,
-                <code>$channel</code>, and <code>$socket</code>. Other global variables may be available to
-                your script, but only those four are guaranteed to exist.
+                User scripts get embedded into the page using using regular <code>&ltscript&gt;</code> tags, and
+                four convenience variables are created.
             </p>
             <ul style="margin:0;padding:0;list-style-type:none;">
                 <li>
-                    <code>$api</code>
-                    Provides an interface to the chat software. The API is covered
-                    <a href="#topic-api">further along in this documentation</a>.
+                    <code class="signature">$api</code>
+                    Provides an interface to the chat software.
                 </li>
                 <li>
-                    <code>$socket</code>
-                    Raw socket used to commentate with the server. Only required for advanced scripting, and not covered
-                    in this documentation. See the <a href="http://socket.io/" target="_blank">socket.io documentation</a>
-                    for more information on emitting events to the server, and receiving events.
-                </li>
-                <li>
-                    <code>$channel</code>
+                    <code class="signature">$channel</code>
                     An object containing information about the channel you are in. The object contains several properties.
                     <pre style="margin-top: 12px;">
                         <code class="language-javascript">
@@ -125,12 +106,9 @@
                         }
                         </code>
                     </pre>
-                    <div class="alert alert-info" role="alert">
-                        The object may contain other properties, but only those listed above are guaranteed to exist.
-                    </div>
                 </li>
                 <li>
-                    <code>$user</code>
+                    <code class="signature">$user</code>
                     An object containing information about you. The object contains several properties.
                     <pre style="margin-top: 12px;">
                         <code class="language-javascript">
@@ -142,36 +120,37 @@
                         }
                         </code>
                     </pre>
-                    <div class="alert alert-info" role="alert">
-                        The object may contain other properties, but only those listed above are guaranteed to exist.
-                    </div>
+                </li>
+                <li>
+                    <code class="signature">$socket</code>
+                    Raw socket used to commentate with the server. Only required for advanced scripting, and not covered
+                    in this documentation. See the <a href="http://socket.io/" target="_blank">socket.io documentation</a>
+                    for more information on emitting events to the server, and receiving events.
                 </li>
             </ul>
-            
-            {{ top() }}
-        </section>
 
-        <h3 id="topic-overview-first-script">First Script</h3>
-        <section>
+            <h5>First Script</h5>
             <p>
-                Try the following user script. Type (or paste) this code into the user script text area and click save.
+                From the site navigation menu click on Options and then Scripting. In the default text box,
+                type (or paste) this code and click save.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
-                alert("Your username is " + $user.name + " and you are in the channel " + $channel.name);
+                    alert("Your username is " + $user.name + " and you are in the channel " + $channel.name);
                 </code>
             </pre>
-
+            
             {{ top() }}
         </section>
 
         <h3 id="topic-api-events">Events</h3>
         <section>
             <p>
-                The <code>$api</code> object contains a number of methods which can be used to interact with
-                the channel and other users. Such as sending messages and queuing videos. Interacting with the
-                channel is mostly done through the use of callbacks. The following code demonstrates the use
-                of callbacks to CAPITALIZE every message you send.
+                Interacting with the channel is mostly done through the use of event callbacks. The following code
+                demonstrates the use of callbacks to CAPITALIZE every message you send. Callbacks are registered
+                with events using the <code>$api.on()</code> method, which takes two arguments: the name of the
+                event, and the callback function. The function will be called when an event with the given name
+                is triggered.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
@@ -183,66 +162,17 @@
                     });
                 </code>
             </pre>
-            <p>
-                Upon sending a message your registered callbacks are called. Two values are passed to the callback
-                function: an event object, and a message object. The message object typically contains the following
-                properties.
-            </p>
-            <pre>
-                <code class="language-javascript line-numbers">
-                {
-                    msg: String, // The message you are sending
-                    meta: Object // Additional meta information, such as text color
-                }
-                </code>
-            </pre>
-            <p>
-                The message object (with your changes) are sent to the server. Other users in the channel will
-                receive the same object, which includes the changes you made. The following user script
-                capitalizes every message you <i>receive</i>.
-            </p>
             <pre>
                 <code class="language-javascript line-numbers">
                     // Registers a callback which filters every message you received from the server.
                     $api.on("receive", function(e, data) {
-                        // Every message you receive will be automatically capitalized.
-                        data.msg = data.msg.toUpperCase();
+                    // Every message you receive will be automatically capitalized.
+                    data.msg = data.msg.toUpperCase();
                     });
                 </code>
             </pre>
-            <p>
-                Every message displayed in the chat buffer will be capitalized.
-                <img src="/img/help/scripting/receive_caps.png" style="margin-top: 16px;" />
-            </p>
-            <p>
-                Each time a registered callback is invoked, it receives an event object as the first
-                parameter. The event contains two methods which may be useful: <code>Event.stop()</code>,
-                and <code>Event.cancel()</code>.
-            </p>
-            <p>
-                Calling <code>Event.stop()</code> inside your callback will stop any other callbacks from
-                processing the event. For example if you have three callbacks registered with the "receive"
-                event, and the first callback calls <code>Event.stop()</code>, the other two registered callbacks
-                will not be invoked.
-            </p>
-            <p>
-                Calling <code>Event.cancel()</code> inside your callback stops the channel from processing
-                the message. For instance, the following code will prevent ALL messages from appearing in the
-                chat buffer.
-            </p>
-            <pre>
-                <code class="language-javascript line-numbers">
-                    $api.on("receive", function(e, data) {
-                        // This causes the channel to completely discard the message, and it won't
-                        // be shown in your chat buffer.
-                        e.cancel();
-                    });
-                </code>
-            </pre>
-            <p>
-                The following is a list of events for which callbacks may be registered.
-            </p>
             
+            <h5>Event Names</h5>
             <ul style="list-style-type: none; padding: 0;">
                 <li id="topic-api-events-loaded">
                     <code class="signature">loaded</code>
@@ -342,6 +272,32 @@
                 </li>
             </ul>
 
+            <h5>Event Object</h5>
+            <p>
+                Each time a registered callback is invoked, it receives an event object as the first
+                parameter. The event contains two methods.
+            </p>
+            <p>
+                <code>Event.stop()</code> Called inside your callback will stop any other callbacks from
+                processing the event. For example if you have three callbacks registered with the "receive"
+                event, and the first callback calls <code>Event.stop()</code>, the other two registered callbacks
+                will not be invoked.
+            </p>
+            <p>
+                <code>Event.cancel()</code> Called inside your callback stops the channel from processing
+                the message. For instance, the following code will prevent ALL messages from appearing in the
+                chat buffer.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.on("receive", function(e, data) {
+                        // This causes the channel to completely discard the message, and it won't
+                        // be shown in your chat buffer.
+                        e.cancel();
+                    });
+                </code>
+            </pre>
+
             {{ top() }}
         </section>
 
@@ -353,34 +309,48 @@
             </p>
             
             <!-- $api.send() -->
-            <code id="topic-api-methods-send" class="signature">$api.send()</code>
+            <code id="topic-api-methods-send" class="signature">$api.send(msg, meta)</code>
             <p>
-                The following example uses the <code>$api.send()</code> method to send a message to
-                everyone in the channel.
+                Sends a message to everyone else in the chat room. The value of <code>msg</code> must be a string,
+                which contains the message. The <code>meta</code> value is an object which may contain a property
+                named "color", which sets the color of the text.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
                     // Will send the message "Hey everyone, headzoo has arrived!" or whatever
                     // your username is.
-                    $api.send("Hey everyone, " + $user.name + " has arrived!");
+                    $api.send("Hey everyone, I have arrived!");
+                    
+                    // Same message, but set the text color to green.
+                    $api.send("Hey everyone, I have arrived!", { color: "#00FF00" });
                 </code>
             </pre>
 
             <!-- $api.queue() -->
-            <code id="topic-api-methods-queue" class="signature">$api.queue()</code>
+            <code id="topic-api-methods-queue" class="signature">$api.queue(video)</code>
             <p>
-                This example uses the <code>$api.queue()</code> method to add a video to the end of the playlist.
+                Adds a video to the playlist. The value of the <code>video</code> argument may be one of two things:<br />
+                String: A media url, such as the url to a YouTube video.<br />
+                Object: A media object. Must contain the properties "uid", "type", and "title".
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
-                    $api.queue("https://www.youtube.com/watch?v=Tv9YoYCKNoE");
+                    // Queue a video from a media url.
+                    $api.queue("https://www.youtube.com/watch?v=OsCfufAp2tM");
+                    
+                    // Queue a video using a media object.
+                    $api.queue({
+                        type: "yt",                   // It's a YouTube video
+                        uid: "OsCfufAp2tM",           // The id of the video
+                        title: "Grimes - California"  // The title of the video
+                    });
                 </code>
             </pre>
 
             <!-- $api.skip() -->
             <code id="topic-api-methods-skip" class="signature">$api.skip()</code>
             <p>
-                This example uses the <code>$api.skip()</code> method to vote skip the currently playing video.
+                Vote skips the currently playing video.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
@@ -389,22 +359,24 @@
             </pre>
 
             <!-- $api.vote() -->
-            <code id="topic-api-methods-vote" class="signature">$api.vote()</code>
+            <code id="topic-api-methods-vote" class="signature">$api.vote(value)</code>
             <p>
-                This example uses the <code>$api.vote()</code> method to up/down vote the currently playing video.
+                Votes for the currently playing video. Valid values for the <code>value</code> are 1 to up vote
+                the video, or -1 to down vote the video. Calling the method a second time with the same value
+                toggles the vote.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
-                    // Upvote the video.
+                    // Up vote the video.
                     $api.vote(1);
                     
-                    // Take back the upvote by calling again with the same value.
+                    // Take back the up vote by calling again with the same value.
                     $api.vote(1);
                     
-                    // Downvote the video.
+                    // Down vote the video.
                     $api.vote(-1);
                     
-                    // Take back the downvote by calling again with the same value.
+                    // Take back the down vote by calling again with the same value.
                     $api.vote(-1);
                 </code>
             </pre>
@@ -412,8 +384,7 @@
             <!-- $api.playlistClear() -->
             <code id="topic-api-methods-playlist-clear" class="signature">$api.playlistClear()</code>
             <p>
-                This example uses the <code>$api.playlistClear()</code> method to remove all videos from the playlist.
-                Only applicable to mods and admins.
+                Clears the playlist. Only applicable to chat moderators.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
@@ -424,8 +395,7 @@
             <!-- $api.playlistShuffle() -->
             <code id="topic-api-methods-playlist-shuffle" class="signature">$api.playlistShuffle()</code>
             <p>
-                This example uses the <code>$api.playlistShuffle()</code> method to shuffle the playlist.
-                Only applicable to mods and admins.
+                Shuffles the playlist. Only applicable to chat moderators.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
@@ -434,18 +404,22 @@
             </pre>
 
             <!-- $api.search() -->
-            <code id="topic-api-methods-search" class="signature">$api.search()</code>
+            <code id="topic-api-methods-search" class="signature">$api.search(query, type)</code>
             <p>
-                This example uses the <code>$api.search()</code> method to search YouTube. It uses the
-                <code>search_results</code> event to receive the search results, and queue the first video.
+                Searches YouTube for videos matching the given <code>query</code> argument. The <code>type</code>
+                argument defaults to "yt" and is currently ignored. Used in conjunction with the
+                <code>search_results</code> event.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
+                    // Register an event which receives the search results.
                     $api.on("search_results", function(e, data) {
                         if (data.results.length > 0) {
                             $api.queue(data.results[0]);
                         }
                     });
+                    
+                    // Now perform the search.
                     $api.search("Grimes");
                 </code>
             </pre>
@@ -453,7 +427,7 @@
             <!-- $api.clear() -->
             <code id="topic-api-methods-clear" class="signature">$api.clear()</code>
             <p>
-                This example uses the <code>$api.clear()</code> method to clear the chat buffer.
+                Clears the chat buffer.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
