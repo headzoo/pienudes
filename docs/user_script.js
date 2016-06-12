@@ -175,23 +175,24 @@ $api.on("send", function(e, data) {
 });
 
 
-// Register a callback which gets every message we send to the server.
+/**
+ * Script: Lucky
+ *
+ * Creates a /lucky command, which searches YouTube using the query following
+ * the command, and queues the first video found.
+ *
+ * To use, copy this script into the Options->Scripting box. In the chat box
+ * type something like "/lucky grimes kill v maim".
+ */
 $api.on("send", function(e, data) {
-    
-    // We search when the message starts with the /lucky command.
     if (data.msg.indexOf("/lucky ") === 0) {
         $api.search(data.msg.replace("/lucky ", ""));
-        
-        // Stop the message from being sent to the other users.
         e.cancel();
     }
 });
 
-// Register a callback to receive the search results.
 $api.on("search_results", function(e, data) {
     if (data.results.length > 0) {
-        
-        // Queue the first video found in the results.
         $api.queue(data.results[0]);
     }
 });
