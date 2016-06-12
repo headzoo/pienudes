@@ -1,3 +1,6 @@
+/** import: https://somesite.com/somescript.js **/
+/** import: https://anothersite.com/anotherscript.js **/
+
 // The "favorites" event is called when you enter chat. Save the favorites to a local variable.
 var favorites = [];
 $api.on("favorites", function(e, data) {

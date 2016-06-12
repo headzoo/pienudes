@@ -17,9 +17,10 @@ const TBL_USER_SCRIPTS = "" +
     "CREATE TABLE IF NOT EXISTS `user_scripts` (" +
     "`id` INT NOT NULL AUTO_INCREMENT," +
     "`user_id` INT NOT NULL," +
+    "`name` VARCHAR(20) NOT NULL, " +
     "`script` TEXT NOT NULL DEFAULT ''," +
     "PRIMARY KEY (`id`)," +
-    "UNIQUE INDEX (`user_id`)," +
+    "UNIQUE INDEX (`user_id`, `name`)," +
     "FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE" +
     ") CHARACTER SET utf8";
 

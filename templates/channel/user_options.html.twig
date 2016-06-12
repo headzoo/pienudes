@@ -181,11 +181,23 @@
 
                     <!-- Scripting -->
                     <div id="us-scripting" class="tab-pane">
-                        <a href="/help/scripting" class="pull-right" target="_blank" title="Help">
-                            <span class="glyphicon glyphicon-question-sign"></span>
-                        </a>
-                        <h4>Scripting</h4>
-                        <textarea id="us-scripting-text" class="form-control" rows="20" style="font-family: monospace;"></textarea>
+                        <div style="height: 30px; margin-top: 4px;">
+                            <a href="/help/scripting" class="pull-right" target="_blank" title="User Scripting Help">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <button id="user-scripting-create-btn" class="btn btn-primary">Create</button>
+                        </div>
+                        
+                        <ul id="user-scripting-tabs" class="nav nav-tabs" role="tablist">
+                            <li id="user-scripting-tab-default" role="presentation" class="active">
+                                <a href="#user-script-pane-default" aria-controls="user-script-pane-default" role="tab" data-toggle="tab">Default</a>
+                            </li>
+                        </ul>
+                        <div id="user-scripting-panes" class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="user-script-pane-default">
+                                <textarea class="form-control user-scripting-textarea" rows="20" data-name="Default"></textarea>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Moderator preferences -->

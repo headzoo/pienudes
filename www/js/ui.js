@@ -91,6 +91,36 @@ $(function() {
             }
         }
     });
+    
+    $("#user-scripting-create-btn").on("click", function() {
+        var name = prompt("Name of script");
+        if (!name) {
+            return;
+        }
+        if (name.match(/[^\sa-zA-Z0-9_-]/)) {
+            alert("Special characters are not allowed in script names. Only letters, numbers, spaces, underscores, and dashes may be used.");
+            return;
+        }
+        if (name.length > 20) {
+            alert("Script names must contain 20 characters or less.");
+            return;
+        }
+    
+        var tabs = $("#user-scripting-tabs");
+        var data = formatUserScriptTab({name: name, script: ""});
+        
+        var items = tabs.children("li").get();
+        items.sort(function(a, b) {
+            if ($(a).text().indexOf("Default") !== -1) return -1;
+            return $(a).find("a").text().toUpperCase().localeCompare($(b).find("a").text().toUpperCase());
+        });
+        $.each(items, function(idx, itm) { tabs.append(itm); });
+        
+        setTimeout(function() {
+            data.anchor.click();
+            data.textarea.focus();
+        }, 250);
+    });
 });
 
 

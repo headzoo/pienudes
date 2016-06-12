@@ -5,6 +5,7 @@ var Flags = require("../flags");
 var XSS = require("../xss");
 var Account = require("../account");
 var Config = require("../config");
+var async = require('async');
 var util = require("../utilities");
 var fs = require("graceful-fs");
 var path = require("path");
@@ -250,31 +251,70 @@ Channel.prototype.loadState = function () {
     });
 };
 
-Channel.prototype.sendUserScripting = function(user, cb) {
+Channel.prototype.sendUserScripts = function(user, cb) {
     cb = cb || function() {};
-    
     if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
         return cb();
     }
-    db_user_scripts.findByUser(user.account.id, function(err, row) {
-        if (!err && row) {
-            user.socket.emit("setUserScripting", row.script);
+    
+    db_user_scripts.findByUser(user.account.id, function(err, rows) {
+        if (!err && rows) {
+            var scripts = [];
+            rows.forEach(function(row) {
+                scripts.push({
+                    name: row.name,
+                    script: row.script
+                });
+            });
+            
+            var sent_to = [user.channel.name];
+            user.socket.emit("setUserScripts", scripts);
+            Server.getServer().getUserAll(user.account.name).forEach(function(u) {
+                if (sent_to.indexOf(u.channel.name) == -1) {
+                    u.socket.emit("setUserScripts", scripts);
+                    sent_to.push(u.channel.name);
+                }
+            });
         }
         cb();
     });
 };
 
-Channel.prototype.handleSetUserScripting = function(user, script) {
+Channel.prototype.handleSaveUserScripts = function(user, data) {
     if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
         return;
     }
-    db_user_scripts.insertOrUpdate(user.account.id, script, function(err) {
+    
+    var self = this;
+    async.map(data,
+        function(d, c) {
+            db_user_scripts.insertOrUpdate(user.account.id, d.name, d.script, c)
+        },
+        function() {
+            setTimeout(function() {
+                self.sendUserScripts(user);
+            }, 500);
+        }
+    );
+};
+
+Channel.prototype.handleDeleteUserScript = function(user, data) {
+    if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
+        return;
+    }
+    
+    db_user_scripts.removeByUserAndName(user.account.id, data.name, function(err) {
         if (!err) {
             Server.getServer().getUserAll(user.account.name).forEach(function(u) {
-                u.socket.emit("setUserScripting", script);
+                u.socket.emit("deleteUserScript", {
+                    name: data.name
+                });
             });
+            setTimeout(function() {
+                this.sendUserScripts(user);
+            }.bind(this), 500);
         }
-    });
+    }.bind(this));
 };
 
 Channel.prototype.loadAlts = function() {
@@ -568,12 +608,13 @@ Channel.prototype.joinUser = function (user, data) {
 Channel.prototype.acceptUser = function (user) {
     user.channel = this;
     
-    this.sendUserScripting(user, function() {
+    this.sendUserScripts(user, function() {
         user.setFlag(Flags.U_IN_CHANNEL);
         user.socket.join(this.name);
         user.autoAFK();
         user.socket.on("readChanLog", this.handleReadLog.bind(this, user));
-        user.socket.on("setUserScripting", this.handleSetUserScripting.bind(this, user));
+        user.socket.on("saveUserScripts", this.handleSaveUserScripts.bind(this, user));
+        user.socket.on("deleteUserScript", this.handleDeleteUserScript.bind(this, user));
     
         Logger.syslog.log(user.realip + " joined " + this.name);
         if (user.socket._isUsingTor) {

@@ -81,7 +81,17 @@ function getOpt(k) {
 
 function setOpt(k, v) {
     if (k === "scripting") {
-        socket.emit("setUserScripting", v);
+        var scripts = [];
+        $(".user-scripting-textarea").each(function(i, textarea) {
+            var target = $(textarea);
+            scripts.push({
+                name: target.data("name"),
+                script: target.val()
+            });
+        });
+        if (scripts.length > 0) {
+            socket.emit("saveUserScripts", scripts);
+        }
     } else {
         v = JSON.stringify(v);
         NO_STORAGE ? createCookie(k, v, 1000) : localStorage.setItem(k, v);
