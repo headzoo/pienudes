@@ -106,7 +106,19 @@ $(function() {
             return;
         }
     
-        var tabs = $("#user-scripting-tabs");
+        var name_low = name.toLowerCase().replace(" ", "-");
+        var tabs     = $("#user-scripting-tabs");
+        var found    = false;
+        tabs.find('[role="tab"]').each(function(i, item) {
+            if ($(item).attr("href") == ("#user-script-pane-" + name_low)) {
+                found = true;
+            }
+        });
+        if (found) {
+            alert("The script name must be unique.");
+            return;
+        }
+        
         var data = formatUserScriptTab({name: name, script: ""});
         
         var items = tabs.children("li").get();
