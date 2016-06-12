@@ -1,30 +1,11 @@
+{% macro top() %}
+    <a href="#top" class="top">
+        <span class="glyphicon glyphicon-chevron-up"></span>
+        Back to Top
+    </a>
+{% endmacro %}
 {% extends "layout.html.twig" %}
 {% block content %}
-    <style type="text/css">
-        #help-page a {
-            text-decoration: underline;
-        }
-        #help-page ul > li > ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0 8px;
-        }
-        #help-page h3, #help-page h4, #help-page h5 {
-            color: #DD9A2F;
-            margin: 42px 0 12px 0;
-        }
-        #help-page h3 {
-            font-size: 32px;
-            border-bottom: 1px solid #DD9A2F;
-        }
-        #help-page h4 {
-            font-size: 28px;
-        }
-        #help-page h5 {
-            font-size: 16px;
-            margin: 12px 0;
-        }
-    </style>
     <div id="help-page" class="col-lg-10 col-md-10">
         <h1>Scripting</h1>
         <p>
@@ -33,60 +14,57 @@
             you may build "bots" with user scripts.
         </p>
         
-        <h3>Table of Contents</h3>
+        <h3 id="top">Table of Contents</h3>
         <ul class="list-style-type-none">
             <li>
                 <a href="#topic-overview">Overview</a>
+            </li>
+            <li>
+                <a href="#topic-overview-variables">Variables</a>
+            </li>
+            <li>
+                <a href="#topic-overview-first-script">First Script</a>
+            </li>
+            <li>
+                <a href="#topic-api-events">Events</a>
                 <ul>
-                    <li><a href="#topic-overview-variables">Variables</a></li>
-                    <li><a href="#topic-overview-first-script">First Script</a></li>
+                    <li><a href="#topic-api-events-loaded">loaded</a></li>
+                    <li><a href="#topic-api-events-reloaded">reloaded</a></li>
+                    <li><a href="#topic-api-events-receive">receive</a></li>
+                    <li><a href="#topic-api-events-send">send</a></li>
+                    <li><a href="#topic-api-events-notice">notice</a></li>
+                    <li><a href="#topic-api-events-user-join">user_join</a></li>
+                    <li><a href="#topic-api-events-user-leave">user_leave</a></li>
+                    <li><a href="#topic-api-events-playlist">playlist</a></li>
+                    <li><a href="#topic-api-events-queue">queue</a></li>
+                    <li><a href="#topic-api-events-media-change">media_change</a></li>
+                    <li><a href="#topic-api-events-media-update">media_update</a></li>
+                    <li><a href="#topic-api-events-favorites">favorites</a></li>
+                    <li><a href="#topic-api-events-favorite-add">favorite_add</a></li>
+                    <li><a href="#topic-api-events-tags">tags</a></li>
+                    <li><a href="#topic-api-events-votes">votes</a></li>
+                    <li><a href="#topic-api-events-vote-value">vote_value</a></li>
+                    <li><a href="#topic-api-events-emotes">emotes</a></li>
+                    <li><a href="#topic-api-events-afk">afk</a></li>
+                    <li><a href="#topic-api-events-profile-menu">profile_menu</a></li>
+                    <li><a href="#topic-api-events-user-options-save">user_options_save</a></li>
+                    <li><a href="#topic-api-events-channel-option-save">channel_option_save</a></li>
+                    <li><a href="#topic-api-events-search-results">search_results</a></li>
+                    <li><a href="#topic-api-events-color-change">color_change</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#topic-api">API</a>
+                <a href="#topic-api-methods">Methods</a>
                 <ul>
-                    <li>
-                        <a href="#topic-api-events">Events</a>
-                        <ul>
-                            <li><a href="#topic-api-events-loaded">loaded</a></li>
-                            <li><a href="#topic-api-events-reloaded">reloaded</a></li>
-                            <li><a href="#topic-api-events-receive">receive</a></li>
-                            <li><a href="#topic-api-events-send">send</a></li>
-                            <li><a href="#topic-api-events-notice">notice</a></li>
-                            <li><a href="#topic-api-events-user-join">user_join</a></li>
-                            <li><a href="#topic-api-events-user-leave">user_leave</a></li>
-                            <li><a href="#topic-api-events-playlist">playlist</a></li>
-                            <li><a href="#topic-api-events-queue">queue</a></li>
-                            <li><a href="#topic-api-events-media-change">media_change</a></li>
-                            <li><a href="#topic-api-events-media-update">media_update</a></li>
-                            <li><a href="#topic-api-events-favorites">favorites</a></li>
-                            <li><a href="#topic-api-events-favorite-add">favorite_add</a></li>
-                            <li><a href="#topic-api-events-tags">tags</a></li>
-                            <li><a href="#topic-api-events-votes">votes</a></li>
-                            <li><a href="#topic-api-events-vote-value">vote_value</a></li>
-                            <li><a href="#topic-api-events-emotes">emotes</a></li>
-                            <li><a href="#topic-api-events-afk">afk</a></li>
-                            <li><a href="#topic-api-events-profile-menu">profile_menu</a></li>
-                            <li><a href="#topic-api-events-user-options-save">user_options_save</a></li>
-                            <li><a href="#topic-api-events-channel-option-save">channel_option_save</a></li>
-                            <li><a href="#topic-api-events-search-results">search_results</a></li>
-                            <li><a href="#topic-api-events-color-change">color_change</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#topic-api-methods">Methods</a>
-                        <ul>
-                            <li><a href="#topic-api-methods-send">$api.send()</a></li>
-                            <li><a href="#topic-api-methods-queue">$api.queue()</a></li>
-                            <li><a href="#topic-api-methods-skip">$api.skip()</a></li>
-                            <li><a href="#topic-api-methods-vote">$api.vote()</a></li>
-                            <li><a href="#topic-api-methods-playlist-clear">$api.playlistClear()</a></li>
-                            <li><a href="#topic-api-methods-playlist-shuffle">$api.playlistShuffle()</a></li>
-                            <li><a href="#topic-api-methods-search">$api.search()</a></li>
-                            <li><a href="#topic-api-methods-clear">$api.clear()</a></li>
-                            <li><a href="#topic-api-methods-color">$api.color()</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="#topic-api-methods-send">$api.send()</a></li>
+                    <li><a href="#topic-api-methods-queue">$api.queue()</a></li>
+                    <li><a href="#topic-api-methods-skip">$api.skip()</a></li>
+                    <li><a href="#topic-api-methods-vote">$api.vote()</a></li>
+                    <li><a href="#topic-api-methods-playlist-clear">$api.playlistClear()</a></li>
+                    <li><a href="#topic-api-methods-playlist-shuffle">$api.playlistShuffle()</a></li>
+                    <li><a href="#topic-api-methods-search">$api.search()</a></li>
+                    <li><a href="#topic-api-methods-clear">$api.clear()</a></li>
+                    <li><a href="#topic-api-methods-color">$api.color()</a></li>
                 </ul>
             </li>
             <li>
@@ -98,7 +76,7 @@
         </ul>
 
         <h3 id="topic-overview">Overview</h3>
-        <div>
+        <section>
             <p>
                 User scripts are created from the Options -> Scripting dialog. Simply type (or paste) your
                 script into the text area, and click the Save button. Your script is immediately executed,
@@ -108,8 +86,12 @@
                 <img src="/img/help/scripting/nav_options.png" style="margin-bottom: 10px;width:100%" />
                 <img src="/img/help/scripting/user_options.png" style="width:100%" />
             </p>
-            
-            <h5 id="topic-overview-variables">Variables</h5>
+
+            {{ top() }}
+        </section>
+
+        <h3 id="topic-overview-variables">Variables</h3>
+        <section>
             <p>
                 Four variables are made available to your user script: <code>$api</code>, <code>$user</code>,
                 <code>$channel</code>, and <code>$socket</code>. Other global variables may be available to
@@ -165,8 +147,12 @@
                     </div>
                 </li>
             </ul>
+            
+            {{ top() }}
+        </section>
 
-            <h5 id="topic-overview-first-script">First Script</h5>
+        <h3 id="topic-overview-first-script">First Script</h3>
+        <section>
             <p>
                 Try the following user script. Type (or paste) this code into the user script text area and click save.
             </p>
@@ -175,11 +161,12 @@
                 alert("Your username is " + $user.name + " and you are in the channel " + $channel.name);
                 </code>
             </pre>
-        </div>
 
-        <h3 id="topic-api">API</h3>
-        <div>
-            <h4 id="topic-api-events">Events</h4>
+            {{ top() }}
+        </section>
+
+        <h3 id="topic-api-events">Events</h3>
+        <section>
             <p>
                 The <code>$api</code> object contains a number of methods which can be used to interact with
                 the channel and other users. Such as sending messages and queuing videos. Interacting with the
@@ -258,111 +245,115 @@
             
             <ul style="list-style-type: none; padding: 0;">
                 <li id="topic-api-events-loaded">
-                    <h5>loaded</h5>
+                    <code class="signature">loaded</code>
                     Triggered after all page elements have been loaded. Page elements include the user list,
                     chat buffer, and video player.
                 </li>
                 <li id="topic-api-events-reloaded">
-                    <h5>reloading</h5>
+                    <code class="signature">reloading</code>
                     Triggered after the user scripts have been updated, and are about to be torn down and
                     reinserted into the page.
                 </li>
                 <li id="topic-api-events-receive">
-                    <h5>receive</h5>
+                    <code class="signature">receive</code>
                     Triggered when a chat message is received from the server.
                 </li>
                 <li id="topic-api-events-send">
-                    <h5>send</h5>
+                    <code class="signature">send</code>
                     Triggered before sending your messages to the server.
                 </li>
                 <li id="topic-api-events-notice">
-                    <h5>notice</h5>
+                    <code class="signature">notice</code>
                     Triggered when a notice is received from the server.
                 </li>
                 <li id="topic-api-events-user-join">
-                    <h5>user_join</h5>
+                    <code class="signature">user_join</code>
                     Triggered when a user joins the channel.
                 </li>
                 <li id="topic-api-events-user-leave">
-                    <h5>user_leave</h5>
+                    <code class="signature">user_leave</code>
                     Triggered when a user leaves the channel.
                 </li>
                 <li id="topic-api-events-playlist">
-                    <h5>playlist</h5>
+                    <code class="signature">playlist</code>
                     Triggered when the channel receives the list of videos in the playlist.
                 </li>
                 <li id="topic-api-events-queue">
-                    <h5>queue</h5>
+                    <code class="signature">queue</code>
                     Triggered before a video gets added to the playlist.
                 </li>
                 <li id="topic-api-events-media-change">
-                    <h5>media_change</h5>
+                    <code class="signature">media_change</code>
                     Triggered before the next song in the playlist begins to play.
                 </li>
                 <li id="topic-api-events-media-update">
-                    <h5>media_update</h5>
+                    <code class="signature">media_update</code>
                     Triggered when the time information for the currently playing video updates.
                 </li>
                 <li id="topic-api-events-favorites">
-                    <h5>favorites</h5>
+                    <code class="signature">favorites</code>
                     Triggered when you receive your list of favorited videos.
                 </li>
                 <li id="topic-api-events-favorite-add">
-                    <h5>favorite_add</h5>
+                    <code class="signature">favorite_add</code>
                     Triggered when you have favorited a video.
                 </li>
                 <li id="topic-api-events-tags">
-                    <h5>tags</h5>
+                    <code>tags</code>
                     Triggered when you receive your list of tags.
                 </li>
                 <li id="topic-api-events-votes">
-                    <h5>votes</h5>
+                    <code class="signature">votes</code>
                     Triggered when the votes for the currently playing video have changed.
                 </li>
                 <li id="topic-api-events-vote-value">
-                    <h5>vote_value</h5>
+                    <code class="signature">vote_value</code>
                     Triggered when your vote value changes. Receives a -1, 1, or 0, indicating whether
                     you down voted, up voted, or remain neutral on the vote.
                 </li>
                 <li id="topic-api-events-emotes">
-                    <h5>emotes</h5>
+                    <code class="signature">emotes</code>
                     Triggered when you receive your list of personal emotes, and after updating
                     your list of emotes.
                 </li>
                 <li id="topic-api-events-afk">
-                    <h5>afk</h5>
+                    <code class="signature">afk</code>
                     Triggered when a user goes afk or comes back from afk.
                 </li>
                 <li id="topic-api-events-profile-menu">
-                    <h5>profile_menu</h5>
+                    <code class="signature">profile_menu</code>
                     Triggered when the popup profile menu is created for each user in the user list.
                 </li>
                 <li id="topic-api-events-user-options-save">
-                    <h5>user_options_save</h5>
+                    <code class="signature">user_options_save</code>
                     Triggered before the user options are saved.
                 </li>
                 <li id="topic-api-events-channel-option-save">
-                    <h5>channel_option_save</h5>
+                    <code class="signature">channel_option_save</code>
                     Triggered when a channel option is being saved. Only applicable to admins and mods.
                 </li>
                 <li id="topic-api-events-search-results">
-                    <h5>search_results</h5>
+                    <code class="signature">search_results</code>
                     Triggered with the results of a YouTube search.
                 </li>
                 <li id="topic-api-events-color-change">
-                    <h5>color_change</h5>
+                    <code class="signature">color_change</code>
                     Triggered when the text color is changed. Fires when the page initially loads as well.
                 </li>
             </ul>
 
-            <h4 id="topic-api-methods">Methods</h4>
+            {{ top() }}
+        </section>
+
+        <h3 id="topic-api-methods">Methods</h3>
+        <section>
             <p>
                 The API contains a few methods for interacting with the channel. For instance to send messages,
                 queue songs, and vote skip videos.
             </p>
             
             <!-- $api.send() -->
-            <h5 id="topic-api-methods-send">$api.send()</h5>
+            <code id="topic-api-methods-send" class="signature">$api.send()</code>
             <p>
                 The following example uses the <code>$api.send()</code> method to send a message to
                 everyone in the channel.
@@ -376,7 +367,7 @@
             </pre>
 
             <!-- $api.queue() -->
-            <h5 id="topic-api-methods-queue">$api.queue()</h5>
+            <code id="topic-api-methods-queue" class="signature">$api.queue()</code>
             <p>
                 This example uses the <code>$api.queue()</code> method to add a video to the end of the playlist.
             </p>
@@ -387,7 +378,7 @@
             </pre>
 
             <!-- $api.skip() -->
-            <h5 id="topic-api-methods-skip">$api.skip()</h5>
+            <code id="topic-api-methods-skip" class="signature">$api.skip()</code>
             <p>
                 This example uses the <code>$api.skip()</code> method to vote skip the currently playing video.
             </p>
@@ -398,7 +389,7 @@
             </pre>
 
             <!-- $api.vote() -->
-            <h5 id="topic-api-methods-vote">$api.vote()</h5>
+            <code id="topic-api-methods-vote" class="signature">$api.vote()</code>
             <p>
                 This example uses the <code>$api.vote()</code> method to up/down vote the currently playing video.
             </p>
@@ -419,7 +410,7 @@
             </pre>
 
             <!-- $api.playlistClear() -->
-            <h5 id="topic-api-methods-playlist-clear">$api.playlistClear()</h5>
+            <code id="topic-api-methods-playlist-clear" class="signature">$api.playlistClear()</code>
             <p>
                 This example uses the <code>$api.playlistClear()</code> method to remove all videos from the playlist.
                 Only applicable to mods and admins.
@@ -431,7 +422,7 @@
             </pre>
 
             <!-- $api.playlistShuffle() -->
-            <h5 id="topic-api-methods-playlist-shuffle">$api.playlistShuffle()</h5>
+            <code id="topic-api-methods-playlist-shuffle" class="signature">$api.playlistShuffle()</code>
             <p>
                 This example uses the <code>$api.playlistShuffle()</code> method to shuffle the playlist.
                 Only applicable to mods and admins.
@@ -443,7 +434,7 @@
             </pre>
 
             <!-- $api.search() -->
-            <h5 id="topic-api-methods-search">$api.search()</h5>
+            <code id="topic-api-methods-search" class="signature">$api.search()</code>
             <p>
                 This example uses the <code>$api.search()</code> method to search YouTube. It uses the
                 <code>search_results</code> event to receive the search results, and queue the first video.
@@ -460,7 +451,7 @@
             </pre>
             
             <!-- $api.clear() -->
-            <h5 id="topic-api-methods-clear">$api.clear()</h5>
+            <code id="topic-api-methods-clear" class="signature">$api.clear()</code>
             <p>
                 This example uses the <code>$api.clear()</code> method to clear the chat buffer.
             </p>
@@ -471,20 +462,23 @@
             </pre>
 
             <!-- $api.color() -->
-            <h5 id="topic-api-methods-clear">$api.color()</h5>
+            <code id="topic-api-methods-color" class="signature">$api.clear(hex_code)</code>
             <p>
-                <code>$api.clear(hex_code)</code> Sets the chat text color.
+                Sets the chat text color.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
                     $api.color("#c13b3b");
                 </code>
             </pre>
-        </div>
+
+            {{ top() }}
+        </section>
+
         
         <h3 id="topic-examples">Examples</h3>
-        <div>
-            <h4 id="topic-api-examples-favorites">Queuing Favorites</h4>
+        <section>
+            <h5 id="topic-api-examples-favorites">Queuing Favorites</h5>
             This tiny user script adds one of your favorited videos to the playlist every 30
             minutes.
             
@@ -510,6 +504,8 @@
                     }, 1800000); // 30 minutes in milliseconds
                 </code>
             </pre>
-        </div>
+
+            {{ top() }}
+        </section>
     </div>
 {% endblock %}

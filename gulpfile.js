@@ -90,7 +90,7 @@ gulp.task('build-player', function() {
 
 gulp.task('default', ['less', 'scripts', 'babel']);
 
-gulp.task('watch', ['default'], function() {
+gulp.task('watch', ['less', 'scripts'], function() {
     var dirs = [
         pack.paths.source.js,
         pack.paths.source.less
