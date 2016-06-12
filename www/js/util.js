@@ -1642,6 +1642,9 @@ function addNotice(data) {
     
     var div = $("<div/>");
     div.addClass("notice-message");
+    if (data.is_error) {
+        div.addClass("notice-message-error");
+    }
     
     var message = $("<span/>").appendTo(div);
     message.html(msg);

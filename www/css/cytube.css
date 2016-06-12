@@ -988,6 +988,9 @@ input:focus {
   color: #FFF;
   background-color: rgba(58, 55, 55, 0.66);
 }
+.notice-message.notice-message-error {
+  color: red;
+}
 #user-scripting-tabs {
   margin-top: 5px;
 }

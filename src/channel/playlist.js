@@ -894,7 +894,8 @@ PlaylistModule.prototype.handleVoteVideo = function(user, value) {
                                 if (this.channel.users[i].getLowerName() == qdby) {
                                     this.channel.users[i].socket.emit("notice", {
                                         msg: this.filterMessage(user.account.name + " liked your video, **" + this.current.media.title + "**."),
-                                        time: Date.now()
+                                        time: Date.now(),
+                                        is_error: false
                                     });
                                     break;
                                 }
@@ -1014,7 +1015,8 @@ PlaylistModule.prototype.handleFavoritesAdd = function(user, tags) {
                                     if (this.channel.users[i].getLowerName() == qdby) {
                                         this.channel.users[i].socket.emit("notice", {
                                             msg: this.filterMessage(user.account.name + " favorited your video, **" + this.current.media.title + "**."),
-                                            time: Date.now()
+                                            time: Date.now(),
+                                            is_error: false
                                         });
                                         break;
                                     }

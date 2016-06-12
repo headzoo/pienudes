@@ -1270,6 +1270,10 @@ Callbacks = {
     },
 
     emoteList: function (data) {
+        if (ChatAPI.trigger("emotes_channel", data).isCancelled()) {
+            return;
+        }
+        
         loadEmotes(data);
         var tbl = $("#cs-emotes table");
         tbl.data("entries", data);
@@ -1354,7 +1358,7 @@ Callbacks = {
     },
     
     userEmoteList: function(data) {
-        if (ChatAPI.trigger("emotes", data).isCancelled()) {
+        if (ChatAPI.trigger("emotes_personal", data).isCancelled()) {
             return;
         }
 

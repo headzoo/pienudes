@@ -48,7 +48,8 @@
                     <li><a href="#topic-api-events-tags">tags</a></li>
                     <li><a href="#topic-api-events-votes">votes</a></li>
                     <li><a href="#topic-api-events-vote-value">vote_value</a></li>
-                    <li><a href="#topic-api-events-emotes">emotes</a></li>
+                    <li><a href="#topic-api-events-emotes-personal">emotes_personal</a></li>
+                    <li><a href="#topic-api-events-emotes-channel">emotes_channel</a></li>
                     <li><a href="#topic-api-events-afk">afk</a></li>
                     <li><a href="#topic-api-events-profile-menu">profile_menu</a></li>
                     <li><a href="#topic-api-events-user-options-save">user_options_save</a></li>
@@ -61,15 +62,25 @@
                 <a href="#topic-api-methods">Methods</a>
                 <ul>
                     <li><a href="#topic-api-methods-send">$api.send()</a></li>
+                    <li><a href="#topic-api-methods-notice">$api.notice()</a></li>
                     <li><a href="#topic-api-methods-queue">$api.queue()</a></li>
                     <li><a href="#topic-api-methods-dequeue-by-name">$api.dequeueByName()</a></li>
                     <li><a href="#topic-api-methods-skip">$api.skip()</a></li>
                     <li><a href="#topic-api-methods-vote">$api.vote()</a></li>
                     <li><a href="#topic-api-methods-playlist-clear">$api.playlistClear()</a></li>
                     <li><a href="#topic-api-methods-playlist-shuffle">$api.playlistShuffle()</a></li>
+                    <li><a href="#topic-api-methods-playlist-lock">$api.playlistLock()</a></li>
                     <li><a href="#topic-api-methods-search">$api.search()</a></li>
                     <li><a href="#topic-api-methods-clear">$api.clear()</a></li>
                     <li><a href="#topic-api-methods-color">$api.color()</a></li>
+                    <li><a href="#topic-api-methods-ignore">$api.ignore()</a></li>
+                    <li><a href="#topic-api-methods-unignore">$api.unignore()</a></li>
+                    <li><a href="#topic-api-methods-kick">$api.kick()</a></li>
+                    <li><a href="#topic-api-methods-mute">$api.mute()</a></li>
+                    <li><a href="#topic-api-methods-smute">$api.smute()</a></li>
+                    <li><a href="#topic-api-methods-unmute">$api.unmute()</a></li>
+                    <li><a href="#topic-api-methods-ban-by-name">$api.banByName()</a></li>
+                    <li><a href="#topic-api-methods-ban-by-ip">$api.banByIP()</a></li>
                 </ul>
             </li>
             <li>
@@ -422,16 +433,30 @@
                     how you voted: -1, 1, or 0, indicating whether you down voted, up voted, or remain neutral
                     on the vote.
                 </li>
-                <li id="topic-api-events-emotes">
-                    <code class="signature">emotes</code>
+                <li id="topic-api-events-emotes-personal">
+                    <code class="signature">emotes_personal</code>
                     Triggered when the server sends your personal emotes. The callback receives an <i>array</i> of
                     objects which describe the emote.
                     <pre>
                         <code class="language-javascript">
                             {
                                 image: String, // URL of the emote image
-                                name: String   // The string value that triggers the emote
-                                regex: RegExp, // Used to find the emote in strings
+                                name: String,  // The string value that triggers the emote
+                                regex: RegExp  // Used to find the emote in strings
+                            }
+                        </code>
+                    </pre>
+                </li>
+                <li id="topic-api-events-emotes-channel">
+                    <code class="signature">emotes_channel</code>
+                    Triggered when the server sends the channel emotes. The callback receives an <i>array</i> of
+                    objects which describe the emote.
+                    <pre>
+                        <code class="language-javascript">
+                            {
+                                image: String, // URL of the emote image
+                                name: String,  // The string value that triggers the emote
+                                regex: RegExp  // Used to find the emote in strings
                             }
                         </code>
                     </pre>
@@ -573,6 +598,47 @@
                 </code>
             </pre>
 
+            <!-- $api.notice() -->
+            <code id="topic-api-methods-notice" class="signature">$api.notice(msg, is_error)</code>
+            <p>
+                Writes the given notice message to your chat buffer. Set <code>is_error</code> to true
+                to show an error notice.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // Shows a regular notice.
+                    $api.notice("Your song has been queued.");
+                    
+                    // Shows an error notice.
+                    $api.notice("Could not find song.", true);
+                </code>
+            </pre>
+
+            <!-- $api.toast() -->
+            <code id="topic-api-methods-toast" class="signature">$api.toast(msg, type, time_out)</code>
+            <p>
+                Displays a popup message in the corner of the page. Valid values for <code>type</code> are
+                "success", "warning", and "error". Defaults to "success". The <code>time_out</code> argument
+                specifies how long the message is shown in milliseconds before fading out.
+            </p>
+            <p>
+                See <a href="http://codeseven.github.io/toastr/demo.html" target="_blank">
+                    http://codeseven.github.io/toastr/demo.html
+                </a>
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // Show a success message.
+                    $api.toast("Your song has been queued.");
+                    
+                    // Show a warning message.
+                    $api.toast("Could not find user.", "warning");
+                    
+                    // Show an error message.
+                    $api.toast("Failed to complete action.", "error");
+                </code>
+            </pre>
+
             <!-- $api.queue() -->
             <code id="topic-api-methods-queue" class="signature">$api.queue(video)</code>
             <p>
@@ -662,6 +728,17 @@
                 </code>
             </pre>
 
+            <!-- $api.playlistLock() -->
+            <code id="topic-api-methods-playlist-lock" class="signature">$api.playlistLock()</code>
+            <p>
+                Toggles the playlist lock on and off. Only applicable to chat moderators.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.playlistLock();
+                </code>
+            </pre>
+
             <!-- $api.search() -->
             <code id="topic-api-methods-search" class="signature">$api.search(query, type)</code>
             <p>
@@ -702,6 +779,94 @@
             <pre>
                 <code class="language-javascript line-numbers">
                     $api.color("#c13b3b");
+                </code>
+            </pre>
+
+            <!-- $api.ignore() -->
+            <code id="topic-api-methods-ignore" class="signature">$api.ignore(name)</code>
+            <p>
+                Puts the named user on ignore.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.ignore("az4521");
+                </code>
+            </pre>
+
+            <!-- $api.unignore() -->
+            <code id="topic-api-methods-unignore" class="signature">$api.unignore(name)</code>
+            <p>
+                Takes the named user off ignore.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.unignore("az4521");
+                </code>
+            </pre>
+
+            <!-- $api.kick() -->
+            <code id="topic-api-methods-kick" class="signature">$api.kick(name, reason)</code>
+            <p>
+                Kicks the named user from the chat room with the optional reason.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.kick("az4521", "Being a troll.");
+                </code>
+            </pre>
+
+            <!-- $api.mute() -->
+            <code id="topic-api-methods-mute" class="signature">$api.mute(name)</code>
+            <p>
+                Mutes the named user. Only applicable to moderators.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.mute("az4521");
+                </code>
+            </pre>
+
+            <!-- $api.smute() -->
+            <code id="topic-api-methods-smute" class="signature">$api.smute(name)</code>
+            <p>
+                Shadow mutes the named user. Only applicable to moderators.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.smute("az4521");
+                </code>
+            </pre>
+
+            <!-- $api.unmute() -->
+            <code id="topic-api-methods-unmute" class="signature">$api.unmute(name)</code>
+            <p>
+                Unmutes the named user. Only applicable to moderators.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.unmute("az4521");
+                </code>
+            </pre>
+
+            <!-- $api.banByName() -->
+            <code id="topic-api-methods-ban-by-name" class="signature">$api.banByName(name, reason)</code>
+            <p>
+                Bans the named user by their username with an optional reason. Only applicable to moderators.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.banByName("az4521", "Being a troll.");
+                </code>
+            </pre>
+
+            <!-- $api.banByIP() -->
+            <code id="topic-api-methods-ban-by-ip" class="signature">$api.banByIP(name, reason)</code>
+            <p>
+                Bans the named user by their IP address with an optional reason. Only applicable to moderators.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.banByIP("az4521", "Being a troll.");
                 </code>
             </pre>
 

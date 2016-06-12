@@ -31,14 +31,27 @@ var ChatAPI = null;
     ChatAPI = {
         _callbacks: {},
         _load_count: 0,
-        
+    
+        /**
+         * Registers a callback with the named event
+         * 
+         * @param event
+         * @param callback
+         */
         on: function(event, callback) {
             if (this._callbacks[event] == undefined) {
                 this._callbacks[event] = [];
             }
             this._callbacks[event].push(callback);
         },
-        
+    
+        /**
+         * Sends a message to everyone else in the chat room
+         * 
+         * @param msg
+         * @param meta
+         * @returns {ChatAPI}
+         */
         send: function(msg, meta) {
             if (typeof msg != "string") {
                 throw '$api.send#msg must be of type string.';
@@ -62,7 +75,55 @@ var ChatAPI = null;
             
             return this;
         },
-        
+    
+        /**
+         * Writes the given notice message to your chat buffer
+         * 
+         * @param msg
+         * @param is_error
+         */
+        notice: function(msg, is_error) {
+            is_error = is_error || false;
+            
+            var data = {
+                msg: msg,
+                time: Date.now(),
+                is_error: is_error
+            };
+            
+            addNotice(data);
+        },
+    
+        /**
+         * Displays a popup message in the corner of the page
+         * 
+         * @param msg
+         * @param type
+         * @param time_out
+         */
+        toast: function(msg, type, time_out) {
+            toastr.options.preventDuplicates = true;
+            toastr.options.closeButton = true;
+            toastr.options.timeOut = (time_out || 1500);
+            
+            switch(type) {
+                case "warning":
+                    toastr.warning(msg);
+                    break;
+                case "error":
+                    toastr.error(msg);
+                    break;
+                default:
+                    toastr.success(msg);
+                    break;
+            }
+        },
+    
+        /**
+         * Adds a video to the playlist
+         * 
+         * @param url
+         */
         queue: function(url) {
             if (typeof url == "object" && url.uid != undefined) {
                 socket.emit("queue", {
@@ -77,17 +138,30 @@ var ChatAPI = null;
                 queue("end", "src");
             }
         },
-        
+    
+        /**
+         * Removes videos from the playlist that have been queued by the given user
+         * 
+         * @param name
+         */
         dequeueByName: function(name) {
             $(".queue_entry_by_" + name).each(function(i, item) {
                 socket.emit("delete", $(item).data("pluid"));
             });
         },
-        
+    
+        /**
+         * Vote skips the currently playing video
+         */
         skip: function() {
             $("#voteskip").trigger("click");
         },
-        
+    
+        /**
+         * Votes for the currently playing video
+         * 
+         * @param value
+         */
         vote: function(value) {
             if (value != -1 && value != 1) {
                 throw "Vote value invalid. Must -1, or 1.";
@@ -95,14 +169,33 @@ var ChatAPI = null;
             socket.emit("voteVideo", value);
         },
     
+        /**
+         * Clears the playlist
+         */
         playlistClear: function() {
             socket.emit("clearPlaylist");
         },
-        
+    
+        /**
+         * Shuffles the playlist
+         */
         playlistShuffle: function() {
             socket.emit("shufflePlaylist");
         },
-        
+    
+        /**
+         * Toggles the playlist lock
+         */
+        playlistLock: function() {
+            socket.emit("togglePlaylistLock");
+        },
+    
+        /**
+         * Searches YouTube for videos matching the given query argument
+         * 
+         * @param query
+         * @param type
+         */
         search: function(query, type) {
             if (type != undefined && type != "yt") {
                 throw "Type must be value 'yt'.";
@@ -112,15 +205,128 @@ var ChatAPI = null;
                 query: query
             });
         },
-        
+    
+        /**
+         * Clears the chat buffer
+         */
         clear: function() {
             $("#messagebuffer").empty();
         },
-        
+    
+        /**
+         * Sets the chat text color
+         * 
+         * @param color
+         */
         color: function(color) {
             $("#chatcolor").spectrum("set", color);
         },
-        
+    
+        /**
+         * Puts the named user on ignore
+         * 
+         * @param name
+         */
+        ignore: function(name) {
+            if(IGNORED.indexOf(name) === -1) {
+                IGNORED.push(name);
+            }
+        },
+    
+        /**
+         * Takes the named user off ignore
+         * 
+         * @param name
+         */
+        unignore: function(name) {
+            var index = IGNORED.indexOf(name);
+            if (index !== -1) {
+                IGNORED.splice(index, 1);
+            }
+        },
+    
+        /**
+         * Kicks the named user from the chat room with the optional reason
+         * 
+         * @param name
+         * @param reason
+         */
+        kick: function(name, reason) {
+            socket.emit("chatMsg", {
+                msg: "/kick " + name + " " + reason,
+                meta: {}
+            });
+        },
+    
+        /**
+         * Mutes the named user
+         * 
+         * @param name
+         */
+        mute: function(name) {
+            socket.emit("chatMsg", {
+                msg: "/mute " + name,
+                meta: {}
+            });
+        },
+    
+        /**
+         * Shadow mutes the named user
+         * 
+         * @param name
+         */
+        smute: function(name) {
+            socket.emit("chatMsg", {
+                msg: "/smute " + name,
+                meta: {}
+            });
+        },
+    
+        /**
+         * Unmutes the named user
+         * 
+         * @param name
+         */
+        unmute: function(name) {
+            socket.emit("chatMsg", {
+                msg: "/unmute " + name,
+                meta: {}
+            });
+        },
+    
+        /**
+         * Bans the named user by their username with an optional reason
+         * 
+         * @param name
+         * @param reason
+         */
+        banByName: function(name, reason) {
+            socket.emit("chatMsg", {
+                msg: "/ban " + name + " " + reason,
+                meta: {}
+            });
+        },
+    
+        /**
+         * Bans the named user by their IP address with an optional reason
+         * 
+         * @param name
+         * @param reason
+         */
+        banByIP: function(name, reason) {
+            socket.emit("chatMsg", {
+                msg: "/ipban " + name + " " + reason,
+                meta: {}
+            });
+        },
+    
+        /**
+         * Triggers the named event
+         * 
+         * @param name
+         * @param data
+         * @returns {ChatEvent}
+         */
         trigger: function(name, data) {
             var event = new ChatEvent(name);
             if (this._callbacks[name] == undefined || this._callbacks[name].length == 0) {
@@ -137,7 +343,14 @@ var ChatAPI = null;
             
             return event;
         },
-        
+    
+        /**
+         * Loads external scripts
+         * 
+         * @param scripts
+         * @param callback
+         * @private
+         */
         _getScripts: function(scripts, callback) {
             var progress = 0;
             var internalCallback = function () {
@@ -150,7 +363,12 @@ var ChatAPI = null;
                 $.getScript(script, internalCallback);
             });
         },
-        
+    
+        /**
+         * Resets the api state
+         * 
+         * @private
+         */
         _reset: function() {
             this._callbacks = {
                 reloading: [],
@@ -168,7 +386,8 @@ var ChatAPI = null;
                 tags: [],
                 votes: [],
                 vote_value: [],
-                emotes: [],
+                emotes_personal: [],
+                emotes_channel: [],
                 afk: [],
                 user_options_save: [],
                 channel_option_save: [],
@@ -177,6 +396,10 @@ var ChatAPI = null;
             };
         },
     
+        /**
+         * 
+         * @private
+         */
         _pushLoaded: function() {
             this._load_count++;
             if (this._load_count == 3) {
