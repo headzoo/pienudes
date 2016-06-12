@@ -835,6 +835,9 @@ Callbacks = {
         socket.emit("favoritesGet");
         socket.emit("userTagsGet");
         
+        for(var i = 0; i < data.length; i++) {
+            data[i].media.uid = data[i].media.id;
+        }
         if (ChatAPI.trigger("playlist", data).isCancelled()) {
             return;
         }
@@ -864,6 +867,7 @@ Callbacks = {
     },
 
     queue: function(data) {
+        data.item.media.uid = data.item.media.id;
         if (ChatAPI.trigger("queue", data).isCancelled()) {
             return;
         }
@@ -975,6 +979,7 @@ Callbacks = {
             return;
         }
         
+        data.uid = data.id;
         CHAT_WRAP_MEDIA = data;
         if ($("body").hasClass("chatOnly") || $("#videowrap").length === 0) {
             ChatAPI._pushLoaded();
