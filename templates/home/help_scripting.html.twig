@@ -75,6 +75,7 @@
                 <a href="#topic-examples">Examples</a>
                 <ul>
                     <li><a href="#topic-api-examples-favorites">Queuing Favorites</a></li>
+                    <li><a href="#topic-api-examples-lucky">I'm Feeling Lucky</a></li>
                 </ul>
             </li>
         </ul>
@@ -698,9 +699,10 @@
         <h3 id="topic-examples">Examples</h3>
         <section>
             <h5 id="topic-api-examples-favorites">Queuing Favorites</h5>
-            This tiny user script adds one of your favorited videos to the playlist every 30
-            minutes.
-            
+            <p>
+                A user script that automatically queues one of your favorite videos every
+                30 minutes.
+            </p>
             <pre>
                 <code class="language-javascript line-numbers">
                     // The "favorites" event is called when you enter chat. Save the favorites to a local variable.
@@ -724,6 +726,37 @@
                 </code>
             </pre>
 
+            <h5 id="topic-api-examples-lucky">I'm Feeling Lucky</h5>
+            <p>
+                Creates a <code>/lucky</code> command, which searches YouTube with a given search term,
+                and queues the first video found. Install the script, and then type a search query into
+                the chatbox using the command. For example: <code>/lucky grimes kill v maim</code>
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // Register a callback which gets every message we send to the server. We'll use this
+                    // to parse our messages for the "/lucky" command.
+                    $api.on("send", function(e, data) {
+                        if (data.msg.indexOf("/lucky ") === 0) {
+                            // We search when the message starts with the /lucky command.
+                            $api.search(data.msg.replace("/lucky ", ""));
+        
+                            // Stop the message from being sent to the other users.
+                            e.cancel();
+                        }
+                    });
+
+                    // Register a callback to receive the search results. This gets called with the results of
+                    // calling the the $api.search() method.
+                    $api.on("search_results", function(e, data) {
+                        if (data.results.length > 0) {
+                            // Queue the first video found in the results.
+                            $api.queue(data.results[0]);
+                        }
+                    });
+                </code>
+            </pre>
+            
             {{ top() }}
         </section>
     </div>
