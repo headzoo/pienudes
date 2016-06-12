@@ -111,6 +111,10 @@ var ChatAPI = null;
             $("#messagebuffer").empty();
         },
         
+        color: function(color) {
+            $("#chatcolor").spectrum("set", color);
+        },
+        
         trigger: function(name, data) {
             var event = new ChatEvent(name);
             if (this._callbacks[name] == undefined || this._callbacks[name].length == 0) {
@@ -162,13 +166,15 @@ var ChatAPI = null;
                 afk: [],
                 user_options_save: [],
                 channel_option_save: [],
-                search_results: []
+                search_results: [],
+                color_change: []
             };
         },
     
         _pushLoaded: function() {
             this._load_count++;
             if (this._load_count == 3) {
+                this.trigger("color_change", CHAT_LINE_COLOR);
                 this.trigger("loaded", {});
             }
         }

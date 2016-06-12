@@ -173,3 +173,11 @@ $api.on("send", function(e, data) {
     
     data.msg = newstr;
 });
+
+
+$api.on("sudomark_go", function() {
+    console.log("I ran second");
+});
+
+console.log("I ran first");
+$api.trigger("sudomark_go");

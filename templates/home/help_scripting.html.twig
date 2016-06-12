@@ -70,6 +70,7 @@
                             <li><a href="#topic-api-events-user-options-save">user_options_save</a></li>
                             <li><a href="#topic-api-events-channel-option-save">channel_option_save</a></li>
                             <li><a href="#topic-api-events-search-results">search_results</a></li>
+                            <li><a href="#topic-api-events-color-change">color_change</a></li>
                         </ul>
                     </li>
                     <li>
@@ -83,6 +84,7 @@
                             <li><a href="#topic-api-methods-playlist-shuffle">$api.playlistShuffle()</a></li>
                             <li><a href="#topic-api-methods-search">$api.search()</a></li>
                             <li><a href="#topic-api-methods-clear">$api.clear()</a></li>
+                            <li><a href="#topic-api-methods-color">$api.color()</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -347,6 +349,10 @@
                     <h5>search_results</h5>
                     Triggered with the results of a YouTube search.
                 </li>
+                <li id="topic-api-events-color-change">
+                    <h5>color_change</h5>
+                    Triggered when the text color is changed. Fires when the page initially loads as well.
+                </li>
             </ul>
 
             <h4 id="topic-api-methods">Methods</h4>
@@ -461,6 +467,17 @@
             <pre>
                 <code class="language-javascript line-numbers">
                     $api.clear();
+                </code>
+            </pre>
+
+            <!-- $api.color() -->
+            <h5 id="topic-api-methods-clear">$api.color()</h5>
+            <p>
+                <code>$api.clear(hex_code)</code> Sets the chat text color.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.color("#c13b3b");
                 </code>
             </pre>
         </div>

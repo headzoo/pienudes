@@ -34,6 +34,7 @@ $(function() {
             clickoutFiresChange: true
         }).on("change", function () {
             CHAT_LINE_COLOR = $(this).val();
+            ChatAPI.trigger("color_change", CHAT_LINE_COLOR);
             window.localStorage.setItem("chat_line_color", CHAT_LINE_COLOR);
         });
     } else {
