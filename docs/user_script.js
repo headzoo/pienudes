@@ -140,35 +140,49 @@ $api.on("user_join", function(e, data) {
 
 $socket.emit("assignLeader", {name: "Potato"});
 
+/**
+ * Script: Colors
+ *
+ * Import: https://upnext.fm/js/rainbowvis.js
+ * 
+ * Gives your text gradient colors. Colors are turned on by typing
+ * the command "/colors on" and they are turned off by typing the
+ * command "/colors off".
+ * 
+ * Set the colors to use in the gradient by changing the rainbow.setSpectrum()
+ * values. For instance rainbow.setSpectrum('#FF0000', '#00FF00') will create
+ * a gradient between red and green.
+ */
+var rainbow = new Rainbow();
+rainbow.setSpectrum('#C13B3B', '#CD6A6A', '#C13B3B');
+var colors_on = false;
 
 $api.on("send", function(e, data) {
-    if (data.msg.length > 35) { return }
-    var colors  = [
-        '#00efd3',
-        '#00d7d1',
-        '#00cacf',
-        '#00bccd',
-        '#00afcb',
-        '#00a1c9',
-        '#0094c7',
-        '#0086c4',
-        '#0079c3',
-        '#006bc1',
-        '#005ebf'
-    ];
+    if (data.msg.indexOf("/colors ") === 0 || data.msg.indexOf("/colours ") === 0) {
+        var arg = data.msg.replace("/colors ", "");
+        arg = arg.replace("/colours ", "");
+        colors_on = (arg == "on");
+        e.cancel();
+        return;
+    } else if (data.msg[0] == "/" || data.msg[0] == "$" || data.msg.match(/:([^:]+):/)) {
+        return;
+    }
+    if (!colors_on) {
+        return;
+    }
+    
+    rainbow.setNumberRange(0, data.msg.length);
+    
     var newstr  = '';
     var counter = 0;
     var chars   = data.msg.split('');
     for (var x in chars) {
         if (chars[x]!=' ') {
-            newstr = newstr + '[' + colors[counter] + ']' + chars[x] + '[/#]';
+            var hex = '#' + rainbow.colourAt(counter);
+            newstr = newstr + '[' + hex + ']' + chars[x] + '[/#]';
             counter++;
         } else {
             newstr = newstr + ' ';
-        }
-        if (counter >= colors.length) {
-            colors.reverse();
-            counter = 0;
         }
     }
     
