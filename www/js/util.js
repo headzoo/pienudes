@@ -2866,6 +2866,7 @@ function formatUserScriptTab(data) {
     var textarea = $('<textarea class="form-control user-scripting-textarea" rows="20"/>');
     textarea.data("name", name);
     textarea.val(data.script);
+    tabOverride.set(textarea[0]);
     pane.append(textarea);
     
     anchor.find("span:first").on("click", function() {

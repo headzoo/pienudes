@@ -92,6 +92,11 @@ $(function() {
         }
     });
     
+    var default_scripting = $("#user-script-pane-default textarea");
+    tabOverride.tabSize(4);
+    tabOverride.autoIndent(true);
+    tabOverride.set(default_scripting[0]);
+    
     $("#user-scripting-create-btn").on("click", function() {
         var name = prompt("Name of script");
         if (!name) {
