@@ -376,6 +376,14 @@ Callbacks = {
         textarea.data("name", name);
         
         if (script.length != 0) {
+            if (name_low == "css") {
+                $("<style/>").attr("type", "text/css")
+                    .attr("id", "user-script-exec-" + name_low)
+                    .text(script)
+                    .appendTo($("head"));
+                return;
+            }
+            
             var imports  = [];
             var pattern  = /\*\s+Import:\s+(https?:\/\/(.*?)\.js)\b/gi;
             while (match = pattern.exec(script)) {
