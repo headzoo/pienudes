@@ -355,6 +355,7 @@ Callbacks = {
             Callbacks.addUserScript(scripts[i]);
         }
         USER_SCRIPTS_INIT = true;
+        ChatAPI._pushLoaded();
     },
     
     addUserScript: function(data) {
