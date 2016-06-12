@@ -78,6 +78,12 @@ var ChatAPI = null;
             }
         },
         
+        dequeueByName: function(name) {
+            $(".queue_entry_by_" + name).each(function(i, item) {
+                socket.emit("delete", $(item).data("pluid"));
+            });
+        },
+        
         skip: function() {
             $("#voteskip").trigger("click");
         },

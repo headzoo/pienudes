@@ -62,6 +62,7 @@
                 <ul>
                     <li><a href="#topic-api-methods-send">$api.send()</a></li>
                     <li><a href="#topic-api-methods-queue">$api.queue()</a></li>
+                    <li><a href="#topic-api-methods-dequeue-by-name">$api.dequeueByName()</a></li>
                     <li><a href="#topic-api-methods-skip">$api.skip()</a></li>
                     <li><a href="#topic-api-methods-vote">$api.vote()</a></li>
                     <li><a href="#topic-api-methods-playlist-clear">$api.playlistClear()</a></li>
@@ -590,6 +591,18 @@
                         uid: "OsCfufAp2tM",           // The id of the video
                         title: "Grimes - California"  // The title of the video
                     });
+                </code>
+            </pre>
+
+            <!-- $api.dequeueByName() -->
+            <code id="topic-api-methods-dequeue-by-name" class="signature">$api.dequeueByName(username)</code>
+            <p>
+                Removes videos from the playlist that have been queued by the given user.
+                Only applicable to moderators.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.dequeueByName("headzoo");
                 </code>
             </pre>
 

@@ -470,6 +470,8 @@ function makeQueueEntry(item, addbtns) {
     var li = $("<li/>");
     li.addClass("queue_entry");
     li.addClass("pluid-" + item.uid);
+    li.data("pluid", item.uid);
+    li.addClass("queue_entry_by_" + item.queueby.replace("@", ""));
     li.data("uid", item.uid);
     li.data("media", video);
     li.data("temp", item.temp);

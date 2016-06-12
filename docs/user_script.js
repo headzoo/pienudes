@@ -26,6 +26,7 @@ $api.on("receive", function(e, data) {
 
 /**
  * Script: Troll Protection
+ * Version: 1.1
  *
  * Prevents trolls from showing images and emotes in the channel, and
  * converts their messages to lower case letters.
@@ -40,20 +41,31 @@ $api.on("receive", function(e, data) {
         no_emotes: true,
         no_upper_case: true
     };
-    var trolls = [];
     
-    $(".btn-stop-trolling").remove();
+    var trolls = localStorage.getItem("trolls");
+    if (trolls) {
+        trolls = JSON.parse(trolls);
+    } else {
+        trolls = [];
+    }
     
-    // Add a button to user profile menus to turn trolling protection on and off.
+    var no_queue = localStorage.getItem("trolls_no_queue");
+    if (no_queue) {
+        no_queue = JSON.parse(no_queue);
+    } else {
+        no_queue = [];
+    }
+    
     $api.on("profile_menu", function(e, menu) {
+        var name      = menu.data("name").toLowerCase();
         var btn_group = menu.find(".btn-group-vertical:first");
         var btn = $("<button/>")
             .addClass("btn btn-xs btn-default btn-stop-trolling")
             .appendTo(btn_group);
-        
-        btn.text("Troll Protection On")
+    
+        // Add a button to user profile menus to turn trolling protection on and off.
+        btn.text(trolls.indexOf(name) == -1 ? "Troll Protection On" : "Troll Protection Off")
             .click(function () {
-                var name  = menu.data("name").toLowerCase();
                 var index = trolls.indexOf(name);
                 if (index == -1) {
                     trolls.push(name);
@@ -62,7 +74,29 @@ $api.on("receive", function(e, data) {
                     trolls.splice(index, 1);
                     btn.text("Troll Protection On");
                 }
+                
+                localStorage.setItem("trolls", JSON.stringify(trolls));
             });
+            
+        // Gives mods a button to stop the user from adding to the queue.
+        if ($user.rank >= 2) {
+            var btnq = $("<button/>")
+                .addClass("btn btn-xs btn-default btn-stop-trolling-playlist")
+                .appendTo(btn_group);
+            btnq.text(no_queue.indexOf(name) == -1 ? "No Queue On" : "No Queue Off")
+                .click(function() {
+                    var index = no_queue.indexOf(name);
+                    if (index == -1) {
+                        no_queue.push(name);
+                        btnq.text("No Queue Off");
+                    } else {
+                        no_queue.splice(index, 1);
+                        btnq.text("No Queue On");
+                    }
+                    
+                    localStorage.setItem("trolls_no_queue", JSON.stringify(no_queue));
+                });
+        }
     });
     
     // Filter messages from users that have been put in troll prison.
@@ -85,44 +119,17 @@ $api.on("receive", function(e, data) {
             }
         }
     });
-})();
-/**
- * End: Troll Protection
- */
-
-
-$api.on("send", function(e, data) {
-    var colors  = [
-        '#00efd3',
-        '#00d7d1',
-        '#00cacf',
-        '#00bccd',
-        '#00afcb',
-        '#00a1c9',
-        '#0094c7',
-        '#0086c4',
-        '#0079c3',
-        '#006bc1',
-        '#005ebf'
-    ];
-    var newstr  = '';
-    var counter = 0;
-    var chars   = data.msg.split('');
-    for (var x in chars) {
-        if (chars[x]!=' ') {
-            newstr = newstr + '[' + colors[counter] + ']' + chars[x] + '[/#]';
-            counter++;
-        } else {
-            newstr = newstr + ' ';
-        }
-        if (counter >= colors.length) {
-            colors.reverse();
-            counter = 0;
-        }
-    }
     
-    data.msg = newstr;
-});
+    // Stop trolls from queuing songs.
+    $api.on("queue", function(e, data) {
+        if (no_queue.indexOf(data.item.queueby) != -1) {
+            setTimeout(function() {
+                $api.dequeueByName(data.item.queueby);
+            }, 1000);
+        }
+    });
+})();
+
 
 var to_hide = [
     "dj_lost",
@@ -141,57 +148,71 @@ $api.on("user_join", function(e, data) {
 $socket.emit("assignLeader", {name: "Potato"});
 
 /**
- * Script: Colors
+ * Script: Gradient Text
+ * Version: 1.1
+ * Author: headzoo
  *
  * Import: https://upnext.fm/js/rainbowvis.js
  * 
- * Gives your text gradient colors. Colors are turned on by typing
- * the command "/colors on" and they are turned off by typing the
- * command "/colors off".
+ * Gives your text gradient colors.
  * 
- * Set the colors to use in the gradient by changing the rainbow.setSpectrum()
- * values. For instance rainbow.setSpectrum('#FF0000', '#00FF00') will create
- * a gradient between red and green.
+ * Colors are turned on by typing the command "/colors on" and they
+ * are turned off by typing the command "/colors off".
+ * 
+ * Set the colors in the gradient by changing the spectrum array values.
+ * For example ['#FF0000', '#00FF00'] will create a gradient between
+ * red and green. ['#FF0000', '#00FF00', '#0000FF'] creates a gradient
+ * that goes from red, to green, to blue.
  */
-var rainbow = new Rainbow();
-rainbow.setSpectrum('#C13B3B', '#CD6A6A', '#C13B3B');
-var colors_on = false;
-
-$api.on("send", function(e, data) {
-    if (data.msg.indexOf("/colors ") === 0 || data.msg.indexOf("/colours ") === 0) {
-        var arg = data.msg.replace("/colors ", "");
-        arg = arg.replace("/colours ", "");
-        colors_on = (arg == "on");
-        e.cancel();
-        return;
-    } else if (data.msg[0] == "/" || data.msg[0] == "$" || data.msg.match(/:([^:]+):/)) {
-        return;
-    }
-    if (!colors_on) {
-        return;
-    }
+(function() {
+    var spectrum = [
+        '#C13B3B',
+        '#CD6A6A',
+        '#C13B3B'
+    ];
     
-    rainbow.setNumberRange(0, data.msg.length);
+    /**
+     * Dot not edit below this line (unless you know what you're doing).
+     */
+    var colors_on = false;
+    var rainbow = new Rainbow();
+    rainbow.setSpectrum.apply(rainbow, spectrum);
     
-    var newstr  = '';
-    var counter = 0;
-    var chars   = data.msg.split('');
-    for (var x in chars) {
-        if (chars[x]!=' ') {
-            var hex = '#' + rainbow.colourAt(counter);
-            newstr = newstr + '[' + hex + ']' + chars[x] + '[/#]';
-            counter++;
-        } else {
-            newstr = newstr + ' ';
+    $api.on("send", function(e, data) {
+        if (data.msg.indexOf("/colors ") === 0 || data.msg.indexOf("/colours ") === 0) {
+            var arg = data.msg.replace("/colors ", "").replace("/colours ", "");
+            colors_on = (arg.toLowerCase() == "on");
+            e.cancel();
+            return;
+        } else if (data.msg[0] == "/" || data.msg[0] == "$" || data.msg.match(/:([^:]+):/) || data.msg.match(/https?:\/\//)) {
+            return;
         }
-    }
+        if (!colors_on) {
+            return;
+        }
     
-    data.msg = newstr;
-});
+        var msg   = "";
+        var len   = data.msg.length;
+        var chars = data.msg.split('');
+        rainbow.setNumberRange(0, len);
+        
+        for (var i = 0; i < len; i++) {
+            if (chars[i] != " ") {
+                msg = msg + "[#" + rainbow.colourAt(i) + "]" + chars[i] + "[/#]";
+            } else {
+                msg = msg + " ";
+            }
+        }
+        
+        data.msg = msg;
+    });
+})();
 
 
 /**
  * Script: Lucky
+ * Version: 1.0
+ * Author: headzoo
  *
  * Creates a /lucky command, which searches YouTube using the query following
  * the command, and queues the first video found.
@@ -199,15 +220,43 @@ $api.on("send", function(e, data) {
  * To use, copy this script into the Options->Scripting box. In the chat box
  * type something like "/lucky grimes kill v maim".
  */
-$api.on("send", function(e, data) {
-    if (data.msg.indexOf("/lucky ") === 0) {
-        $api.search(data.msg.replace("/lucky ", ""));
-        e.cancel();
-    }
-});
+(function() {
+    $api.on("send", function(e, data) {
+        if (data.msg.indexOf("/lucky ") === 0) {
+            $api.search(data.msg.replace("/lucky ", ""));
+            e.cancel();
+        }
+    });
+    
+    $api.on("search_results", function(e, data) {
+        if (data.results.length > 0) {
+            $api.queue(data.results[0]);
+        }
+    });
+})();
 
-$api.on("search_results", function(e, data) {
-    if (data.results.length > 0) {
-        $api.queue(data.results[0]);
-    }
-});
+/**
+ * Script: Auto Queue Favorites
+ * Version: 1.0
+ * Author: headzoo
+ *
+ * Automatically queues one of the songs from your favorites every
+ * 30 minutes.
+ */
+(function() {
+    var favorites = [];
+    $api.on("favorites", function(e, data) {
+        favorites = data;
+    });
+    
+    $api.on("favorite_add", function(e, data) {
+        favorites.push(data.media);
+    });
+    
+    setInterval(function() {
+        var item = favorites[Math.floor(Math.random() * favorites.length)];
+        if (item) {
+            $api.queue(item);
+        }
+    }, 1800000); // 30 minutes in milliseconds
+})();
