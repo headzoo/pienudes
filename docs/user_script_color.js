@@ -24,13 +24,6 @@
         right:  $api.getStorage("chat_gradient_color_right", CHAT_LINE_COLOR),
         last:   CHAT_LINE_COLOR
     };
-    for(var k in gradients) {
-        if (gradients.hasOwnProperty(k)) {
-            if (!gradients[k]) {
-                gradients[k] = CHAT_LINE_COLOR;
-            }
-        }
-    }
     
     // Use the existing color picker as the "last" color in the gradient.
     // This already exists on the page, and has already been setup with

@@ -61,6 +61,8 @@
             <li>
                 <a href="#topic-api-methods">Methods</a>
                 <ul>
+                    <li><a href="#topic-api-methods-set-storage">$api.setStorage()</a></li>
+                    <li><a href="#topic-api-methods-get-storage">$api.getStorage()</a></li>
                     <li><a href="#topic-api-methods-send">$api.send()</a></li>
                     <li><a href="#topic-api-methods-notice">$api.notice()</a></li>
                     <li><a href="#topic-api-methods-queue">$api.queue()</a></li>
@@ -579,6 +581,46 @@
                 The API contains a few methods for interacting with the channel. For instance to send messages,
                 queue songs, and vote skip videos.
             </p>
+
+            <!-- $api.setStorage() -->
+            <code id="topic-api-methods-set-storage" class="signature">$api.setStorage(key, value)</code>
+            <p>
+                Saves a value to local storage with the given value. All values are serialized
+                before saving. Future versions of this method may fall back on using cookies when
+                local storage isn't available.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // Saving a plain string.
+                    $api.setStorage("gradient_color", "#FF0000");
+
+                    // Saving an object.
+                    $api.setStorage("gradient_color", {
+                        red: 255,
+                        green: 0,
+                        blue: 0
+                    });
+                </code>
+            </pre>
+
+            <!-- $api.getStorage() -->
+            <code id="topic-api-methods-get-storage" class="signature">$api.getStorage(key, default_value)</code>
+            <p>
+                Returns a value from local storage. Values are automatically unserialized. Returns the
+                <code>default_value</code> when the value does not exist in local storage. Future
+                versions of this method may fall back on using cookies when local storage isn't available.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // Gets a value from local storage using the key "gradient_color".
+                    // This will return null if the value does not exist in storage.
+                    var color = $api.getStorage("gradient_color");
+
+                    // Same as above, but will return the given default value when the value
+                    // does not exist in local storage.
+                    var color = $api.getStorage("gradient_color", "#FF0000");
+                </code>
+            </pre>
             
             <!-- $api.send() -->
             <code id="topic-api-methods-send" class="signature">$api.send(msg, meta)</code>
