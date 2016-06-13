@@ -588,6 +588,10 @@ Callbacks = {
         }
     },
     
+    delMsg: function(msg_id) {
+        $("#chat-msg-" + msg_id).remove();
+    },
+    
     chatBuffer: function(data) {
         for(var i = 0; i < data.length; i++) {
             Callbacks.chatMsg(data[i]);

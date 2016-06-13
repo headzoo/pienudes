@@ -1186,3 +1186,22 @@ textarea:focus, input:focus{
         margin: 15px;
     }
 }
+
+.chat-msg-deletable {
+    
+    .chat-msg-delete-btn {
+        cursor: pointer;
+        font-size: 10px;
+        margin-right: 2px;
+        width: 0;
+        opacity: 0;
+        transition: all 0.2s ease-in-out;
+    }
+    
+    &:hover {
+        .chat-msg-delete-btn {
+            opacity: 1.0;
+            width: 10px;
+        }
+    }
+}

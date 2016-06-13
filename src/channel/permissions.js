@@ -45,6 +45,7 @@ const DEFAULT_PERMISSIONS = {
     chat: 0,                  // Send chat messages
     chatclear: 2,             // Use the /clear command
     exceedmaxitems: 2,        // Exceed maximum items per user limit
+    deletemsg: 2,             // Deleting chat messages that aren't your own
     scripting: 1
 };
 
@@ -365,6 +366,10 @@ PermissionsModule.prototype.canUncache = function (actor) {
 
 PermissionsModule.prototype.canExceedMaxItemsPerUser = function (actor) {
     return this.hasPermission(actor, "exceedmaxitems");
+};
+
+PermissionsModule.prototype.canDeleteMsg = function(actor) {
+    return this.hasPermission(actor, "deletemsg");
 };
 
 PermissionsModule.prototype.canUserScripting = function (actor) {

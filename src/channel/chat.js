@@ -101,6 +101,7 @@ ChatModule.prototype.onUserPostJoin = function (user) {
 
     user.socket.typecheckedOn("chatMsg", TYPE_CHAT, this.handleChatMsg.bind(this, user));
     user.socket.typecheckedOn("pm", TYPE_PM, this.handlePm.bind(this, user));
+    user.socket.on("delMsg", this.handleDelMsg.bind(this, user));
     user.socket.emit("chatBuffer", this.buffer);
 };
 
@@ -253,6 +254,14 @@ ChatModule.prototype.handlePm = function (user, data) {
 
     to.socket.emit("pm", msgobj);
     user.socket.emit("pm", msgobj);
+};
+
+ChatModule.prototype.handleDelMsg = function(user, msg_id) {
+    if (!this.channel || !this.channel.modules.permissions.canDeleteMsg(user)) {
+        return;
+    }
+    
+    this.channel.broadcastAll("delMsg", msg_id);
 };
 
 ChatModule.prototype.processChatMsg = function (user, data) {

@@ -1461,6 +1461,7 @@ function formatChatMessage(data, last, permalink) {
 
     last.name = data.username;
     var div = $("<div/>");
+    
     /* drink is a special case because the entire container gets the class, not
        just the message */
     if (data.meta.addClass === "drink") {
@@ -1479,6 +1480,20 @@ function formatChatMessage(data, last, permalink) {
         time.text("[" + timestamp + "] ");
         if (data.meta.addClass && data.meta.addClassToNameAndTimestamp) {
             time.addClass(data.meta.addClass);
+        }
+    }
+    
+    if (data.id != undefined) {
+        div.attr("id", "chat-msg-" + data.id);
+        if (hasPermission("deletemsg")) {
+            div.addClass("chat-msg-deletable");
+            var del_msg = $('<span class="glyphicon glyphicon-remove chat-msg-delete-btn"/>');
+            del_msg.on("click", function() {
+                if (confirm("Delete this message?")) {
+                    socket.emit("delMsg", data.id);
+                }
+            });
+            div.append(del_msg);
         }
     }
 
@@ -2063,6 +2078,7 @@ function genPermissionsEditor() {
     makeOption("Edit chat emotes", "emoteedit", modplus, CHANNEL.perms.emoteedit+"");
     makeOption("Upload files", "upload", modplus, CHANNEL.perms.upload+"");
     makeOption("Import chat emotes", "emoteimport", modplus, CHANNEL.perms.emoteimport+"");
+    makeOption("Delete messages", "deletemsg", modplus, CHANNEL.perms.deletemsg+"");
 
     addDivider("Misc");
     makeOption("Drink calls", "drink", modleader, CHANNEL.perms.drink+"");
