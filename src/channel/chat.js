@@ -48,6 +48,7 @@ function ChatModule(channel) {
     this.registerCommand("/clear", this.handleCmdClear.bind(this));
     this.registerCommand("/a", this.handleCmdAdminflair.bind(this));
     this.registerCommand("/afk", this.handleCmdAfk.bind(this));
+    this.registerCommand("/shake", this.handleShake.bind(this));
     this.registerCommand("/mute", this.handleCmdMute.bind(this));
     this.registerCommand("/smute", this.handleCmdSMute.bind(this));
     this.registerCommand("/unmute", this.handleCmdUnmute.bind(this));
@@ -496,6 +497,28 @@ ChatModule.prototype.handleCmdAdminflair = function (user, msg, meta) {
 
 ChatModule.prototype.handleCmdAfk = function (user, msg, meta) {
     user.setAFK(!user.is(Flags.U_AFK));
+};
+
+ChatModule.prototype.handleShake = function(user, msg) {
+    if (user.account.globalRank < 2) {
+        return;
+    }
+    
+    var args = msg.split(" ");
+    args.shift();
+    
+    if (args.length == 0) {
+        this.channel.users.forEach(function(u) {
+            u.setAFK(false);
+        });
+    } else {
+        var name = args[0].toLowerCase();
+        this.channel.users.forEach(function(u) {
+            if (u.account.name.toLowerCase() == name) {
+                u.setAFK(false);
+            }
+        });
+    }
 };
 
 ChatModule.prototype.handleCmdMute = function (user, msg, meta) {
