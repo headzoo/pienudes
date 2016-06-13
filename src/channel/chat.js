@@ -2,6 +2,7 @@ var Config = require("../config");
 var User = require("../user");
 var XSS = require("../xss");
 var ChannelModule = require("./module");
+var Server = require("../server");
 var util = require("../utilities");
 var Flags = require("../flags");
 var url = require("url");
@@ -53,6 +54,7 @@ function ChatModule(channel) {
     this.registerCommand("/smute", this.handleCmdSMute.bind(this));
     this.registerCommand("/unmute", this.handleCmdUnmute.bind(this));
     this.registerCommand("/unsmute", this.handleCmdUnmute.bind(this));
+    this.registerCommand("/announce", this.handleCmdAnnounce.bind(this));
 }
 
 ChatModule.prototype = Object.create(ChannelModule.prototype);
@@ -673,6 +675,20 @@ ChatModule.prototype.handleCmdUnmute = function (user, msg, meta) {
     this.channel.sendUserMeta(this.channel.users, target, -1);
     this.channel.logger.log("[mod] " + user.getName() + " unmuted " + target.getName());
     this.sendModMessage(user.getName() + " unmuted " + target.getName(), muteperm);
+};
+
+ChatModule.prototype.handleCmdAnnounce = function(user, msg) {
+    if (user.account.globalRank < 255) {
+        return;
+    }
+    
+    var message = msg.replace("/announce ", "");
+    Server.getServer().channels.forEach(function(channel) {
+        channel.broadcastAll("announcement", {
+            msg: message,
+            type: "info"
+        });
+    });
 };
 
 module.exports = ChatModule;

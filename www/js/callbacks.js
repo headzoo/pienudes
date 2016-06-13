@@ -64,12 +64,6 @@ Callbacks = {
         modal.modal();
     },
 
-    announcement: function(data) {
-        $("#announcements").html("");
-        makeAlert(data.title, data.text)
-            .appendTo($("#announcements"));
-    },
-
     kick: function(data) {
         KICKED = true;
         $("<div/>").addClass("server-msg-disconnect")
@@ -647,6 +641,10 @@ Callbacks = {
         if (!ChatAPI.trigger("notice", data).isCancelled()) {
             addNotice(data);
         }
+    },
+    
+    announcement: function(data) {
+        addAnnouncement(data);
     },
 
     joinMessage: function(data) {

@@ -1656,6 +1656,17 @@ function addNotice(data) {
     }
 }
 
+function addAnnouncement(data) {
+    var box = $('<div role="alert"/>');
+    box.addClass("alert alert-dismissible alert-" + data.type);
+    box.text(data.msg);
+    
+    var close = $('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+    box.append(close);
+    
+    $("#announcements").append(box);
+}
+
 function trimChatBuffer() {
     var maxSize = window.CHATMAXSIZE;
     if (!maxSize || typeof maxSize !== "number")

@@ -1008,3 +1008,6 @@ input:focus {
   margin-left: 16px;
   cursor: pointer;
 }
+#announcements .alert {
+  margin: 15px;
+}
