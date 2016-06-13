@@ -283,10 +283,6 @@ ChatModule.prototype.processChatMsg = function (user, data) {
         return;
     }
 
-    if (data.msg.indexOf(">") === 0) {
-        msgobj.meta.addClass = "greentext";
-    }
-
     if (data.msg.indexOf("/") === 0) {
         var space = data.msg.indexOf(" ");
         var cmd;
@@ -341,6 +337,7 @@ ChatModule.prototype.formatMessage = function (user, data) {
     }
     
     var obj = {
+        id: this.channel.getMsgID(),
         username: user,
         msg: msg,
         meta: data.meta,

@@ -94,6 +94,7 @@ function Channel(name) {
     this.refCounter = new ReferenceCounter(this);
     this.flags = 0;
     this.redis = null;
+    this.msg_id = 0;
     var self = this;
     db.channels.load(this, function (err) {
         if (err && err !== "Channel is not registered") {
@@ -139,6 +140,16 @@ Channel.prototype.waitFlag = function (flag, cb) {
         };
         self.on("setFlag", wait);
     }
+};
+
+Channel.prototype.getMsgID = function() {
+    var id = this.msg_id;
+    this.msg_id++;
+    if (this.msg_id > Number.MAX_VALUE) {
+        this.msg_id = 1;
+    }
+    
+    return id;
 };
 
 Channel.prototype.moderators = function () {
