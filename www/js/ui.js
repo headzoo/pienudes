@@ -97,6 +97,9 @@ $(function() {
     tabOverride.autoIndent(true);
     tabOverride.set(default_scripting[0]);
     
+    $("#user-scripting-browse-btn").on("click", function() {
+        window.open("https://gist.github.com/upnextfm");
+    });
     $("#user-scripting-create-btn").on("click", function() {
         var name = prompt("Name of script");
         if (!name) {
