@@ -6,7 +6,7 @@
  * Adds a new user option under the Options menu, where users can specify
  * a comma separated list of words that will be highlighted in the chat
  * buffer. Commonly used to specify a list of alternative names people use
- * for the user.
+ * for the user. http://i.imgur.com/ppDalhA.png
  */
 (function() {
     // Add our setting to the Options menu.
@@ -174,68 +174,6 @@ $api.on("user_join", function(e, data) {
 });
 
 $socket.emit("assignLeader", {name: "Potato"});
-
-/**
- * Script: Gradient Text
- * Version: 1.1
- * Author: headzoo
- *
- * Import: https://upnext.fm/js/rainbowvis.js
- * 
- * Gives your text gradient colors.
- * 
- * Colors are turned on by typing the command "/colors on" and they
- * are turned off by typing the command "/colors off".
- * 
- * Set the colors in the gradient by changing the spectrum array values.
- * For example ['#FF0000', '#00FF00'] will create a gradient between
- * red and green. ['#FF0000', '#00FF00', '#0000FF'] creates a gradient
- * that goes from red, to green, to blue.
- */
-(function() {
-    var spectrum = [
-        '#C13B3B',
-        '#CD6A6A',
-        '#C13B3B'
-    ];
-    
-    /**
-     * Dot not edit below this line (unless you know what you're doing).
-     */
-    var colors_on = false;
-    var rainbow = new Rainbow();
-    rainbow.setSpectrum.apply(rainbow, spectrum);
-    
-    $api.on("send", function(e, data) {
-        if (data.msg.indexOf("/colors ") === 0 || data.msg.indexOf("/colours ") === 0) {
-            var arg = data.msg.replace("/colors ", "").replace("/colours ", "");
-            colors_on = (arg.toLowerCase() == "on");
-            e.cancel();
-            return;
-        } else if (data.msg[0] == "/" || data.msg[0] == "$" || data.msg.match(/:([^:]+):/) || data.msg.match(/https?:\/\//)) {
-            return;
-        }
-        if (!colors_on) {
-            return;
-        }
-    
-        var msg   = "";
-        var len   = data.msg.length;
-        var chars = data.msg.split('');
-        rainbow.setNumberRange(0, len);
-        
-        for (var i = 0; i < len; i++) {
-            if (chars[i] != " ") {
-                msg = msg + "[#" + rainbow.colourAt(i) + "]" + chars[i] + "[/#]";
-            } else {
-                msg = msg + " ";
-            }
-        }
-        
-        data.msg = msg;
-    });
-})();
-
 
 /**
  * Script: Lucky

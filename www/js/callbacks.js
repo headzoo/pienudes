@@ -349,8 +349,8 @@ Callbacks = {
                 el.remove();
             }
         });
-        ChatAPI._reset();
         
+        ChatAPI._reset();
         for(var i = 0; i < scripts.length; i++) {
             Callbacks.addUserScript(scripts[i]);
         }

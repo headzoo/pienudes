@@ -431,7 +431,7 @@ var ChatAPI = null;
          */
         _pushLoaded: function() {
             this._load_count++;
-            if (this._load_count == 4) {
+            if (this._load_count >= 4) {
                 this.trigger("color_change", CHAT_LINE_COLOR);
                 this.trigger("loaded", {});
             }
