@@ -38,7 +38,7 @@ var ChatAPI = null;
          * @param key
          * @param d
          */
-        getItem: function(key, d) {
+        getStorage: function(key, d) {
             d = d || null;
             var value = localStorage.getItem(key);
             if (value === null) {
@@ -56,7 +56,7 @@ var ChatAPI = null;
          * @param key
          * @param value
          */
-        setItem: function(key, value) {
+        setStorage: function(key, value) {
             value = JSON.stringify(value);
             localStorage.setItem(key, value);
         },

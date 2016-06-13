@@ -18,10 +18,10 @@
     var is_on   = false;
     var rainbow = new Rainbow();
     var gradients = {
-        first:  $api.getItem("chat_gradient_color_first", CHAT_LINE_COLOR),
-        left:   $api.getItem("chat_gradient_color_left", CHAT_LINE_COLOR),
-        middle: $api.getItem("chat_gradient_color_middle", CHAT_LINE_COLOR),
-        right:  $api.getItem("chat_gradient_color_right", CHAT_LINE_COLOR),
+        first:  $api.getStorage("chat_gradient_color_first", CHAT_LINE_COLOR),
+        left:   $api.getStorage("chat_gradient_color_left", CHAT_LINE_COLOR),
+        middle: $api.getStorage("chat_gradient_color_middle", CHAT_LINE_COLOR),
+        right:  $api.getStorage("chat_gradient_color_right", CHAT_LINE_COLOR),
         last:   CHAT_LINE_COLOR
     };
     for(var k in gradients) {
@@ -60,7 +60,7 @@
                         clickoutFiresChange: true
                     }).on("change", function () {
                         gradients[key] = $(this).val();
-                        $api.setItem(
+                        $api.setStorage(
                             "chat_gradient_color_" + key,
                             gradients[key]
                         );
