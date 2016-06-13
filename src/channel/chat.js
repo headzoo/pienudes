@@ -261,6 +261,17 @@ ChatModule.prototype.handleDelMsg = function(user, msg_id) {
         return;
     }
     
+    var index = -1;
+    for(var i = 0; i < this.buffer.length; i++) {
+        if (this.buffer[i].id == msg_id) {
+            index = i;
+            break;
+        }
+    }
+    if (index != -1) {
+        this.buffer.splice(index, 1);
+    }
+    
     this.channel.broadcastAll("delMsg", msg_id);
 };
 
