@@ -31,6 +31,25 @@ var ChatAPI = null;
     ChatAPI = {
         _callbacks: {},
         _load_count: 0,
+        
+        storage: {
+            getItem: function(key, d) {
+                d = d || null;
+                var value = localStorage.getItem(key);
+                if (value === null) {
+                    value = d;
+                } else {
+                    value = JSON.parse(value);
+                }
+                
+                return value;
+            },
+            
+            setItem: function(key, value) {
+                value = JSON.stringify(value);
+                localStorage.setItem(key, value);
+            }
+        },
     
         /**
          * Registers a callback with the named event
