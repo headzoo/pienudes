@@ -31,24 +31,34 @@ var ChatAPI = null;
     ChatAPI = {
         _callbacks: {},
         _load_count: 0,
-        
-        storage: {
-            getItem: function(key, d) {
-                d = d || null;
-                var value = localStorage.getItem(key);
-                if (value === null) {
-                    value = d;
-                } else {
-                    value = JSON.parse(value);
-                }
-                
-                return value;
-            },
-            
-            setItem: function(key, value) {
-                value = JSON.stringify(value);
-                localStorage.setItem(key, value);
+    
+        /**
+         * Gets an item from local storage
+         * 
+         * @param key
+         * @param d
+         */
+        getItem: function(key, d) {
+            d = d || null;
+            var value = localStorage.getItem(key);
+            if (value === null) {
+                value = d;
+            } else {
+                value = JSON.parse(value);
             }
+        
+            return value;
+        },
+    
+        /**
+         * Stores an item in local storage
+         * 
+         * @param key
+         * @param value
+         */
+        setItem: function(key, value) {
+            value = JSON.stringify(value);
+            localStorage.setItem(key, value);
         },
     
         /**

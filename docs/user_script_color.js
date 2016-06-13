@@ -18,10 +18,10 @@
     var is_on   = false;
     var rainbow = new Rainbow();
     var gradients = {
-        first:  $api.storage.getItem("chat_gradient_color_first", CHAT_LINE_COLOR),
-        left:   $api.storage.getItem("chat_gradient_color_left", CHAT_LINE_COLOR),
-        middle: $api.storage.getItem("chat_gradient_color_middle", CHAT_LINE_COLOR),
-        right:  $api.storage.getItem("chat_gradient_color_right", CHAT_LINE_COLOR),
+        first:  $api.getItem("chat_gradient_color_first", CHAT_LINE_COLOR),
+        left:   $api.getItem("chat_gradient_color_left", CHAT_LINE_COLOR),
+        middle: $api.getItem("chat_gradient_color_middle", CHAT_LINE_COLOR),
+        right:  $api.getItem("chat_gradient_color_right", CHAT_LINE_COLOR),
         last:   CHAT_LINE_COLOR
     };
     for(var k in gradients) {
@@ -32,9 +32,10 @@
         }
     }
     
-    // Use the existing color picture as the "last" color in the gradient.
+    // Use the existing color picker as the "last" color in the gradient.
     // This already exists on the page, and has already been setup with
-    // spectrum.
+    // spectrum. We only need to register a callback to know when the color
+    // has changed.
     var chatcolor = $("#chatcolor");
     chatcolor.on("change", function() {
         gradients.last = $(this).val();
@@ -59,7 +60,7 @@
                         clickoutFiresChange: true
                     }).on("change", function () {
                         gradients[key] = $(this).val();
-                        $api.storage.setItem(
+                        $api.setItem(
                             "chat_gradient_color_" + key,
                             gradients[key]
                         );
