@@ -62,6 +62,32 @@ var ChatAPI = null;
         },
     
         /**
+         * Iterates over an object or array
+         * 
+         * @param obj
+         * @param cb
+         */
+        each: function(obj, cb) {
+            if (Array.isArray(obj)) {
+                for(var i = 0; i < obj.length; i++) {
+                    if (cb(obj[i], i) === null) {
+                        break;
+                    }
+                }
+            } else if (typeof obj == "object") {
+                for(var key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        if (cb(obj[key], key) === null) {
+                            break;
+                        }
+                    }
+                }
+            } else {
+                throw "Value must be object or array.";
+            }
+        },
+    
+        /**
          * Registers a callback with the named event
          * 
          * @param event
