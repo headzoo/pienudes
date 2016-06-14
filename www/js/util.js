@@ -1431,6 +1431,11 @@ function sendVideoUpdate() {
 }
 
 /* chat */
+function cleanChatMsg(msg) {
+    msg = msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
+    msg = msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '$2');
+    return msg;
+}
 
 function formatChatMessage(data, last, permalink) {
     // Backwards compat
@@ -1556,9 +1561,6 @@ function addChatMessage(data) {
             return;
         }
     }
-    
-    data.msg_clean = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
-    data.msg_clean = data.msg_clean.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '$2');
     
     var div = formatChatMessage(data, LASTCHAT);
     var msgBuf = $("#messagebuffer");

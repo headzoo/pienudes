@@ -45,7 +45,7 @@
     
     // Highlight the chat when the regex matches.
     $api.on("receive", function(e, data) {
-        if (regex.test(data.msg)) {
+        if (regex.test(data.msg_clean)) {
             data.meta.highlight = true;
         }
     });
