@@ -718,7 +718,7 @@ function saveUserOptions() {
         USEROPTS.show_shadowchat = $("#us-shadowchat").prop("checked");
     }
     
-    setOpt("scripting");
+    saveScripting();
     if (!ChatAPI.trigger("user_options_save", USEROPTS).isCancelled()) {
         storeOpts();
         applyOpts();
@@ -2904,6 +2904,8 @@ function formatUserScriptTab(data) {
     var textarea = $('<textarea class="form-control user-scripting-textarea" rows="20"/>');
     textarea.data("name", name);
     textarea.val(data.script);
+    tabOverride.tabSize(4);
+    tabOverride.autoIndent(true);
     tabOverride.set(textarea[0]);
     pane.append(textarea);
     

@@ -70,6 +70,25 @@ var FILTER_TO = 0;
 var NO_STORAGE = typeof localStorage == "undefined" || localStorage === null;
 var CHAT_LINE_COLOR = window.localStorage.getItem("chat_line_color") || "#ffffff";
 
+function saveScripting(toast) {
+    var scripts = [];
+    $(".user-scripting-textarea").each(function(i, textarea) {
+        var target = $(textarea);
+        scripts.push({
+            name: target.data("name"),
+            script: target.val()
+        });
+    });
+    if (scripts.length > 0) {
+        socket.emit("saveUserScripts", scripts);
+    }
+    if (toast) {
+        toastr.options.preventDuplicates = true;
+        toastr.options.closeButton = true;
+        toastr.options.timeOut = 1500;
+        toastr.success('Scripts saved!');
+    }
+}
 
 function getOpt(k) {
     var v = NO_STORAGE ? readCookie(k) : localStorage.getItem(k);
@@ -80,22 +99,8 @@ function getOpt(k) {
 }
 
 function setOpt(k, v) {
-    if (k === "scripting") {
-        var scripts = [];
-        $(".user-scripting-textarea").each(function(i, textarea) {
-            var target = $(textarea);
-            scripts.push({
-                name: target.data("name"),
-                script: target.val()
-            });
-        });
-        if (scripts.length > 0) {
-            socket.emit("saveUserScripts", scripts);
-        }
-    } else {
-        v = JSON.stringify(v);
-        NO_STORAGE ? createCookie(k, v, 1000) : localStorage.setItem(k, v);
-    }
+    v = JSON.stringify(v);
+    NO_STORAGE ? createCookie(k, v, 1000) : localStorage.setItem(k, v);
 }
 
 function getOrDefault(k, def) {

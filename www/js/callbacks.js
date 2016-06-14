@@ -371,6 +371,7 @@ Callbacks = {
         textarea.data("name", name);
         
         if (script.length != 0) {
+            
             if (name_low == "css") {
                 $("<style/>").attr("type", "text/css")
                     .attr("id", "user-script-exec-" + name_low)
@@ -388,7 +389,9 @@ Callbacks = {
                 }
             }
             
-            script = "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket);";
+            script = "try { " +
+            "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket); " +
+            "} catch (e) { console.error(e); }";
             if (imports.length > 0) {
                 ChatAPI._getScripts(imports, function() {
                     $("<script/>").attr("type", "text/javascript")

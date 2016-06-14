@@ -100,8 +100,63 @@ $(function() {
     $("#user-scripting-browse-btn").on("click", function() {
         window.open("https://gist.github.com/upnextfm");
     });
+    $("#user-scripting-help-btn").on("click", function() {
+        window.open("https://upnext.fm/help/scripting");
+    });
+    
+    $(function() {
+        var scripting_box_full    = false;
+        var user_options          = $("#useroptions");
+        var user_emotes           = $("#us-user-emotes");
+        var scripting_expand_btn  = $("#user-scripting-expand-btn");
+        var scripting_expand_icon = scripting_expand_btn.find(".glyphicon:first");
+        var scripting_box         = $("#us-scripting");
+        var options_footer        = $("#user-scripting-modal-footer");
+    
+        window.shrinkScriptingBox = function() {
+            scripting_box.detach();
+            scripting_box.removeClass("scripting-fullscreen");
+            user_emotes.after(scripting_box);
+            options_footer.hide();
+        
+            scripting_expand_btn.attr("title", "Full screen");
+            scripting_expand_icon
+                .removeClass("glyphicon-resize-small")
+                .addClass("glyphicon-resize-full");
+            user_options.show();
+        };
+        
+        window.expandScriptingBox = function() {
+            scripting_box.detach();
+            scripting_box.addClass("scripting-fullscreen");
+            $("#main").append(scripting_box);
+            options_footer.show();
+        
+            scripting_expand_btn.attr("title", "Small screen");
+            scripting_expand_icon
+                .addClass("glyphicon-resize-small")
+                .removeClass("glyphicon-resize-full");
+            user_options.hide();
+            
+            options_footer.find(".btn-scripting-close-btn").on("click.scripting_box_expanded", function() {
+                $(this).off("click.scripting_box_expanded");
+                shrinkScriptingBox();
+                $("#useroptions").modal("hide");
+            });
+        };
+        
+        scripting_expand_btn.on("click", function() {
+            scripting_box_full = !scripting_box_full;
+            if (scripting_box_full) {
+                expandScriptingBox();
+            } else {
+                shrinkScriptingBox();
+            }
+        });
+    });
+    
     $("#user-scripting-create-btn").on("click", function() {
-        var name = prompt("Name of script");
+        var name = prompt("Name of the tab.");
         if (!name) {
             return;
         }

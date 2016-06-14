@@ -181,12 +181,13 @@
 
                     <!-- Scripting -->
                     <div id="us-scripting" class="tab-pane">
-                        <div style="height: 30px; margin-top: 4px;">
-                            <a href="/help/scripting" class="pull-right" target="_blank" title="User Scripting Help">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </a>
-                            <button id="user-scripting-create-btn" class="btn btn-primary">Create</button>
-                            <button id="user-scripting-browse-btn" class="btn btn-primary">Browse</button>
+                        <div id="user-scripting-buttons">
+                            <button id="user-scripting-expand-btn" class="btn btn-info pull-right" title="Full screen">
+                                <span class="glyphicon glyphicon-resize-full"></span>
+                            </button>
+                            <button id="user-scripting-create-btn" class="btn btn-info">Create Tab</button>
+                            <button id="user-scripting-browse-btn" class="btn btn-info">Find Scripts</button>
+                            <button id="user-scripting-help-btn" class="btn btn-info" title="User Scripting Help">Help</button>
                         </div>
                         
                         <ul id="user-scripting-tabs" class="nav nav-tabs" role="tablist">
@@ -198,6 +199,11 @@
                             <div role="tabpanel" class="tab-pane active" id="user-script-pane-default">
                                 <textarea class="form-control user-scripting-textarea" rows="20" data-name="Default"></textarea>
                             </div>
+                        </div>
+
+                        <div id="user-scripting-modal-footer" class="modal-footer" style="display: none;">
+                            <button class="btn btn-primary btn-scripting-save-btn" type="button" data-dismiss="modal" onclick="saveScripting(true)">Save</button>
+                            <button class="btn btn-default btn-scripting-close-btn" type="button" data-dismiss="modal">Close</button>
                         </div>
                     </div>
 
@@ -213,8 +219,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" type="button" data-dismiss="modal" onclick="saveUserOptions()">Save</button>
-                <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary btn-scripting-save-btn" type="button" data-dismiss="modal" onclick="saveUserOptions()">Save</button>
+                <button class="btn btn-default btn-scripting-close-btn" type="button" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

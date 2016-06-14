@@ -1000,9 +1000,32 @@ input:focus {
 #user-scripting-panes textarea {
   font-family: monospace;
 }
-#user-scripting-create-btn,
-#user-scripting-browse-btn {
+#user-scripting-buttons {
+  height: 30px;
+  margin: 8px 0;
+}
+#user-scripting-buttons button {
   padding: 5px 15px;
+}
+#us-scripting.scripting-fullscreen {
+  background-color: #2e3338;
+  padding: 12px;
+  position: absolute;
+  z-index: 2000;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+#us-scripting.scripting-fullscreen textarea {
+  width: 100vw;
+  height: 80vh;
+}
+#us-scripting textarea {
+  background-color: #000000;
+  color: #FFFFFF;
 }
 .user-script-tab-anchor span {
   margin-left: 16px;
