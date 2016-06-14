@@ -1527,6 +1527,7 @@ function formatChatMessage(data, last, permalink) {
         data.msg = data.msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');
     } else {
         data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
+        data.msg = data.msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '$2');
     }
     
     message[0].innerHTML = data.msg;
@@ -1555,6 +1556,9 @@ function addChatMessage(data) {
             return;
         }
     }
+    
+    data.msg_clean = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
+    data.msg_clean = data.msg_clean.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '$2');
     
     var div = formatChatMessage(data, LASTCHAT);
     var msgBuf = $("#messagebuffer");
@@ -1609,7 +1613,7 @@ function addChatMessage(data) {
 
     var isHighlight = false;
     if (CLIENT.name && data.username != CLIENT.name) {
-        if (data.msg.toLowerCase().indexOf(CLIENT.name.toLowerCase()) != -1 || data.meta.highlight) {
+        if (data.msg_clean.toLowerCase().indexOf(CLIENT.name.toLowerCase()) != -1 || data.meta.highlight) {
             div.addClass("nick-highlight");
             isHighlight = true;
         }
