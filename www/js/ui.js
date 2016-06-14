@@ -98,7 +98,7 @@ $(function() {
     tabOverride.set(default_scripting[0]);
     
     $("#user-scripting-browse-btn").on("click", function() {
-        window.open("https://gist.github.com/upnextfm");
+        window.open("https://github.com/upnextfm/scripts");
     });
     $("#user-scripting-help-btn").on("click", function() {
         window.open("https://upnext.fm/help/scripting");
