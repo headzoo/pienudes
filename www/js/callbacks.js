@@ -518,7 +518,7 @@ Callbacks = {
     },
 
     chatMsg: function(data) {
-        data.msg_clean = cleanChatMsg(data.msg);
+        data.msg_clean = removeBBCodes(data.msg);
         if (!ChatAPI.trigger("receive", data).isCancelled()) {
             addChatMessage(data);
         }

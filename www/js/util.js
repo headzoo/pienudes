@@ -1431,11 +1431,6 @@ function sendVideoUpdate() {
 }
 
 /* chat */
-function cleanChatMsg(msg) {
-    msg = msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
-    msg = msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '$2');
-    return msg;
-}
 
 function formatChatMessage(data, last, permalink) {
     // Backwards compat
@@ -1528,11 +1523,9 @@ function formatChatMessage(data, last, permalink) {
     data.msg = data.msg.replace('[br]', '<br />');
     if (USEROPTS.show_colors) {
         message.css("color", data.meta.color);
-        data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
-        data.msg = data.msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');
+        data.msg = parseBBCodes(data.msg);
     } else {
-        data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
-        data.msg = data.msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '$2');
+        data.msg = removeBBCodes(data.msg);
     }
     
     message[0].innerHTML = data.msg;
@@ -1658,9 +1651,6 @@ function addNotice(data) {
         return;
     }
     
-    var timestamp = "[" + new Date(data.time).toTimeString().split(" ")[0] + "]";
-    //var msg = "[" + timestamp + "] " + data.msg;
-    
     var div = $("<div/>");
     div.addClass("notice-message");
     if (data.is_error) {
@@ -1669,7 +1659,9 @@ function addNotice(data) {
     
     var span = $("<span/>");
     span.addClass("timestamp");
-    span.text(timestamp);
+    if (USEROPTS.show_timestamps) {
+        span.text("[" + new Date(data.time).toTimeString().split(" ")[0] + "]");
+    }
     div.append(span);
     
     var message = $("<span/>").appendTo(div);
@@ -1680,8 +1672,9 @@ function addNotice(data) {
     }
     if (USEROPTS.show_colors) {
         message.css("color", data.meta.color);
-        data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
-        data.msg = data.msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');
+        data.msg = parseBBCodes(data.msg);
+    } else {
+        data.msg = removeBBCodes(data.msg);
     }
     
     message.html(data.msg);
@@ -1691,6 +1684,20 @@ function addNotice(data) {
     if (SCROLLCHAT) {
         scrollChat();
     }
+}
+
+function parseBBCodes(msg) {
+    msg = msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
+    msg = msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');
+    
+    return msg;
+}
+
+function removeBBCodes(msg) {
+    msg = msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '$2');
+    msg = msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '$2');
+    
+    return msg;
 }
 
 function addAnnouncement(data) {
