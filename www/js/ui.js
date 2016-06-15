@@ -31,7 +31,8 @@ $(function() {
             color: CHAT_LINE_COLOR,
             preferredFormat: "hex",
             showInput: true,
-            clickoutFiresChange: true
+            clickoutFiresChange: true,
+            replacerClassName: "chatline-color-picker"
         }).on("change", function () {
             CHAT_LINE_COLOR = $(this).val();
             ChatAPI.trigger("color_change", CHAT_LINE_COLOR);

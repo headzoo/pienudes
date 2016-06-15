@@ -33,6 +33,7 @@ var ChatAPI = null;
     ChatAPI = {
         _callbacks: {},
         _load_count: 0,
+        _load_min: 4,
         _imported: [],
     
         /**
@@ -62,6 +63,15 @@ var ChatAPI = null;
         setStorage: function(key, value) {
             value = JSON.stringify(value);
             localStorage.setItem(key, value);
+        },
+    
+        /**
+         * Removes an item from local storage
+         * 
+         * @param key
+         */
+        removeStorage: function(key) {
+            localStorage.removeItem(key);
         },
     
         /**
@@ -101,6 +111,9 @@ var ChatAPI = null;
                 this._callbacks[event] = [];
             }
             this._callbacks[event].push(callback);
+            if (event == "loaded" && this._load_count >= this._load_min) {
+                this.trigger("loaded");
+            }
         },
     
         /**
@@ -683,7 +696,7 @@ var ChatAPI = null;
          */
         _pushLoaded: function() {
             this._load_count++;
-            if (this._load_count >= 4) {
+            if (this._load_count >= this._load_min) {
                 this.trigger("color_change", CHAT_LINE_COLOR);
                 this.trigger("loaded", {});
             }

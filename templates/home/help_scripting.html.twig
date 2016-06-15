@@ -63,6 +63,7 @@
                 <ul>
                     <li><a href="#topic-api-methods-set-storage">$api.setStorage()</a></li>
                     <li><a href="#topic-api-methods-get-storage">$api.getStorage()</a></li>
+                    <li><a href="#topic-api-methods-remove-storage">$api.removeStorage()</a></li>
                     <li><a href="#topic-api-methods-each">$api.each()</a></li>
                     <li><a href="#topic-api-methods-send">$api.send()</a></li>
                     <li><a href="#topic-api-methods-notice">$api.notice()</a></li>
@@ -621,6 +622,18 @@
                     // Same as above, but will return the given default value when the value
                     // does not exist in local storage.
                     var color = $api.getStorage("gradient_color", "#FF0000");
+                </code>
+            </pre>
+
+            <!-- $api.removeStorage() -->
+            <code id="topic-api-methods-remove-storage" class="signature">$api.removeStorage(key)</code>
+            <p>
+                Removes an item from local storage. Future
+                versions of this method may fall back on using cookies when local storage isn't available.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.removeStorage("gradient_color");
                 </code>
             </pre>
 
