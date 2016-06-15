@@ -3,6 +3,8 @@ var ChatAPI = null;
 (function() {
     'use strict';
     
+    var USER_SCRIPTS_INIT = false;
+    
     /**
      * @constructor
      */
@@ -31,6 +33,7 @@ var ChatAPI = null;
     ChatAPI = {
         _callbacks: {},
         _load_count: 0,
+        _imported: [],
     
         /**
          * Gets an item from local storage
@@ -400,13 +403,234 @@ var ChatAPI = null;
         },
     
         /**
+         * Sets the user scripts to be appended to the page
+         * 
+         * @param scripts
+         * @private
+         */
+        _setUserScripts: function(scripts) {
+            if (USER_SCRIPTS_INIT) {
+                this.trigger("reloading");
+            }
+    
+            this._removeAttached();
+            this._reset();
+            for(var i = 0; i < scripts.length; i++) {
+                this._addUserScript(scripts[i]);
+            }
+    
+            USER_SCRIPTS_INIT = true;
+            this._pushLoaded();
+        },
+    
+        /**
+         * Adds a script to be appended to the page
+         * 
+         * @param data
+         * @private
+         */
+        _addUserScript: function(data) {
+            var script   = data.script;
+            var name     = data.name;
+            var name_low = data.name.replace(" ", "-").toLowerCase();
+            var tab      = $("#user-scripting-tab-" + name_low);
+            var pane     = $("#user-script-pane-" + name_low);
+            var textarea = pane.find("textarea:first");
+            
+            if (tab.length == 0) {
+                var obj = this._createScriptingTab(data);
+                tab      = obj.tab;
+                pane     = obj.pane;
+                textarea = obj.textarea;
+            }
+            
+            textarea.val(script);
+            textarea.data("name", name);
+            
+            if (script.length != 0) {
+        
+                if (name_low == "css") {
+                    return this._attachStylesheet(name_low, script);
+                }
+                
+                var imports = this._findImports(script);
+                if (imports.length > 0) {
+                    this._importExternalScripts(imports, function() {
+                        this._attachScript(name_low, script);
+                    }.bind(this));
+                } else {
+                    this._attachScript(name_low, script);
+                }
+            }
+        },
+    
+        /**
+         * Removes a user script
+         * 
+         * @param data
+         * @private
+         */
+        _deleteUserScript: function(data) {
+            var name_low = data.name.toLowerCase();
+            $("#user-scripting-tab-" + name_low).remove();
+            $("#user-script-pane-" + name_low).remove();
+            $("#user-script-exec-" + name_low).remove();
+            $("#user-scripting-tab-default").find("a:first").click();
+        },
+    
+        /**
+         * Appends the given script to the page
+         * 
+         * @param name_low
+         * @param script
+         * @private
+         */
+        _attachScript: function(name_low, script) {
+            script = "try { " +
+                "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket); " +
+                "} catch (e) { console.error(e); }";
+                
+            $("<script/>").attr("type", "text/javascript")
+                .attr("id", "user-script-exec-" + name_low)
+                .text(script)
+                .appendTo($("body"));
+        },
+    
+        /**
+         * Appends the given css to the page
+         * 
+         * @param name_low
+         * @param css
+         * @private
+         */
+        _attachStylesheet: function(name_low, css) {
+            $("<style/>").attr("type", "text/css")
+                .attr("id", "user-script-exec-" + name_low)
+                .text(css)
+                .appendTo($("head"));
+        },
+    
+        /**
+         * Removes all user scripts from the page
+         * 
+         * @private
+         */
+        _removeAttached: function() {
+            $("script").each(function(i, el) {
+                el = $(el);
+                var id = el.attr("id");
+                if (id != undefined && id.indexOf("user-script-exec") == 0) {
+                    el.remove();
+                }
+            });
+        },
+    
+        /**
+         * Creates a new tab pane in the Options->Scripting dialog
+         * 
+         * @param data
+         * @returns {{tab: (*|jQuery|HTMLElement), anchor: (*|jQuery|HTMLElement), pane: (*|jQuery|HTMLElement), textarea: (*|jQuery|HTMLElement)}}
+         * @private
+         */
+        _createScriptingTab: function(data) {
+            var name     = data.name;
+            var name_low = name.replace(" ", "-").toLowerCase();
+            
+            var tabs = $("#user-scripting-tabs");
+            var tab  = $('<li role="presentation"/>');
+            tab.attr("id", "user-scripting-tab-" + name_low);
+            tabs.append(tab);
+            
+            var anchor = $('<a role="tab" data-toggle="tab" class="user-script-tab-anchor"/>');
+            anchor.attr("href", "#user-script-pane-" + name_low);
+            anchor.attr("aria-controls", "user-script-pane-" + name_low);
+            anchor.html(name + '<span aria-hidden="true" title="Delete Script">&times;</span>');
+            tab.append(anchor);
+            
+            var pane = $('<div role="tabpanel" class="tab-pane"/>');
+            pane.attr("id", "user-script-pane-" + name_low);
+            $("#user-scripting-panes").append(pane);
+            
+            var textarea = $('<textarea class="form-control user-scripting-textarea" rows="20"/>');
+            textarea.data("name", name);
+            textarea.val(data.script);
+            tabOverride.tabSize(4);
+            tabOverride.autoIndent(true);
+            tabOverride.set(textarea[0]);
+            pane.append(textarea);
+            
+            anchor.find("span:first").on("click", function() {
+                if (confirm("Are you sure you want to delete this script?")) {
+                    socket.emit("deleteUserScript", {
+                        name: name
+                    });
+                }
+            });
+            
+            return {
+                tab: tab,
+                anchor: anchor,
+                pane: pane,
+                textarea: textarea
+            };
+        },
+    
+        /**
+         * Sends the user scripts to the server to be saved
+         * 
+         * @param toast
+         * @private
+         */
+        _saveUserScripts: function(toast) {
+            var scripts = [];
+            $(".user-scripting-textarea").each(function(i, textarea) {
+                var target = $(textarea);
+                scripts.push({
+                    name: target.data("name"),
+                    script: target.val()
+                });
+            });
+            if (scripts.length > 0) {
+                socket.emit("saveUserScripts", scripts);
+            }
+            if (toast) {
+                toastr.options.preventDuplicates = true;
+                toastr.options.closeButton = true;
+                toastr.options.timeOut = 1500;
+                toastr.success('Scripts saved!');
+            }
+        },
+    
+        /**
+         * Finds import statements and returns an array of urls
+         * 
+         * @param script
+         * @returns {Array}
+         * @private
+         */
+        _findImports: function(script) {
+            var imports = [];
+            var pattern = /\*\s+Import:\s+(https?:\/\/(.*?)\.js)\b/gi;
+            var match   = pattern.exec(script);
+            while (match !== null) {
+                var url = match[1].trim();
+                if (url.length > 0 && this._imported.indexOf(url) == -1) {
+                    imports.push(url);
+                }
+                match = pattern.exec(script);
+            }
+            
+            return imports;
+        },
+    
+        /**
          * Loads external scripts
          * 
          * @param scripts
          * @param callback
          * @private
          */
-        _getScripts: function(scripts, callback) {
+        _importExternalScripts: function(scripts, callback) {
             var progress = 0;
             var internalCallback = function () {
                 if (++progress == scripts.length) {
@@ -415,8 +639,9 @@ var ChatAPI = null;
             };
         
             scripts.forEach(function(script) {
+                this._imported.push(script);
                 $.getScript(script, internalCallback);
-            });
+            }.bind(this));
         },
     
         /**

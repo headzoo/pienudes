@@ -718,7 +718,7 @@ function saveUserOptions() {
         USEROPTS.show_shadowchat = $("#us-shadowchat").prop("checked");
     }
     
-    saveScripting();
+    ChatAPI._saveUserScripts();
     if (!ChatAPI.trigger("user_options_save", USEROPTS).isCancelled()) {
         storeOpts();
         applyOpts();
@@ -2880,49 +2880,6 @@ function tagExists(items, tag) {
         }
     });
     return found;
-}
-
-function formatUserScriptTab(data) {
-    var name     = data.name;
-    var name_low = name.replace(" ", "-").toLowerCase();
-    
-    var tabs = $("#user-scripting-tabs");
-    var tab  = $('<li role="presentation"/>');
-    tab.attr("id", "user-scripting-tab-" + name_low);
-    tabs.append(tab);
-    
-    var anchor = $('<a role="tab" data-toggle="tab" class="user-script-tab-anchor"/>');
-    anchor.attr("href", "#user-script-pane-" + name_low);
-    anchor.attr("aria-controls", "user-script-pane-" + name_low);
-    anchor.html(name + '<span aria-hidden="true" title="Delete Script">&times;</span>');
-    tab.append(anchor);
-    
-    var pane = $('<div role="tabpanel" class="tab-pane"/>');
-    pane.attr("id", "user-script-pane-" + name_low);
-    $("#user-scripting-panes").append(pane);
-    
-    var textarea = $('<textarea class="form-control user-scripting-textarea" rows="20"/>');
-    textarea.data("name", name);
-    textarea.val(data.script);
-    tabOverride.tabSize(4);
-    tabOverride.autoIndent(true);
-    tabOverride.set(textarea[0]);
-    pane.append(textarea);
-    
-    anchor.find("span:first").on("click", function() {
-        if (confirm("Are you sure you want to delete this script?")) {
-            socket.emit("deleteUserScript", {
-                name: name
-            });
-        }
-    });
-    
-    return {
-        tab: tab,
-        anchor: anchor,
-        pane: pane,
-        textarea: textarea
-    };
 }
 
 function formatTime(sec) {

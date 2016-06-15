@@ -182,7 +182,7 @@ $(function() {
             return;
         }
         
-        var data = formatUserScriptTab({name: name, script: ""});
+        var data = ChatAPI._formatUserScriptTab({name: name, script: ""});
         
         var items = tabs.children("li").get();
         items.sort(function(a, b) {

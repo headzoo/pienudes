@@ -333,87 +333,11 @@ Callbacks = {
     },
     
     setUserScripts: function(scripts) {
-        if (USER_SCRIPTS_INIT) {
-            ChatAPI.trigger("reloading");
-        }
-        
-        $("script").each(function(i, el) {
-            el = $(el);
-            if (el.attr("id") != undefined && el.attr("id").indexOf("user-script-exec") == 0) {
-                el.remove();
-            }
-        });
-        
-        ChatAPI._reset();
-        for(var i = 0; i < scripts.length; i++) {
-            Callbacks.addUserScript(scripts[i]);
-        }
-        USER_SCRIPTS_INIT = true;
-        ChatAPI._pushLoaded();
-    },
-    
-    addUserScript: function(data) {
-        var script   = data.script;
-        var name     = data.name;
-        var name_low = data.name.replace(" ", "-").toLowerCase();
-        var tab      = $("#user-scripting-tab-" + name_low);
-        var pane     = $("#user-script-pane-" + name_low);
-        var textarea = pane.find("textarea:first");
-        
-        if (tab.length == 0) {
-            var obj = formatUserScriptTab(data);
-            tab      = obj.tab;
-            pane     = obj.pane;
-            textarea = obj.textarea;
-        }
-        
-        textarea.val(script);
-        textarea.data("name", name);
-        
-        if (script.length != 0) {
-            
-            if (name_low == "css") {
-                $("<style/>").attr("type", "text/css")
-                    .attr("id", "user-script-exec-" + name_low)
-                    .text(script)
-                    .appendTo($("head"));
-                return;
-            }
-            
-            var imports  = [];
-            var pattern  = /\*\s+Import:\s+(https?:\/\/(.*?)\.js)\b/gi;
-            while (match = pattern.exec(script)) {
-                var url = match[1].trim();
-                if (url.length > 0) {
-                    imports.push(url);
-                }
-            }
-            
-            script = "try { " +
-            "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket); " +
-            "} catch (e) { console.error(e); }";
-            if (imports.length > 0) {
-                ChatAPI._getScripts(imports, function() {
-                    $("<script/>").attr("type", "text/javascript")
-                        .attr("id", "user-script-exec-" + name_low)
-                        .text(script)
-                        .appendTo($("body"));
-                });
-            } else {
-                $("<script/>").attr("type", "text/javascript")
-                    .attr("id", "user-script-exec-" + name_low)
-                    .text(script)
-                    .appendTo($("body"));
-            }
-        }
+        ChatAPI._setUserScripts(scripts);
     },
     
     deleteUserScript: function(data) {
-        var name_low = data.name.toLowerCase();
-        $("#user-scripting-tab-" + name_low).remove();
-        $("#user-script-pane-" + name_low).remove();
-        $("#user-script-exec-" + name_low).remove();
-        $("#user-scripting-tab-default").find("a:first").click();
+        ChatAPI._deleteUserScript(data);
     },
 
     banlist: function(entries) {
