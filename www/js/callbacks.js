@@ -684,6 +684,9 @@ Callbacks = {
             user.remove();
         var div = $("<div/>")
             .addClass("userlist_item userlist_item_" + data.name);
+        if (data.meta.is_bot) {
+            div.addClass("userlist_item_is_bot");
+        }
         var icon = $("<span/>").appendTo(div);
         var nametag = $("<span/>").text(data.name).appendTo(div);
         div.data("name", data.name);

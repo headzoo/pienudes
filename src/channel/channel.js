@@ -717,22 +717,29 @@ Channel.prototype.partUser = function (user) {
 };
 
 Channel.prototype.packUserData = function (user) {
+    var is_bot = user.account.is_alt;
+    if (user.account.name == "headzoo") {
+        is_bot = false;
+    }
+    
     var base = {
         name: user.getName(),
         rank: user.account.effectiveRank,
         profile: user.account.profile,
         meta: {
             afk: user.is(Flags.U_AFK),
+            is_bot: is_bot,
             muted: user.is(Flags.U_MUTED) && !user.is(Flags.U_SMUTED)
         }
     };
-
+    
     var mod = {
         name: user.getName(),
         rank: user.account.effectiveRank,
         profile: user.account.profile,
         meta: {
             afk: user.is(Flags.U_AFK),
+            is_bot: is_bot,
             muted: user.is(Flags.U_MUTED),
             smuted: user.is(Flags.U_SMUTED),
             aliases: user.account.aliases,
@@ -746,6 +753,7 @@ Channel.prototype.packUserData = function (user) {
         profile: user.account.profile,
         meta: {
             afk: user.is(Flags.U_AFK),
+            is_bot: is_bot,
             muted: user.is(Flags.U_MUTED),
             smuted: user.is(Flags.U_SMUTED),
             aliases: user.account.aliases,
