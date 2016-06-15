@@ -1667,7 +1667,7 @@ function addNotice(data) {
     var message = $("<span/>").appendTo(div);
     message.addClass("msg");
     
-    if (!data.meta.color) {
+    if (data.meta.color == undefined) {
         data.meta.color = "#ffffff";
     }
     if (USEROPTS.show_colors) {
