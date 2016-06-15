@@ -432,6 +432,7 @@ var ChatAPI = null;
                 notice: [],
                 user_join: [],
                 user_leave: [],
+                user_count: [],
                 playlist: [],
                 queue: [],
                 media_change: [],
