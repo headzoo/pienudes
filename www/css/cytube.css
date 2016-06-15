@@ -1049,7 +1049,7 @@ input:focus {
   margin-right: 2px;
   width: 0;
   opacity: 0;
-  transition: all 0.2s ease-in-out;
+  transition: all 2s ease-in-out;
 }
 .chat-msg-deletable:hover .chat-msg-delete-btn {
   opacity: 1.0;
