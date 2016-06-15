@@ -464,8 +464,10 @@ ChatModule.prototype.handleCmdWhisper = function(user, msg, meta) {
         return;
     }
     
+    var found = false;
     this.channel.users.forEach(function(u) {
         if (u.account.name.toLowerCase() == matches[1].toLowerCase()) {
+            found = true;
             u.socket.emit("notice", {
                 msg: '[#FFFFFF]' + user.account.name + " whispered to you:[/#] " + matches[2],
                 meta: meta,
@@ -474,6 +476,22 @@ ChatModule.prototype.handleCmdWhisper = function(user, msg, meta) {
             });
         }
     });
+    
+    if (!found) {
+        user.socket.emit("notice", {
+            msg: "No one in the room with the name " + matches[1],
+            meta: {},
+            time: Date.now(),
+            is_error: true
+        });
+    } else {
+        user.socket.emit("notice", {
+            msg: '[#FFFFFF]You whispered to ' + matches[1] + ":[/#] " + matches[2],
+            meta: meta,
+            time: Date.now(),
+            is_error: false
+        });
+    }
 };
 
 ChatModule.prototype.handleCmdSp = function (user, msg, meta) {
