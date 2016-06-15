@@ -1658,8 +1658,8 @@ function addNotice(data) {
         return;
     }
     
-    var timestamp = new Date(data.time).toTimeString().split(" ")[0];
-    var msg = "[" + timestamp + "] " + data.msg;
+    var timestamp = "[" + new Date(data.time).toTimeString().split(" ")[0] + "]";
+    //var msg = "[" + timestamp + "] " + data.msg;
     
     var div = $("<div/>");
     div.addClass("notice-message");
@@ -1667,8 +1667,24 @@ function addNotice(data) {
         div.addClass("notice-message-error");
     }
     
+    var span = $("<span/>");
+    span.addClass("timestamp");
+    span.text(timestamp);
+    div.append(span);
+    
     var message = $("<span/>").appendTo(div);
-    message.html(msg);
+    message.addClass("msg");
+    
+    if (!data.meta.color) {
+        data.meta.color = "#ffffff";
+    }
+    if (USEROPTS.show_colors) {
+        message.css("color", data.meta.color);
+        data.msg = data.msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
+        data.msg = data.msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');
+    }
+    
+    message.html(data.msg);
     
     var msgBuf = $("#messagebuffer");
     msgBuf.append(div);

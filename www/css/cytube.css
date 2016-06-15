@@ -991,6 +991,9 @@ input:focus {
 .notice-message.notice-message-error {
   color: red;
 }
+.notice-message .timestamp {
+  margin-right: 4px;
+}
 #user-scripting-tabs {
   margin-top: 5px;
 }

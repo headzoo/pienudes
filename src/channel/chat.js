@@ -55,6 +55,7 @@ function ChatModule(channel) {
     this.registerCommand("/unmute", this.handleCmdUnmute.bind(this));
     this.registerCommand("/unsmute", this.handleCmdUnmute.bind(this));
     this.registerCommand("/announce", this.handleCmdAnnounce.bind(this));
+    this.registerCommand("/w", this.handleCmdWhisper.bind(this));
 }
 
 ChatModule.prototype = Object.create(ChannelModule.prototype);
@@ -454,6 +455,25 @@ ChatModule.prototype.handleCmdMe = function (user, msg, meta) {
     var args = msg.split(" ");
     args.shift();
     this.processChatMsg(user, { msg: args.join(" "), meta: meta });
+};
+
+ChatModule.prototype.handleCmdWhisper = function(user, msg, meta) {
+    var pattern = /^\/w\s+([^\s]+)\s+(.*)$/i
+    var matches = pattern.exec(msg);
+    if (!matches) {
+        return;
+    }
+    
+    this.channel.users.forEach(function(u) {
+        if (u.account.name.toLowerCase() == matches[1].toLowerCase()) {
+            u.socket.emit("notice", {
+                msg: '[#FFFFFF]' + user.account.name + " whispered to you:[/#] " + matches[2],
+                meta: meta,
+                time: Date.now(),
+                is_error: false
+            });
+        }
+    });
 };
 
 ChatModule.prototype.handleCmdSp = function (user, msg, meta) {
