@@ -758,8 +758,8 @@ var ChatOptions = null;
             tab.anchor.attr("href", "#" + pane_id);
     
             pane.form = $('<form/>');
-            form.addClass("form-horizontal");
-            pane.append(form);
+            pane.form.addClass("form-horizontal");
+            pane.append(pane.form);
             
             return pane;
         },
@@ -774,6 +774,21 @@ var ChatOptions = null;
                                 label +
                             '</label>' +
                         '</div>' +
+                    '</div>' +
+                '</div>'
+            );
+        },
+        
+        makeInput: function(id, label, type) {
+            type = type || "text";
+            
+            return $(
+                '<div class="form-group">' +
+                    '<label class="control-label col-sm-4 for="' + id + '">' +
+                        label +
+                    '</label>' +
+                    '<div class="col-sm-8">' +
+                        '<input type="' + type + '" class="form-control" id="' + id + '"/>' +
                     '</div>' +
                 '</div>'
             );
