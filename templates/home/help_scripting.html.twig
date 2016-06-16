@@ -65,6 +65,9 @@
                     <li><a href="#topic-api-methods-set-storage">$api.setStorage()</a></li>
                     <li><a href="#topic-api-methods-get-storage">$api.getStorage()</a></li>
                     <li><a href="#topic-api-methods-remove-storage">$api.removeStorage()</a></li>
+                    <li><a href="#topic-api-methods-set-database">$api.setDatabase()</a></li>
+                    <li><a href="#topic-api-methods-get-database">$api.getDatabase()</a></li>
+                    <li><a href="#topic-api-methods-remove-database">$api.removeDatabase()</a></li>
                     <li><a href="#topic-api-methods-each">$api.each()</a></li>
                     <li><a href="#topic-api-methods-send">$api.send()</a></li>
                     <li><a href="#topic-api-methods-notice">$api.notice()</a></li>
@@ -605,8 +608,8 @@
             <code id="topic-api-methods-set-storage" class="signature">$api.setStorage(key, value)</code>
             <p>
                 Saves a value to local storage with the given value. All values are serialized
-                before saving. Future versions of this method may fall back on using cookies when
-                local storage isn't available.
+                before saving. Note that local storage is volatile, and values are not guaranteed
+                to exist beyond the current browser session.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
@@ -626,8 +629,9 @@
             <code id="topic-api-methods-get-storage" class="signature">$api.getStorage(key, default_value)</code>
             <p>
                 Returns a value from local storage. Values are automatically unserialized. Returns the
-                <code>default_value</code> when the value does not exist in local storage. Future
-                versions of this method may fall back on using cookies when local storage isn't available.
+                <code>default_value</code> when the value does not exist in local storage.
+                Note that local storage is volatile, and values are not guaranteed
+                to exist beyond the current browser session.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
@@ -644,12 +648,89 @@
             <!-- $api.removeStorage() -->
             <code id="topic-api-methods-remove-storage" class="signature">$api.removeStorage(key)</code>
             <p>
-                Removes an item from local storage. Future
-                versions of this method may fall back on using cookies when local storage isn't available.
+                Removes an item from local storage. Note that local storage is volatile, and values are not guaranteed
+                to exist beyond the current browser session.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
                     $api.removeStorage("gradient_color");
+                </code>
+            </pre>
+
+            <!-- $api.setDatabase() -->
+            <code id="topic-api-methods-set-database" class="signature">$api.setDatabase(key, value, callback)</code>
+            <p>
+                Saves a value to permanent storage in the site database. The <code>key</code> param must be 150
+                characters or less. The JSON encoded string value of <code>value</code> must be 1024 characters
+                or less. The <code>value</code> argument may be any kind of value, including arrays and objects.
+            </p>
+            <p>
+                The optional <code>callback</code> argument is invoked when the operation is complete, and is
+                passed any error that occurred as the first argument, and the result of the operation as
+                the second argument. The second argument is object with the properties "affectedRows" and "changedRows".
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.setDatabase("gradient_color", "#FF0000", function(err, res) {
+                        if (err) {
+                            alert(err);
+                            return;
+                        }
+                        console.log("Affected rows " + res.affectedRows);
+                    });
+                </code>
+            </pre>
+
+            <!-- $api.getDatabase() -->
+            <code id="topic-api-methods-get-database" class="signature">$api.getDatabase(key, default_value, callback)</code>
+            <p>
+                Returns a value from permanent storage in the site's database. Returns the
+                <code>default_value</code> when the value does not exist.
+            </p>
+            <p>
+                The optional <code>callback</code> argument is a function which receives two values: any error that
+                occurred and the value from the database.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    // The value will be the default if the key does not exist in the database.
+                    $api.getDatabase("gradient_colors", "#FF0000", function(err, value) {
+                        if (err) {
+                            alert(err);
+                            return;
+                        }
+                        console.log("Got value: " + value);
+                    });
+                    
+                    // The default argument is optional. Without a default the value will be
+                    // null when the key does not exist in the database.
+                    $api.getDatabase("gradient_colors", function(err, value) {
+                        if (err) {
+                            alert(err);
+                            return;
+                        }
+                        console.log("Got value: " + value);
+                    });
+                </code>
+            </pre>
+
+            <!-- $api.removeDatabase() -->
+            <code id="topic-api-methods-remove-database" class="signature">$api.removeDatabase(key, callback)</code>
+            <p>
+                Removes an item from permanent storage in the site's database. The optional <code>callback</code>
+                argument is invoked when the operation is complete, and is passed any error that occurred as
+                the first argument, and the result of the operation as the second argument. The second argument
+                is object with the properties "affectedRows" and "changedRows".
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.removeDatabase("gradient_color", function(err, res) {
+                        if (err) {
+                            alert(err);
+                            return;
+                        }
+                        console.log("Affected rows " + res.affectedRows);
+                    });
                 </code>
             </pre>
 

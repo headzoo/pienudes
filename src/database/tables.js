@@ -240,6 +240,19 @@ const TBL_ALTS = "" +
     "PRIMARY KEY (`id`), " +
     "UNIQUE INDEX (`name`) " +
     ") CHARACTER SET utf8";
+    
+const TBL_API_STORAGE = "" +
+    "CREATE TABLE IF NOT EXISTS `api_storage` (" +
+        "`id` BIGINT NOT NULL AUTO_INCREMENT, " +
+        "`user_id` INT NOT NULL, " +
+        "`key` VARCHAR(150) NOT NULL, " +
+        "`value` VARCHAR(1024) NOT NULL, " +
+        "`time` BIGINT NOT NULL," +
+    "PRIMARY KEY (`id`)," +
+    "UNIQUE INDEX(`user_id`, `key`), " +
+    "FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE" +
+    ") CHARACTER SET utf8";
+
 
 module.exports.init = function (queryfn, cb) {
     var tables = {
@@ -265,7 +278,8 @@ module.exports.init = function (queryfn, cb) {
         favorites: TBL_FAVORITES,
         tags: TBL_TAGS,
         tags_to_favorites: TBL_TAGS_TO_FAVORITES,
-        alts: TBL_ALTS
+        alts: TBL_ALTS,
+        api_storage: TBL_API_STORAGE
     };
 
     var AsyncQueue = require("../asyncqueue");

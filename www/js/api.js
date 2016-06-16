@@ -4,7 +4,11 @@ var ChatOptions = null;
 (function() {
     'use strict';
     
-    var USER_SCRIPTS_INIT = false;
+    var USER_SCRIPTS_INIT  = false;
+    var DATABASE_MAX_KEY   = 150;
+    var DATABASE_MAX_VALUE = 1024;
+    
+    var noop = function() {};
     
     /**
      * @constructor
@@ -73,6 +77,123 @@ var ChatOptions = null;
          */
         removeStorage: function(key) {
             localStorage.removeItem(key);
+        },
+    
+        /**
+         * Gets a value from the site database
+         * 
+         * @param key
+         * @param d
+         * @param callback
+         * @returns {*}
+         */
+        getDatabase: function(key, d, callback) {
+            callback = callback || noop;
+            
+            if (typeof d == "function") {
+                callback = d;
+                d = null;
+            }
+            
+            if (key.length > DATABASE_MAX_KEY) {
+                return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
+            }
+            
+            $.ajax({
+                url: "/api/database",
+                data: {
+                    key: key
+                }
+            }).done(function(res) {
+                try {
+                    var value = JSON.parse(res);
+                } catch (e) {}
+                if (value === null) {
+                    value = d;
+                }
+                callback(null, value);
+            }).fail(function(xhr) {
+                try {
+                    var err = JSON.parse(xhr.responseText);
+                    return callback(err);
+                } catch (e) {}
+                callback(xhr.responseText);
+            });
+        },
+    
+        /**
+         * Stores a value in the site database
+         * 
+         * @param key
+         * @param value
+         * @param callback
+         * @returns {*}
+         */
+        setDatabase: function(key, value, callback) {
+            callback = callback || noop;
+    
+            if (key.length > DATABASE_MAX_KEY) {
+                return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
+            }
+            
+            value = JSON.stringify(value);
+            if (value.length > DATABASE_MAX_VALUE) {
+                return callback("JSON encoded value exceeds max character length of " + DATABASE_MAX_VALUE);
+            }
+            
+            $.ajax({
+                url: "/api/database",
+                type: "post",
+                data: {
+                    key: key,
+                    value: value
+                }
+            }).done(function(res) {
+                try {
+                    res = JSON.parse(res);
+                } catch (e) {}
+                callback(null, res);
+            }).fail(function() {
+                try {
+                    var err = JSON.parse(xhr.responseText);
+                    return callback(err);
+                } catch (e) {}
+                callback(xhr.responseText);
+            });
+        },
+    
+        /**
+         * Removes a value from the site database
+         * 
+         * @param key
+         * @param callback
+         * @returns {*}
+         */
+        removeDatabase: function(key, callback) {
+            callback = callback || noop;
+    
+            if (key.length > DATABASE_MAX_KEY) {
+                return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
+            }
+            
+            $.ajax({
+                url: "/api/database",
+                type: "delete",
+                data: {
+                    key: key
+                }
+            }).done(function(res) {
+                try {
+                    res = JSON.parse(res);
+                } catch (e) {}
+                callback(null, res);
+            }).fail(function(xhr) {
+                try {
+                    var err = JSON.parse(xhr.responseText);
+                    return callback(err);
+                } catch (e) {}
+                callback(xhr.responseText);
+            });
         },
     
         /**
