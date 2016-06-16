@@ -1,4 +1,5 @@
 var ChatAPI = null;
+var ChatOptions = null;
 
 (function() {
     'use strict';
@@ -500,7 +501,7 @@ var ChatAPI = null;
          */
         _attachScript: function(name_low, script) {
             script = "try { " +
-                "(function($api, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, CLIENT, CHANNEL, socket); " +
+                "(function($api, $options, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, socket); " +
                 "} catch (e) { console.error(e); }";
                 
             $("<script/>").attr("type", "text/javascript")
@@ -700,6 +701,77 @@ var ChatAPI = null;
                 this.trigger("color_change", CHAT_LINE_COLOR);
                 this.trigger("loaded", {});
             }
+        }
+    };
+    
+    ChatOptions = {
+        _root: null,
+        _tabs: null,
+        _panes: null,
+    
+        root: function() {
+            if (!this._root) {
+                this._root = $("#useroptions");
+            }
+            return this._root;
+        },
+        
+        tabs: function() {
+            if (!this._tabs) {
+                this._tabs = $("#user-options-tabs");
+            }
+            return this._tabs;
+        },
+        
+        panes: function() {
+            if (!this._panes) {
+                this._panes = $("#user-options-panes");
+            }
+            return this._panes;
+        },
+        
+        makeTab: function(label, tab_id) {
+            $("#" + tab_id).remove();
+            
+            var tab = $('<li/>');
+            tab.attr("id", tab_id);
+            
+            tab.anchor = $('<a/>');
+            tab.anchor.attr("data-toggle", "tab");
+            tab.anchor.text(label);
+            tab.append(tab.anchor);
+            
+            return tab;
+        },
+        
+        makePane: function(pane_id, tab) {
+            $("#" + pane_id).remove();
+            
+            var pane = $('<div/>');
+            pane.addClass("tab-pane");
+            pane.attr("id", pane_id);
+            tab.anchor.attr("href", "#" + pane_id);
+    
+            pane.form = $('<form/>');
+            form.addClass("form-horizontal");
+            pane.append(form);
+            
+            return pane;
+        },
+        
+        makeCheckbox: function(id, label) {
+            return $(
+                '<div class="form-group">' +
+                    '<div class="col-sm-8 col-sm-offset-4">' +
+                        '<div class="checkbox">' +
+                            '<label for="' + id + '">' +
+                                '<input type="checkbox" id="' + id + '" />' +
+                                label +
+                            '</label>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>'
+            );
         }
     };
 })();
