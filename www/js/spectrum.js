@@ -90,7 +90,7 @@
         }
 
         return [
-            "<div class='sp-container sp-hidden'>",
+            "<div data-foo='bar' class='sp-container sp-hidden'>",
                 "<div class='sp-palette-container'>",
                     "<div class='sp-palette sp-thumb sp-cf'></div>",
                     "<div class='sp-palette-button-container sp-cf'>",
@@ -269,7 +269,8 @@
             container.toggleClass("sp-palette-only", opts.showPaletteOnly);
             container.toggleClass("sp-initial-disabled", !opts.showInitial);
             container.addClass(opts.className).addClass(opts.containerClassName);
-
+    
+            textInput.data("element", boundElement);
             reflow();
         }
 
