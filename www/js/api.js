@@ -714,27 +714,45 @@ var ChatOptions = null;
         _tabs: null,
         _panes: null,
     
+        /**
+         * 
+         * @returns {null}
+         */
         root: function() {
             if (!this._root) {
                 this._root = $("#useroptions");
             }
             return this._root;
         },
-        
+    
+        /**
+         * 
+         * @returns {null}
+         */
         tabs: function() {
             if (!this._tabs) {
                 this._tabs = $("#user-options-tabs");
             }
             return this._tabs;
         },
-        
+    
+        /**
+         * 
+         * @returns {null}
+         */
         panes: function() {
             if (!this._panes) {
                 this._panes = $("#user-options-panes");
             }
             return this._panes;
         },
-        
+    
+        /**
+         * 
+         * @param label
+         * @param tab_id
+         * @returns {*|jQuery|HTMLElement}
+         */
         makeTab: function(label, tab_id) {
             $("#" + tab_id).remove();
             
@@ -748,7 +766,13 @@ var ChatOptions = null;
             
             return tab;
         },
-        
+    
+        /**
+         * 
+         * @param pane_id
+         * @param tab
+         * @returns {*|jQuery|HTMLElement}
+         */
         makePane: function(pane_id, tab) {
             $("#" + pane_id).remove();
             
@@ -763,7 +787,13 @@ var ChatOptions = null;
             
             return pane;
         },
-        
+    
+        /**
+         * 
+         * @param id
+         * @param label
+         * @returns {*|jQuery|HTMLElement}
+         */
         makeCheckbox: function(id, label) {
             return $(
                 '<div class="form-group">' +
@@ -778,7 +808,14 @@ var ChatOptions = null;
                 '</div>'
             );
         },
-        
+    
+        /**
+         * 
+         * @param id
+         * @param label
+         * @param type
+         * @returns {*|jQuery|HTMLElement}
+         */
         makeInput: function(id, label, type) {
             type = type || "text";
             
@@ -789,6 +826,23 @@ var ChatOptions = null;
                     '</label>' +
                     '<div class="col-sm-8">' +
                         '<input type="' + type + '" class="form-control" id="' + id + '"/>' +
+                    '</div>' +
+                '</div>'
+            );
+        },
+        
+        makeButtonGroup: function(buttons) {
+            var html = [];
+            ChatAPI.each(buttons, function(button) {
+                html.push(
+                    '<button class="btn btn-primary" type="button" id="' + button.id + '">' + button.label + '</button>'
+                );
+            });
+            
+            return $(
+                '<div class="form-group">' +
+                    '<div class="col-sm-8 col-sm-offset-4">' +
+                    html.join("\n") +
                     '</div>' +
                 '</div>'
             );
