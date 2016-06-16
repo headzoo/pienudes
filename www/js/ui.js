@@ -104,6 +104,11 @@ $(function() {
     $("#user-scripting-help-btn").on("click", function() {
         window.open("https://upnext.fm/help/scripting");
     });
+    $("#user-scripting-safe-mode-btn").on("click", function() {
+        if (confirm("This will refresh the page with scripts disabled. Continue?")) {
+            document.location = document.location + "?safemode";
+        }
+    });
     
     $(function() {
         var scripting_box_full    = false;

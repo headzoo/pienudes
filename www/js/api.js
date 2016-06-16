@@ -500,14 +500,16 @@ var ChatOptions = null;
          * @private
          */
         _attachScript: function(name_low, script) {
-            script = "try { " +
-                "(function($api, $options, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, socket); " +
-                "} catch (e) { console.error(e); }";
-                
-            $("<script/>").attr("type", "text/javascript")
-                .attr("id", "user-script-exec-" + name_low)
-                .text(script)
-                .appendTo($("body"));
+            if (!SAFE_MODE) {
+                script = "try { " +
+                    "(function($api, $options, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, socket); " +
+                    "} catch (e) { console.error(e); }";
+    
+                $("<script/>").attr("type", "text/javascript")
+                    .attr("id", "user-script-exec-" + name_low)
+                    .text(script)
+                    .appendTo($("body"));
+            }
         },
     
         /**
@@ -518,10 +520,12 @@ var ChatOptions = null;
          * @private
          */
         _attachStylesheet: function(name_low, css) {
-            $("<style/>").attr("type", "text/css")
-                .attr("id", "user-script-exec-" + name_low)
-                .text(css)
-                .appendTo($("head"));
+            if (!SAFE_MODE) {
+                $("<style/>").attr("type", "text/css")
+                    .attr("id", "user-script-exec-" + name_low)
+                    .text(css)
+                    .appendTo($("head"));
+            }
         },
     
         /**

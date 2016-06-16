@@ -4,6 +4,9 @@
         {% include "head.html.twig" %}
     </head>
     <body>
+        <script>
+            var SAFE_MODE = {% if safemode %}true{% else %}false{% endif %};
+        </script>
         {% block content %}{% endblock %}
         {% include "foot.html.twig" %}
         <script src="/js/ga.js"></script>

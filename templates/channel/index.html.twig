@@ -16,6 +16,12 @@
                     </div>
                 </div>
                 <div id="announcements" class="row"></div>
+                {% if safemode %}
+                    <div class="alert alert-warning">
+                        This page is running in safe mode. Your user scripts will not execute in safe mode but you 
+                        can edit them. <a href="#" onclick="document.location = document.location.href.split('?')[0]">Exit Safe Mode</a>.
+                    </div>
+                {% endif %}
                 <div id="drinkbarwrap" class="row">
                     <div id="drinkbar" class="col-lg-12 col-md-12">
                         <h1 id="drinkcount"></h1>
