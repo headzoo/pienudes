@@ -1461,6 +1461,7 @@ function formatChatMessage(data, last, permalink) {
 
     last.name = data.username;
     var div = $("<div/>");
+    div.addClass("chat-msg");
     
     /* drink is a special case because the entire container gets the class, not
        just the message */
