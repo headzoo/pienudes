@@ -1691,6 +1691,14 @@ function addNotice(data) {
     }
 }
 
+function addWhisper(data) {
+    if (IGNORED.indexOf(data.name) !== -1) {
+        return;
+    }
+    
+    addNotice(data);
+}
+
 function parseBBCodes(msg) {
     msg = msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
     msg = msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');

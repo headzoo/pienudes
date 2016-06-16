@@ -583,6 +583,12 @@ Callbacks = {
         }
     },
     
+    whisper: function(data) {
+        if (!ChatAPI.trigger("whisper", data).isCancelled()) {
+            addWhisper(data);
+        }
+    },
+    
     announcement: function(data) {
         addAnnouncement(data);
     },

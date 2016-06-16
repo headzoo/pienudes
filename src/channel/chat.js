@@ -468,11 +468,11 @@ ChatModule.prototype.handleCmdWhisper = function(user, msg, meta) {
     this.channel.users.forEach(function(u) {
         if (u.account.name.toLowerCase() == matches[1].toLowerCase()) {
             found = true;
-            u.socket.emit("notice", {
+            u.socket.emit("whisper", {
                 msg: '[#FFFFFF]' + user.account.name + " whispered to you:[/#] " + matches[2],
                 meta: meta,
                 time: Date.now(),
-                is_error: false
+                name: user.account.name
             });
         }
     });
@@ -485,11 +485,11 @@ ChatModule.prototype.handleCmdWhisper = function(user, msg, meta) {
             is_error: true
         });
     } else {
-        user.socket.emit("notice", {
+        user.socket.emit("whisper", {
             msg: '[#FFFFFF]You whispered to ' + matches[1] + ":[/#] " + matches[2],
             meta: meta,
             time: Date.now(),
-            is_error: false
+            name: user.account.name
         });
     }
 };

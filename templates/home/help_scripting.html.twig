@@ -37,6 +37,7 @@
                     <li><a href="#topic-api-events-receive">receive</a></li>
                     <li><a href="#topic-api-events-send">send</a></li>
                     <li><a href="#topic-api-events-notice">notice</a></li>
+                    <li><a href="#topic-api-events-whisper">whisper</a></li>
                     <li><a href="#topic-api-events-user-join">user_join</a></li>
                     <li><a href="#topic-api-events-user-leave">user_leave</a></li>
                     <li><a href="#topic-api-events-playlist">playlist</a></li>
@@ -238,6 +239,21 @@
                         <code class="language-javascript">
                             {
                                 msg: String // The notice text
+                            }
+                        </code>
+                    </pre>
+                </li>
+                <li id="topic-api-events-whisper">
+                    <code class="signature">whisper</code>
+                    Triggered when a whisper is received from another user. The callback gets an object which
+                    contains the whisper data.
+                    <pre>
+                        <code class="language-javascript">
+                            {
+                                msg: String,  // The whisper text
+                                meta: Object, // Meta information
+                                time: Number, // Time the whisper was sent
+                                name: String, // Name of the user who sent the whisper
                             }
                         </code>
                     </pre>

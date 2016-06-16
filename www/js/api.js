@@ -669,6 +669,7 @@ var ChatOptions = null;
                 receive: [],
                 send: [],
                 notice: [],
+                whisper: [],
                 user_join: [],
                 user_leave: [],
                 user_count: [],
