@@ -195,6 +195,25 @@ var ChatOptions = null;
                 callback(xhr.responseText);
             });
         },
+        
+        keysDatabase: function(callback) {
+            callback = callback || noop;
+    
+            $.ajax({
+                url: "/api/database/keys"
+            }).done(function(res) {
+                try {
+                    res = JSON.parse(res);
+                } catch (e) {}
+                callback(null, res);
+            }).fail(function(xhr) {
+                try {
+                    var err = JSON.parse(xhr.responseText);
+                    return callback(err);
+                } catch (e) {}
+                callback(xhr.responseText);
+            });
+        },
     
         /**
          * Iterates over an object or array

@@ -68,6 +68,7 @@
                     <li><a href="#topic-api-methods-set-database">$api.setDatabase()</a></li>
                     <li><a href="#topic-api-methods-get-database">$api.getDatabase()</a></li>
                     <li><a href="#topic-api-methods-remove-database">$api.removeDatabase()</a></li>
+                    <li><a href="#topic-api-methods-keys-database">$api.keysDatabase()</a></li>
                     <li><a href="#topic-api-methods-each">$api.each()</a></li>
                     <li><a href="#topic-api-methods-send">$api.send()</a></li>
                     <li><a href="#topic-api-methods-notice">$api.notice()</a></li>
@@ -669,6 +670,9 @@
                 passed any error that occurred as the first argument, and the result of the operation as
                 the second argument. The second argument is object with the properties "affectedRows" and "changedRows".
             </p>
+            <p>
+                NOTE: Each account may only store 100 values in permanent storage.
+            </p>
             <pre>
                 <code class="language-javascript line-numbers">
                     $api.setDatabase("gradient_color", "#FF0000", function(err, res) {
@@ -730,6 +734,25 @@
                             return;
                         }
                         console.log("Affected rows " + res.affectedRows);
+                    });
+                </code>
+            </pre>
+
+            <!-- $api.keysDatabase() -->
+            <code id="topic-api-methods-keys-database" class="signature">$api.keysDatabase(callback)</code>
+            <p>
+                Returns an array of all <i>your</i> keys stored in the database. The optional <code>callback</code>
+                argument is invoked when the operation is complete, and is passed any error that occurred as
+                the first argument, and an array of keys as the second argument.
+            </p>
+            <pre>
+                <code class="language-javascript line-numbers">
+                    $api.keysDatabase(function(err, keys) {
+                        if (err) {
+                            alert(err);
+                            return;
+                        }
+                        console.log(keys);
                     });
                 </code>
             </pre>

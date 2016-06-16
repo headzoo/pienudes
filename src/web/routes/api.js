@@ -3,6 +3,25 @@
 var request        = require('request');
 var db_api_storage = require('../../database/api_storage');
 
+function handleGetDatabaseKeys(req, res) {
+    if (!req.user) {
+        return res.send(401);
+    }
+    
+    db_api_storage.fetchKeysByUser(req.user.id, function(err, keys) {
+        if (err) {
+            if (typeof err == "string") {
+                res.json(err, 500);
+            } else {
+                res.json("Server Error", 500);
+            }
+            return;
+        }
+        
+        res.json(keys);
+    });
+}
+
 function handleGetDatabase(req, res) {
     if (!req.user) {
         return res.send(401);
@@ -34,7 +53,7 @@ function handleSetDatabase(req, res) {
         return res.send(400);
     }
     
-    db_api_storage.insertOrUpdate(req.user.id, req.body.key, req.body.value, function(err, obj) {
+    db_api_storage.countByUser(req.user.id, function(err, count) {
         if (err) {
             if (typeof err == "string") {
                 res.json(err, 500);
@@ -44,9 +63,34 @@ function handleSetDatabase(req, res) {
             return;
         }
         
-        res.json({
-            affectedRows: obj.affectedRows,
-            changedRows: obj.changedRows
+        db_api_storage.fetchByUserAndKey(req.user.id, req.body.key, function(err, row) {
+            if (err) {
+                if (typeof err == "string") {
+                    res.json(err, 500);
+                } else {
+                    res.json("Server Error", 500);
+                }
+                return;
+            }
+            if (!row && count >= 100) {
+                return res.json("Maximum of 100 values reached.");
+            }
+            
+            db_api_storage.insertOrUpdate(req.user.id, req.body.key, req.body.value, function(err, obj) {
+                if (err) {
+                    if (typeof err == "string") {
+                        res.json(err, 500);
+                    } else {
+                        res.json("Server Error", 500);
+                    }
+                    return;
+                }
+        
+                res.json({
+                    affectedRows: obj.affectedRows,
+                    changedRows: obj.changedRows
+                });
+            });
         });
     });
 }
@@ -81,6 +125,7 @@ module.exports = {
      * Initializes auth callbacks
      */
     init: function (app) {
+        app.get('/api/database/keys', handleGetDatabaseKeys);
         app.get('/api/database', handleGetDatabase);
         app.post('/api/database', handleSetDatabase);
         app.delete('/api/database', handleDeleteDatabase);

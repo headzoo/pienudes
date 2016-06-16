@@ -22,6 +22,36 @@ module.exports = {
         );
     },
     
+    fetchKeysByUser: function(user_id, callback) {
+        callback = callback || noop;
+        
+        db.query(
+            "SELECT `key` FROM `api_storage` WHERE `user_id` = ?",
+            [user_id],
+            function(err, rows) {
+                if (err) return callback(err);
+                var keys = [];
+                rows.forEach(function(row) {
+                    keys.push(row.key);
+                });
+                callback(null, keys);
+            }
+        );
+    },
+    
+    countByUser: function(user_id, callback) {
+        callback = callback || noop;
+        
+        db.query(
+            "SELECT COUNT(*) AS `cnt` FROM `api_storage` WHERE `user_id` = ?",
+            [user_id],
+            function(err, rows) {
+                if (err) return callback(err);
+                callback(null, rows[0]["cnt"]);
+            }
+        );
+    },
+    
     insertOrUpdate: function(user_id, key, value, callback) {
         callback = callback || noop;
         
