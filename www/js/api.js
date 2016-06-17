@@ -573,7 +573,7 @@ var ChatOptions = null;
             if (USER_SCRIPTS_INIT) {
                 this.trigger("reloading");
             }
-    
+            
             this._removeAttached();
             this._reset();
             for(var i = 0; i < scripts.length; i++) {
@@ -796,7 +796,14 @@ var ChatOptions = null;
             
             return imports;
         },
-        
+    
+        /**
+         * Finds the annotations in the script header
+         * 
+         * @param script
+         * @returns {{}}
+         * @private
+         */
         _findAnnotations: function(script) {
             var annotations = {};
             var pattern     = /\*\s+([\w]+):\s*(.*)/g;
@@ -817,17 +824,10 @@ var ChatOptions = null;
          * @private
          */
         _importExternalScripts: function(scripts, callback) {
-            var progress = 0;
-            var internalCallback = function () {
-                if (++progress == scripts.length) {
-                    callback();
-                }
-            };
-        
-            scripts.forEach(function(script) {
-                this._imported.push(script);
-                $.getScript(script, internalCallback);
-            }.bind(this));
+            var queue = scripts.map(function(script) {
+                return $.getScript(script);
+            });
+            $.when.apply(null, queue).done(callback);
         },
     
         /**

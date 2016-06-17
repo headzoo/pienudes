@@ -296,15 +296,19 @@ Channel.prototype.handleSaveUserScripts = function(user, data) {
         return;
     }
     
-    var self = this;
     async.map(data,
         function(d, c) {
             db_user_scripts.insertOrUpdate(user.account.id, d.name, d.script, c)
         },
         function() {
-            setTimeout(function() {
-                self.sendUserScripts(user);
-            }, 500);
+            var sent_to = [user.channel.name];
+            user.socket.emit("setUserScripts", data);
+            Server.getServer().getUserAll(user.account.name).forEach(function(u) {
+                if (sent_to.indexOf(u.channel.name) == -1) {
+                    u.socket.emit("setUserScripts", data);
+                    sent_to.push(u.channel.name);
+                }
+            });
         }
     );
 };
