@@ -1,9 +1,10 @@
-var ChatAPI = null;
+var ChatAPI     = null;
 var ChatOptions = null;
 
 (function() {
     'use strict';
     
+    var API_VERSION        = "1.0";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 1024;
@@ -36,6 +37,7 @@ var ChatOptions = null;
     };
     
     ChatAPI = {
+        version: API_VERSION,
         _callbacks: {},
         _load_count: 0,
         _load_min: 4,
@@ -195,7 +197,12 @@ var ChatOptions = null;
                 callback(xhr.responseText);
             });
         },
-        
+    
+        /**
+         * Gets a list of stored keys
+         * 
+         * @param callback
+         */
         keysDatabase: function(callback) {
             callback = callback || noop;
     
@@ -641,8 +648,10 @@ var ChatOptions = null;
          */
         _attachScript: function(name_low, script) {
             if (!SAFE_MODE) {
+                var annotations = JSON.stringify(this._findAnnotations(script));
+                
                 script = "try { " +
-                    "(function($api, $options, $user, $channel, $socket) { \n" + script + "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, socket); " +
+                    "(function($api, $options, $user, $channel, $annotations) { \n" + script + "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, " + annotations + "); " +
                     "} catch (e) { console.error(e); }";
     
                 $("<script/>").attr("type", "text/javascript")
@@ -779,6 +788,18 @@ var ChatOptions = null;
             }
             
             return imports;
+        },
+        
+        _findAnnotations: function(script) {
+            var annotations = {};
+            var pattern     = /\*\s+([\w]+):\s*(.*)/g;
+            var matches     = pattern.exec(script);
+            while(matches !== null) {
+                annotations[matches[1]] = matches[2].trim();
+                matches = pattern.exec(script);
+            }
+            
+            return annotations;
         },
     
         /**

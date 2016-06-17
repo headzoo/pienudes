@@ -20,17 +20,30 @@
             dialog.
         </p>
         <p>
-            <img src="/img/help/scripting/nav_options.png" style="margin-bottom: 10px;width:100%" />
             <img src="/img/help/scripting/user_options.png" style="width:100%" />
         </p>
         
         <h3 id="top">Table of Contents</h3>
-        <ul class="list-style-type-none">
+        <ul id="help-table-of-contents" class="list-style-type-none">
             <li>
-                <a href="#topic-overview-api">API</a>
+                <a href="#topic-overview-api" class="help-tc-root">API</a>
+                <ul>
+                    <li><a href="#topic-api-api">$api</a></li>
+                    <li><a href="#topic-api-channel">$channel</a></li>
+                    <li><a href="#topic-api-user">$user</a></li>
+                    <li><a href="#topic-api-options">$options</a></li>
+                    <li><a href="#topic-api-annotations">$annotations</a></li>
+                    <li><a href="#topic-api-first-script">First Script</a></li>
+                </ul>
             </li>
             <li>
-                <a href="#topic-api-events">Events</a>
+                <a href="#topic-properties" class="help-tc-root">Properties</a>
+                <ul>
+                    <li><a href="#topic-properties-version">version</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#topic-api-events" class="help-tc-root">Events</a>
                 <ul>
                     <li><a href="#topic-api-events-loaded">loaded</a></li>
                     <li><a href="#topic-api-events-reloaded">reloaded</a></li>
@@ -60,7 +73,7 @@
                 </ul>
             </li>
             <li>
-                <a href="#topic-api-methods">Methods</a>
+                <a href="#topic-api-methods" class="help-tc-root">Methods</a>
                 <ul>
                     <li><a href="#topic-api-methods-set-storage">$api.setStorage()</a></li>
                     <li><a href="#topic-api-methods-get-storage">$api.getStorage()</a></li>
@@ -109,12 +122,17 @@
             </p>
             <ul style="margin:0;padding:0;list-style-type:none;">
                 <li>
-                    <code class="signature">$api</code>
-                    Provides an interface to the chat software.
+                    <code id="topic-api-api" class="signature">$api</code>
+                    <p>
+                        Provides an interface to the chat API. The rest of this documentation covers the properties,
+                        methods, and events related to this object.
+                    </p>
                 </li>
                 <li>
-                    <code class="signature">$channel</code>
-                    An object containing information about the channel you are in. The object contains several properties.
+                    <code id="topic-api-channel" class="signature">$channel</code>
+                    <p>
+                        An object containing information about the channel you are in. The object contains several properties.
+                    </p>
                     <pre style="margin-top: 12px;">
                         <code class="language-javascript">
                         {
@@ -130,8 +148,10 @@
                     </pre>
                 </li>
                 <li>
-                    <code class="signature">$user</code>
-                    An object containing information about you. The object contains several properties.
+                    <code id="topic-api-user" class="signature">$user</code>
+                    <p>
+                        An object containing information about you. The object contains several properties.
+                    </p>
                     <pre style="margin-top: 12px;">
                         <code class="language-javascript">
                         {
@@ -144,14 +164,45 @@
                     </pre>
                 </li>
                 <li>
-                    <code class="signature">$socket</code>
-                    Raw socket used to commentate with the server. Only required for advanced scripting, and not covered
-                    in this documentation. See the <a href="http://socket.io/" target="_blank">socket.io documentation</a>
-                    for more information on emitting events to the server, and receiving events.
+                    <code id="topic-api-options" class="signature">$options</code>
+                    <p>
+                        Reference to an object which represents the channel Options menu. It can be used
+                        to add additional options to the menu.
+                    </p>
+                </li>
+                <li>
+                    <code id="topic-api-annotations" class="signature">$annotations</code>
+                    <p>
+                        Object of key/value pairs found in the head of the user script. For instance when
+                        the user script contains the following doc block:
+                    </p>
+                    <pre style="margin-top: 12px;">
+                        <code class="language-javascript">
+                            /**
+                            * Script: Reaction GIFs
+                            * Version: 1.5
+                            * Author: headzoo
+                            *
+                            * Displays a random image from replygif.net based on your search term
+                            */
+                        </code>
+                    </pre>
+                    <p>
+                        The <code>$annotations</code> object will contain the following values:
+                    </p>
+                    <pre style="margin-top: 12px;">
+                        <code class="language-javascript">
+                            {
+                                "Script": "Reaction GIFs",
+                                "Version": "1.5",
+                                "Author": "headzoo"
+                            }
+                        </code>
+                    </pre>
                 </li>
             </ul>
 
-            <h5>First Script</h5>
+            <h5 id="topic-api-first-script">First Script</h5>
             <p>
                 From the site navigation menu click on Options and then Scripting. In the default text box,
                 type (or paste) this code and click save.
@@ -162,6 +213,16 @@
                 </code>
             </pre>
             
+            {{ top() }}
+        </section>
+        
+        <h3 id="topic-properties">Properties</h3>
+        <section>
+            <!-- $api.version -->
+            <code id="topic-properties-version" class="signature">$api.version</code>
+            <p>
+                Version of the API implemented.
+            </p>
             {{ top() }}
         </section>
 
