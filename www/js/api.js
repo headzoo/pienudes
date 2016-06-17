@@ -4,7 +4,7 @@ var ChatOptions = null;
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.0";
+    var API_VERSION        = "1.1";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 1024;
@@ -38,6 +38,8 @@ var ChatOptions = null;
     
     ChatAPI = {
         version: API_VERSION,
+        _scripts: {},
+        _scripts_changed: false,
         _callbacks: {},
         _load_count: 0,
         _load_min: 4,
@@ -607,9 +609,12 @@ var ChatOptions = null;
             
             textarea.val(script);
             textarea.data("name", name);
+            textarea.on("change.chat_api", function() {
+                this._scripts_changed = true;
+            }.bind(this));
+            this._scripts[name] = function() { return textarea.val(); };
             
             if (script.length != 0) {
-        
                 if (name_low == "css") {
                     return this._attachStylesheet(name_low, script);
                 }
@@ -637,6 +642,8 @@ var ChatOptions = null;
             $("#user-script-pane-" + name_low).remove();
             $("#user-script-exec-" + name_low).remove();
             $("#user-scripting-tab-default").find("a:first").click();
+            delete this._scripts[data.name];
+            this._scripts_changed = true;
         },
     
         /**
@@ -721,8 +728,9 @@ var ChatOptions = null;
             var textarea = $('<textarea class="form-control user-scripting-textarea" rows="20"/>');
             textarea.data("name", name);
             textarea.val(data.script);
-            tabOverride.tabSize(4);
-            tabOverride.autoIndent(true);
+            textarea.on("change.chat_api", function() {
+                this._scripts_changed = true;
+            }.bind(this));
             tabOverride.set(textarea[0]);
             pane.append(textarea);
             
@@ -734,7 +742,11 @@ var ChatOptions = null;
                 }
             });
             
+            this._scripts_changed = true;
+            this._scripts[name]   = function() { return textarea.val(); };
+            
             return {
+                name: name,
                 tab: tab,
                 anchor: anchor,
                 pane: pane,
@@ -749,24 +761,26 @@ var ChatOptions = null;
          * @private
          */
         _saveUserScripts: function(toast) {
-            var scripts = [];
-            $(".user-scripting-textarea").each(function(i, textarea) {
-                var target = $(textarea);
-                scripts.push({
-                    name: target.data("name"),
-                    script: target.val()
-                });
-            });
+            if (!this._scripts_changed) {
+                return;
+            }
             
             var obj = {
-                scripts: scripts
+                scripts: []
             };
+            this.each(this._scripts, function(cb, name) {
+                obj.scripts.push({
+                    name: name,
+                    script: cb()
+                });
+            });
             if (this.trigger("save_scripts", obj).isCancelled()) {
                 return;
             }
             if (obj.scripts.length > 0) {
                 socket.emit("saveUserScripts", obj.scripts);
             }
+            
             if (toast) {
                 toastr.options.preventDuplicates = true;
                 toastr.options.closeButton = true;
@@ -861,7 +875,8 @@ var ChatOptions = null;
                 channel_option_save: [],
                 save_scripts: [],
                 search_results: [],
-                color_change: []
+                color_change: [],
+                script_tab_added: []
             };
         },
     
