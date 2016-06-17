@@ -757,8 +757,15 @@ var ChatOptions = null;
                     script: target.val()
                 });
             });
-            if (scripts.length > 0) {
-                socket.emit("saveUserScripts", scripts);
+            
+            var obj = {
+                scripts: scripts
+            };
+            if (this.trigger("save_scripts", obj).isCancelled()) {
+                return;
+            }
+            if (obj.scripts.length > 0) {
+                socket.emit("saveUserScripts", obj.scripts);
             }
             if (toast) {
                 toastr.options.preventDuplicates = true;
@@ -852,6 +859,7 @@ var ChatOptions = null;
                 afk: [],
                 user_options_save: [],
                 channel_option_save: [],
+                save_scripts: [],
                 search_results: [],
                 color_change: []
             };

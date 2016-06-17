@@ -1045,9 +1045,18 @@ input:focus {
   width: 100vw;
   height: 80vh;
 }
+#us-scripting.scripting-fullscreen pre {
+  width: 100%;
+  height: 80vh;
+}
 #us-scripting textarea {
   background-color: #000000;
   color: #FFFFFF;
+}
+#us-scripting pre {
+  height: 400px;
+  font-size: 15px;
+  box-sizing: border-box;
 }
 #us-scripting .nav-tabs > li > a {
   background-color: #3C4044;
