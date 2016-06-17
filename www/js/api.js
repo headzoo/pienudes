@@ -632,7 +632,7 @@ var ChatOptions = null;
          * @private
          */
         _deleteUserScript: function(data) {
-            var name_low = data.name.toLowerCase();
+            var name_low = data.name.replace(" ", "-").toLowerCase();
             $("#user-scripting-tab-" + name_low).remove();
             $("#user-script-pane-" + name_low).remove();
             $("#user-script-exec-" + name_low).remove();
