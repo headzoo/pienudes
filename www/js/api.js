@@ -1,5 +1,6 @@
 var ChatAPI     = null;
 var ChatOptions = null;
+var UserScript  = null;
 
 (function() {
     'use strict';
@@ -34,6 +35,23 @@ var ChatOptions = null;
     
     ChatEvent.prototype.isCancelled = function() {
         return this.cancelled;
+    };
+    
+    UserScript = function(name, reader) {
+        this.name   = name;
+        this.reader = reader;
+    };
+    
+    UserScript.prototype.getName = function() {
+        return this.name;
+    };
+    
+    UserScript.prototype.setReader = function(reader) {
+        this.reader = reader;
+    };
+    
+    UserScript.prototype.getCode = function() {
+        return this.reader();
     };
     
     ChatAPI = {
@@ -612,7 +630,9 @@ var ChatOptions = null;
             textarea.on("change.chat_api", function() {
                 this._scripts_changed = true;
             }.bind(this));
-            this._scripts[name] = function() { return textarea.val(); };
+            this._scripts[name] = new UserScript(name, function() {
+                return textarea.val();
+            });
             
             if (script.length != 0) {
                 if (name_low == "css") {
@@ -743,7 +763,9 @@ var ChatOptions = null;
             });
             
             this._scripts_changed = true;
-            this._scripts[name]   = function() { return textarea.val(); };
+            this._scripts[name] = new UserScript(name, function() {
+                return textarea.val();
+            });
             
             return {
                 name: name,
@@ -768,10 +790,10 @@ var ChatOptions = null;
             var obj = {
                 scripts: []
             };
-            this.each(this._scripts, function(cb, name) {
+            this.each(this._scripts, function(script) {
                 obj.scripts.push({
-                    name: name,
-                    script: cb()
+                    name: script.getName(),
+                    script: script.getCode()
                 });
             });
             if (this.trigger("save_scripts", obj).isCancelled()) {
@@ -875,8 +897,7 @@ var ChatOptions = null;
                 channel_option_save: [],
                 save_scripts: [],
                 search_results: [],
-                color_change: [],
-                script_tab_added: []
+                color_change: []
             };
         },
     
