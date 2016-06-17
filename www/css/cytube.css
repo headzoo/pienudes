@@ -474,6 +474,7 @@ body.chatOnly .pm-panel-placeholder {
   float: left;
   width: 250px;
   pointer-events: auto;
+  transition: all 0.2s ease-in-out;
 }
 .pm-panel {
   margin-bottom: 0!important;
