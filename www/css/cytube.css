@@ -479,9 +479,27 @@ body.chatOnly .pm-panel-placeholder {
   margin-bottom: 0!important;
   border-radius: 0!important;
 }
+.pm-panel.expanded {
+  width: 40%;
+}
+.pm-panel.expanded > .panel-body > .pm-buffer {
+  height: 300px;
+}
+.pm-panel-placeholder.expanded {
+  width: 40%;
+}
 .pm-panel > .panel-heading {
   cursor: pointer;
   border-radius: 0!important;
+}
+.pm-panel > .panel-heading .pm-close,
+.pm-panel > .panel-heading .pm-expand {
+  font-size: 12px;
+  margin-left: 8px;
+  line-height: 20px;
+}
+.pm-panel > .panel-heading .pm-close {
+  font-size: 14px;
 }
 .pm-panel > .panel-body {
   padding: 0;

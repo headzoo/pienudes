@@ -551,12 +551,36 @@ body.chatOnly .pm-panel, body.chatOnly .pm-panel-placeholder {
     margin-bottom: 0!important;
     border-radius: 0!important;
     border-radius: 0!important;
+    
+    &.expanded {
+        width: 40%;
+        
+        & > .panel-body > .pm-buffer {
+            height: 300px;
+        }
+    }
+}
+
+.pm-panel-placeholder {
+    &.expanded {
+        width: 40%;
+    }
 }
 
 .pm-panel > .panel-heading {
     cursor: pointer;
     border-radius: 0!important;
     border-radius: 0!important;
+
+    .pm-close, .pm-expand {
+        font-size: 12px;
+        margin-left: 8px;
+        line-height: 20px;
+    }
+    
+    .pm-close {
+        font-size: 14px;
+    }
 }
 
 .pm-panel > .panel-body {

@@ -3061,15 +3061,32 @@ function initPm(user) {
         .data("username", user)
         .appendTo(pm);
     
-    var close = $("<button/>")
-        .addClass("close pull-right")
-        .html("&times;")
+    var close = $("<span/>")
+        .addClass("pm-close pull-right glyphicon glyphicon-remove")
+        .attr("title", "Close")
+        .appendTo(title);
+        
+    var expand = $("<span/>")
+        .addClass("pm-expand pull-right glyphicon glyphicon-new-window")
+        .attr("title", "Expand")
         .appendTo(title);
     
-    close.click(function () {
-            pm.remove();
-            $("#pm-placeholder-" + user).remove();
-        });
+    close.on("click", function () {
+        pm.remove();
+        $("#pm-placeholder-" + user).remove();
+    });
+        
+    expand.on("click", function() {
+        if (pm.is(".expanded")) {
+            pm.removeClass("expanded");
+            $("#pm-placeholder-" + user).removeClass("expanded");
+        } else {
+            pm.addClass("expanded");
+            $("#pm-placeholder-" + user).addClass("expanded");
+        }
+        
+        return false;
+    });
 
     var body = $("<div/>")
         .addClass("panel-body")
@@ -3079,10 +3096,15 @@ function initPm(user) {
     title.click(function () {
         body.toggle();
         pm.removeClass("panel-primary").addClass("panel-default");
+        
         if (!body.is(":hidden")) {
-            placeholder = $("<div/>").addClass("pm-panel-placeholder")
+            placeholder = $("<div/>")
+                .addClass("pm-panel-placeholder")
                 .attr("id", "pm-placeholder-" + user)
                 .insertAfter(pm);
+            if (pm.is(".expanded")) {
+                placeholder.addClass("expanded");
+            }
             var left = pm.position().left;
             pm.css("position", "absolute")
                 .css("bottom", "0px")
