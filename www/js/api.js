@@ -59,8 +59,8 @@ var UserScript  = null;
         _scripts: {},
         _scripts_changed: false,
         _callbacks: {},
-        _load_count: 0,
-        _load_min: 4,
+        _ready_expected: 0,
+        _ready_count: 0,
         _imported: [],
     
         /**
@@ -279,8 +279,9 @@ var UserScript  = null;
                 this._callbacks[event] = [];
             }
             this._callbacks[event].push(callback);
+            
             if (event == "loaded" && this._load_count >= this._load_min) {
-                this.trigger("loaded");
+                //this.trigger("loaded");
             }
         },
     
@@ -572,12 +573,16 @@ var UserScript  = null;
                 return event;
             }
             
-            var callbacks = this._callbacks[name];
-            for(var i = 0; i < callbacks.length; i++) {
-                callbacks[i].call(this, event, data);
-                if (event.isStopped()) {
-                    break;
+            try {
+                var callbacks = this._callbacks[name];
+                for (var i = 0; i < callbacks.length; i++) {
+                    callbacks[i].call(this, event, data);
+                    if (event.isStopped()) {
+                        break;
+                    }
                 }
+            } catch (e) {
+                console.log(e);
             }
             
             return event;
@@ -594,14 +599,18 @@ var UserScript  = null;
                 this.trigger("reloading");
             }
             
-            this._removeAttached();
-            this._reset();
-            for(var i = 0; i < scripts.length; i++) {
-                this._addUserScript(scripts[i]);
+            if (scripts.length == 0) {
+                this._initDefaultTab();
+            } else {
+                this._removeAttached();
+                this._reset();
+                this._ready_expected = scripts.length;
+                for(var i = 0; i < scripts.length; i++) {
+                    this._addUserScript(scripts[i]);
+                }
             }
-    
+            
             USER_SCRIPTS_INIT = true;
-            this._pushLoaded();
         },
     
         /**
@@ -634,19 +643,17 @@ var UserScript  = null;
                 return textarea.val();
             });
             
-            if (script.length != 0) {
-                if (name_low == "css") {
-                    return this._attachStylesheet(name_low, script);
-                }
-                
-                var imports = this._findImports(script);
-                if (imports.length > 0) {
-                    this._importExternalScripts(imports, function() {
-                        this._attachScript(name_low, script);
-                    }.bind(this));
-                } else {
+            if (name_low == "css") {
+                return this._attachStylesheet(name_low, script);
+            }
+            
+            var imports = this._findImports(script);
+            if (imports.length > 0) {
+                this._importExternalScripts(imports, function() {
                     this._attachScript(name_low, script);
-                }
+                }.bind(this));
+            } else {
+                this._attachScript(name_low, script);
             }
         },
     
@@ -677,8 +684,12 @@ var UserScript  = null;
             if (!SAFE_MODE) {
                 var annotations = JSON.stringify(this._findAnnotations(script));
                 
-                script = "try { " +
-                    "(function($api, $options, $user, $channel, $annotations) { \n" + script + "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, " + annotations + "); " +
+                script = "" +
+                    "try {" +
+                        "(function($api, $options, $user, $channel, $annotations) { \n" +
+                            script +
+                        "\nChatAPI._pushReady();" +
+                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, " + annotations + "); " +
                     "} catch (e) { console.error(e); }";
     
                 $("<script/>").attr("type", "text/javascript")
@@ -775,6 +786,18 @@ var UserScript  = null;
                 textarea: textarea
             };
         },
+        
+        _initDefaultTab: function() {
+            var textarea = $('.user-scripting-textarea[data-name="Default"]');
+            textarea.data("name", "Default");
+            textarea.on("change.chat_api", function() {
+                this._scripts_changed = true;
+            }.bind(this));
+            tabOverride.set(textarea[0]);
+            this._scripts[name] = new UserScript("Default", function() {
+                return textarea.val();
+            });
+        },
     
         /**
          * Sends the user scripts to the server to be saved
@@ -783,24 +806,22 @@ var UserScript  = null;
          * @private
          */
         _saveUserScripts: function(toast) {
-            if (!this._scripts_changed) {
-                return;
-            }
-            
-            var obj = {
-                scripts: []
-            };
-            this.each(this._scripts, function(script) {
-                obj.scripts.push({
-                    name: script.getName(),
-                    script: script.getCode()
+            if (this._scripts_changed) {
+                var obj = {
+                    scripts: []
+                };
+                this.each(this._scripts, function(script) {
+                    obj.scripts.push({
+                        name: script.getName(),
+                        script: script.getCode()
+                    });
                 });
-            });
-            if (this.trigger("save_scripts", obj).isCancelled()) {
-                return;
-            }
-            if (obj.scripts.length > 0) {
-                socket.emit("saveUserScripts", obj.scripts);
+                if (this.trigger("save_scripts", obj).isCancelled()) {
+                    return;
+                }
+                if (obj.scripts.length > 0) {
+                    socket.emit("saveUserScripts", obj.scripts);
+                }
             }
             
             if (toast) {
@@ -872,6 +893,8 @@ var UserScript  = null;
          * @private
          */
         _reset: function() {
+            this._ready_expected = 0;
+            this._ready_count = 0;
             this._callbacks = {
                 reloading: [],
                 receive: [],
@@ -900,14 +923,10 @@ var UserScript  = null;
                 color_change: []
             };
         },
-    
-        /**
-         * 
-         * @private
-         */
-        _pushLoaded: function() {
-            this._load_count++;
-            if (this._load_count >= this._load_min) {
+        
+        _pushReady: function() {
+            this._ready_count++;
+            if (this._ready_count >= this._ready_expected) {
                 this.trigger("color_change", CHAT_LINE_COLOR);
                 this.trigger("loaded", {});
             }

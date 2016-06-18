@@ -35,18 +35,43 @@
     </div>
 {% endmacro %}
 
-<div id="useroptions" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="useroptions" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4>User Preferences</h4>
                 <ul id="user-options-tabs" class="nav nav-tabs">
-                    <li><a href="#us-chat" data-toggle="tab">Chat</a></li>
-                    <li><a href="#us-playback" data-toggle="tab">Playback</a></li>
-                    <li id="us-user-emotes-tab"><a href="#us-user-emotes" data-toggle="tab">Emotes</a></li>
-                    <li id="us-scripting-tab"><a href="#us-scripting" data-toggle="tab">Scripting</a></li>
-                    <li><a href="#us-mod" data-toggle="tab" style="">Moderator</a></li>
+                    <li>
+                        <a href="#us-chat" data-toggle="tab">
+                            <span class="glyphicon glyphicon-comment"></span>
+                            Chat
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#us-playback" data-toggle="tab">
+                            <span class="glyphicon glyphicon-facetime-video"></span>
+                            Playback
+                        </a>
+                    </li>
+                    <li id="us-user-emotes-tab">
+                        <a href="#us-user-emotes" data-toggle="tab">
+                            <span class="glyphicon glyphicon-sunglasses"></span>
+                            Emotes
+                        </a>
+                    </li>
+                    <li id="us-scripting-tab">
+                        <a href="#us-scripting" data-toggle="tab">
+                            <span class="glyphicon glyphicon-flash"></span>
+                            Scripting
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#us-mod" data-toggle="tab" style="">
+                            <span class="glyphicon glyphicon-cog"></span>
+                            Moderator
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="modal-body">

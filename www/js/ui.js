@@ -130,7 +130,7 @@ $(function() {
                 .removeClass("glyphicon-resize-small")
                 .addClass("glyphicon-resize-full");
             user_options.show();
-    
+            $("body").css("overflow", "auto");
             scripting_box.trigger("shrunk.scripting");
         };
         
@@ -145,7 +145,7 @@ $(function() {
                 .addClass("glyphicon-resize-small")
                 .removeClass("glyphicon-resize-full");
             user_options.hide();
-            
+            $("body").css("overflow", "hidden");
             options_footer.find(".btn-scripting-close-btn").on("click.scripting_box_expanded", function() {
                 $(this).off("click.scripting_box_expanded");
                 shrinkScriptingBox();
