@@ -975,17 +975,23 @@ var UserScript  = null;
          * 
          * @param label
          * @param tab_id
+         * @param icon
          * @returns {*|jQuery|HTMLElement}
          */
-        makeTab: function(label, tab_id) {
+        makeTab: function(label, tab_id, icon) {
             $("#" + tab_id).remove();
             
             var tab = $('<li/>');
             tab.attr("id", tab_id);
             
+            var html = label;
+            if (icon) {
+                html = '<span class="glyphicon glyphicon-' + icon + '"></span> ' + label;
+            }
+            
             tab.anchor = $('<a/>');
             tab.anchor.attr("data-toggle", "tab");
-            tab.anchor.text(label);
+            tab.anchor.html(html);
             tab.append(tab.anchor);
             
             return tab;
