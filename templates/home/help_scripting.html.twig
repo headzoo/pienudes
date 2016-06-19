@@ -33,6 +33,7 @@
                     <li><a href="#topic-api-user">$user</a></li>
                     <li><a href="#topic-api-options">$options</a></li>
                     <li><a href="#topic-api-proxy">$proxy</a></li>
+                    <li><a href="#topic-api-store">$store</a></li>
                     <li><a href="#topic-api-annotations">$annotations</a></li>
                     <li><a href="#topic-api-first-script">First Script</a></li>
                 </ul>
@@ -77,13 +78,13 @@
             <li>
                 <a href="#topic-api-methods" class="help-tc-root">Methods</a>
                 <ul>
-                    <li><a href="#topic-api-methods-set-storage">$api.setStorage()</a></li>
-                    <li><a href="#topic-api-methods-get-storage">$api.getStorage()</a></li>
-                    <li><a href="#topic-api-methods-remove-storage">$api.removeStorage()</a></li>
-                    <li><a href="#topic-api-methods-set-database">$api.setDatabase()</a></li>
-                    <li><a href="#topic-api-methods-get-database">$api.getDatabase()</a></li>
-                    <li><a href="#topic-api-methods-remove-database">$api.removeDatabase()</a></li>
-                    <li><a href="#topic-api-methods-keys-database">$api.keysDatabase()</a></li>
+                    <li><a href="#topic-api-methods-set-storage">$store.local.set()</a></li>
+                    <li><a href="#topic-api-methods-get-storage">$store.local.get()</a></li>
+                    <li><a href="#topic-api-methods-remove-storage">$store.local.remove()</a></li>
+                    <li><a href="#topic-api-methods-set-database">$store.database.set()</a></li>
+                    <li><a href="#topic-api-methods-get-database">$store.database.get()</a></li>
+                    <li><a href="#topic-api-methods-remove-database">$store.database.remove()</a></li>
+                    <li><a href="#topic-api-methods-keys-database">$store.database.keys()</a></li>
                     <li><a href="#topic-api-methods-each">$api.each()</a></li>
                     <li><a href="#topic-api-methods-send">$api.send()</a></li>
                     <li><a href="#topic-api-methods-notice">$api.notice()</a></li>
@@ -181,6 +182,14 @@
                     <p>
                         Contains the methods <code>$proxy.getJSON()</code>, <code>$proxy.getScript()</code>,
                         <code>$proxy.get()</code>, and <code>$proxy.post()</code>.
+                    </p>
+                </li>
+                <li>
+                    <code id="topic-api-store" class="signature">$store</code>
+                    <p>
+                        Provides access to cookies, localStorage, and the site database key/value store.
+                        More information about the <code>$store</code> methods are covered in the
+                        <a href="#topic-api-methods" class="help-tc-root">methods</a> of this documentation.
                     </p>
                 </li>
                 <li>
@@ -692,8 +701,8 @@
                 queue songs, and vote skip videos.
             </p>
 
-            <!-- $api.setStorage() -->
-            <code id="topic-api-methods-set-storage" class="signature">$api.setStorage(key, value)</code>
+            <!-- $store.local.set() -->
+            <code id="topic-api-methods-set-storage" class="signature">$store.local.set(key, value)</code>
             <p>
                 Saves a value to local storage with the given value. All values are serialized
                 before saving. Note that local storage is volatile, and values are not guaranteed
@@ -702,10 +711,10 @@
             <pre>
                 <code class="language-javascript line-numbers">
                     // Saving a plain string.
-                    $api.setStorage("gradient_color", "#FF0000");
+                    $store.local.set("gradient_color", "#FF0000");
 
                     // Saving an object.
-                    $api.setStorage("gradient_color", {
+                    $store.local.set("gradient_color", {
                         red: 255,
                         green: 0,
                         blue: 0
@@ -713,8 +722,8 @@
                 </code>
             </pre>
 
-            <!-- $api.getStorage() -->
-            <code id="topic-api-methods-get-storage" class="signature">$api.getStorage(key, default_value)</code>
+            <!-- $store.local.get() -->
+            <code id="topic-api-methods-get-storage" class="signature">$store.local.get(key, default_value)</code>
             <p>
                 Returns a value from local storage. Values are automatically unserialized. Returns the
                 <code>default_value</code> when the value does not exist in local storage.
@@ -725,28 +734,28 @@
                 <code class="language-javascript line-numbers">
                     // Gets a value from local storage using the key "gradient_color".
                     // This will return null if the value does not exist in storage.
-                    var color = $api.getStorage("gradient_color");
+                    var color = $store.local.get("gradient_color");
 
                     // Same as above, but will return the given default value when the value
                     // does not exist in local storage.
-                    var color = $api.getStorage("gradient_color", "#FF0000");
+                    var color = $store.local.get("gradient_color", "#FF0000");
                 </code>
             </pre>
 
-            <!-- $api.removeStorage() -->
-            <code id="topic-api-methods-remove-storage" class="signature">$api.removeStorage(key)</code>
+            <!-- $store.local.remove() -->
+            <code id="topic-api-methods-remove-storage" class="signature">$store.local.remove(key)</code>
             <p>
                 Removes an item from local storage. Note that local storage is volatile, and values are not guaranteed
                 to exist beyond the current browser session.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
-                    $api.removeStorage("gradient_color");
+                    $store.local.remove("gradient_color");
                 </code>
             </pre>
 
-            <!-- $api.setDatabase() -->
-            <code id="topic-api-methods-set-database" class="signature">$api.setDatabase(key, value, callback)</code>
+            <!-- $store.database.set() -->
+            <code id="topic-api-methods-set-database" class="signature">$store.database.set(key, value, callback)</code>
             <p>
                 Saves a value to permanent storage in the site database. The <code>key</code> param must be 150
                 characters or less. The JSON encoded string value of <code>value</code> must be 1024 characters
@@ -762,7 +771,7 @@
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
-                    $api.setDatabase("gradient_color", "#FF0000", function(err, res) {
+                    $store.database.set("gradient_color", "#FF0000", function(err, res) {
                         if (err) {
                             alert(err);
                             return;
@@ -772,8 +781,8 @@
                 </code>
             </pre>
 
-            <!-- $api.getDatabase() -->
-            <code id="topic-api-methods-get-database" class="signature">$api.getDatabase(key, default_value, callback)</code>
+            <!-- $store.database.get() -->
+            <code id="topic-api-methods-get-database" class="signature">$store.database.get(key, default_value, callback)</code>
             <p>
                 Returns a value from permanent storage in the site's database. Returns the
                 <code>default_value</code> when the value does not exist.
@@ -785,7 +794,7 @@
             <pre>
                 <code class="language-javascript line-numbers">
                     // The value will be the default if the key does not exist in the database.
-                    $api.getDatabase("gradient_colors", "#FF0000", function(err, value) {
+                    $store.database.get("gradient_colors", "#FF0000", function(err, value) {
                         if (err) {
                             alert(err);
                             return;
@@ -795,7 +804,7 @@
                     
                     // The default argument is optional. Without a default the value will be
                     // null when the key does not exist in the database.
-                    $api.getDatabase("gradient_colors", function(err, value) {
+                    $store.database.get("gradient_colors", function(err, value) {
                         if (err) {
                             alert(err);
                             return;
@@ -805,8 +814,8 @@
                 </code>
             </pre>
 
-            <!-- $api.removeDatabase() -->
-            <code id="topic-api-methods-remove-database" class="signature">$api.removeDatabase(key, callback)</code>
+            <!-- $store.database.remove() -->
+            <code id="topic-api-methods-remove-database" class="signature">$store.database.remove(key, callback)</code>
             <p>
                 Removes an item from permanent storage in the site's database. The optional <code>callback</code>
                 argument is invoked when the operation is complete, and is passed any error that occurred as
@@ -815,7 +824,7 @@
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
-                    $api.removeDatabase("gradient_color", function(err, res) {
+                    $store.database.remove("gradient_color", function(err, res) {
                         if (err) {
                             alert(err);
                             return;
@@ -825,8 +834,8 @@
                 </code>
             </pre>
 
-            <!-- $api.keysDatabase() -->
-            <code id="topic-api-methods-keys-database" class="signature">$api.keysDatabase(prefix, callback)</code>
+            <!-- $store.database.keys() -->
+            <code id="topic-api-methods-keys-database" class="signature">$store.database.keys(prefix, callback)</code>
             <p>
                 Returns an array of all <i>your</i> keys stored in the database. When <code>prefix</code> is not set
                 you will get <i>all</i> of your keys. With <code>prefix</code> set to a non-empty value, you only
@@ -839,7 +848,7 @@
             <pre>
                 <code class="language-javascript line-numbers">
                     // Get all keys
-                    $api.keysDatabase(function(err, keys) {
+                    $store.database.keys(function(err, keys) {
                         if (err) {
                             alert(err);
                             return;
@@ -848,7 +857,7 @@
                     });
                     
                     // Get keys prefixed with "foo"
-                    $api.keysDatabase("foo", function(err, keys) {
+                    $store.database.keys("foo", function(err, keys) {
                         if (err) {
                             alert(err);
                             return;
