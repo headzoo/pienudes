@@ -85,7 +85,6 @@
                     <li><a href="#topic-api-methods-get-database">$store.database.get()</a></li>
                     <li><a href="#topic-api-methods-remove-database">$store.database.remove()</a></li>
                     <li><a href="#topic-api-methods-keys-database">$store.database.keys()</a></li>
-                    <li><a href="#topic-api-methods-each">$api.each()</a></li>
                     <li><a href="#topic-api-methods-send">$api.send()</a></li>
                     <li><a href="#topic-api-methods-notice">$api.notice()</a></li>
                     <li><a href="#topic-api-methods-queue">$api.queue()</a></li>
@@ -863,35 +862,6 @@
                             return;
                         }
                         console.log(keys);
-                    });
-                </code>
-            </pre>
-
-            <!-- $api.each() -->
-            <code id="topic-api-methods-each" class="signature">$api.each(object, callback)</code>
-            <p>
-                Iterates over and object or array. The provided <code>callback</code> is called for
-                each value, and receives two arguments: the value and the key/index. Note: The
-                iteration "breaks" if the callback returns the <code>null</code> value.
-            </p>
-            <pre>
-                <code class="language-javascript line-numbers">
-                    // Iterating over an array
-                    var obj = ["one", "two", "three"];
-
-                    $api.each(obj, function(value, index) {
-                        console.log(index + " = " + value);
-                    });
-
-                    // Iterating over an object
-                    var obj = {
-                        one: "foo",
-                        two: "bar",
-                        three: "baz"
-                    };
-                    
-                    $api.each(obj, function(value, key) {
-                        console.log(key + " = " + value);
                     });
                 </code>
             </pre>
