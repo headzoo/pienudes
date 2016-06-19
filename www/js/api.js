@@ -221,13 +221,21 @@ var UserScript  = null;
         /**
          * Gets a list of stored keys
          * 
+         * @param prefix
          * @param callback
          */
-        keysDatabase: function(callback) {
+        keysDatabase: function(prefix, callback) {
+            if (typeof prefix == "function") {
+                callback = prefix;
+                prefix   = "";
+            }
             callback = callback || noop;
     
             $.ajax({
-                url: "/api/database/keys"
+                url: "/api/database/keys",
+                data: {
+                    prefix: prefix
+                }
             }).done(function(res) {
                 try {
                     res = JSON.parse(res);

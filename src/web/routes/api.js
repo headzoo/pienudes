@@ -7,8 +7,9 @@ function handleGetDatabaseKeys(req, res) {
     if (!req.user) {
         return res.send(401);
     }
+    var prefix = req.query.prefix || null;
     
-    db_api_storage.fetchKeysByUser(req.user.id, function(err, keys) {
+    db_api_storage.fetchKeysByUser(req.user.id, prefix, function(err, keys) {
         if (err) {
             if (typeof err == "string") {
                 res.json(err, 500);

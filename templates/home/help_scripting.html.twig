@@ -814,15 +814,29 @@
             </pre>
 
             <!-- $api.keysDatabase() -->
-            <code id="topic-api-methods-keys-database" class="signature">$api.keysDatabase(callback)</code>
+            <code id="topic-api-methods-keys-database" class="signature">$api.keysDatabase(prefix, callback)</code>
             <p>
-                Returns an array of all <i>your</i> keys stored in the database. The optional <code>callback</code>
-                argument is invoked when the operation is complete, and is passed any error that occurred as
-                the first argument, and an array of keys as the second argument.
+                Returns an array of all <i>your</i> keys stored in the database. When <code>prefix</code> is not set
+                you will get <i>all</i> of your keys. With <code>prefix</code> set to a non-empty value, you only
+                get the keys that start with the given prefix.
+            </p>
+            <p>
+                The optional <code>callback</code> argument is invoked when the operation is complete, and is
+                passed any error that occurred as the first argument, and an array of keys as the second argument.
             </p>
             <pre>
                 <code class="language-javascript line-numbers">
+                    // Get all keys
                     $api.keysDatabase(function(err, keys) {
+                        if (err) {
+                            alert(err);
+                            return;
+                        }
+                        console.log(keys);
+                    });
+                    
+                    // Get keys prefixed with "foo"
+                    $api.keysDatabase("foo", function(err, keys) {
                         if (err) {
                             alert(err);
                             return;
