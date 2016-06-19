@@ -11,7 +11,7 @@ var UserScript  = null;
  * @param cb
  */
 var $each = function(obj, cb) {
-    if (Array.isArray(obj)) {
+    if (Array.isArray(obj) || typeof obj == "string") {
         for(var i = 0; i < obj.length; i++) {
             if (cb(obj[i], i) === null) {
                 break;
@@ -26,7 +26,7 @@ var $each = function(obj, cb) {
             }
         }
     } else {
-        throw "Value must be object or array.";
+        throw "Value must be object, array, or string.";
     }
 };
 
