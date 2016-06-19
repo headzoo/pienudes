@@ -1477,7 +1477,7 @@ function formatChatMessage(data, last, permalink) {
         } else {
             var time = $("<span/>").addClass("timestamp").appendTo(div);
         }
-        var timestamp = new Date(data.time).toTimeString().split(" ")[0];
+        var timestamp = formatTimestamp(data.time);
         time.text("[" + timestamp + "] ");
         if (data.meta.addClass && data.meta.addClassToNameAndTimestamp) {
             time.addClass(data.meta.addClass);
@@ -1662,7 +1662,7 @@ function addNotice(data) {
     var span = $("<span/>");
     span.addClass("timestamp");
     if (USEROPTS.show_timestamps) {
-        span.text("[" + new Date(data.time).toTimeString().split(" ")[0] + "]");
+        span.text("[" + formatTimestamp(data.time) + "]");
     }
     div.append(span);
     
@@ -3295,6 +3295,11 @@ function formatScriptAccessPrefs() {
                 tr.remove();
             });
     });
+}
+
+function formatTimestamp(time) {
+    var d = new Date(time);
+    return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 }
 
 /*
