@@ -1186,6 +1186,7 @@ var UserScript  = null;
      * Wrapper for jQuery ajax shorthand methods, which sends every request through
      * the site proxy.
      */
+     
     ChatProxy = {
         "getJSON": function(url, data, success) {
             return $.getJSON(this._getProxyUrl(url), data, success);
