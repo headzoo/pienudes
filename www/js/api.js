@@ -153,20 +153,9 @@ var UserScript  = null;
                     callback = default_value;
                     default_value = null;
                 }
-        
-                if (key.length > DATABASE_MAX_KEY) {
-                    return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
-                }
-        
-                $.ajax({
-                    url: "/api/database",
-                    data: {
-                        key: key
-                    }
-                }).done(function(res) {
-                    callback(null, this._transformDone(res));
-                }).fail(function(xhr) {
-                    callback(this._transformError(xhr));
+                
+                return this._send("/api/database", "get", callback, {
+                    key: key
                 });
             },
     
@@ -180,26 +169,10 @@ var UserScript  = null;
              */
             "set": function(key, value, callback) {
                 callback = callback || noop;
-        
-                if (key.length > DATABASE_MAX_KEY) {
-                    return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
-                }
-                value = JSON.stringify(value);
-                if (value.length > DATABASE_MAX_VALUE) {
-                    return callback("JSON encoded value exceeds max character length of " + DATABASE_MAX_VALUE);
-                }
-        
-                $.ajax({
-                    url: "/api/database",
-                    type: "post",
-                    data: {
-                        key: key,
-                        value: value
-                    }
-                }).done(function(res) {
-                    callback(null, this._transformDone(res));
-                }).fail(function() {
-                    callback(this._transformError(xhr));
+                
+                return this._send("/api/database", "post", callback, {
+                    key: key,
+                    value: value
                 });
             },
     
@@ -212,21 +185,9 @@ var UserScript  = null;
              */
             "remove": function(key, callback) {
                 callback = callback || noop;
-        
-                if (key.length > DATABASE_MAX_KEY) {
-                    return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
-                }
-        
-                $.ajax({
-                    url: "/api/database",
-                    type: "delete",
-                    data: {
-                        key: key
-                    }
-                }).done(function(res) {
-                    callback(null, this._transformDone(res));
-                }).fail(function(xhr) {
-                    callback(this._transformError(xhr));
+                
+                return this._send("/api/database", "delete", callback, {
+                    key: key
                 });
             },
     
@@ -243,15 +204,32 @@ var UserScript  = null;
                     prefix   = "";
                 }
                 
-                $.ajax({
-                    url: "/api/database/keys",
-                    data: {
-                        prefix: prefix
+                return this._send("/api/database/keys", "get", callback, {
+                    prefix: prefix
+                });
+            },
+            
+            "_send": function(url, type, callback, data) {
+                var self = this;
+    
+                if (data.key !== undefined && data.key.length > DATABASE_MAX_KEY) {
+                    return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
+                }
+                if (data.value !== undefined) {
+                    data.value = JSON.stringify(data.value);
+                    if (data.value.length > DATABASE_MAX_VALUE) {
+                        return callback("JSON encoded value exceeds max character length of " + DATABASE_MAX_VALUE);
                     }
+                }
+                
+                return $.ajax({
+                    url: url,
+                    type: type,
+                    data: data
                 }).done(function(res) {
-                    callback(null, this._transformDone(res));
-                }).fail(function(xhr) {
-                    callback(this._transformError(xhr));
+                    callback(null, self._transformDone(res));
+                }).fail(function() {
+                    callback(self._transformError(xhr));
                 });
             },
             
