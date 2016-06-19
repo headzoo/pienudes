@@ -167,6 +167,7 @@ module.exports = {
         require('./routes/channel')(app, ioConfig);
         require('./routes/socketconfig')(app, clusterClient);
         require('./routes/home').init(app, channelIndex);
+        require('./routes/scripting').init(app);
         require('./routes/contact').init(app);
         require('./routes/auth').init(app);
         require('./routes/account').init(app);
@@ -181,7 +182,6 @@ module.exports = {
         require('./routes/admin/index').init(app, channelIndex);
         require('./routes/admin/users').init(app);
         require('./routes/admin/alts').init(app);
-        //require('./routes/acp').init(app);
         
         require('../google2vtt').attach(app);
         app.get('/sioconfig(.json)?', handleLegacySocketConfig);

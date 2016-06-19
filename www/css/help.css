@@ -1,5 +1,12 @@
 #help-page {
   font-family: Consolas, Monaco, monospace;
+  color: #FFF;
+}
+#help-page h1 {
+  color: #FFF;
+}
+#help-page h1 .glyphicon {
+  font-size: 28px;
 }
 #help-page a {
   text-decoration: underline;

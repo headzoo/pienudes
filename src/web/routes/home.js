@@ -1,4 +1,5 @@
 "use strict";
+
 import template from '../template';
 import Config from '../../config';
 import db_playlists from '../../database/playlist';
@@ -23,14 +24,6 @@ function handlePrivacyPolicy(req, res) {
 function handleHelp(req, res) {
     template.send(res, 'home/help', {
         pageTitle: "Help"
-    });
-}
-
-function handleHelpScripting(req, res) {
-    template.send(res, 'home/help_scripting', {
-        pageTitle: "Scripting",
-        pageStylesheets: ["/css/prism.css"],
-        pageScripts: ["/js/prism.js"]
     });
 }
 
@@ -139,7 +132,6 @@ module.exports = {
         app.get('/terms', handleUserAgreement);
         app.get('/privacy', handlePrivacyPolicy);
         app.get('/help', handleHelp);
-        app.get('/help/scripting', handleHelpScripting);
         app.get('/about', handleAbout);
         app.get('/tags', handleTags);
         app.get('/', (req, res) => {

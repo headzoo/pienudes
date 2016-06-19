@@ -102,7 +102,7 @@ $(function() {
         window.open("https://github.com/upnextfm/scripts");
     });
     $("#user-scripting-help-btn").on("click", function() {
-        window.open("https://upnext.fm/help/scripting");
+        window.open("/scripting/help");
     });
     $("#user-scripting-safe-mode-btn").on("click", function() {
         if (confirm("This will refresh the page with scripts disabled. Continue?")) {
@@ -166,7 +166,7 @@ $(function() {
     });
     
     $("#user-scripting-create-btn").on("click", function() {
-        var name = prompt("Name of the tab.");
+        var name = prompt("Name of the file.");
         if (!name) {
             return;
         }
