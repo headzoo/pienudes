@@ -1522,7 +1522,7 @@ function formatChatMessage(data, last, permalink) {
     // Add the message itself
     var message = $("<span/>").appendTo(div);
     message.addClass("chat-msg-line");
-    data.msg = data.msg.replace(/[br]/g, '<br />');
+    data.msg = data.msg.replace(/\[br\]/g, '<br />');
     if (USEROPTS.show_colors) {
         message.css("color", data.meta.color);
         data.msg = parseBBCodes(data.msg);
