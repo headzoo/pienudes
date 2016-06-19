@@ -601,6 +601,10 @@ Callbacks = {
         $("#messagebuffer").html("");
         LASTCHAT.name = "";
     },
+    
+    chatPong: function() {
+        handlePong();
+    },
 
     userlist: function(data) {
         $(".userlist_item").remove();

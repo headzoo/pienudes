@@ -377,6 +377,11 @@ $("#chatline").keydown(function(ev) {
         }
         var msg = $("#chatline").val();
         if(msg.trim()) {
+            if (msg.indexOf("/ping") === 0) {
+                $("#chatline").val("");
+                return sendPing(msg);
+            }
+            
             var meta = {};
             if (USEROPTS.adminhat && CLIENT.rank >= 255) {
                 msg = "/a " + msg;

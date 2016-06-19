@@ -103,6 +103,7 @@ ChatModule.prototype.onUserPostJoin = function (user) {
     user.socket.typecheckedOn("chatMsg", TYPE_CHAT, this.handleChatMsg.bind(this, user));
     user.socket.typecheckedOn("pm", TYPE_PM, this.handlePm.bind(this, user));
     user.socket.on("delMsg", this.handleDelMsg.bind(this, user));
+    user.socket.on("chatPing", this.handleChatPing.bind(this, user));
     user.socket.emit("chatBuffer", this.buffer);
 };
 
@@ -744,6 +745,15 @@ ChatModule.prototype.handleCmdAnnounce = function(user, msg) {
             type: "info"
         });
     });
+};
+
+ChatModule.prototype.handleChatPing = function(user) {
+    if (user.chatLimiter.throttle(MIN_ANTIFLOOD)) {
+        user.socket.emit("cooldown", 1000 / MIN_ANTIFLOOD.sustained);
+        return;
+    }
+
+    user.socket.emit("chatPong");
 };
 
 module.exports = ChatModule;

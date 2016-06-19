@@ -3627,3 +3627,25 @@ function thumbnailUrl(media, size) {
         
     }
 }
+
+var PING_START_TIME = null;
+
+function sendPing() {
+    console.log("ping");
+    PING_START_TIME = Date.now();
+    socket.emit("chatPing", {});
+}
+
+function handlePong() {
+    if (PING_START_TIME === null) {
+        return;
+    }
+    
+    var elapsed = (Date.now()) - PING_START_TIME;
+    console.log(elapsed);
+    PING_START_TIME = null;
+    addNotice({
+        msg: "Ping time: " + elapsed + "ms",
+        time: Date.now()
+    });
+}
