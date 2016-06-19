@@ -2,7 +2,7 @@
 
 var request = require('request');
 
-function handleImage(req, res) {
+function handle(req, res) {
     var path = req.query.u;
     request.get(path).pipe(res);
 }
@@ -12,6 +12,7 @@ module.exports = {
      * Initializes auth callbacks
      */
     init: function (app) {
-        app.get('/proxy/image', handleImage);
+        app.get('/proxy', handle);
+        app.get('/proxy/image', handle);
     }
 };
