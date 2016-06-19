@@ -4,10 +4,36 @@ var ChatProxy   = null;
 var ChatStore   = null;
 var UserScript  = null;
 
+/**
+ * Iterates over an object or array
+ *
+ * @param obj
+ * @param cb
+ */
+var $each = function(obj, cb) {
+    if (Array.isArray(obj)) {
+        for(var i = 0; i < obj.length; i++) {
+            if (cb(obj[i], i) === null) {
+                break;
+            }
+        }
+    } else if (typeof obj == "object") {
+        for(var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (cb(obj[key], key) === null) {
+                    break;
+                }
+            }
+        }
+    } else {
+        throw "Value must be object or array.";
+    }
+};
+
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.2";
+    var API_VERSION        = "1.2.1";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 1024;
@@ -350,25 +376,10 @@ var UserScript  = null;
          * 
          * @param obj
          * @param cb
+         * @deprecated
          */
         each: function(obj, cb) {
-            if (Array.isArray(obj)) {
-                for(var i = 0; i < obj.length; i++) {
-                    if (cb(obj[i], i) === null) {
-                        break;
-                    }
-                }
-            } else if (typeof obj == "object") {
-                for(var key in obj) {
-                    if (obj.hasOwnProperty(key)) {
-                        if (cb(obj[key], key) === null) {
-                            break;
-                        }
-                    }
-                }
-            } else {
-                throw "Value must be object or array.";
-            }
+            return $each(obj, cb);
         },
     
         /**
