@@ -32,6 +32,7 @@
                     <li><a href="#topic-api-channel">$channel</a></li>
                     <li><a href="#topic-api-user">$user</a></li>
                     <li><a href="#topic-api-options">$options</a></li>
+                    <li><a href="#topic-api-proxy">$proxy</a></li>
                     <li><a href="#topic-api-annotations">$annotations</a></li>
                     <li><a href="#topic-api-first-script">First Script</a></li>
                 </ul>
@@ -118,8 +119,7 @@
         <h3 id="topic-overview-api">API</h3>
         <section>
             <p>
-                User scripts get embedded into the page using using regular <code>&ltscript&gt;</code> tags, and
-                four convenience variables are created.
+                Several objects are available to user scripts.
             </p>
             <ul style="margin:0;padding:0;list-style-type:none;">
                 <li>
@@ -169,6 +169,18 @@
                     <p>
                         Reference to an object which represents the channel Options menu. It can be used
                         to add additional options to the menu.
+                    </p>
+                </li>
+                <li>
+                    <code id="topic-api-proxy" class="signature">$proxy</code>
+                    <p>
+                        Wrapper for jQuery ajax shorthand methods, which sends request through the site proxy.
+                        Helps to get around CORS and TLS/SSL issues when making remote requests. 
+                        See <a href="http://api.jquery.com/category/ajax/shorthand-methods" target="_blank">http://api.jquery.com/category/ajax/shorthand-methods</a>
+                    </p>
+                    <p>
+                        Contains the methods <code>$proxy.getJSON()</code>, <code>$proxy.getScript()</code>,
+                        <code>$proxy.get()</code>, and <code>$proxy.post()</code>.
                     </p>
                 </li>
                 <li>

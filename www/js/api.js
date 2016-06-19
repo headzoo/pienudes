@@ -1,11 +1,13 @@
 var ChatAPI     = null;
 var ChatOptions = null;
+var ChatProxy   = null;
+var ChatStore   = null;
 var UserScript  = null;
 
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.1";
+    var API_VERSION        = "1.2";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 1024;
@@ -54,6 +56,227 @@ var UserScript  = null;
         return this.reader();
     };
     
+    ChatStore = {
+        cookies: {
+            "get": function(name, default_value) {
+                var eq = name + "=";
+                var ca = document.cookie.split(";");
+                
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == " ") {
+                            c = c.substring(1,c.length);
+                    }
+                    if (c.indexOf(eq) == 0) {
+                        return JSON.parse(c.substring(eq.length, c.length));
+                    }
+                }
+                
+                return default_value || null;
+            },
+            
+            "set": function(name, value, days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                
+                value = JSON.stringify(value);
+                document.cookie = name + "=" + value + expires + "; path=/";
+            },
+            
+            "remove": function(name) {
+                this.set(name, "", -1);
+            }
+        },
+        
+        /**
+         * Provides access to local storage
+         */
+        local: {
+            /**
+             * Gets an item from local storage
+             *
+             * @param key
+             * @param default_value
+             */
+            "get": function(key, default_value) {
+                default_value = default_value || null;
+                
+                var value = localStorage.getItem(key);
+                if (value === null) {
+                    value = default_value;
+                } else {
+                    value = JSON.parse(value);
+                }
+                
+                return value;
+            },
+    
+            /**
+             * Stores an item in local storage
+             *
+             * @param key
+             * @param value
+             */
+            "set": function(key, value) {
+                localStorage.setItem(key, JSON.stringify(value));
+            },
+    
+            /**
+             * Removes an item from local storage
+             *
+             * @param key
+             */
+            "remove": function(key) {
+                localStorage.removeItem(key);
+            }
+        },
+    
+        /**
+         * Provides access to the site permanent key/value store.
+         */
+        database: {
+            /**
+             * Gets a value from the site database
+             *
+             * @param key
+             * @param default_value
+             * @param callback
+             * @returns {*}
+             */
+            "get": function(key, default_value, callback) {
+                callback = callback || noop;
+                if (typeof default_value == "function") {
+                    callback = default_value;
+                    default_value = null;
+                }
+        
+                if (key.length > DATABASE_MAX_KEY) {
+                    return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
+                }
+        
+                $.ajax({
+                    url: "/api/database",
+                    data: {
+                        key: key
+                    }
+                }).done(function(res) {
+                    callback(null, this._transformDone(res));
+                }).fail(function(xhr) {
+                    callback(this._transformError(xhr));
+                });
+            },
+    
+            /**
+             * Stores a value in the site database
+             *
+             * @param key
+             * @param value
+             * @param callback
+             * @returns {*}
+             */
+            "set": function(key, value, callback) {
+                callback = callback || noop;
+        
+                if (key.length > DATABASE_MAX_KEY) {
+                    return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
+                }
+                value = JSON.stringify(value);
+                if (value.length > DATABASE_MAX_VALUE) {
+                    return callback("JSON encoded value exceeds max character length of " + DATABASE_MAX_VALUE);
+                }
+        
+                $.ajax({
+                    url: "/api/database",
+                    type: "post",
+                    data: {
+                        key: key,
+                        value: value
+                    }
+                }).done(function(res) {
+                    callback(null, this._transformDone(res));
+                }).fail(function() {
+                    callback(this._transformError(xhr));
+                });
+            },
+    
+            /**
+             * Removes a value from the site database
+             *
+             * @param key
+             * @param callback
+             * @returns {*}
+             */
+            "remove": function(key, callback) {
+                callback = callback || noop;
+        
+                if (key.length > DATABASE_MAX_KEY) {
+                    return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
+                }
+        
+                $.ajax({
+                    url: "/api/database",
+                    type: "delete",
+                    data: {
+                        key: key
+                    }
+                }).done(function(res) {
+                    callback(null, this._transformDone(res));
+                }).fail(function(xhr) {
+                    callback(this._transformError(xhr));
+                });
+            },
+    
+            /**
+             * Gets a list of stored keys
+             *
+             * @param prefix
+             * @param callback
+             */
+            "keys": function(prefix, callback) {
+                callback = callback || noop;
+                if (typeof prefix == "function") {
+                    callback = prefix;
+                    prefix   = "";
+                }
+                
+                $.ajax({
+                    url: "/api/database/keys",
+                    data: {
+                        prefix: prefix
+                    }
+                }).done(function(res) {
+                    callback(null, this._transformDone(res));
+                }).fail(function(xhr) {
+                    callback(this._transformError(xhr));
+                });
+            },
+            
+            "_transformDone": function(res, default_value) {
+                default_value = default_value || null;
+    
+                try {
+                    var value = JSON.parse(res);
+                } catch (e) {}
+                if (value === null) {
+                    value = default_value;
+                }
+                
+                return value;
+            },
+            
+            "_transformError": function(xhr) {
+                try {
+                    return JSON.parse(xhr.responseText);
+                } catch (e) {}
+                return xhr.responseText;
+            }
+        }
+    };
+    
     ChatAPI = {
         version: API_VERSION,
         _scripts: {},
@@ -68,17 +291,10 @@ var UserScript  = null;
          * 
          * @param key
          * @param d
+         * @deprecated
          */
         getStorage: function(key, d) {
-            d = d || null;
-            var value = localStorage.getItem(key);
-            if (value === null) {
-                value = d;
-            } else {
-                value = JSON.parse(value);
-            }
-        
-            return value;
+            return ChatStore.local.get(key, d);
         },
     
         /**
@@ -86,19 +302,20 @@ var UserScript  = null;
          * 
          * @param key
          * @param value
+         * @deprecated
          */
         setStorage: function(key, value) {
-            value = JSON.stringify(value);
-            localStorage.setItem(key, value);
+            return ChatStore.local.set(key, value);
         },
     
         /**
          * Removes an item from local storage
          * 
          * @param key
+         * @deprecated
          */
         removeStorage: function(key) {
-            localStorage.removeItem(key);
+            return ChatStore.local.remove(key);
         },
     
         /**
@@ -108,39 +325,10 @@ var UserScript  = null;
          * @param d
          * @param callback
          * @returns {*}
+         * @deprecated
          */
         getDatabase: function(key, d, callback) {
-            callback = callback || noop;
-            
-            if (typeof d == "function") {
-                callback = d;
-                d = null;
-            }
-            
-            if (key.length > DATABASE_MAX_KEY) {
-                return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
-            }
-            
-            $.ajax({
-                url: "/api/database",
-                data: {
-                    key: key
-                }
-            }).done(function(res) {
-                try {
-                    var value = JSON.parse(res);
-                } catch (e) {}
-                if (value === null) {
-                    value = d;
-                }
-                callback(null, value);
-            }).fail(function(xhr) {
-                try {
-                    var err = JSON.parse(xhr.responseText);
-                    return callback(err);
-                } catch (e) {}
-                callback(xhr.responseText);
-            });
+            return ChatStore.database.get(key, d, callback);
         },
     
         /**
@@ -150,38 +338,10 @@ var UserScript  = null;
          * @param value
          * @param callback
          * @returns {*}
+         * @deprecated
          */
         setDatabase: function(key, value, callback) {
-            callback = callback || noop;
-    
-            if (key.length > DATABASE_MAX_KEY) {
-                return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
-            }
-            
-            value = JSON.stringify(value);
-            if (value.length > DATABASE_MAX_VALUE) {
-                return callback("JSON encoded value exceeds max character length of " + DATABASE_MAX_VALUE);
-            }
-            
-            $.ajax({
-                url: "/api/database",
-                type: "post",
-                data: {
-                    key: key,
-                    value: value
-                }
-            }).done(function(res) {
-                try {
-                    res = JSON.parse(res);
-                } catch (e) {}
-                callback(null, res);
-            }).fail(function() {
-                try {
-                    var err = JSON.parse(xhr.responseText);
-                    return callback(err);
-                } catch (e) {}
-                callback(xhr.responseText);
-            });
+            return ChatStore.database.set(key, value, callback);
         },
     
         /**
@@ -190,32 +350,10 @@ var UserScript  = null;
          * @param key
          * @param callback
          * @returns {*}
+         * @deprecated
          */
         removeDatabase: function(key, callback) {
-            callback = callback || noop;
-    
-            if (key.length > DATABASE_MAX_KEY) {
-                return callback("Key exceeds max character length of " + DATABASE_MAX_KEY);
-            }
-            
-            $.ajax({
-                url: "/api/database",
-                type: "delete",
-                data: {
-                    key: key
-                }
-            }).done(function(res) {
-                try {
-                    res = JSON.parse(res);
-                } catch (e) {}
-                callback(null, res);
-            }).fail(function(xhr) {
-                try {
-                    var err = JSON.parse(xhr.responseText);
-                    return callback(err);
-                } catch (e) {}
-                callback(xhr.responseText);
-            });
+            ChatStore.database.remove(key, callback);
         },
     
         /**
@@ -223,31 +361,10 @@ var UserScript  = null;
          * 
          * @param prefix
          * @param callback
+         * @deprecated
          */
         keysDatabase: function(prefix, callback) {
-            if (typeof prefix == "function") {
-                callback = prefix;
-                prefix   = "";
-            }
-            callback = callback || noop;
-    
-            $.ajax({
-                url: "/api/database/keys",
-                data: {
-                    prefix: prefix
-                }
-            }).done(function(res) {
-                try {
-                    res = JSON.parse(res);
-                } catch (e) {}
-                callback(null, res);
-            }).fail(function(xhr) {
-                try {
-                    var err = JSON.parse(xhr.responseText);
-                    return callback(err);
-                } catch (e) {}
-                callback(xhr.responseText);
-            });
+            return ChatStore.keys(prefix, callback);
         },
     
         /**
@@ -694,10 +811,10 @@ var UserScript  = null;
                 
                 script = "" +
                     "try {" +
-                        "(function($api, $options, $user, $channel, $annotations) { \n" +
+                        "(function($api, $options, $user, $channel, $proxy, $store, $annotations) { \n" +
                             script +
                         "\nChatAPI._pushReady();" +
-                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, " + annotations + "); " +
+                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, " + annotations + "); " +
                     "} catch (e) { console.error(e); }";
     
                 $("<script/>").attr("type", "text/javascript")
@@ -1086,4 +1203,30 @@ var UserScript  = null;
             );
         }
     };
+    
+    /**
+     * Wrapper for jQuery ajax shorthand methods, which sends every request through
+     * the site proxy.
+     */
+    ChatProxy = {
+        "getJSON": function(url, data, success) {
+            return $.getJSON(this._getProxyUrl(url), data, success);
+        },
+        
+        "getScript": function(url, success) {
+            return $.getScript(this._getProxyUrl(url), data, success);
+        },
+        
+        "get": function(url, data, success, data_type) {
+            return $.get(this._getProxyUrl(url), data, success, data_type);
+        },
+        
+        "post": function(url, data, success, data_type) {
+            return $.post(this._getProxyUrl(url), data, success, data_type);
+        },
+        
+        _getProxyUrl: function(url) {
+            return "/proxy?u=" + encodeURIComponent(url);
+        }
+    }
 })();
