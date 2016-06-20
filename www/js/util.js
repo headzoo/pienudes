@@ -3648,7 +3648,8 @@ function installUserScript(script) {
     
     $.ajax({
         url: SCRIPTS_BASE_URL + "/meta.json",
-        dataType: "json"
+        dataType: "json",
+        cache: false
     }).done(function(res) {
         if (typeof res[script] === "undefined") {
             return alert("Unable to fetch script meta data. Try again in a minute.");
@@ -3660,7 +3661,8 @@ function installUserScript(script) {
         $("#install-script-open-anchor").attr("href", script_url);
         
         $.ajax({
-            url: script_url
+            url: script_url,
+            cache: false
         }).done(function(script_text) {
             
             var preview_input = $("#install-script-preview-input");
@@ -3687,6 +3689,7 @@ function installUserScript(script) {
                     
                     $.ajax({
                         url: "/scripting/exists",
+                        cache: false,
                         data: {
                             name: script
                         }
