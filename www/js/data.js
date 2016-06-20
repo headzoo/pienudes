@@ -1,4 +1,6 @@
-var CL_VERSION = 3.0;
+var CL_VERSION       = 3.0;
+var SCRIPTS_BASE_URL = "https://scripts.upnext.fm";
+var SCRIPTS_REGEX    = new RegExp(SCRIPTS_BASE_URL + '/([^\\s]+).js');
 
 var CLIENT = {
     rank: -1,

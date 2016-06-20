@@ -170,16 +170,16 @@ $(function() {
         if (!name) {
             return;
         }
-        if (name.match(/[^\sa-zA-Z0-9_-]/)) {
-            alert("Special characters are not allowed in script names. Only letters, numbers, spaces, underscores, and dashes may be used.");
+        if (name.match(/[^\sa-zA-Z0-9_\-\.]/)) {
+            alert("Special characters are not allowed in script names. Only letters, numbers, spaces, underscores, dashes and periods may be used.");
             return;
         }
         if (name.length > 20) {
             alert("Script names must contain 20 characters or less.");
             return;
         }
-    
-        var name_low = name.toLowerCase().replace(" ", "-");
+        
+        var name_low = name.toLowerCase().replace(" ", "-").replace(".", "-");
         var tabs     = $("#user-scripting-tabs");
         var found    = false;
         tabs.find('[role="tab"]').each(function(i, item) {

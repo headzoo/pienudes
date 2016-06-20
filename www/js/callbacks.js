@@ -339,6 +339,14 @@ Callbacks = {
     deleteUserScript: function(data) {
         ChatAPI._deleteUserScript(data);
     },
+    
+    installedUserScript: function() {
+        $("#install-script-modal").modal("hide");
+        toastr.options.preventDuplicates = true;
+        toastr.options.closeButton = true;
+        toastr.options.timeOut = 5000;
+        toastr.success('Script installed! You may have to refresh the page.');
+    },
 
     banlist: function(entries) {
         var tbl = $("#cs-banlist table");

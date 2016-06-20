@@ -33,6 +33,11 @@ module.exports = {
     
     insert: function(user_id, name, script, callback) {
         callback = callback || noop;
+    
+        if (name.match(/[^\sa-zA-Z0-9_\-\.]/)) {
+            callback("Special characters are not allowed in script names. Only letters, numbers, spaces, underscores, dashes and periods may be used.");
+            return;
+        }
         
         db.query(
             "INSERT INTO `user_scripts` (`user_id`, `name`, `script`) VALUES(?, ?, ?)",

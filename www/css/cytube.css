@@ -1082,3 +1082,24 @@ input:focus {
   opacity: 1.0;
   width: 10px;
 }
+#install-script-modal .modal-header {
+  color: #FFF;
+}
+#install-script-modal .modal-header p {
+  margin: 0;
+}
+#install-script-modal .modal-body {
+  color: #FFF;
+}
+#install-script-modal .modal-body a {
+  color: #5bc0de;
+  text-decoration: underline;
+}
+#install-script-preview-input {
+  height: 150px;
+  font-family: monospace;
+}
+#install-script-preview-input[readonly] {
+  background-color: #FFF;
+  color: #000;
+}

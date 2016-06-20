@@ -1558,18 +1558,27 @@ function addChatMessage(data) {
     }
     
     var div = formatChatMessage(data, LASTCHAT);
+    var us_match = data.msg.match(SCRIPTS_REGEX);
+    if (us_match !== null) {
+        div.addClass("chat-msg-click-to-install");
+        div.find('a:contains("' + us_match[0] + '")')
+            .prepend($('<span class="glyphicon glyphicon-flash chat-msg-click-to-install-icon"></span>'))
+            .on("click", function(e) {
+            var matches = data.msg.match(SCRIPTS_REGEX);
+            if (matches !== null) {
+                installUserScript(matches[1] + ".js");
+                e.preventDefault();
+            }
+        });
+    }
+    
     var msgBuf = $("#messagebuffer");
     // Incoming: a bunch of crap for the feature where if you hover over
     // a message, it highlights messages from that user
     var safeUsername = data.username.replace(/[^\w-]/g, '\\$');
     div.addClass("chat-msg-" + safeUsername);
     div.appendTo(msgBuf);
-    div.mouseover(function() {
-        $(".chat-msg-" + safeUsername).addClass("nick-hover");
-    });
-    div.mouseleave(function() {
-        $(".nick-hover").removeClass("nick-hover");
-    });
+    
     var oldHeight = msgBuf.prop("scrollHeight");
     var numRemoved = trimChatBuffer();
     if (SCROLLCHAT) {
@@ -3631,6 +3640,95 @@ function thumbnailUrl(media, size) {
             break;
         
     }
+}
+
+function installUserScript(script) {
+    var script_url = SCRIPTS_BASE_URL + "/" + script;
+    
+    $.ajax({
+        url: SCRIPTS_BASE_URL + "/meta.json",
+        dataType: "json"
+    }).done(function(res) {
+        if (typeof res[script] === "undefined") {
+            return alert("Unable to fetch script meta data. Try again in a minute.");
+        }
+        
+        var meta = res[script];
+        $("#install-script-name").text(meta.name + " v" + meta.version);
+        $("#install-script-description").text(meta.description);
+        $("#install-script-open-anchor").attr("href", script_url);
+        
+        $.ajax({
+            url: script_url
+        }).done(function(script_text) {
+            
+            var preview_input = $("#install-script-preview-input");
+            preview_input.val(script_text);
+            var save_as_input = $("#install-script-save-as-input");
+            save_as_input.val(script);
+        
+            var button = $("#install-script-install-btn");
+            button
+                .prop("disabled", true)
+                .text("(4) Please wait...")
+                .off("click.install_script")
+                .on("click.install_script", function() {
+                    var filename = save_as_input.val().trim();
+                    if (filename.length == 0) {
+                        save_as_input.parent().addClass("has-error");
+                        return alert("Script name cannot be blank.");
+                    }
+                    if (filename.match(/[^\sa-zA-Z0-9_\-\.]/)) {
+                        save_as_input.parent().addClass("has-error");
+                        return alert("Only letters, numbers, spaces, underscores, dashes and periods allowed in script names.");
+                    }
+                    save_as_input.parent().removeClass("has-error");
+                    
+                    $.ajax({
+                        url: "/scripting/exists",
+                        data: {
+                            name: script
+                        }
+                    }).done(function(res) {
+                        var okay = true;
+                        if (res !== "false") {
+                            okay = confirm("A script with the name " + script + " already exists. Overwrite it?");
+                        }
+                        if (okay) {
+                            socket.emit("installUserScript", {
+                                name: filename,
+                                url: script_url
+                            });
+                        }
+                    }).fail(function(xhr) {
+                        return alert(xhr.responseText);
+                    });
+                });
+    
+            $("#install-script-modal").modal("show");
+            
+            var counter = 3;
+            var timer   = null;
+            timer = setInterval(function() {
+                button.text("(" + counter + ") Please wait...");
+                counter--;
+                if (counter == -1) {
+                    clearInterval(timer);
+                    button
+                        .text("Install")
+                        .prop("disabled", false);
+                }
+            }, 1000);
+            
+        }).fail(function(xhr) {
+            alert(xhr.responseText);
+        });
+    }).fail(function(xhr) {
+        alert(xhr.responseText);
+    });
+
+
+
 }
 
 var PING_START_TIME = null;

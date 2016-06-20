@@ -5,8 +5,10 @@ var Flags = require("../flags");
 var XSS = require("../xss");
 var Account = require("../account");
 var Config = require("../config");
+var request = require('request');
 var async = require('async');
 var util = require("../utilities");
+var urlParser  = require("url");
 var fs = require("graceful-fs");
 var path = require("path");
 var sio = require("socket.io");
@@ -311,6 +313,43 @@ Channel.prototype.handleSaveUserScripts = function(user, data) {
             });
         }
     );
+};
+
+Channel.prototype.installUserScript = function(user, data) {
+    if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
+        return;
+    }
+    
+    var parsed = urlParser.parse(data.url);
+    if (!parsed) {
+        return user.socket.emit("errorMsg", {
+            msg: "Invalid script URL."
+        });
+    }
+    if (parsed.protocol !== "https:" || parsed.hostname !== "scripts.upnext.fm") {
+        return user.socket.emit("errorMsg", {
+            msg: "Invalid script protocol or hostname."
+        });
+    }
+    
+    request(data.url, function(err, res, body) {
+        if (!err && res.statusCode == 200 && body.length > 0) {
+            db_user_scripts.insertOrUpdate(user.account.id, data.name, body, function(err, res) {
+                if (err) {
+                    return user.socket.emit("errorMsg", {
+                        msg: "Failed to install script. Try again in a minute."
+                    });
+                }
+        
+                user.socket.emit("installedUserScript", data);
+                this.sendUserScripts(user);
+            }.bind(this));
+        } else {
+            return user.socket.emit("errorMsg", {
+                msg: "Unable to download and install script. Try again in a minute."
+            });
+        }
+    }.bind(this));
 };
 
 Channel.prototype.handleDeleteUserScript = function(user, data) {
@@ -629,6 +668,7 @@ Channel.prototype.acceptUser = function (user) {
         user.autoAFK();
         user.socket.on("readChanLog", this.handleReadLog.bind(this, user));
         user.socket.on("saveUserScripts", this.handleSaveUserScripts.bind(this, user));
+        user.socket.on("installUserScript", this.installUserScript.bind(this, user));
         user.socket.on("deleteUserScript", this.handleDeleteUserScript.bind(this, user));
     
         Logger.syslog.log(user.realip + " joined " + this.name);

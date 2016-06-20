@@ -1,0 +1,42 @@
+<div id="install-script-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 id="install-script-name" class="modal-title"></h4>
+                <p id="install-script-description"></p>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="install-script-save-as-input">
+                            Save as...
+                        </label>
+                        <input type="text" class="form-control" id="install-script-save-as-input" maxlength="20" />
+                    </div>
+                    <div class="form-group">
+                        <a href="#" id="install-script-open-anchor" class="pull-right" target="_blank">Open In Browser</a>
+                        <label for="install-script-preview-input">
+                            Contents
+                        </label>
+                        <textarea class="form-control" id="install-script-preview-input" readonly></textarea>
+                    </div>
+                </form>
+                
+                <div class="alert alert-warning">
+                    <span class="glyphicon glyphicon-flash"></span>
+                    You are installing a script from <strong>https://scripts.upnext.fm</strong> which is
+                    a <strong>TRUSTED</strong> source, but you should not install scripts from <strong>UNTRUSTED</strong>
+                    users. A malicious script could potentially compromise your account. Do not install this script
+                    if you did not ask for it, or do not know the user who gave it to you.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="install-script-close-btn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="install-script-install-btn" type="button" class="btn btn-primary">Install</button>
+            </div>
+        </div>
+    </div>
+</div>

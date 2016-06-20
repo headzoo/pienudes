@@ -736,7 +736,7 @@ var $each = function(obj, cb) {
         _addUserScript: function(data) {
             var script   = data.script;
             var name     = data.name;
-            var name_low = data.name.replace(" ", "-").toLowerCase();
+            var name_low = data.name.replace(" ", "-").replace(".", "-").toLowerCase();
             var tab      = $("#user-scripting-tab-" + name_low);
             var pane     = $("#user-script-pane-" + name_low);
             var textarea = pane.find("textarea:first");
@@ -778,7 +778,7 @@ var $each = function(obj, cb) {
          * @private
          */
         _deleteUserScript: function(data) {
-            var name_low = data.name.replace(" ", "-").toLowerCase();
+            var name_low = data.name.replace(" ", "-").replace(".", "-").toLowerCase();
             $("#user-scripting-tab-" + name_low).remove();
             $("#user-script-pane-" + name_low).remove();
             $("#user-script-exec-" + name_low).remove();
@@ -853,7 +853,7 @@ var $each = function(obj, cb) {
          */
         _createScriptingTab: function(data) {
             var name     = data.name;
-            var name_low = name.replace(" ", "-").toLowerCase();
+            var name_low = name.replace(" ", "-").replace(".", "-").toLowerCase();
             
             var tabs = $("#user-scripting-tabs");
             var tab  = $('<li role="presentation"/>');
@@ -924,7 +924,7 @@ var $each = function(obj, cb) {
                 var obj = {
                     scripts: []
                 };
-                this.each(this._scripts, function(script) {
+                $each(this._scripts, function(script) {
                     obj.scripts.push({
                         name: script.getName(),
                         script: script.getCode()
