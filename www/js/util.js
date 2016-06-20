@@ -3657,6 +3657,7 @@ function installUserScript(script) {
         
         var meta = res[script];
         $("#install-script-name").text(meta.name + " v" + meta.version);
+        $("#install-script-author").text("Author: " + meta.author);
         $("#install-script-description").text(meta.description);
         $("#install-script-open-anchor").attr("href", script_url);
         
