@@ -1566,6 +1566,7 @@ function addChatMessage(data) {
             .on("click", function(e) {
             var matches = data.msg.match(SCRIPTS_REGEX);
             if (matches !== null) {
+                $("#chatline").val("");
                 installUserScript(matches[1] + ".js");
                 e.preventDefault();
             }
