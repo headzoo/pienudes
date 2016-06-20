@@ -2,14 +2,6 @@
 import template from '../template';
 import db_us from '../../database/user_scripts';
 
-function handleHelp(req, res) {
-    template.send(res, 'scripting/help', {
-        pageTitle: "Scripting Help",
-        pageStylesheets: ["/css/prism.css"],
-        pageScripts: ["/js/prism.js"]
-    });
-}
-
 function handleExists(req, res) {
     if (req.user === undefined) {
         return res.sendStatus(401);
@@ -35,7 +27,6 @@ module.exports = {
      * Initializes auth callbacks
      */
     init: function (app) {
-        app.get('/scripting/help', handleHelp);
         app.get('/scripting/exists', handleExists);
     }
 };

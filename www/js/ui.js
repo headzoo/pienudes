@@ -99,10 +99,10 @@ $(function() {
     tabOverride.set(default_scripting[0]);
     
     $("#user-scripting-browse-btn").on("click", function() {
-        window.open("https://scripts.upnext.fm/");
+        window.open("https://scripts.upnext.fm");
     });
     $("#user-scripting-help-btn").on("click", function() {
-        window.open("/scripting/help");
+        window.open("https://scripts.upnext.fm#docs");
     });
     $("#user-scripting-safe-mode-btn").on("click", function() {
         if (confirm("This will refresh the page with scripts disabled. Continue?")) {
