@@ -109,6 +109,31 @@ $(function() {
             document.location = document.location + "?safemode";
         }
     });
+    $("#user-scripting-install-btn").on("click", function() {
+        var container = $("#user-scripting-import-container");
+        var input     = container.find("input");
+        
+        input.on("keyup", function(e) {
+            if (e.keyCode == 13) {
+                var value = input.val();
+                var matches = value.match(SCRIPTS_REGEX);
+                if (matches === null) {
+                    return alert("Invalid script url.");
+                }
+                
+                input.val("");
+                container.slideUp();
+                installUserScript(matches[1] + ".js");
+                e.preventDefault();
+            }
+        });
+        
+        container.slideToggle(function() {
+            if (container.is(":visible")) {
+                input.focus();
+            }
+        });
+    });
     
     $(function() {
         var scripting_box_full    = false;
