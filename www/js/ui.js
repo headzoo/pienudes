@@ -99,7 +99,7 @@ $(function() {
     tabOverride.set(default_scripting[0]);
     
     $("#user-scripting-browse-btn").on("click", function() {
-        window.open("https://github.com/upnextfm/scripts");
+        window.open("https://scripts.upnext.fm/");
     });
     $("#user-scripting-help-btn").on("click", function() {
         window.open("/scripting/help");
