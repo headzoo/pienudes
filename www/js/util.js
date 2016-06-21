@@ -1569,7 +1569,7 @@ function addChatMessage(data) {
             var matches = data.msg.match(SCRIPTS_REGEX);
             if (matches !== null) {
                 $("#chatline").val("");
-                installUserScript(matches[1] + ".js");
+                installUserScript(matches[1] + "." + matches[2]);
                 e.preventDefault();
             }
         });

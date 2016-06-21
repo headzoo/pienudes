@@ -756,8 +756,7 @@ var $each = function(obj, cb) {
             this._scripts[name] = new UserScript(name, function() {
                 return textarea.val();
             });
-            
-            if (name_low == "css") {
+            if (name_low == "css" || name.substr(name.length - 4, 4) == ".css") {
                 return this._attachStylesheet(name_low, script);
             }
             
