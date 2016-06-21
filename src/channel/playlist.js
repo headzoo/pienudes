@@ -312,6 +312,7 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     }
     
     var update = this.current.media.getFullUpdate();
+    update.queueby = this.current.queueby;
     this.sendVideoVotes();
     this.sendUserVideoVotes(users);
     
