@@ -680,6 +680,7 @@ function showUserOptions() {
     $("#us-modflair").prop("checked", USEROPTS.modhat);
     $("#us-joinmessage").prop("checked", USEROPTS.joinmessage);
     $("#us-shadowchat").prop("checked", USEROPTS.show_shadowchat);
+    $("#us-highlight").val(USEROPTS.highlight);
 
     formatScriptAccessPrefs();
 
@@ -711,6 +712,13 @@ function saveUserOptions() {
     USEROPTS.boop                 = $("#us-ping-sound").val();
     USEROPTS.chatbtn              = $("#us-sendbtn").prop("checked");
     USEROPTS.no_emotes            = $("#us-no-emotes").prop("checked");
+    USEROPTS.highlight            = $("#us-highlight").val();
+    
+    if (USEROPTS.highlight.trim().length > 0) {
+        var split = USEROPTS.highlight.split(",")
+            .map(Function.prototype.call, String.prototype.trim);
+        USEROPTS.highlight_regex = new RegExp('\\b(' + split.join("|") + ')\\b', 'i');
+    }
     
     if (CLIENT.rank >= 2) {
         USEROPTS.modhat      = $("#us-modflair").prop("checked");
@@ -1619,10 +1627,12 @@ function addChatMessage(data) {
             scrollAndIgnoreEvent(msgBuf.scrollTop() + $(this).height());
         }
     });
-
+    
     var isHighlight = false;
     if (CLIENT.name && data.username != CLIENT.name) {
-        if (data.msg_clean.toLowerCase().indexOf(CLIENT.name.toLowerCase()) != -1 || data.meta.highlight) {
+        if (data.msg_clean.toLowerCase().indexOf(CLIENT.name.toLowerCase()) != -1
+            || data.meta.highlight
+            || (USEROPTS.highlight_regex !== null && data.msg_clean.match(USEROPTS.highlight_regex) !== null)) {
             div.addClass("nick-highlight");
             isHighlight = true;
         }

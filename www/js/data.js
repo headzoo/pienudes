@@ -127,8 +127,16 @@ var USEROPTS = {
     secure_connection    : getOrDefault("secure_connection", false),
     show_shadowchat      : getOrDefault("show_shadowchat", false),
     emotelist_sort       : getOrDefault("emotelist_sort", true),
-    no_emotes            : getOrDefault("no_emotes", false)
+    no_emotes            : getOrDefault("no_emotes", false),
+    highlight            : getOrDefault("highlight", ""),
+    highlight_regex      : null
 };
+
+if (USEROPTS.highlight.trim().length > 0) {
+    var split = USEROPTS.highlight.split(",")
+        .map(Function.prototype.call, String.prototype.trim);
+    USEROPTS.highlight_regex = new RegExp('\\b(' + split.join("|") + ')\\b', 'i');
+}
 
 /* Backwards compatibility check */
 if (USEROPTS.blink_title === true) {
