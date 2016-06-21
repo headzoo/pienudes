@@ -1929,23 +1929,9 @@ function chatOnly() {
         margin: "0",
         padding: "0"
     });
-    $("<span/>").addClass("label label-default pull-right pointer")
-        .text("User Options")
-        .appendTo($("#chatheader"))
-        .click(showUserOptions);
-    $("<span/>").addClass("label label-default pull-right pointer")
-        .attr("id", "showchansettings")
-        .text("Channel Settings")
-        .appendTo($("#chatheader"))
-        .click(function () {
-            $("#channeloptions").modal();
-        });
-    $("<span/>").addClass("label label-default pull-right pointer")
-        .text("Emote List")
-        .appendTo($("#chatheader"))
-        .click(function () {
-            EMOTELIST.show();
-        });
+    $(".chatbuttons").find("button").css({
+        "fontSize": "75%"
+    });
     setVisible("#showchansettings", CLIENT.rank >= 2);
 
     $("body").addClass("chatOnly");
