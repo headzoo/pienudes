@@ -3731,15 +3731,11 @@ function installUserScript(script) {
     }).fail(function(xhr) {
         alert(xhr.responseText);
     });
-
-
-
 }
 
 var PING_START_TIME = null;
 
 function sendPing() {
-    console.log("ping");
     PING_START_TIME = Date.now();
     socket.emit("chatPing", {});
 }
@@ -3750,7 +3746,6 @@ function handlePong() {
     }
     
     var elapsed = (Date.now()) - PING_START_TIME;
-    console.log(elapsed);
     PING_START_TIME = null;
     addNotice({
         msg: "Ping time: " + elapsed + "ms",

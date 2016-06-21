@@ -737,6 +737,8 @@ input:focus {
 }
 .thumbnail-channel-playing {
   font-size: 12px;
+  max-height: 32px;
+  overflow: hidden;
 }
 .homepage {
   background: url(https://uploads.upnext.fm/lobby/background4.jpg) top center no-repeat;
