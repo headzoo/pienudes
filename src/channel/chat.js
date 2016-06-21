@@ -784,6 +784,7 @@ ChatModule.prototype.handleChatCommand = function(user, msg) {
         return;
     }
     
+    msg.from = user.getName();
     if (msg.to == "#") {
         this.channel.broadcastAll("chatCommand", msg);
     } else {
