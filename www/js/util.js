@@ -1486,16 +1486,6 @@ function formatChatMessage(data, last, permalink) {
     
     if (data.id != undefined) {
         div.attr("id", "chat-msg-" + data.id);
-        if (hasPermission("deletemsg")) {
-            div.addClass("chat-msg-deletable");
-            var del_msg = $('<span class="glyphicon glyphicon-remove chat-msg-delete-btn"/>');
-            del_msg.on("click", function() {
-                if (confirm("Delete this message?")) {
-                    socket.emit("delMsg", data.id);
-                }
-            });
-            div.append(del_msg);
-        }
     }
 
     // Add username
@@ -1542,6 +1532,17 @@ function formatChatMessage(data, last, permalink) {
     }
     if (data.meta.shadow) {
         div.addClass("chat-shadow");
+    }
+    
+    if (hasPermission("deletemsg")) {
+        div.addClass("chat-msg-deletable");
+        var del_msg = $('<span class="glyphicon glyphicon-remove chat-msg-delete-btn"/>');
+        del_msg.on("click", function() {
+            if (confirm("Delete this message?")) {
+                socket.emit("delMsg", data.id);
+            }
+        });
+        div.append(del_msg);
     }
     
     return div;

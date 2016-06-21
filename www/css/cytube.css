@@ -1075,10 +1075,10 @@ input:focus {
 .chat-msg-deletable .chat-msg-delete-btn {
   cursor: pointer;
   font-size: 10px;
-  margin-right: 2px;
+  margin-left: 4px;
   width: 0;
   opacity: 0;
-  transition: all 2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .chat-msg-deletable:hover .chat-msg-delete-btn {
   opacity: 1.0;
