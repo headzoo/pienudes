@@ -135,7 +135,11 @@ var $each = function(obj, cb) {
                 if (value === null) {
                     value = default_value;
                 } else {
-                    value = JSON.parse(value);
+                    try {
+                        value = JSON.parse(value);
+                    } catch (e) {
+                        value = default_value;
+                    }
                 }
                 
                 return value;
