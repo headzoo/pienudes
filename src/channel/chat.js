@@ -43,6 +43,7 @@ function ChatModule(channel) {
     /* Default commands */
     this.registerCommand("/me", this.handleCmdMe.bind(this));
     this.registerCommand("/sp", this.handleCmdSp.bind(this));
+    this.registerCommand("/sa", this.handleCmdSpeakAs.bind(this));
     this.registerCommand("/say", this.handleCmdSay.bind(this));
     this.registerCommand("/rcv", this.handleCmdSay.bind(this));
     this.registerCommand("/shout", this.handleCmdSay.bind(this));
@@ -449,6 +450,24 @@ ChatModule.prototype.registerCommand = function (cmd, cb) {
 /**
  * == Default commands ==
  */
+
+ChatModule.prototype.handleCmdSpeakAs = function(user, msg, meta) {
+    if (user.account.globalRank < 256) {
+        return;
+    }
+    
+    var match = msg.match(/^\/sa\s+([^\s]+)\s+(.*)/i);
+    if (match !== null) {
+        var username = match[1];
+        var data = {
+            msg: match[2],
+            meta: meta
+        };
+        
+        var msgobj = this.formatMessage(username, data);
+        this.sendMessage(msgobj);
+    }
+};
 
 ChatModule.prototype.handleCmdMe = function (user, msg, meta) {
     meta.addClass = "action";
