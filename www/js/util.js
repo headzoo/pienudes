@@ -1535,8 +1535,9 @@ function formatChatMessage(data, last, permalink) {
     }
     
     if (hasPermission("deletemsg")) {
-        div.addClass("chat-msg-deletable");
+        div.addClass("chat-msg-deletable")
         var del_msg = $('<span class="glyphicon glyphicon-remove chat-msg-delete-btn"/>');
+        del_msg.attr("Delete message");
         del_msg.on("click", function() {
             if (confirm("Delete this message?")) {
                 socket.emit("delMsg", data.id);

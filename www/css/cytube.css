@@ -1078,6 +1078,7 @@ input:focus {
   margin-left: 4px;
   width: 0;
   opacity: 0;
+  color: #525050;
   transition: all 0.2s ease-in-out;
 }
 .chat-msg-deletable:hover .chat-msg-delete-btn {
