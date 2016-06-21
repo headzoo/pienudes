@@ -453,6 +453,19 @@ var $each = function(obj, cb) {
         },
     
         /**
+         * Sends a command to other bots
+         * 
+         * @param to
+         * @param data
+         */
+        command: function(to, data) {
+            socket.emit("chatCommand", {
+                to: to,
+                data: data
+            });
+        },
+    
+        /**
          * Displays a popup message in the corner of the page
          * 
          * @param msg
@@ -903,7 +916,12 @@ var $each = function(obj, cb) {
                 textarea: textarea
             };
         },
-        
+    
+        /**
+         * Initialize the default tab, which is already embedded in the page
+         * 
+         * @private
+         */
         _initDefaultTab: function() {
             var textarea = $('.user-scripting-textarea[data-name="Default"]');
             textarea.data("name", "Default");
@@ -1018,6 +1036,7 @@ var $each = function(obj, cb) {
                 send: [],
                 notice: [],
                 whisper: [],
+                command: [],
                 user_join: [],
                 user_leave: [],
                 user_count: [],

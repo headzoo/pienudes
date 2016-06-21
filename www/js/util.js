@@ -2139,6 +2139,7 @@ function genPermissionsEditor() {
     makeOption("Chat", "chat", noanon, CHANNEL.perms.chat+"");
     makeOption("Clear Chat", "chatclear", modleader, CHANNEL.perms.chatclear+"");
     makeOption("User Scripting", "scripting", standard, CHANNEL.perms.scripting+"");
+    makeOption("Chat Commands", "chat_commands", noanon, CHANNEL.perms.chat_commands+"");
 
     var sgroup = $("<div/>").addClass("form-group").appendTo(form);
     var sgroupinner = $("<div/>").addClass("col-sm-8 col-sm-offset-4").appendTo(sgroup);

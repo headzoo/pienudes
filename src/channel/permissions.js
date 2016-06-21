@@ -46,7 +46,8 @@ const DEFAULT_PERMISSIONS = {
     chatclear: 2,             // Use the /clear command
     exceedmaxitems: 2,        // Exceed maximum items per user limit
     deletemsg: 2,             // Deleting chat messages that aren't your own
-    scripting: 1
+    scripting: 1,             // Run/install user scripts
+    chat_commands: 1          // Use the chatCommand command
 };
 
 function PermissionsModule(channel) {
@@ -374,6 +375,10 @@ PermissionsModule.prototype.canDeleteMsg = function(actor) {
 
 PermissionsModule.prototype.canUserScripting = function (actor) {
     return this.hasPermission(actor, "scripting");
+};
+
+PermissionsModule.prototype.canChatCommands = function (actor) {
+    return this.hasPermission(actor, "chat_commands");
 };
 
 PermissionsModule.prototype.loadUnregistered = function () {

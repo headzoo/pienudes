@@ -1,20 +1,20 @@
 Callbacks = {
-
+    
     error: function (reason) {
         window.SOCKET_ERROR_REASON = reason;
     },
-
+    
     /* fired when socket connection completes */
-    connect: function() {
+    connect: function () {
         socket.emit("initChannelCallbacks");
         socket.emit("joinChannel", {
             name: CHANNEL.name
         });
-
+        
         if (CHANNEL.opts.password) {
             socket.emit("channelPassword", CHANNEL.opts.password);
         }
-
+        
         if (CLIENT.name && CLIENT.guest) {
             socket.emit("login", {
                 name: CLIENT.name
@@ -26,8 +26,8 @@ Callbacks = {
         //    .appendTo($("#messagebuffer"));
         //scrollChat();
     },
-
-    disconnect: function() {
+    
+    disconnect: function () {
         //if(KICKED) {
         //    return;
         //}
@@ -38,48 +38,48 @@ Callbacks = {
         //    .appendTo($("#messagebuffer"));
         //scrollChat();
     },
-
-    errorMsg: function(data) {
+    
+    errorMsg: function (data) {
         if (data.alert) {
             alert(data.msg);
         } else {
             errDialog(data.msg);
         }
     },
-
+    
     costanza: function (data) {
         hidePlayer();
         $("#costanza-modal").modal("hide");
         var modal = makeModal();
         modal.attr("id", "costanza-modal")
             .appendTo($("body"));
-
+        
         var body = $("<div/>").addClass("modal-body")
             .appendTo(modal.find(".modal-content"));
         $("<img/>").attr("src", "http://i0.kym-cdn.com/entries/icons/original/000/005/498/1300044776986.jpg")
             .appendTo(body);
-
+        
         $("<strong/>").text(data.msg).appendTo(body);
         hidePlayer();
         modal.modal();
     },
-
-    kick: function(data) {
+    
+    kick: function (data) {
         KICKED = true;
         $("<div/>").addClass("server-msg-disconnect")
             .text("Kicked: " + data.reason)
             .appendTo($("#messagebuffer"));
         scrollChat();
     },
-
-    noflood: function(data) {
+    
+    noflood: function (data) {
         $("<div/>")
             .addClass("server-msg-disconnect")
             .text(data.action + ": " + data.msg)
             .appendTo($("#messagebuffer"));
         scrollChat();
     },
-
+    
     needPassword: function (wrongpw) {
         var div = $("<div/>");
         $("<strong/>").text("Channel Password")
@@ -90,8 +90,8 @@ Callbacks = {
                 .text("Wrong Password")
                 .appendTo(div);
         }
-
-        var pwbox = $("<input/>").addClass("form-control")
+        
+        var pwbox  = $("<input/>").addClass("form-control")
             .attr("type", "password")
             .appendTo(div);
         var submit = $("<button/>").addClass("btn btn-xs btn-default btn-block")
@@ -112,11 +112,11 @@ Callbacks = {
         });
         pwbox.focus();
     },
-
+    
     cancelNeedPassword: function () {
         $("#needpw").remove();
     },
-
+    
     cooldown: function (time) {
         time = time + 200;
         $(".pm-input").css("color", "#ff0000");
@@ -129,11 +129,11 @@ Callbacks = {
             $(".pm-input").css("color", "");
         }, time));
     },
-
-    channelNotRegistered: function() {
+    
+    channelNotRegistered: function () {
         var div = $("<div/>").addClass("alert alert-info")
             .appendTo($("<div/>").addClass("col-md-12").appendTo($("#announcements")));
-
+        
         $("<button/>").addClass("close pull-right")
             .appendTo(div)
             .click(function () {
@@ -143,17 +143,17 @@ Callbacks = {
         $("<h4/>").appendTo(div).text("Unregistered channel");
         $("<p/>").appendTo(div)
             .html("This channel is not registered to a upnext.fm account.  You can still " +
-                  "use it, but some features will not be available.  To register a " +
-                  "channel to your account, visit your <a href='/account/channels'>" +
-                  "channels</a> page.");
+            "use it, but some features will not be available.  To register a " +
+            "channel to your account, visit your <a href='/account/channels'>" +
+            "channels</a> page.");
     },
-
-    registerChannel: function(data) {
+    
+    registerChannel: function (data) {
         if ($("#chanregisterbtn").length > 0) {
             $("#chanregisterbtn").text("Register it")
                 .attr("disabled", false);
         }
-        if(data.success) {
+        if (data.success) {
             $("#chregnotice").remove();
         }
         else {
@@ -161,17 +161,17 @@ Callbacks = {
                 .insertAfter($("#chregnotice"));
         }
     },
-
-    unregisterChannel: function(data) {
-        if(data.success) {
+    
+    unregisterChannel: function (data) {
+        if (data.success) {
             alert("Channel unregistered");
         }
         else {
             alert(data.error);
         }
     },
-
-    setMotd: function(motd) {
+    
+    setMotd: function (motd) {
         CHANNEL.motd = motd;
         $("#motd").html(motd);
         $("#cs-motdtext").val(motd);
@@ -186,7 +186,7 @@ Callbacks = {
         }
     },
     
-    setBio: function(bio) {
+    setBio: function (bio) {
         CHANNEL.bio = bio;
         $("#cs-biotext").html(bio);
         $("#bio").html(bio);
@@ -196,59 +196,59 @@ Callbacks = {
             $("#biobtn").show();
         }
     },
-
-    chatFilters: function(entries) {
+    
+    chatFilters: function (entries) {
         var tbl = $("#cs-chatfilters table");
         tbl.data("entries", entries);
         formatCSChatFilterList();
     },
-
+    
     updateChatFilter: function (f) {
         var entries = $("#cs-chatfilters table").data("entries") || [];
-        var found = false;
+        var found   = false;
         for (var i = 0; i < entries.length; i++) {
             if (entries[i].name === f.name) {
                 entries[i] = f;
-                found = true;
+                found      = true;
                 break;
             }
         }
-
+        
         if (!found) {
             entries.push(f);
         }
-
+        
         $("#cs-chatfilters table").data("entries", entries);
         formatCSChatFilterList();
     },
-
+    
     deleteChatFilter: function (f) {
         var entries = $("#cs-chatfilters table").data("entries") || [];
-        var found = false;
+        var found   = false;
         for (var i = 0; i < entries.length; i++) {
             if (entries[i].name === f.name) {
                 entries[i] = f;
-                found = i;
+                found      = i;
                 break;
             }
         }
-
+        
         if (found !== false) {
             entries.splice(found, 1);
         }
-
+        
         $("#cs-chatfilters table").data("entries", entries);
         formatCSChatFilterList();
     },
-
-    channelOpts: function(opts) {
+    
+    channelOpts: function (opts) {
         document.title = opts.pagetitle;
-        PAGETITLE = opts.pagetitle;
-
+        PAGETITLE      = opts.pagetitle;
+        
         if (!USEROPTS.ignore_channelcss &&
             opts.externalcss !== CHANNEL.opts.externalcss) {
             $("#chanexternalcss").remove();
-
+            
             if (opts.externalcss.trim() !== "") {
                 $("#chanexternalcss").remove();
                 $("<link/>")
@@ -258,19 +258,19 @@ Callbacks = {
                     .appendTo($("head"));
             }
         }
-
-        if(opts.externaljs.trim() != "" && !USEROPTS.ignore_channeljs &&
-           opts.externaljs !== CHANNEL.opts.externaljs) {
+        
+        if (opts.externaljs.trim() != "" && !USEROPTS.ignore_channeljs &&
+            opts.externaljs !== CHANNEL.opts.externaljs) {
             checkScriptAccess(opts.externaljs, "external", function (pref) {
                 if (pref === "ALLOW") {
                     $.getScript(opts.externaljs);
                 }
             });
         }
-
+        
         CHANNEL.opts = opts;
-
-        if(opts.allow_voteskip) {
+        
+        if (opts.allow_voteskip) {
             $("#voteskip").attr("disabled", false);
         } else {
             $("#voteskip").attr("disabled", true);
@@ -286,29 +286,29 @@ Callbacks = {
         }
         handlePermissionChange();
     },
-
-    setPermissions: function(perms) {
+    
+    setPermissions: function (perms) {
         CHANNEL.perms = perms;
         genPermissionsEditor();
         handlePermissionChange();
     },
-
-    channelCSSJS: function(data) {
+    
+    channelCSSJS: function (data) {
         $("#chancss").remove();
         CHANNEL.css = data.css;
         $("#cs-csstext").val(data.css);
-        if(data.css && !USEROPTS.ignore_channelcss) {
+        if (data.css && !USEROPTS.ignore_channelcss) {
             $("<style/>").attr("type", "text/css")
                 .attr("id", "chancss")
                 .text(data.css)
                 .appendTo($("head"));
         }
-
+        
         $("#chanjs").remove();
-        CHANNEL.js = data.js;
+        CHANNEL.js  = data.js;
         $("#cs-jstext").val(data.js);
-
-        if(data.js && !USEROPTS.ignore_channeljs) {
+        
+        if (data.js && !USEROPTS.ignore_channeljs) {
             var src = data.js
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -316,11 +316,11 @@ Callbacks = {
                 .replace(/\n/g, "<br>")
                 .replace(/\t/g, "    ")
                 .replace(/ /g, "&nbsp;");
-            src = encodeURIComponent(src);
-
+            src     = encodeURIComponent(src);
+            
             var viewsource = "data:text/html, <body style='font: 9pt monospace;" +
-                             "max-width:60rem;margin:0 auto;padding:4rem;'>" +
-                             src + "</body>";
+                "max-width:60rem;margin:0 auto;padding:4rem;'>" +
+                src + "</body>";
             checkScriptAccess(viewsource, "embedded", function (pref) {
                 if (pref === "ALLOW") {
                     $("<script/>").attr("type", "text/javascript")
@@ -332,91 +332,91 @@ Callbacks = {
         }
     },
     
-    setUserScripts: function(scripts) {
+    setUserScripts: function (scripts) {
         ChatAPI._setUserScripts(scripts);
     },
     
-    deleteUserScript: function(data) {
+    deleteUserScript: function (data) {
         ChatAPI._deleteUserScript(data);
     },
     
-    installedUserScript: function() {
+    installedUserScript: function () {
         $("#install-script-modal").modal("hide");
         toastr.options.preventDuplicates = true;
-        toastr.options.closeButton = true;
-        toastr.options.timeOut = 5000;
+        toastr.options.closeButton       = true;
+        toastr.options.timeOut           = 5000;
         toastr.success('Script installed! You may have to refresh the page.');
     },
-
-    banlist: function(entries) {
+    
+    banlist: function (entries) {
         var tbl = $("#cs-banlist table");
         tbl.data("entries", entries);
         formatCSBanlist();
     },
-
+    
     banlistRemove: function (data) {
         var entries = $("#cs-banlist table").data("entries") || [];
-        var found = false;
+        var found   = false;
         for (var i = 0; i < entries.length; i++) {
             if (entries[i].id === data.id) {
                 found = i;
                 break;
             }
         }
-
+        
         if (found !== false) {
             entries.splice(i, 1);
             $("#cs-banlist table").data("entries", entries);
         }
-
+        
         formatCSBanlist();
     },
-
-    recentLogins: function(entries) {
+    
+    recentLogins: function (entries) {
         var tbl = $("#loginhistory table");
         // I originally added this check because of a race condition
         // Now it seems to work without but I don't trust it
-        if(!tbl.hasClass("table")) {
-            setTimeout(function() {
+        if (!tbl.hasClass("table")) {
+            setTimeout(function () {
                 Callbacks.recentLogins(entries);
             }, 100);
             return;
         }
-        if(tbl.children().length > 1) {
+        if (tbl.children().length > 1) {
             $(tbl.children()[1]).remove();
         }
-        for(var i = 0; i < entries.length; i++) {
-            var tr = document.createElement("tr");
-            var name = $("<td/>").text(entries[i].name).appendTo(tr);
+        for (var i = 0; i < entries.length; i++) {
+            var tr      = document.createElement("tr");
+            var name    = $("<td/>").text(entries[i].name).appendTo(tr);
             var aliases = $("<td/>").text(entries[i].aliases.join(", ")).appendTo(tr);
-            var time = new Date(entries[i].time).toTimeString();
+            var time    = new Date(entries[i].time).toTimeString();
             $("<td/>").text(time).appendTo(tr);
-
+            
             $(tr).appendTo(tbl);
         }
     },
-
-    channelRanks: function(entries) {
+    
+    channelRanks: function (entries) {
         var tbl = $("#cs-chanranks table");
         tbl.data("entries", entries);
         formatCSModList();
     },
-
+    
     channelRankFail: function (data) {
         if ($("#cs-chanranks").is(":visible")) {
             makeAlert("Error", data.msg, "alert-danger")
                 .removeClass().addClass("vertical-spacer")
                 .insertAfter($("#cs-chanranks form"));
         } else {
-            Callbacks.noflood({ action: "/rank", msg: data.msg });
+            Callbacks.noflood({action: "/rank", msg: data.msg});
         }
     },
-
+    
     readChanLog: function (data) {
         var log = $("#cs-chanlog-text");
         if (log.length == 0)
             return;
-
+        
         if (data.success) {
             setupChanlogFilter(data.data);
             filterChannelLog();
@@ -424,30 +424,30 @@ Callbacks = {
             $("#cs-chanlog-text").text("Error reading channel log");
         }
     },
-
-    voteskip: function(data) {
+    
+    voteskip: function (data) {
         var icon = $("#voteskip").find(".glyphicon").remove();
-        if(data.count > 0) {
-            $("#voteskip").text(" ("+data.count+"/"+data.need+")");
+        if (data.count > 0) {
+            $("#voteskip").text(" (" + data.count + "/" + data.need + ")");
         } else {
             $("#voteskip").text("");
         }
-
+        
         icon.prependTo($("#voteskip"));
     },
-
+    
     /* REGION Rank Stuff */
-
-    rank: function(r) {
-        if(r >= 255)
+    
+    rank: function (r) {
+        if (r >= 255)
             SUPERADMIN = true;
         CLIENT.rank = r;
         handlePermissionChange();
-        if(SUPERADMIN && $("#setrank").length == 0) {
-            var li = $("<li/>").addClass("dropdown")
+        if (SUPERADMIN && $("#setrank").length == 0) {
+            var li   = $("<li/>").addClass("dropdown")
                 .attr("id", "setrank");
-                //.appendTo($(".nav")[0]);
-                
+            //.appendTo($(".nav")[0]);
+            
             $("<a/>").addClass("dropdown-toggle")
                 .attr("data-toggle", "dropdown")
                 .attr("href", "javascript:void(0)")
@@ -455,17 +455,17 @@ Callbacks = {
                 .appendTo(li);
             var menu = $("<ul/>").addClass("dropdown-menu")
                 .appendTo(li);
-
+            
             function addRank(r, disp) {
                 var li = $("<li/>").appendTo(menu);
                 $("<a/>").attr("href", "javascript:void(0)")
                     .html(disp)
-                    .click(function() {
+                    .click(function () {
                         socket.emit("borrow-rank", r);
                     })
                     .appendTo(li);
             }
-
+            
             addRank(0, "<span class='userlist_guest'>Guest</span>");
             addRank(1, "<span>Registered</span>");
             addRank(2, "<span class='userlist_op'>Moderator</span>");
@@ -473,17 +473,17 @@ Callbacks = {
             addRank(255, "<span class='userlist_siteadmin'>Superadmin</span>");
         }
     },
-
-    login: function(data) {
+    
+    login: function (data) {
         if (!data.success) {
             if (data.error != "Session expired") {
                 errDialog(data.error);
             }
         } else {
-            CLIENT.name = data.name;
-            CLIENT.guest = data.guest;
+            CLIENT.name      = data.name;
+            CLIENT.guest     = data.guest;
             CLIENT.logged_in = true;
-
+            
             if (!CLIENT.guest) {
                 socket.emit("initUserPLCallbacks");
                 if ($("#loginform").length === 0) {
@@ -492,23 +492,23 @@ Callbacks = {
                 var logoutform = $("<p/>").attr("id", "logoutform")
                     .addClass("navbar-text pull-right")
                     .insertAfter($("#loginform"));
-
+                
                 $("<span/>").attr("id", "welcome").text("Welcome, " + CLIENT.name)
                     .appendTo(logoutform);
                 $("<span/>").html("&nbsp;&middot;&nbsp;").appendTo(logoutform);
-                var domain = $("#loginform").attr("action").replace("/login", "");
+                var domain     = $("#loginform").attr("action").replace("/login", "");
                 $("<a/>").attr("id", "logout")
                     .attr("href", domain + "/logout?redirect=/r/" + CHANNEL.name)
                     .text("Logout")
                     .appendTo(logoutform);
-
+                
                 $("#loginform").remove();
             }
         }
     },
-
+    
     /* REGION Chat */
-    usercount: function(count) {
+    usercount: function (count) {
         var obj = {
             count: count
         };
@@ -518,59 +518,59 @@ Callbacks = {
         count = obj.count;
         
         CHANNEL.usercount = count;
-        var text = count + " connected user";
-        if(count != 1) {
+        var text          = count + " connected user";
+        if (count != 1) {
             text += "s";
         }
         $("#usercount").text(text);
     },
-
-    chatMsg: function(data) {
+    
+    chatMsg: function (data) {
         data.msg_clean = removeBBCodes(data.msg);
         if (!ChatAPI.trigger("receive", data).isCancelled()) {
             addChatMessage(data);
         }
     },
     
-    delMsg: function(msg_id) {
+    delMsg: function (msg_id) {
         $("#chat-msg-" + msg_id).remove();
     },
     
-    chatBuffer: function(data) {
-        for(var i = 0; i < data.length; i++) {
+    chatBuffer: function (data) {
+        for (var i = 0; i < data.length; i++) {
             Callbacks.chatMsg(data[i]);
         }
     },
-
+    
     pm: function (data) {
         var name = data.username;
         if (IGNORED.indexOf(name) !== -1) {
             return;
         }
-
+        
         if (data.username === CLIENT.name) {
             name = data.to;
         } else {
             pingMessage(true);
         }
-        var pm = initPm(name);
-        var body = pm.find(".panel-body:first");
+        var pm      = initPm(name);
+        var body    = pm.find(".panel-body:first");
         var heading = pm.find(".panel-heading:first");
-        var msg = formatChatMessage(data, pm.data("last"));
-        var buffer = pm.find(".pm-buffer");
+        var msg     = formatChatMessage(data, pm.data("last"));
+        var buffer  = pm.find(".pm-buffer");
         msg.appendTo(buffer);
         buffer.scrollTop(buffer.prop("scrollHeight"));
         if (pm.find(".panel-body").is(":hidden")) {
             pm.removeClass("panel-default").addClass("panel-primary");
         }
-    
+        
         var unread_msg_count = pm.data("unread_msg_count");
         if (body.is(":hidden")) {
             unread_msg_count++;
             pm.data("unread_msg_count", unread_msg_count);
             heading.find("span:first").text(heading.data("username") + " (" + unread_msg_count + ")");
             heading.addClass("flash unread_messages");
-            setTimeout(function() {
+            setTimeout(function () {
                 heading.removeClass("flash");
             }, 120000);
         } else {
@@ -580,29 +580,33 @@ Callbacks = {
         }
     },
     
-    userJoin: function(data) {
+    userJoin: function (data) {
         addUserJoinMessage(data);
     },
     
-    notice: function(data) {
+    notice: function (data) {
         if (!ChatAPI.trigger("notice", data).isCancelled()) {
             addNotice(data);
         }
     },
     
-    whisper: function(data) {
+    whisper: function (data) {
         if (!ChatAPI.trigger("whisper", data).isCancelled()) {
             addWhisper(data);
         }
     },
     
-    announcement: function(data) {
+    announcement: function (data) {
         addAnnouncement(data);
     },
-
-    joinMessage: function(data) {
-        if(USEROPTS.joinmessage)
+    
+    joinMessage: function (data) {
+        if (USEROPTS.joinmessage)
             addChatMessage(data);
+    },
+    
+    chatCommand: function (data) {
+        ChatAPI.trigger("command", data)
     },
 
     clearchat: function() {
