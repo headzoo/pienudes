@@ -186,7 +186,7 @@ var $each = function(obj, cb) {
                 
                 return this._send("/api/database", "get", callback, {
                     key: key
-                });
+                }, default_value);
             },
     
             /**
@@ -239,7 +239,7 @@ var $each = function(obj, cb) {
                 });
             },
             
-            "_send": function(url, type, callback, data) {
+            "_send": function(url, type, callback, data, default_value) {
                 var self = this;
     
                 if (data.key !== undefined && data.key.length > DATABASE_MAX_KEY) {
@@ -257,7 +257,7 @@ var $each = function(obj, cb) {
                     type: type,
                     data: data
                 }).done(function(res) {
-                    callback(null, self._transformDone(res));
+                    callback(null, self._transformDone(res, default_value));
                 }).fail(function() {
                     callback(self._transformError(xhr));
                 });
