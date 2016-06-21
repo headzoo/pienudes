@@ -166,7 +166,6 @@ Channel.prototype.initModules = function () {
         "./emotes"        : "emotes",
         "./uploads"       : "uploads",
         "./chat"          : "chat",
-        "./drink"         : "drink",
         "./filters"       : "filters",
         "./customization" : "customization",
         "./opts"          : "options",
