@@ -563,6 +563,9 @@ body.chatOnly .pm-panel-placeholder {
   right: auto;
   left: -6px;
 }
+.pm-buffer .chat-msg .chat-msg-line .embedded-image {
+  max-height: 100px;
+}
 .pm-buffer .chat-msg .timestamp {
   position: absolute;
   right: 44px;
