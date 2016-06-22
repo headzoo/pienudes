@@ -493,7 +493,8 @@ body.chatOnly .pm-panel-placeholder {
 .pm-panel > .panel-heading {
   cursor: pointer;
   border-radius: 0!important;
-  background-color: #715941 !important;
+  background-color: #2F2F2F !important;
+  color: #FFFFFF !important;
 }
 .pm-panel > .panel-heading .pm-close,
 .pm-panel > .panel-heading .pm-expand {
