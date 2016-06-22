@@ -1227,3 +1227,7 @@ input:focus {
     width: 20%;
   }
 }
+#orlando {
+  text-align: center;
+  margin-bottom: 20px;
+}
