@@ -16,6 +16,13 @@
                     </div>
                 </div>
                 <div id="announcements" class="row"></div>
+                {% if channelName == "Punk" %}
+                    <div id="chat-banner-leaderboard">
+                        <a href="https://www.amazon.com/WaS-TeeN-GuiTariST-CLaSH-ebook/dp/B00W42NLK8/ref=sr_1_1?ie=UTF8&qid=1466470020&sr=8-1&keywords=kathy+ditondo" target="_blank">
+                            <img src="/img/banners/book1_banner4.jpg" />
+                        </a>
+                    </div>
+                {% endif %}
                 {% if safemode %}
                     <div class="alert alert-warning">
                         This page is running in safe mode. Your user scripts will not execute in safe mode but you 
@@ -46,13 +53,6 @@
                             </div>
                             <input id="chatcolor" type="color" />
                         </div>
-                        {% if channelName == "Punk" %}
-                            <div id="chat-banner-leaderboard">
-                                <a href="https://www.amazon.com/WaS-TeeN-GuiTariST-CLaSH-ebook/dp/B00W42NLK8/ref=sr_1_1?ie=UTF8&qid=1466470020&sr=8-1&keywords=kathy+ditondo" target="_blank">
-                                    <img src="/img/banners/book1_banner4.jpg" />
-                                </a>
-                            </div>
-                        {% endif %}
                     </div>
 
                     <div id="videowrap-mount">
