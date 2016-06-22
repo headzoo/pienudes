@@ -543,23 +543,36 @@ Callbacks = {
     },
     
     pm: function (data) {
+        console.log(data);
         var name = data.username;
         if (IGNORED.indexOf(name) !== -1) {
             return;
         }
         
+        data.pm = true;
         if (data.username === CLIENT.name) {
             name = data.to;
         } else {
             pingMessage(true);
         }
+        
         var pm      = initPm(name);
         var body    = pm.find(".panel-body:first");
         var heading = pm.find(".panel-heading:first");
         var msg     = formatChatMessage(data, pm.data("last"));
+        
+        msg.css("display", "none");
         var buffer  = pm.find(".pm-buffer");
         msg.appendTo(buffer);
+        
+        var p = $('<div class="chat-msg chat-msg-hidden">&nbsp;</div>');
+        buffer.append(p);
         buffer.scrollTop(buffer.prop("scrollHeight"));
+        msg.slideDown('fast', function() {
+            p.remove();
+            buffer.scrollTop(buffer.prop("scrollHeight"));
+        });
+        
         if (pm.find(".panel-body").is(":hidden")) {
             pm.removeClass("panel-default").addClass("panel-primary");
         }

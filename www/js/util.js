@@ -1471,22 +1471,25 @@ function formatChatMessage(data, last, permalink) {
     var div = $("<div/>");
     div.addClass("chat-msg");
     
-    /* drink is a special case because the entire container gets the class, not
-       just the message */
-    if (data.meta.addClass === "drink") {
-        div.addClass("drink");
-        data.meta.addClass = "";
-    }
+    //var avatar = $('<img class="chat-msg-avatar"/>');
+    //avatar.attr("src", data.to_avatar);
+    //div.append(avatar);
 
     // Add timestamps (unless disabled)
     if (USEROPTS.show_timestamps && data.username !== "chmod") {
         if (permalink) {
-            var time = $("<a/>").addClass("timestamp").attr("href", permalink).appendTo(div);
+            var time = $("<a/>").data("time", data.time).addClass("timestamp").attr("href", permalink).appendTo(div);
         } else {
-            var time = $("<span/>").addClass("timestamp").appendTo(div);
+            var time = $("<span/>").data("time", data.time).addClass("timestamp").appendTo(div);
         }
-        var timestamp = formatTimestamp(data.time);
-        time.text("[" + timestamp + "] ");
+        
+        if (data.pm === true) {
+            var diff = timeSince(new Date(data.time));
+            time.addClass("pm-timestamp").text(diff);
+        } else {
+            var timestamp = formatTimestamp(data.time);
+            time.text("[" + timestamp + "] ");
+        }
         if (data.meta.addClass && data.meta.addClassToNameAndTimestamp) {
             time.addClass(data.meta.addClass);
         }
@@ -1496,12 +1499,24 @@ function formatChatMessage(data, last, permalink) {
         div.attr("id", "chat-msg-" + data.id);
     }
 
-    // Add username
-    var name = $("<span/>");
-    if (!skip) {
-        name.appendTo(div);
+    if (data.pm === true) {
+        if (data.username == CLIENT.name) {
+            div.addClass("chat-msg-pm-me");
+        }
+        
+        var avatar = $('<img class="pm-avatar"/>');
+        avatar.attr("src", data.avatar);
+        div.append(avatar);
     }
-    $("<strong/>").addClass("username").text(data.username + ": ").appendTo(name);
+    
+    // Add username
+    if (data.pm !== true) {
+        var name = $("<span/>");
+        if (!skip) {
+            name.appendTo(div);
+        }
+        $("<strong/>").addClass("username").text(data.username + ": ").appendTo(name);
+    }
     if (data.meta.modflair) {
         name.addClass(getNameColor(data.meta.modflair));
     }
@@ -1520,6 +1535,10 @@ function formatChatMessage(data, last, permalink) {
     // Add the message itself
     var message = $("<span/>").appendTo(div);
     message.addClass("chat-msg-line");
+    if (data.pm === true && data.username == CLIENT.name) {
+        message.addClass("chat-msg-pm-line-me");
+    }
+    
     data.msg = data.msg.replace(/\[br\]/g, '<br />');
     if (USEROPTS.show_colors) {
         message.css("color", data.meta.color);
@@ -3058,7 +3077,7 @@ function initPm(user) {
     }
     
     var pm = $("<div/>")
-        .addClass("panel panel-default pm-panel")
+        .addClass("pm-panel")
         .appendTo($("#pmbar"))
         .data("last", { name: "" })
         .data("unread_msg_count", 0)
@@ -3642,6 +3661,26 @@ function thumbnailUrl(media, size) {
     }
 }
 
+function timeSince(timeStamp) {
+    var now = new Date(),
+        secondsPast = (now.getTime() - timeStamp.getTime() ) / 1000;
+    if(secondsPast < 60){
+        return parseInt(secondsPast) + 's';
+    }
+    if(secondsPast < 3600){
+        return parseInt(secondsPast/60) + 'm';
+    }
+    if(secondsPast <= 86400){
+        return parseInt(secondsPast/3600) + 'h';
+    }
+    if(secondsPast > 86400){
+        day = timeStamp.getDate();
+        month = timeStamp.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ","");
+        year = timeStamp.getFullYear() == now.getFullYear() ? "" :  " "+timeStamp.getFullYear();
+        return day + " " + month + year;
+    }
+}
+
 function installUserScript(script) {
     var script_url = SCRIPTS_BASE_URL + "/" + script;
     
@@ -3751,3 +3790,11 @@ function handlePong() {
         time: Date.now()
     });
 }
+
+setInterval(function() {
+    $(".pm-timestamp").each(function(i, item) {
+        item = $(item);
+        var diff = timeSince(new Date(item.data("time")));
+        item.text(diff);
+    });
+}, 30000);
