@@ -256,6 +256,9 @@ ChatModule.prototype.handlePm = function (user, data) {
     data.meta = meta;
     var msgobj = this.formatMessage(user.getName(), data);
     msgobj.to = to.getName();
+    if (!user.account.profile.image) {
+        user.account.profile.image = db_accounts.getRandomAvatar();
+    }
     msgobj.avatar = user.account.profile.image;
 
     to.socket.emit("pm", msgobj);
