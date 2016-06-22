@@ -544,7 +544,6 @@ Callbacks = {
     },
     
     pm: function (data) {
-        console.log(data);
         var name = data.username;
         if (IGNORED.indexOf(name) !== -1) {
             return;
@@ -557,14 +556,36 @@ Callbacks = {
             pingMessage(true);
         }
         
+        var is_first  = false;
+        var prev_msgs = ChatStore.local.get("pm_with_" + name);
+        if (!prev_msgs) {
+            prev_msgs = [];
+        }
+        if ($("#pm-" + name).length == 0) {
+            is_first = true;
+        }
+        
         var pm      = initPm(name);
         var body    = pm.find(".panel-body:first");
         var heading = pm.find(".panel-heading:first");
-        var msg     = formatChatMessage(data, pm.data("last"));
-        
+        var msg = formatChatMessage(data, pm.data("last"));
         msg.css("display", "none");
-        var buffer  = pm.find(".pm-buffer");
+        var buffer = pm.find(".pm-buffer");
+        
+        if (is_first) {
+            for(var i = 0; i < prev_msgs.length; i++) {
+                var prev_msg = formatChatMessage(prev_msgs[i], pm.data("last"));
+                prev_msg.appendTo(buffer);
+            }
+            buffer.scrollTop(buffer.prop("scrollHeight"));
+        }
+        
         msg.appendTo(buffer);
+        prev_msgs.push(data);
+        if (prev_msgs.length > 10) {
+            prev_msgs.shift();
+        }
+        ChatStore.local.set("pm_with_" + name, prev_msgs);
         
         var p = $('<div class="chat-msg chat-msg-hidden">&nbsp;</div>');
         buffer.append(p);

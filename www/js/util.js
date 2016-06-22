@@ -242,8 +242,23 @@ function addUserDropdown(entry) {
             .text("Private Message")
             .appendTo(btngroup)
             .click(function () {
-                initPm(name).find(".panel-heading").click();
+                var pm = initPm(name);
+                var prev_msgs = ChatStore.local.get("pm_with_" + name);
+                
+                var buffer = pm.find(".pm-buffer");
+                if (!prev_msgs) {
+                    prev_msgs = [];
+                }
+                if (prev_msgs.length > 0) {
+                    for(var i = 0; i < prev_msgs.length; i++) {
+                        var prev_msg = formatChatMessage(prev_msgs[i], pm.data("last"));
+                        prev_msg.appendTo(buffer);
+                    }
+                }
+                
+                pm.find(".panel-heading").click();
                 menu.hide();
+                buffer.scrollTop(buffer.prop("scrollHeight"));
             });
     }
 
@@ -3121,29 +3136,6 @@ function initPm(user) {
         .appendTo(pm).hide();
     var placeholder;
     
-    title.click(function () {
-        body.toggle();
-        pm.removeClass("panel-primary").addClass("panel-default");
-        
-        if (!body.is(":hidden")) {
-            placeholder = $("<div/>")
-                .addClass("pm-panel-placeholder")
-                .attr("id", "pm-placeholder-" + user)
-                .insertAfter(pm);
-            if (pm.is(".expanded")) {
-                placeholder.addClass("expanded");
-            }
-            var left = pm.position().left;
-            pm.css("position", "absolute")
-                .css("bottom", "0px")
-                .css("left", left);
-            title.find("span:first").text(title.data("username"));
-        } else {
-            pm.css("position", "");
-            $("#pm-placeholder-" + user).remove();
-        }
-    });
-    
     var buffer = $("<div/>").addClass("pm-buffer linewrap").appendTo(body);
     $("<hr/>").appendTo(body);
     var input = $("<input/>").addClass("form-control pm-input").attr("type", "text")
@@ -3175,6 +3167,30 @@ function initPm(user) {
                 meta: meta
             });
             input.val("");
+        }
+    });
+    
+    title.click(function () {
+        body.toggle();
+        pm.removeClass("panel-primary").addClass("panel-default");
+        
+        if (!body.is(":hidden")) {
+            placeholder = $("<div/>")
+                .addClass("pm-panel-placeholder")
+                .attr("id", "pm-placeholder-" + user)
+                .insertAfter(pm);
+            if (pm.is(".expanded")) {
+                placeholder.addClass("expanded");
+            }
+            var left = pm.position().left;
+            pm.css("position", "absolute")
+                .css("bottom", "0px")
+                .css("left", left);
+            title.find("span:first").text(title.data("username"));
+            buffer.scrollTop(buffer.prop("scrollHeight"));
+        } else {
+            pm.css("position", "");
+            $("#pm-placeholder-" + user).remove();
         }
     });
 
