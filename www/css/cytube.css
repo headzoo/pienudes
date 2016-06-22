@@ -1106,3 +1106,6 @@ input:focus {
   background-color: #FFF;
   color: #000;
 }
+#chat-banner-leaderboard {
+  text-align: center;
+}
