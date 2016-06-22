@@ -1180,10 +1180,13 @@ var $each = function(obj, cb) {
          * 
          * @param id
          * @param label
+         * @param [help]
          * @returns {*|jQuery|HTMLElement}
          */
-        makeCheckbox: function(id, label) {
-            return $(
+        makeCheckbox: function(id, label, help) {
+            help = help || "";
+            
+            var group = $(
                 '<div class="form-group">' +
                     '<div class="col-sm-8 col-sm-offset-4">' +
                         '<div class="checkbox">' +
@@ -1191,10 +1194,14 @@ var $each = function(obj, cb) {
                                 '<input type="checkbox" id="' + id + '" />' +
                                 label +
                             '</label>' +
+                            '<p class="text-muted">' + help + '</p>' +
                         '</div>' +
                     '</div>' +
                 '</div>'
             );
+            
+            group.form_element = group.find("input:first");
+            return group;
         },
     
         /**
@@ -1202,21 +1209,27 @@ var $each = function(obj, cb) {
          * @param id
          * @param label
          * @param type
+         * @param [help]
          * @returns {*|jQuery|HTMLElement}
          */
-        makeInput: function(id, label, type) {
+        makeInput: function(id, label, type, help) {
             type = type || "text";
+            help = help || "";
             
-            return $(
+            var group = $(
                 '<div class="form-group">' +
                     '<label class="control-label col-sm-4 for="' + id + '">' +
                         label +
                     '</label>' +
                     '<div class="col-sm-8">' +
                         '<input type="' + type + '" class="form-control" id="' + id + '"/>' +
+                        '<p class="text-muted">' + help + '</p>' +
                     '</div>' +
                 '</div>'
             );
+            
+            group.form_element = group.find("input:first");
+            return group;
         },
         
         makeButtonGroup: function(buttons) {
