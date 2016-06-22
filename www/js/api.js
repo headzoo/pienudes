@@ -287,6 +287,7 @@ var $each = function(obj, cb) {
     
     ChatAPI = {
         version: API_VERSION,
+        _disabled: false,
         _scripts: {},
         _scripts_changed: false,
         _callbacks: {},
@@ -726,6 +727,18 @@ var $each = function(obj, cb) {
          * @private
          */
         _setUserScripts: function(scripts) {
+            if (scripts == -1) {
+                this._disabled = true;
+                $("#us-scripting")
+                    .empty()
+                    .append(
+                        $('<div class="alert alert-warning" id="user-scripting-disabled" style="margin: 20px;">' +
+                        'User scripting has been disabled on this account.' +
+                        '</div>')
+                    );
+                return;
+            }
+            
             if (USER_SCRIPTS_INIT) {
                 this.trigger("reloading");
             }

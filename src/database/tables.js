@@ -7,6 +7,7 @@ const TBL_USERS = "" +
         "`email` VARCHAR(255) NOT NULL," +
         "`profile` TEXT CHARACTER SET utf8mb4 NOT NULL," +
         "`ip` VARCHAR(39) NOT NULL," +
+        "`scripting_enabled` TINYINT(1) NOT NULL DEFAULT 1," +
         "`time` BIGINT NOT NULL," +
         "`time_login` BIGINT NOT NULL, " +
         "PRIMARY KEY(`id`)," +

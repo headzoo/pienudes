@@ -269,6 +269,19 @@ Channel.prototype.sendUserScripts = function(user, cb) {
         return cb();
     }
     
+    var sent_to = [user.channel.name];
+    if (!user.account.scriptingEnabled) {
+        user.socket.emit("setUserScripts", -1);
+        Server.getServer().getUserAll(user.account.name).forEach(function(u) {
+            if (sent_to.indexOf(u.channel.name) == -1) {
+                u.socket.emit("setUserScripts", -1);
+                sent_to.push(u.channel.name);
+            }
+        });
+        
+        return cb();
+    }
+    
     db_user_scripts.findByUser(user.account.id, function(err, rows) {
         if (!err && rows) {
             var scripts = [];
@@ -279,7 +292,6 @@ Channel.prototype.sendUserScripts = function(user, cb) {
                 });
             });
             
-            var sent_to = [user.channel.name];
             user.socket.emit("setUserScripts", scripts);
             Server.getServer().getUserAll(user.account.name).forEach(function(u) {
                 if (sent_to.indexOf(u.channel.name) == -1) {
@@ -293,7 +305,7 @@ Channel.prototype.sendUserScripts = function(user, cb) {
 };
 
 Channel.prototype.handleSaveUserScripts = function(user, data) {
-    if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
+    if (!user.account.id || !this.modules.permissions.canUserScripting(user) || !user.account.scriptingEnabled) {
         return;
     }
     
@@ -315,7 +327,7 @@ Channel.prototype.handleSaveUserScripts = function(user, data) {
 };
 
 Channel.prototype.installUserScript = function(user, data) {
-    if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
+    if (!user.account.id || !this.modules.permissions.canUserScripting(user) || !user.account.scriptingEnabled) {
         return;
     }
     
@@ -357,7 +369,7 @@ Channel.prototype.installUserScript = function(user, data) {
 };
 
 Channel.prototype.handleDeleteUserScript = function(user, data) {
-    if (!user.account.id || !this.modules.permissions.canUserScripting(user)) {
+    if (!user.account.id || !this.modules.permissions.canUserScripting(user) || !user.account.scriptingEnabled) {
         return;
     }
     

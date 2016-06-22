@@ -10,6 +10,7 @@ function Account(opts) {
         globalRank: -1,
         channelRank: -1,
         guest: true,
+        scriptingEnabled: true,
         profile: {
             image: "",
             text: ""
@@ -26,6 +27,7 @@ function Account(opts) {
     this.effectiveRank = Math.max(this.globalRank, this.channelRank);
     this.guest = this.globalRank === 0;
     this.profile = opts.profile || defaults.profile;
+    this.scriptingEnabled = (opts.scriptingEnabled === undefined) ? defaults.scriptingEnabled : opts.scriptingEnabled;
 }
 
 module.exports.default = function (ip) {
@@ -73,6 +75,8 @@ module.exports.getAccount = function (name, ip, opts, cb) {
             }
     }).then(function(user) {
             data.id = user.id;
+            data.scriptingEnabled = (user.scripting_enabled == 1);
+            
             /* Look up profile for registered user */
             if (data.globalRank >= 1) {
                 return Q.nfcall(db.users.getProfile, name);
@@ -88,7 +92,8 @@ module.exports.getAccount = function (name, ip, opts, cb) {
                 aliases: data.aliases,
                 globalRank: data.globalRank,
                 channelRank: data.channelRank,
-                profile: profile
+                profile: profile,
+                scriptingEnabled: data.scriptingEnabled
             }));
         });
     }).catch(function (err) {
