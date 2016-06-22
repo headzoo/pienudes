@@ -287,7 +287,6 @@ var $each = function(obj, cb) {
     
     ChatAPI = {
         version: API_VERSION,
-        _disabled: false,
         _scripts: {},
         _scripts_changed: false,
         _callbacks: {},
@@ -728,7 +727,6 @@ var $each = function(obj, cb) {
          */
         _setUserScripts: function(scripts) {
             if (scripts == -1) {
-                this._disabled = true;
                 $("#us-scripting")
                     .empty()
                     .append(
@@ -816,6 +814,7 @@ var $each = function(obj, cb) {
             $("#user-scripting-tab-default").find("a:first").click();
             delete this._scripts[data.name];
             this._scripts_changed = true;
+            ChatStore.local.remove("user_scripting_first_run_" + name_low);
         },
     
         /**
