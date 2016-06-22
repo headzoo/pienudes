@@ -129,7 +129,7 @@ var $each = function(obj, cb) {
              * @param default_value
              */
             "get": function(key, default_value) {
-                default_value = default_value || null;
+                default_value = (default_value === undefined) ? null : default_value;
                 
                 var value = localStorage.getItem(key);
                 if (value === null) {
@@ -787,16 +787,16 @@ var $each = function(obj, cb) {
                 return textarea.val();
             });
             if (name_low == "css" || name.substr(name.length - 4, 4) == ".css") {
-                return this._attachStylesheet(name_low, script);
+                return this._attachStylesheet(name, name_low, script);
             }
             
             var imports = this._findImports(script);
             if (imports.length > 0) {
                 this._importExternalScripts(imports, function() {
-                    this._attachScript(name_low, script);
+                    this._attachScript(name, name_low, script);
                 }.bind(this));
             } else {
-                this._attachScript(name_low, script);
+                this._attachScript(name, name_low, script);
             }
         },
     
@@ -807,6 +807,8 @@ var $each = function(obj, cb) {
          * @private
          */
         _deleteUserScript: function(data) {
+            this.trigger("delete_script", data.name);
+            
             var name_low = data.name.replace(" ", "-").replace(".", "-").toLowerCase();
             $("#user-scripting-tab-" + name_low).remove();
             $("#user-script-pane-" + name_low).remove();
@@ -819,37 +821,45 @@ var $each = function(obj, cb) {
         /**
          * Appends the given script to the page
          * 
+         * @param name
          * @param name_low
          * @param script
          * @private
          */
-        _attachScript: function(name_low, script) {
+        _attachScript: function(name, name_low, script) {
             if (!SAFE_MODE) {
-                var annotations = JSON.stringify(this._findAnnotations(script));
+                var info = this._findAnnotations(script);
+                info.filename = name;
+                info.is_first_run = ChatStore.local.get("user_scripting_first_run_" + name_low, true);
                 
                 script = "" +
                     "try {" +
-                        "(function($api, $options, $user, $channel, $proxy, $store, $annotations) { \n" +
+                        "(function($api, $options, $user, $channel, $proxy, $store, $script) { \n" +
                             script +
                         "\nChatAPI._pushReady();" +
-                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, " + annotations + "); " +
+                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, " + JSON.stringify(info) + "); " +
                     "} catch (e) { console.error(e); }";
     
                 $("<script/>").attr("type", "text/javascript")
                     .attr("id", "user-script-exec-" + name_low)
                     .text(script)
                     .appendTo($("body"));
+                    
+                if (info.is_first_run) {
+                    ChatStore.local.set("user_scripting_first_run_" + name_low, false);
+                }
             }
         },
     
         /**
          * Appends the given css to the page
          * 
+         * @param name
          * @param name_low
          * @param css
          * @private
          */
-        _attachStylesheet: function(name_low, css) {
+        _attachStylesheet: function(name, name_low, css) {
             if (!SAFE_MODE) {
                 $("<style/>").attr("type", "text/css")
                     .attr("id", "user-script-exec-" + name_low)
