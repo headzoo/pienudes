@@ -481,7 +481,8 @@ var $each = function(obj, cb) {
             toastr.options.preventDuplicates = true;
             toastr.options.closeButton = true;
             toastr.options.timeOut = (time_out || 1500);
-            
+    
+            msg = jQuery(msg).text();
             switch(type) {
                 case "warning":
                     toastr.warning(msg);
