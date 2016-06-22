@@ -218,6 +218,7 @@ $(function() {
         }
         
         var data = ChatAPI._createScriptingTab({name: name, script: ""});
+        ChatAPI._scripts_changed = true;
         
         var items = tabs.children("li").get();
         items.sort(function(a, b) {

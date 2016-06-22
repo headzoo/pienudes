@@ -292,6 +292,8 @@ var $each = function(obj, cb) {
         _callbacks: {},
         _ready_expected: 0,
         _ready_count: 0,
+        _page_ready_expected: 3,
+        _page_ready_count: 0,
         _imported: [],
     
         /**
@@ -393,14 +395,17 @@ var $each = function(obj, cb) {
          * @param callback
          */
         on: function(event, callback) {
-            if (this._callbacks[event] == undefined) {
-                this._callbacks[event] = [];
-            }
-            this._callbacks[event].push(callback);
-            
-            if (event == "loaded" && this._load_count >= this._load_min) {
-                //this.trigger("loaded");
-            }
+            var events = event.split(' ');
+            events = events.filter(function(e){return e});
+            $each(events, function(e) {
+                if (this._callbacks[e] == undefined) {
+                    this._callbacks[e] = [];
+                }
+                this._callbacks[e].push(callback);
+                if (e == "loaded" && this._isLoaded()) {
+                    callback();
+                }
+            }.bind(this));
         },
     
         /**
@@ -925,7 +930,6 @@ var $each = function(obj, cb) {
                 }
             });
             
-            this._scripts_changed = true;
             this._scripts[name] = new UserScript(name, function() {
                 return textarea.val();
             });
@@ -1052,8 +1056,10 @@ var $each = function(obj, cb) {
         _reset: function() {
             this._ready_expected = 0;
             this._ready_count = 0;
+            this._scripts_changed = false;
             this._callbacks = {
                 reloading: [],
+                loaded: [],
                 receive: [],
                 send: [],
                 notice: [],
@@ -1081,13 +1087,27 @@ var $each = function(obj, cb) {
                 color_change: []
             };
         },
+    
+        /**
+         * Returns whether all the scripts have been loaded
+         *
+         * @returns {boolean}
+         */
+        _isLoaded: function() {
+            return (this._ready_count >= this._ready_expected)
+                && (this._page_ready_count >= this._page_ready_expected);
+        },
         
         _pushReady: function() {
             this._ready_count++;
-            if (this._ready_count >= this._ready_expected) {
+            if (this._isLoaded()) {
                 this.trigger("color_change", CHAT_LINE_COLOR);
                 this.trigger("loaded", {});
             }
+        },
+        
+        _pushPageReady: function() {
+            this._page_ready_count++;
         }
     };
     

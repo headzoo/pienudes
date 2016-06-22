@@ -540,6 +540,7 @@ Callbacks = {
         for (var i = 0; i < data.length; i++) {
             Callbacks.chatMsg(data[i]);
         }
+        ChatAPI._pushPageReady();
     },
     
     pm: function (data) {
@@ -623,6 +624,7 @@ Callbacks = {
         for(var i = 0; i < data.length; i++) {
             Callbacks.addUser(data[i]);
         }
+        ChatAPI._pushPageReady();
     },
 
     addUser: function(data) {
@@ -948,15 +950,18 @@ Callbacks = {
     changeMedia: function(data) {
         socket.emit("userTags");
         if (!data) {
+            ChatAPI._pushPageReady();
             return;
         }
         
         data.uid = data.id;
         CHAT_WRAP_MEDIA = data;
         if ($("body").hasClass("chatOnly") || $("#videowrap").length === 0) {
+            ChatAPI._pushPageReady();
             return;
         }
         if (ChatAPI.trigger("media_change", data).isCancelled()) {
+            ChatAPI._pushPageReady();
             return;
         }
         
@@ -1005,6 +1010,7 @@ Callbacks = {
         }
 
         $("#currenttitle").text(data.title);
+        ChatAPI._pushPageReady();
     },
 
     mediaUpdate: function(data) {
