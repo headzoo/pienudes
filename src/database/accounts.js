@@ -38,6 +38,10 @@ module.exports = {
     
     init: function () {
     },
+    
+    getRandomAvatar: function() {
+        return random_avatars[Math.floor(Math.random() * random_avatars.length)]
+    },
 
     /**
      * Check if a username is taken

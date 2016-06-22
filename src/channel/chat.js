@@ -8,6 +8,7 @@ var Flags = require("../flags");
 var url = require("url");
 var emotes = require('./emotes');
 var counters = require("../counters");
+var db_accounts = require('../database/accounts');
 var db_channels = require('../database/channels');
 var db_chat_logs = require('../database/chat_logs');
 var db_emotes = require('../database/emotes');
@@ -255,6 +256,10 @@ ChatModule.prototype.handlePm = function (user, data) {
     data.meta = meta;
     var msgobj = this.formatMessage(user.getName(), data);
     msgobj.to = to.getName();
+    if (!user.account.profile.image) {
+        user.account.profile.image = db_accounts.getRandomAvatar();
+    }
+    msgobj.avatar = user.account.profile.image;
 
     to.socket.emit("pm", msgobj);
     user.socket.emit("pm", msgobj);
