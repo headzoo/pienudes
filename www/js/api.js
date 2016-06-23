@@ -1070,6 +1070,7 @@ var $each = function(obj, cb) {
                 user_leave: [],
                 user_count: [],
                 blink: [],
+                unblink: [],
                 playlist: [],
                 queue: [],
                 media_change: [],

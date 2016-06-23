@@ -1,6 +1,10 @@
 /* window focus/blur */
 $(window).focus(function() {
     FOCUSED = true;
+    if (ChatAPI.trigger("unblink").isCancelled()) {
+        return;
+    }
+    
     clearInterval(TITLE_BLINK);
     TITLE_BLINK = false;
     document.title = PAGETITLE;
