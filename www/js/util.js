@@ -1798,6 +1798,7 @@ function pingMessage(isHighlight) {
     if (!FOCUSED) {
         var args = {
             title_text: "*Chat*",
+            boop_setting: USEROPTS.boop,
             blink_setting: USEROPTS.blink_title,
             blink_interval: 1000
         };
@@ -1818,7 +1819,7 @@ function pingMessage(isHighlight) {
             }, args.blink_interval);
         }
 
-        if (USEROPTS.boop === "always" || (USEROPTS.boop === "onlyping" && isHighlight)) {
+        if (args.boop_setting || (args.boop_setting && isHighlight)) {
             CHATSOUND.play();
         }
     }
