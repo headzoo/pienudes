@@ -1796,24 +1796,29 @@ function trimChatBuffer() {
 
 function pingMessage(isHighlight) {
     if (!FOCUSED) {
+        var args = {
+            title_text: "*Chat*",
+            blink_setting: USEROPTS.blink_title,
+            blink_interval: 1000
+        };
         if (!TITLE_BLINK && isHighlight) {
-            if (ChatAPI.trigger("blink").isCancelled()) {
+            if (ChatAPI.trigger("blink", args).isCancelled()) {
                 return;
             }
         }
         
-        if (!TITLE_BLINK && (USEROPTS.blink_title === "always" ||
-            USEROPTS.blink_title === "onlyping" && isHighlight)) {
+        if (!TITLE_BLINK && (args.blink_setting === "always" ||
+            args.blink_setting === "onlyping" && isHighlight)) {
             TITLE_BLINK = setInterval(function() {
-                if(document.title == "*Chat*")
+            
+                if(document.title == args.title_text)
                     document.title = PAGETITLE;
                 else
-                    document.title = "*Chat*";
-            }, 1000);
+                    document.title = args.title_text;
+            }, args.blink_interval);
         }
 
-        if (USEROPTS.boop === "always" || (USEROPTS.boop === "onlyping" &&
-            isHighlight)) {
+        if (USEROPTS.boop === "always" || (USEROPTS.boop === "onlyping" && isHighlight)) {
             CHATSOUND.play();
         }
     }
