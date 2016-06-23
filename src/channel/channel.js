@@ -342,7 +342,7 @@ Channel.prototype.installUserScript = function(user, data) {
             msg: "Invalid script protocol or hostname."
         });
     }
-    if (parsed.path.match(/^\/([^\s.\/]+).(js|css)$/i) === null) {
+    if (parsed.path.match(/^\/script\/([^\s.\/]+).(js|css)$/i) === null) {
         return user.socket.emit("errorMsg", {
             msg: "Invalid script."
         });

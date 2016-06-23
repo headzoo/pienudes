@@ -1608,13 +1608,9 @@ function addChatMessage(data) {
         div.find('a:contains("' + us_match[0] + '")')
             .prepend($('<span class="glyphicon glyphicon-flash chat-msg-click-to-install-icon"></span>'))
             .on("click", function(e) {
-            var matches = data.msg.match(SCRIPTS_REGEX);
-            if (matches !== null) {
-                $("#chatline").val("");
-                installUserScript(matches[1] + "." + matches[2]);
+                installUserScript(us_match[1] + "." + us_match[2]);
                 e.preventDefault();
-            }
-        });
+            });
     }
     
     var msgBuf = $("#messagebuffer");
@@ -3710,7 +3706,7 @@ function timeSince(timeStamp) {
 }
 
 function installUserScript(script) {
-    var script_url = SCRIPTS_BASE_URL + "/" + script;
+    var script_url = SCRIPTS_BASE_URL + "/script/" + script;
     
     $.ajax({
         url: SCRIPTS_BASE_URL + "/meta.json",
@@ -3725,10 +3721,10 @@ function installUserScript(script) {
         $("#install-script-name").text(meta.name + " v" + meta.version);
         $("#install-script-author").text("Author: " + meta.author);
         $("#install-script-description").text(meta.description);
-        $("#install-script-open-anchor").attr("href", script_url);
+        $("#install-script-open-anchor").attr("href", res[script].source);
         
         $.ajax({
-            url: script_url,
+            url: res[script].source,
             cache: false
         }).done(function(script_text) {
             
