@@ -1819,8 +1819,8 @@ function pingMessage(isHighlight) {
             }, args.blink_interval);
         }
 
-        if (args.boop_setting || (args.boop_setting && isHighlight)) {
-            //CHATSOUND.play();
+        if (args.boop_setting === "always" || (args.boop_setting === "onlyping" && isHighlight)) {
+            CHATSOUND.play();
         }
     }
 }
