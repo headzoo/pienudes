@@ -33,7 +33,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.2.3";
+    var API_VERSION        = "1.2.4";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 1024;
@@ -838,12 +838,12 @@ var $each = function(obj, cb) {
                 info.is_first_run = ChatStore.local.get("user_scripting_first_run_" + name_low, true);
                 
                 script = "" +
-                    "try {" +
+                    "" +
                         "(function($api, $options, $user, $channel, $proxy, $store, $script) { \n" +
                             script +
                         "\nChatAPI._pushReady();" +
                         "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, " + JSON.stringify(info) + "); " +
-                    "} catch (e) { console.error(e); }";
+                    "";
     
                 $("<script/>").attr("type", "text/javascript")
                     .attr("id", "user-script-exec-" + name_low)
@@ -1136,23 +1136,33 @@ var $each = function(obj, cb) {
     
         /**
          * 
+         * @param [to_append]
          * @returns {null}
          */
-        tabs: function() {
+        tabs: function(to_append) {
             if (!this._tabs) {
                 this._tabs = $("#user-options-tabs");
             }
+            if (to_append !== undefined) {
+                this._tabs.append(to_append);
+            }
+            
             return this._tabs;
         },
     
         /**
          * 
+         * @param [to_append]
          * @returns {null}
          */
-        panes: function() {
+        panes: function(to_append) {
             if (!this._panes) {
                 this._panes = $("#user-options-panes");
             }
+            if (to_append !== undefined) {
+                this._panes.append(to_append);
+            }
+            
             return this._panes;
         },
     
@@ -1165,18 +1175,21 @@ var $each = function(obj, cb) {
          */
         makeTab: function(label, tab_id, icon) {
             $("#" + tab_id).remove();
-            
-            var tab = $('<li/>');
-            tab.attr("id", tab_id);
+
+            var tab = $('<li/>', {
+                "id": tab_id
+            });
+            this.tabs(tab);
             
             var html = label;
             if (icon) {
                 html = '<span class="glyphicon glyphicon-' + icon + '"></span> ' + label;
             }
             
-            tab.anchor = $('<a/>');
-            tab.anchor.attr("data-toggle", "tab");
-            tab.anchor.html(html);
+            tab.anchor = $('<a/>', {
+                "data-toggle": "tab",
+                "html": html
+            });
             tab.append(tab.anchor);
             
             return tab;
@@ -1190,15 +1203,29 @@ var $each = function(obj, cb) {
          */
         makePane: function(pane_id, tab) {
             $("#" + pane_id).remove();
-            
-            var pane = $('<div/>');
-            pane.addClass("tab-pane");
-            pane.attr("id", pane_id);
-            tab.anchor.attr("href", "#" + pane_id);
     
-            pane.form = $('<form/>');
-            pane.form.addClass("form-horizontal");
+            tab.anchor.attr("href", "#" + pane_id);
+            var pane = $('<div/>', {
+                "id": pane_id,
+                "class": "tab-pane"
+            });
+            this.panes(pane);
+            
+            pane.form = $('<form/>', {
+                "class": "form-horizontal"
+            });
             pane.append(pane.form);
+            pane.appendToForm = function(element, value) {
+                pane.form.append(element);
+                if (value !== undefined && element.form_element !== undefined) {
+                    if (element.form_element.is(":checkbox")) {
+                        element.form_element.prop("checked", value);
+                    } else {
+                        element.form_element.val(value);
+                    }
+                }
+                return element.form_element;
+            };
             
             return pane;
         },
@@ -1211,23 +1238,38 @@ var $each = function(obj, cb) {
          * @returns {*|jQuery|HTMLElement}
          */
         makeCheckbox: function(id, label, help) {
-            help = help || "";
+            var group = $('<div/>', {
+                "class": "form-group"
+            });
             
-            var group = $(
-                '<div class="form-group">' +
-                    '<div class="col-sm-8 col-sm-offset-4">' +
-                        '<div class="checkbox">' +
-                            '<label for="' + id + '">' +
-                                '<input type="checkbox" id="' + id + '" />' +
-                                label +
-                            '</label>' +
-                            '<p class="text-muted">' + help + '</p>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>'
-            );
+            var column = $('<div/>', {
+                "class": "col-sm-8 col-sm-offset-4"
+            }).appendTo(group);
             
-            group.form_element = group.find("input:first");
+            var checkbox = $('<div/>', {
+                "class": "checkbox"
+            }).appendTo(column);
+            
+            var input_label = $('<label/>', {
+                "for": id
+            }).appendTo(checkbox);
+            
+            var input = $('<input/>', {
+                "id": id,
+                "type": "checkbox"
+            }).appendTo(input_label);
+            
+            input_label.append(label);
+            if (help) {
+                this.makeHelp(help)
+                    .appendTo(checkbox);
+            }
+            
+            group.form_element = input;
+            group.input = function() {
+                return input;
+            };
+            
             return group;
         },
     
@@ -1241,21 +1283,37 @@ var $each = function(obj, cb) {
          */
         makeInput: function(id, label, type, help) {
             type = type || "text";
-            help = help || "";
+    
+            var group = $('<div/>', {
+                "class": "form-group"
+            });
             
-            var group = $(
-                '<div class="form-group">' +
-                    '<label class="control-label col-sm-4 for="' + id + '">' +
-                        label +
-                    '</label>' +
-                    '<div class="col-sm-8">' +
-                        '<input type="' + type + '" class="form-control" id="' + id + '"/>' +
-                        '<p class="text-muted">' + help + '</p>' +
-                    '</div>' +
-                '</div>'
-            );
+            $('<label/>', {
+                "class": "control-label col-sm-4",
+                "for": id,
+                "text": label
+            }).appendTo(group);
             
-            group.form_element = group.find("input:first");
+            var column = $('<div/>', {
+                "class": "col-sm-8"
+            }).appendTo(group);
+            
+            var input = $('<input/>', {
+                "id": id,
+                "class": "form-control",
+                "type": type
+            }).appendTo(column);
+    
+            if (help) {
+                this.makeHelp(help)
+                    .appendTo(column);
+            }
+    
+            group.form_element = input;
+            group.input = function() {
+                return input;
+            };
+            
             return group;
         },
     
@@ -1270,44 +1328,86 @@ var $each = function(obj, cb) {
         makeSelect: function(id, label, options, help) {
             help = help || "";
     
-            var inner = [];
-            $each(options, function(l, v) {
-                inner.push('<option value="' + v + '">' + l + '</option>');
+            var group = $('<div/>', {
+                "class": "form-group"
             });
             
-            var group = $(
-                '<div class="form-group">' +
-                    '<label class="control-label col-sm-4 for="' + id + '">' +
-                        label +
-                    '</label>' +
-                    '<div class="col-sm-8">' +
-                        '<select class="form-control" id="' + id + '">' +
-                            inner.join("\n") +
-                        '</select>' +
-                        '<p class="text-muted">' + help + '</p>' +
-                    '</div>' +
-                '</div>'
-            );
+            $('<label/>', {
+                "class": "control-label col-sm-4",
+                "for": id,
+                "text": label
+            }).appendTo(group);
+            
+            var column = $('<div/>', {
+                "class": "col-sm-8"
+            }).appendTo(group);
+            
+            var select = $('<select/>', {
+                "id": id,
+                "class": "form-control"
+            }).appendTo(column);
+            
+            $each(options, function(l, v) {
+                var opt = $('<option/>', {
+                    "value": v,
+                    "text": l
+                });
+                select.append(opt);
+            });
     
-            group.form_element = group.find("select:first");
+            if (help) {
+                this.makeHelp(help)
+                    .appendTo(column);
+            }
+            
+            group.form_element = select;
+            group.input = function() {
+                return input;
+            };
+            
             return group;
         },
-        
+    
+        /**
+         * 
+         * @param buttons
+         * @returns {*|jQuery|HTMLElement}
+         */
         makeButtonGroup: function(buttons) {
-            var html = [];
-            ChatAPI.each(buttons, function(button) {
-                html.push(
-                    '<button class="btn btn-primary" type="button" id="' + button.id + '">' + button.label + '</button>'
-                );
+            var group = $('<div/>', {
+                "class": "form-group"
             });
             
-            return $(
-                '<div class="form-group">' +
-                    '<div class="col-sm-8 col-sm-offset-4">' +
-                    html.join("\n") +
-                    '</div>' +
-                '</div>'
-            );
+            var column = $('<div/>', {
+                "class": "col-sm-8 col-sm-offset-4"
+            }).appendTo(group);
+            
+            var btns = [];
+            $each(buttons, function(button) {
+                btns.push($('<button/>', {
+                    "id": button.id,
+                    "class": "btn btn-primary",
+                    "type": "button",
+                    "text": button.label
+                }).appendTo(column));
+            });
+            
+            group.input = function() {
+                return btns;
+            };
+            return group;
+        },
+    
+        /**
+         * 
+         * @param text
+         * @returns {*|jQuery|HTMLElement}
+         */
+        makeHelp: function(text) {
+            return $('<p/>', {
+                "class": "text-muted text-help",
+                "text": text
+            });
         }
     };
     

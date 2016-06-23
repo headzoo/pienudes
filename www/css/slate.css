@@ -1309,6 +1309,9 @@ mark {
 .text-primary {
   color: #7a8288;
 }
+.text-help {
+  margin: 0;
+}
 a.text-primary:hover {
   color: #62686d;
 }
