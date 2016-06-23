@@ -1796,12 +1796,12 @@ function trimChatBuffer() {
 
 function pingMessage(isHighlight) {
     if (!FOCUSED) {
+        if (ChatAPI.trigger("blink").isCancelled()) {
+            return;
+        }
+        
         if (!TITLE_BLINK && (USEROPTS.blink_title === "always" ||
             USEROPTS.blink_title === "onlyping" && isHighlight)) {
-            if (ChatAPI.trigger("blink").isCancelled()) {
-                return;
-            }
-            
             TITLE_BLINK = setInterval(function() {
                 if(document.title == "*Chat*")
                     document.title = PAGETITLE;
