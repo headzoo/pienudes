@@ -33,7 +33,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.2.2";
+    var API_VERSION        = "1.2.3";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 1024;
@@ -1256,6 +1256,40 @@ var $each = function(obj, cb) {
             );
             
             group.form_element = group.find("input:first");
+            return group;
+        },
+    
+        /**
+         * 
+         * @param id
+         * @param label
+         * @param options
+         * @param help
+         * @returns {*|jQuery|HTMLElement}
+         */
+        makeSelect: function(id, label, options, help) {
+            help = help || "";
+    
+            var inner = [];
+            $each(options, function(l, v) {
+                inner.push('<option value="' + v + '">' + l + '</option>');
+            });
+            
+            var group = $(
+                '<div class="form-group">' +
+                    '<label class="control-label col-sm-4 for="' + id + '">' +
+                        label +
+                    '</label>' +
+                    '<div class="col-sm-8">' +
+                        '<select class="form-control" id="' + id + '">' +
+                            inner.join("\n") +
+                        '</select>' +
+                        '<p class="text-muted">' + help + '</p>' +
+                    '</div>' +
+                '</div>'
+            );
+    
+            group.form_element = group.find("select:first");
             return group;
         },
         
