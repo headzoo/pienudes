@@ -1796,8 +1796,10 @@ function trimChatBuffer() {
 
 function pingMessage(isHighlight) {
     if (!FOCUSED) {
-        if (ChatAPI.trigger("blink").isCancelled()) {
-            return;
+        if (!TITLE_BLINK && isHighlight) {
+            if (ChatAPI.trigger("blink").isCancelled()) {
+                return;
+            }
         }
         
         if (!TITLE_BLINK && (USEROPTS.blink_title === "always" ||
