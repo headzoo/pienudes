@@ -1203,6 +1203,7 @@ input:focus {
   padding: 12px;
   margin: 0 14px;
   background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid #525151;
 }
 #srr-profile h3 {
   margin: 0;
