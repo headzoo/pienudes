@@ -1820,7 +1820,7 @@ function pingMessage(isHighlight) {
         }
 
         if (args.boop_setting || (args.boop_setting && isHighlight)) {
-            CHATSOUND.play();
+            //CHATSOUND.play();
         }
     }
 }
