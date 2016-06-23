@@ -11,6 +11,7 @@ var util = require("../utilities");
 var urlParser  = require("url");
 var fs = require("graceful-fs");
 var path = require("path");
+var crypto = require('crypto');
 var sio = require("socket.io");
 var io = require('socket.io-client');
 var db = require("../database");
@@ -348,17 +349,41 @@ Channel.prototype.installUserScript = function(user, data) {
         });
     }
     
-    request(data.url, function(err, res, body) {
+    var id = parsed.path.replace("/script/", "");
+    request("https://scripts.upnext.fm/meta.json", function(err, res, body) {
         if (!err && res.statusCode == 200 && body.length > 0) {
-            db_user_scripts.insertOrUpdate(user.account.id, data.name, body, function(err, res) {
-                if (err) {
+            var meta = JSON.parse(body);
+            if (meta[id] === undefined) {
+                return user.socket.emit("errorMsg", {
+                    msg: "Invalid script."
+                });
+            }
+            
+            request(meta[id].source, function(err, res, body) {
+                if (!err && res.statusCode == 200 && body.length > 0) {
+                
+                    var checksum = crypto.createHash("md5").update(body).digest("hex");
+                    if (meta[id].checksum !== checksum) {
+                        return user.socket.emit("errorMsg", {
+                            msg: "Script checksum failed."
+                        });
+                    }
+                    
+                    db_user_scripts.insertOrUpdate(user.account.id, data.name, body, function(err, res) {
+                        if (err) {
+                            return user.socket.emit("errorMsg", {
+                                msg: "Failed to install script. Try again in a minute."
+                            });
+                        }
+                        
+                        user.socket.emit("installedUserScript", data);
+                        this.sendUserScripts(user);
+                    }.bind(this));
+                } else {
                     return user.socket.emit("errorMsg", {
-                        msg: "Failed to install script. Try again in a minute."
+                        msg: "Unable to download and install script. Try again in a minute."
                     });
                 }
-        
-                user.socket.emit("installedUserScript", data);
-                this.sendUserScripts(user);
             }.bind(this));
         } else {
             return user.socket.emit("errorMsg", {
