@@ -96,6 +96,6 @@ gulp.task('watch', ['less', 'scripts'], function() {
         pack.paths.source.less
     ];
     
-    gulp.watch(dirs, ['default']);
+    gulp.watch(dirs, ['less', 'scripts']);
 });
 
