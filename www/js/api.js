@@ -1111,6 +1111,10 @@ var $each = function(obj, cb) {
         
         _pushPageReady: function() {
             this._page_ready_count++;
+            if (this._isLoaded()) {
+                this.trigger("color_change", CHAT_LINE_COLOR);
+                this.trigger("loaded", {});
+            }
         }
     };
     
