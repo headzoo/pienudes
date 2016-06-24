@@ -1197,7 +1197,7 @@ input:focus {
 }
 #chat-banner-leaderboard {
   text-align: left;
-  padding-left: 222px;
+  padding-left: 86px;
 }
 .chat-msg-click-to-install-icon {
   color: #E5AE30;
@@ -1218,13 +1218,14 @@ input:focus {
   margin-top: 0;
 }
 #srr-profile h6 span {
-  font-size: 16px;
+  font-size: 14px;
   color: #f19a17;
   display: block;
   margin: 4px 0 2px 0;
 }
 #srr-profile img {
-  height: 130px;
+  width: 105px;
+  height: 121px;
   border: 2px solid #FFF;
 }
 #srr-profile .bio {

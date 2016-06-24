@@ -31,7 +31,7 @@
                 {% endif %}
                 
                 <div id="main" class="row">
-                    <div id="chatwrap" class="col-lg-7 col-md-7">
+                    <div id="chatwrap" class="{% if channelName == "Punk" %}col-lg-6 col-md-6{% else %}col-lg-7 col-md-7{% endif %}">
                         <div id="chatheader">
                             <i id="userlisttoggle" class="glyphicon glyphicon-chevron-down pull-left.pointer" title="Show/Hide Userlist"></i>
                             <span id="usercount" class="pointer">Not Connected</span>
@@ -56,7 +56,7 @@
                     </div>
 
                     <div id="videowrap-mount">
-                        <div id="videowrap" class="col-lg-5 col-md-5" style="padding-left: 0;">
+                        <div id="videowrap" class="{% if channelName == "Punk" %}col-lg-6 col-md-6{% else %}col-lg-5 col-md-5{% endif %}" style="padding-left: 0;">
                             <p id="currenttitle">Nothing Playing</p>
                             <div class="embed-responsive embed-responsive-16by9">
                                 <div id="ytapiplayer" class="embed-responsive-item"></div>
@@ -117,8 +117,9 @@
                         </div>
                     </div>
                 </div>
+                
                 <div id="playlistrow" class="row">
-                    <div id="leftpane" class="col-lg-7 col-md-7">
+                    <div id="leftpane" class="{% if channelName == "Punk" %}col-lg-6 col-md-6{% else %}col-lg-7 col-md-7{% endif %}">
                         <div id="leftpane-inner" class="row">
                             <div id="biowrap" class="col-lg-12 col-md-12">
                                 <div id="bio" class="well" style="display: none;"></div>
@@ -184,7 +185,7 @@
                             <div id="playlistmanagerwrap" class="col-lg-12 col-md-12"></div>
                         </div>
                     </div>
-                    <div id="rightpane" class="col-lg-5 col-md-5" style="padding-left: 0;">
+                    <div id="rightpane" class="{% if channelName == "Punk" %}col-lg-6 col-md-6{% else %}col-lg-5 col-md-5{% endif %}" style="padding-left: 0;">
                         <div id="rightpane-inner" class="row">
                             <div id="searchcontrol" class="collapse plcontrol-collapse col-lg-12 col-md-12">
                                 <div class="vertical-spacer"></div>
