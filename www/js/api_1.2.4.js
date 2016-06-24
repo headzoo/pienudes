@@ -36,7 +36,7 @@ var $each = function(obj, cb) {
     var API_VERSION        = "1.2.4";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
-    var DATABASE_MAX_VALUE = 1024;
+    var DATABASE_MAX_VALUE = 5000;
     
     var noop = function() {};
     

@@ -86,8 +86,8 @@ module.exports = {
         if (key.length > 150) {
             return callback("Key exceeds 150 character max length.");
         }
-        if (value.length > 1024) {
-            return callback("Value exceeds 1024 character max length.");
+        if (value.length > 5000) {
+            return callback("Value exceeds 5000 character max length.");
         }
         
         db.query(
@@ -103,8 +103,8 @@ module.exports = {
         if (key.length > 150) {
             return callback("Key exceeds 150 character max length.");
         }
-        if (value.length > 1024) {
-            return callback("Value exceeds 1024 character max length.");
+        if (value.length > 5000) {
+            return callback("Value exceeds 5000 character max length.");
         }
         
         db.query(
