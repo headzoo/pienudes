@@ -102,15 +102,16 @@ var $each = function(obj, cb) {
     ChatTimer.prototype.clear = function(name) {
         if (this.has(name)) {
             clearInterval(this.timers[name]);
+            clearTimeout(this.timers[name]);
+            delete this.timers[name];
         }
         return this;
     };
     
     ChatTimer.prototype.clearAll = function() {
-        $each(this.timers, function(timer) {
-            clearInterval(timer);
-        });
-        this.timers = [];
+        $each(this.timers, function(timer, name) {
+            this.clear(name);
+        }.bind(this));
         return this;
     };
     
