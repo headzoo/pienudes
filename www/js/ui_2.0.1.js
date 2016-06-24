@@ -324,8 +324,11 @@ $("#guestname").keydown(function (ev) {
     }
 });
 
-function chatTabComplete() {
-    var words = $("#chatline").val().split(" ");
+function chatTabComplete(element, separator) {
+    element   = (element === undefined) ? $("#chatline") : element;
+    separator = separator || ":";
+    
+    var words = element.val().split(" ");
     var current = words[words.length - 1].toLowerCase();
     if (!current.match(/^[\w-]{1,20}$/)) {
         return;
@@ -391,12 +394,12 @@ function chatTabComplete() {
 
     if (users.length === 1) {
         if (words.length === 1) {
-            current += ":";
+            current += separator;
         }
         current += " ";
     }
     words[words.length - 1] = current;
-    $("#chatline").val(words.join(" "));
+    element.val(words.join(" "));
 }
 
 $("#chatline").keydown(function(ev) {

@@ -728,10 +728,10 @@ Channel.prototype.acceptUser = function (user) {
         var self = this;
         user.waitFlag(Flags.U_LOGGED_IN, function () {
             for (var i = 0; i < self.users.length; i++) {
-                if (self.users[i] !== user &&
-                    self.users[i].getLowerName() === user.getLowerName()) {
-                    self.users[i].kick("Duplicate login");
-                }
+                //if (self.users[i] !== user &&
+                //    self.users[i].getLowerName() === user.getLowerName()) {
+                //    self.users[i].kick("Duplicate login");
+               // }
             }
         
             var loginStr = "[login] " + user.displayip + " logged in as " + user.getName();
