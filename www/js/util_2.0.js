@@ -1498,12 +1498,18 @@ function formatChatMessage(data, last, permalink) {
             var time = $("<span/>").data("time", data.time).addClass("timestamp").appendTo(div);
         }
         
+        var time_title = "";
+        if (CHAT_WRAP_MEDIA != null && CHAT_WRAP_MEDIA.title !== undefined) {
+            time_title = CHAT_WRAP_MEDIA.title;
+        }
         if (data.pm === true) {
             var diff = timeSince(new Date(data.time));
             time.addClass("pm-timestamp").text(diff);
+            time.attr("title", time_title);
         } else {
             var timestamp = formatTimestamp(data.time);
             time.text("[" + timestamp + "] ");
+            time.attr("title", time_title);
         }
         if (data.meta.addClass && data.meta.addClassToNameAndTimestamp) {
             time.addClass(data.meta.addClass);
