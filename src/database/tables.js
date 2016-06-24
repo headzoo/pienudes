@@ -247,7 +247,7 @@ const TBL_API_STORAGE = "" +
         "`id` BIGINT NOT NULL AUTO_INCREMENT, " +
         "`user_id` INT NOT NULL, " +
         "`key` VARCHAR(150) NOT NULL, " +
-        "`value` VARCHAR(1024) NOT NULL, " +
+        "`value` VARCHAR(5000) NOT NULL, " +
         "`time` BIGINT NOT NULL," +
     "PRIMARY KEY (`id`)," +
     "UNIQUE INDEX(`user_id`, `key`), " +
