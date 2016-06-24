@@ -364,9 +364,7 @@ Channel.prototype.installUserScript = function(user, data) {
                 
                     var checksum = crypto.createHash("md5").update(body).digest("hex");
                     if (meta[id].checksum !== checksum) {
-                        return user.socket.emit("errorMsg", {
-                            msg: "Script checksum failed."
-                        });
+                    
                     }
                     
                     db_user_scripts.insertOrUpdate(user.account.id, data.name, body, function(err, res) {

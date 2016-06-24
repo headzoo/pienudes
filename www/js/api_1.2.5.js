@@ -33,7 +33,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.2.4";
+    var API_VERSION        = "1.2.5";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 5000;
@@ -268,7 +268,9 @@ var $each = function(obj, cb) {
     
                 try {
                     var value = JSON.parse(res);
-                } catch (e) {}
+                } catch (e) {
+                    value = null;
+                }
                 if (value === null) {
                     value = default_value;
                 }
