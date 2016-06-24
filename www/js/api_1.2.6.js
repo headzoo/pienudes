@@ -737,6 +737,18 @@ var $each = function(obj, cb) {
         },
     
         /**
+         * 
+         * @returns {Array}
+         */
+        users: function() {
+            var names = [];
+            $(".userlist_item").each(function(i, item) {
+                names.push($(item).data("name"));
+            });
+            return names;
+        },
+    
+        /**
          * Triggers the named event
          * 
          * @param name

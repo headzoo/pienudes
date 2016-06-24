@@ -671,7 +671,8 @@ Callbacks = {
         if(user !== null)
             user.remove();
         var div = $("<div/>")
-            .addClass("userlist_item userlist_item_" + data.name);
+            .addClass("userlist_item userlist_item_" + data.name)
+            .data("name", data.name);
         if (data.meta.is_bot) {
             div.addClass("userlist_item_is_bot");
         }
