@@ -2,6 +2,7 @@ var ChatAPI     = null;
 var ChatOptions = null;
 var ChatProxy   = null;
 var ChatStore   = null;
+var ChatTimer   = null;
 var UserScript  = null;
 
 /**
@@ -33,7 +34,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.2.5";
+    var API_VERSION        = "1.2.6";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 5000;
@@ -80,6 +81,41 @@ var $each = function(obj, cb) {
     
     UserScript.prototype.getCode = function() {
         return this.reader();
+    };
+    
+    ChatTimer = function() {
+        this.timers = {};
+    };
+    
+    ChatTimer.prototype.interval = function(name, time, callback) {
+        this.clear(name);
+        this.timers[name] = setInterval(callback, time);
+        return this;
+    };
+    
+    ChatTimer.prototype.once = function(name, time, callback) {
+        this.clear(name);
+        this.timers[name] = setTimeout(callback, time);
+        return this;
+    };
+    
+    ChatTimer.prototype.clear = function(name) {
+        if (this.has(name)) {
+            clearInterval(this.timers[name]);
+        }
+        return this;
+    };
+    
+    ChatTimer.prototype.clearAll = function() {
+        $each(this.timers, function(timer) {
+            clearInterval(timer);
+        });
+        this.timers = [];
+        return this;
+    };
+    
+    ChatTimer.prototype.has = function(name) {
+        return this.timers[name] !== undefined;
     };
     
     ChatStore = {
@@ -841,10 +877,10 @@ var $each = function(obj, cb) {
                 
                 script = "" +
                     "" +
-                        "(function($api, $options, $user, $channel, $proxy, $store, $script) { \n" +
+                        "(function($api, $options, $user, $channel, $proxy, $store, $timer, $script) { \n" +
                             script +
                         "\nChatAPI._pushReady();" +
-                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, " + JSON.stringify(info) + "); " +
+                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, new ChatTimer(), " + JSON.stringify(info) + "); " +
                     "";
     
                 $("<script/>").attr("type", "text/javascript")
