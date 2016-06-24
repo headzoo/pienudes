@@ -984,18 +984,21 @@ Callbacks = {
     changeMedia: function(data) {
         socket.emit("userTags");
         if (!data) {
-            ChatAPI._pushPageReady();
+            if (!MEDIA_INIT) ChatAPI._pushPageReady();
+            MEDIA_INIT = true;
             return;
         }
         
         data.uid = data.id;
         CHAT_WRAP_MEDIA = data;
         if ($("body").hasClass("chatOnly") || $("#videowrap").length === 0) {
-            ChatAPI._pushPageReady();
+            if (!MEDIA_INIT) ChatAPI._pushPageReady();
+            MEDIA_INIT = true;
             return;
         }
         if (ChatAPI.trigger("media_change", data).isCancelled()) {
-            ChatAPI._pushPageReady();
+            if (!MEDIA_INIT) ChatAPI._pushPageReady();
+            MEDIA_INIT = true;
             return;
         }
         
@@ -1044,7 +1047,8 @@ Callbacks = {
         }
 
         $("#currenttitle").text(data.title);
-        ChatAPI._pushPageReady();
+        if (!MEDIA_INIT) ChatAPI._pushPageReady();
+        MEDIA_INIT = true;
     },
 
     mediaUpdate: function(data) {

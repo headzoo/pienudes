@@ -58,6 +58,7 @@ var FOCUSED = true;
 var UNREAD_MSG_COUNT = 0;
 var PAGETITLE = "upnext.fm";
 var TITLE_BLINK;
+var MEDIA_INIT = false;
 var CHATSOUND = new Audio("/boop.wav");
 var KICKED = false;
 var NAME = readCookie("cytube_uname");
