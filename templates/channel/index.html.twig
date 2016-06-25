@@ -31,7 +31,7 @@
                 {% endif %}
                 
                 <div id="main" class="row">
-                    <div id="chatwrap" class="{% if channelName == "Punk" %}col-lg-6 col-md-6{% else %}col-lg-7 col-md-7{% endif %}">
+                    <div id="chatwrap" class="col-lg-7 col-md-7">
                         <div id="chatheader">
                             <i id="userlisttoggle" class="glyphicon glyphicon-chevron-down pull-left.pointer" title="Show/Hide Userlist"></i>
                             <span id="usercount" class="pointer">Not Connected</span>
@@ -56,7 +56,7 @@
                     </div>
 
                     <div id="videowrap-mount">
-                        <div id="videowrap" class="{% if channelName == "Punk" %}col-lg-6 col-md-6{% else %}col-lg-5 col-md-5{% endif %}" style="padding-left: 0;">
+                        <div id="videowrap" class="col-lg-5 col-md-5" style="padding-left: 0;">
                             <p id="currenttitle">Nothing Playing</p>
                             <div class="embed-responsive embed-responsive-16by9">
                                 <div id="ytapiplayer" class="embed-responsive-item"></div>
@@ -119,73 +119,16 @@
                 </div>
                 
                 <div id="playlistrow" class="row">
-                    <div id="leftpane" class="{% if channelName == "Punk" %}col-lg-6 col-md-6{% else %}col-lg-7 col-md-7{% endif %}">
+                    <div id="leftpane" class="col-lg-7 col-md-7">
                         <div id="leftpane-inner" class="row">
                             <div id="biowrap" class="col-lg-12 col-md-12">
                                 <div id="bio" class="well" style="display: none;"></div>
                             </div>
-                            {% if channelName == "Punk" %}
-                                <div id="srr-profile">
-                                    <h3>Sugar Rush Rocks</h3>
-                                    <a href="http://www.sugarrushrocks.com/" target="_blank">www.sugarrushrocks.com</a>
-                                    <p>Band starts live streaming June 25th @ 3pm EST.</p>
-                                    <div class="row">
-                                        <div class="col-sm-2">
-                                            <img src="/img/srr_paige.jpg" />
-                                            <h6>
-                                                <span>Paige Nickole</span>
-                                                Vocals, 18yo
-                                            </h6>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <img src="/img/srr_michael.jpg" />
-                                            <h6>
-                                                <span>Michael Sebastian</span>
-                                                Lead guitar, 12yo
-                                            </h6>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <img src="/img/srr_joey.jpg" />
-                                            <h6>
-                                                <span>Joey Fattore</span>
-                                                Rhythm guitar, 16yo
-                                            </h6>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <img src="/img/srr_jake.jpg" />
-                                            <h6>
-                                                <span>Jake Brightman</span>
-                                                Bass guitar, 13yo
-                                            </h6>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <img src="/img/srr_rj.jpg" />
-                                            <h6>
-                                                <span>RJ Hill</span>
-                                                Drums, 13yo
-                                            </h6>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <img src="/img/srr_400x400.jpg" style="border: none;" />
-                                        </div>
-                                    </div>
-                                    <p class="bio">
-                                        South Jersey and Philadelphia -  young, up and coming rock and roll band Sugar Rush Rocks is
-                                        available for your private parties or events!   If you love the music of the masters like
-                                        Led Zeppelin, the Beatles, Nirvana, and Van Halen you will love this band.  Gloucester County,
-                                        Camden County, and Atlantic County NJ, Philadelphia and Delaware County PA are served.
-                                    </p>
-                                    <p class="bio">
-                                        <a href="https://twitter.com/SugarRushRocks" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @SugarRushRocks</a>
-                                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                                    </p>
-                                </div>
-                            {% endif %}
                             <div id="pollwrap" class="col-lg-12 col-md-12"></div>
                             <div id="playlistmanagerwrap" class="col-lg-12 col-md-12"></div>
                         </div>
                     </div>
-                    <div id="rightpane" class="{% if channelName == "Punk" %}col-lg-6 col-md-6{% else %}col-lg-5 col-md-5{% endif %}" style="padding-left: 0;">
+                    <div id="rightpane" class="col-lg-5 col-md-5" style="padding-left: 0;">
                         <div id="rightpane-inner" class="row">
                             <div id="searchcontrol" class="collapse plcontrol-collapse col-lg-12 col-md-12">
                                 <div class="vertical-spacer"></div>
