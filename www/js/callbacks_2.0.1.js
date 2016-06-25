@@ -526,7 +526,16 @@ Callbacks = {
     },
     
     chatMsg: function (data) {
-        data.msg_clean = removeBBCodes(data.msg);
+        data.msg_clean    = removeBBCodes(data.msg);
+        data.is_mentioned = false;
+        if (CLIENT.name && data.username != CLIENT.name) {
+            if (data.msg_clean.toLowerCase().indexOf(CLIENT.name.toLowerCase()) != -1
+                || (USEROPTS.highlight_regex !== null && data.msg_clean.match(USEROPTS.highlight_regex) !== null)) {
+                
+                data.is_mentioned = true;
+            }
+        }
+        
         if (!ChatAPI.trigger("receive", data).isCancelled()) {
             addChatMessage(data);
         }
