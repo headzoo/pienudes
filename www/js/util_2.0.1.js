@@ -1760,6 +1760,8 @@ function addWhisper(data) {
 function parseBBCodes(msg) {
     msg = msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
     msg = msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');
+    msg = msg.replace(/\[i\](.*?)\[\/i\]/gi, '<span style="font-style: italic;">$1</span>');
+    msg = msg.replace(/\[b\](.*?)\[\/b\]/gi, '<span style="font-weight: bold;">$1</span>');
     
     return msg;
 }
