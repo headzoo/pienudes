@@ -44,11 +44,39 @@ function handleMedia(req, res) {
     });
 }
 
+function handleWho(req, res) {
+    var type = req.params.type;
+    var uid  = req.params.uid;
+    
+    db_media.fetchByUidAndType(uid, type, function(err, media) {
+        if (err) {
+            return res.sendStatus(500);
+        }
+        if (!media) {
+            return res.sendStatus(404);
+        }
+    
+        db_playlists.fetchUsersByMediaId(media.id, function(err, users) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            
+            var names = [];
+            users.forEach(function(user) {
+                names.push(user.name);
+            });
+            
+            res.json(names);
+        });
+    });
+}
+
 module.exports = {
     /**
      * Initializes auth callbacks
      */
     init: function (app) {
+        app.get('/tracks/who/:type/:uid', handleWho);
         app.get('/tracks/:mid/:title', handleMedia);
     }
 };
