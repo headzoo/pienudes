@@ -1259,6 +1259,17 @@ var $each = function(obj, cb) {
     
         /**
          * 
+         * @param tab_label
+         * @param id_prefix
+         * @param icon
+         * @returns {ChatOptionsForm}
+         */
+        create: function(tab_label, id_prefix, icon) {
+            return new ChatOptionsForm(tab_label, id_prefix, icon);
+        },
+    
+        /**
+         * 
          * @param label
          * @param tab_id
          * @param icon
@@ -1412,6 +1423,46 @@ var $each = function(obj, cb) {
          * 
          * @param id
          * @param label
+         * @param help
+         * @returns {*|jQuery|HTMLElement}
+         */
+        makeTextarea: function(id, label, help) {
+            var group = $('<div/>', {
+                "class": "form-group"
+            });
+    
+            $('<label/>', {
+                "class": "control-label col-sm-4",
+                "for": id,
+                "text": label
+            }).appendTo(group);
+    
+            var column = $('<div/>', {
+                "class": "col-sm-8"
+            }).appendTo(group);
+    
+            var textarea = $('<textarea/>', {
+                "id": id,
+                "class": "form-control"
+            }).appendTo(column);
+    
+            if (help) {
+                this.makeHelp(help)
+                    .appendTo(column);
+            }
+    
+            group.form_element = textarea;
+            group.input = function() {
+                return textarea;
+            };
+    
+            return group;
+        },
+    
+        /**
+         * 
+         * @param id
+         * @param label
          * @param options
          * @param help
          * @returns {*|jQuery|HTMLElement}
@@ -1491,6 +1542,26 @@ var $each = function(obj, cb) {
     
         /**
          * 
+         * @param id
+         * @param label
+         * @returns {*|jQuery|HTMLElement}
+         */
+        makeButton: function(id, label) {
+            var button = $('<button/>', {
+                "id": id,
+                "class": "btn btn-primary pull-right",
+                "type": "button",
+                "text": label
+            });
+            button.input = function() {
+                return this;
+            };
+            
+            return button;
+        },
+    
+        /**
+         * 
          * @param text
          * @returns {*|jQuery|HTMLElement}
          */
@@ -1500,6 +1571,100 @@ var $each = function(obj, cb) {
                 "text": text
             });
         }
+    };
+    
+    function ChatOptionsForm(tab_label, id_prefix, icon) {
+        $("#" + id_prefix + "-tab").remove();
+        $("#" + id_prefix + "-pane").remove();
+        
+        this.tab    = ChatOptions.makeTab(tab_label, id_prefix + "-tab", icon);
+        this.pane   = ChatOptions.makePane(id_prefix + "-pane", this.tab);
+        this.form   = this.pane.form;
+        this.inputs = {};
+        this.icon   = icon;
+    }
+    
+    ChatOptionsForm.prototype.on = function() {
+        this.form.on.apply(this.form, arguments);
+        return this;
+    };
+    
+    ChatOptionsForm.prototype.title = function(text, icon) {
+        if (icon === undefined) {
+            icon = this.icon;
+        }
+        if (icon !== undefined && icon !== null) {
+            this.append('<h4><span class="glyphicon glyphicon-' + icon + '"></span> ' + text + '</h4>');
+        } else {
+            this.append('<h4>' + text + '</h4>');
+        }
+        
+        return this;
+    };
+    
+    ChatOptionsForm.prototype.add = function(type, id, opts) {
+        if (opts.label === undefined) {
+            opts.label = "";
+        }
+        if (opts.help === undefined) {
+            opts.help = "";
+        }
+        
+        var group;
+        switch(type) {
+            case "text":
+                group = ChatOptions.makeInput(id, opts.label, "text", opts.help);
+                break;
+            case "checkbox":
+                group = ChatOptions.makeCheckbox(id, opts.label, opts.help);
+                break;
+            case "textarea":
+                group = ChatOptions.makeTextarea(id, opts.label, opts.help);
+                break;
+            case "select":
+                group = ChatOptions.makeSelect(id, opts.label, opts.options, opts.help);
+                break;
+            case "button":
+                group = ChatOptions.makeButton(id, opts.label);
+                break;
+        }
+    
+        this.inputs[id] = group.input();
+        if (opts.attr !== undefined) {
+            this.inputs[id].attr(opts.attr);
+        }
+        if (opts.val !== undefined) {
+            this.inputs[id].val(opts.val);
+        }
+        
+        this.append(group);
+        return this.inputs[id];
+    };
+    
+    ChatOptionsForm.prototype.append = function(element) {
+        this.form.append(element);
+    };
+    
+    ChatOptionsForm.prototype.remove = function() {
+        this.pane.remove();
+        this.tab.remove();
+        return this;
+    };
+    
+    ChatOptionsForm.prototype.input = function(id) {
+        return this.inputs[id];
+    };
+    
+    ChatOptionsForm.prototype.val = function(id, val) {
+        if (val === undefined) {
+            return this.input(id).val();
+        } else {
+            return this.input(id).val(val);
+        }
+    };
+    
+    ChatOptionsForm.prototype.clear = function(id) {
+        return this.input(id).val("");
     };
     
     /**

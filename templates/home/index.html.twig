@@ -3,6 +3,7 @@
 {% block content %}
     <div class="col-lg-8 col-md-8">
         <div class="row">
+            <h3 class="sidebar-widget-title">Channels</h3>
             {% for chan in channels %}
                 <div class="col-xs-12 col-sm-6 col-md-4 thumbnail-channel">
                     <a href="/r/{{ chan.name }}" class="thumbnail card">
