@@ -1,9 +1,10 @@
-var ChatAPI     = null;
-var ChatOptions = null;
-var ChatProxy   = null;
-var ChatStore   = null;
-var ChatTimer   = null;
-var UserScript  = null;
+var ChatAPI         = null;
+var ChatOptions     = null;
+var ChatProxy       = null;
+var ChatStore       = null;
+var ChatTimer       = null;
+var ChatStylesheet  = null;
+var UserScript      = null;
 
 /**
  * Iterates over an object or array
@@ -34,7 +35,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.2.6";
+    var API_VERSION        = "1.3";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 5000;
@@ -117,6 +118,45 @@ var $each = function(obj, cb) {
     
     ChatTimer.prototype.has = function(name) {
         return this.timers[name] !== undefined;
+    };
+    
+    ChatStylesheet = function(id) {
+        this.id    = id;
+        this.props = {};
+        this.head  = $("head");
+    };
+    
+    ChatStylesheet.prototype.add = function(selector, props) {
+        if (this.props[selector] === undefined) {
+            this.props[selector] = {};
+        }
+        this.props[selector] = $.extend({}, this.props[selector], props);
+        return this;
+    };
+    
+    ChatStylesheet.prototype.append = function() {
+        this.remove();
+        $(this.toString()).appendTo(this.head);
+        return this;
+    };
+    
+    ChatStylesheet.prototype.remove = function() {
+        $("#" + this.id).remove();
+        return this;
+    };
+    
+    ChatStylesheet.prototype.toString = function() {
+        var style = '<style id="' + this.id + '" type="text/css">' + "\n";
+        $each(this.props, function(props, selector) {
+            style += selector + " {\n";
+            $each(props, function(value, key) {
+                style += "\t" + key + ": " + value + ";\n";
+            });
+            style += "}\n";
+        });
+        style += '</style>';
+        
+        return style;
     };
     
     ChatStore = {
@@ -890,10 +930,10 @@ var $each = function(obj, cb) {
                 
                 script = "" +
                     "" +
-                        "(function($api, $options, $user, $channel, $proxy, $store, $timer, $script) { \n" +
+                        "(function($api, $options, $user, $channel, $proxy, $store, $timer, $stylesheet, $script) { \n" +
                             script +
                         "\nChatAPI._pushReady();" +
-                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, new ChatTimer(), " + JSON.stringify(info) + "); " +
+                        "\n})(ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, new ChatTimer(), ChatStylesheet, " + JSON.stringify(info) + "); " +
                     "";
     
                 $("<script/>").attr("type", "text/javascript")
