@@ -35,7 +35,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.3";
+    var API_VERSION        = "1.3.1";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 5000;
@@ -1431,14 +1431,16 @@ var $each = function(obj, cb) {
                 "class": "form-group"
             });
     
-            $('<label/>', {
-                "class": "control-label col-sm-4",
-                "for": id,
-                "text": label
-            }).appendTo(group);
+            if (label) {
+                $('<label/>', {
+                    "class": "control-label col-sm-4",
+                    "for": id,
+                    "text": label
+                }).appendTo(group);
+            }
     
             var column = $('<div/>', {
-                "class": "col-sm-8"
+                "class": (label ? "col-sm-8" : "col-sm-12")
             }).appendTo(group);
     
             var textarea = $('<textarea/>', {
@@ -1513,25 +1515,32 @@ var $each = function(obj, cb) {
         /**
          * 
          * @param buttons
+         * @param full_width
          * @returns {*|jQuery|HTMLElement}
          */
-        makeButtonGroup: function(buttons) {
+        makeButtonGroup: function(buttons, full_width) {
             var group = $('<div/>', {
                 "class": "form-group"
             });
             
             var column = $('<div/>', {
-                "class": "col-sm-8 col-sm-offset-4"
+                "class": (full_width ? "col-sm-12" : "col-sm-8 col-sm-offset-4")
             }).appendTo(group);
             
             var btns = [];
             $each(buttons, function(button) {
-                btns.push($('<button/>', {
+                var b = $('<button/>', {
                     "id": button.id,
                     "class": "btn btn-primary",
                     "type": "button",
                     "text": button.label
-                }).appendTo(column));
+                }).appendTo(column);
+                if (button.on !== undefined) {
+                    $each(button.on, function (cb, event) {
+                        b.on(event, cb);
+                    });
+                }
+                btns.push(b);
             });
             
             group.input = function() {
@@ -1603,6 +1612,9 @@ var $each = function(obj, cb) {
     };
     
     ChatOptionsForm.prototype.add = function(type, id, opts) {
+        if (opts === undefined) {
+            opts = {};
+        }
         if (opts.label === undefined) {
             opts.label = "";
         }
@@ -1627,6 +1639,12 @@ var $each = function(obj, cb) {
             case "button":
                 group = ChatOptions.makeButton(id, opts.label);
                 break;
+            case "button-group":
+                if (opts.full_width === undefined) {
+                    opts.full_width = false;
+                }
+                group = ChatOptions.makeButtonGroup(id, opts.full_width);
+                break;
         }
     
         this.inputs[id] = group.input();
@@ -1635,6 +1653,11 @@ var $each = function(obj, cb) {
         }
         if (opts.val !== undefined) {
             this.inputs[id].val(opts.val);
+        }
+        if (opts.on !== undefined) {
+            $each(opts.on, function(cb, event) {
+                this.inputs[id].on(event, cb);
+            }.bind(this));
         }
         
         this.append(group);
