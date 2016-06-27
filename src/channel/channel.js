@@ -703,6 +703,11 @@ Channel.prototype.joinUser = function (user, data) {
 Channel.prototype.acceptUser = function (user) {
     user.channel = this;
     
+    if (!this.is(Flags.C_REGISTERED)) {
+        user.socket.emit("channelNotRegistered");
+        return;
+    }
+    
     this.sendUserScripts(user, function() {
         user.setFlag(Flags.U_IN_CHANNEL);
         user.socket.join(this.name);
