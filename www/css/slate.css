@@ -6740,10 +6740,9 @@ a.list-group-item-danger.active:hover {
   background-color: #555555;
 }
 footer {
-  background-color: #161a20 !important;
+  background-color: #1A1A19 !important;
 }
 footer.homepage-footer {
-  background-color: transparent !important;
   color: #FFF;
 }
 footer.homepage-footer .text-muted {
