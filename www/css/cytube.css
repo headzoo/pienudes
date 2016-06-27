@@ -830,8 +830,8 @@ input:focus {
   overflow: hidden;
 }
 .homepage {
-  background: url(https://uploads.upnext.fm/lobby/background4.jpg) top center no-repeat;
-  background-size: contain;
+  background: url(/img/home_bg.jpg) top center no-repeat;
+  background-size: cover;
 }
 .homepage input.form-control[type="text"],
 .homepage input.form-control[type="password"] {
