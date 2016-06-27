@@ -42,7 +42,8 @@
   display: block;
   margin: 0 auto;
 }
-#chat-log-box .embedded-image {
+#chat-log-box .embedded-image,
+#chat-log-box .embedded-video {
   max-height: 125px;
 }
 #chat-logs-channels,

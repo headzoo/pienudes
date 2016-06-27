@@ -64,8 +64,9 @@ body {
   overflow-y: scroll;
   margin-bottom: 0;
 }
-#messagebuffer .embedded-image {
-  max-height: 75px;
+#messagebuffer .embedded-image,
+#messagebuffer .embedded-video {
+  max-height: 125px;
   margin: 2px 0;
 }
 #chatline,
@@ -567,7 +568,8 @@ body.chatOnly .pm-panel-placeholder {
   right: auto;
   left: -6px;
 }
-.pm-buffer .chat-msg .chat-msg-line .embedded-image {
+.pm-buffer .chat-msg .chat-msg-line .embedded-image,
+.pm-buffer .chat-msg .chat-msg-line .embedded-video {
   max-height: 100px;
 }
 .pm-buffer .chat-msg .timestamp {

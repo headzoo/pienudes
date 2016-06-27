@@ -13,7 +13,8 @@ const ALLOWED_TAGS = [
     "section",
     "span",
     "summary",
-    "audio"
+    "audio",
+    "video"
 ];
 
 const ALLOWED_ATTRIBUTES = [
@@ -43,7 +44,8 @@ var ATTRIBUTE_MAP = {
     table: ["cellpadding", "cellspacing"],
     th: ["colspan", "rowspan"],
     td: ["colspan", "rowspan"],
-    audio: ["src", "autoplay", "controls"]
+    audio: ["src", "autoplay", "controls"],
+    video: ["src", "autoplay", "loop", "muted", "controls", "preload"]
 }
 
 for (var key in ATTRIBUTE_MAP) {

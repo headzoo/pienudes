@@ -395,6 +395,8 @@ ChatModule.prototype.filterMessage = function (msg) {
         } else if (convertLinks) {
             if (link.match(/(https?:\/\/.*\.(?:png|jpe?g|gif))\b/i)) {
                 return "<a href=\"" + link + "\" target=\"_blank\"><img src=\"/proxy/image?u=" + link + "\" class=\"embedded-image\" /></a>";
+            } else if (link.match(/(https?:\/\/.*\.(?:webm|mp4|gifv))\b/i)) {
+                return "<a href=\"" + link + "\" target=\"_blank\"><video src=\"/proxy/image?u=" + link.replace(".gifv", ".mp4") + "\" class=\"embedded-video\" preload=\"auto\" autoplay=\"autoplay\" loop=\"loop\" muted=\"muted\"></video></a>";
             } else {
                 return "<a href=\"" + link + "\" target=\"_blank\">" + link + "</a>";
             }
