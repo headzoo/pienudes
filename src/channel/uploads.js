@@ -414,7 +414,7 @@ UploadModule.prototype.handleAttachment = function(user, data) {
                 var url = Config.get("attachments.uploads_url") + filename;
                 var msg = "";
                 if (data.type.indexOf("image") !== -1) {
-                    msg = '<a href="' + url + '" target="_blank"><img src="' + url + '" /></a>';
+                    msg = '<a href="' + url + '" target="_blank"><img src="' + url + '" class="embedded-image" /></a>';
                 } else {
                     msg = '[#CC9B31]File Attachment:[/#] <a href="' + url + '" target="_blank">(' + data.type + ') ' + data.name + '</a>';
                 }
