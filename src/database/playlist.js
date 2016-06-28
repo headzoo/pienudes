@@ -345,6 +345,17 @@ module.exports = {
         });
     },
     
+    countByMediaID: function(media_id, callback) {
+        callback = callback || noop;
+        db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `media_id` = ?", [media_id], function(err, rows) {
+            if (err) {
+                callback(err, []);
+                return;
+            }
+            callback(null, rows[0]["c"]);
+        });
+    },
+    
     countByUser: function(user, callback) {
         callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `user` = ?", [user], function(err, rows) {

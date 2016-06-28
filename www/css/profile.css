@@ -316,8 +316,7 @@
 }
 .card-media-title {
   font-size: 16px;
-  margin-right: 120px;
-  margin-top: 4px;
+  margin-top: 6px;
   margin-bottom: 2px;
   display: block;
   max-height: 22px;
@@ -328,7 +327,6 @@
 .card-media-title.smaller {
   font-size: 14px;
   line-height: 15px;
-  margin-right: 25px;
   max-height: 80px;
 }
 .card-media-time {
@@ -349,4 +347,8 @@
 }
 .card-media-common a {
   color: #C1882B;
+}
+.card-play-count {
+  font-size: 12px;
+  color: #B7B7B7;
 }

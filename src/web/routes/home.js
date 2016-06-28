@@ -6,6 +6,7 @@ import db_playlists from '../../database/playlist';
 import db_votes from '../../database/votes';
 import db_tags from '../../database/tags';
 var moment = require('moment');
+var async  = require('async');
 
 function handleUserAgreement(req, res) {
     template.send(res, 'home/tos', {
@@ -124,6 +125,14 @@ function handleTags(req, res) {
     });
 }
 
+function findPlayCount(row, callback) {
+    db_playlists.countByMediaID(row.media_id, function(err, count) {
+        if (err) return callback(err);
+        row.play_count = count;
+        callback(null, row);
+    });
+}
+
 module.exports = {
     /**
      * Initializes auth callbacks
@@ -148,13 +157,20 @@ module.exports = {
                 db_playlists.fetch(3, 0, function(err, recent_rows) {
                     db_playlists.fetchMostWatchedByDate(today, 3, function(err, top_rows) {
                         db_votes.fetchMostUpvotedByDate(today, 3, function(err, voted_rows) {
-                            template.send(res, 'home/index', {
-                                pageTitle: "upnext.fm - Music and Chat",
-                                top_media: top_rows,
-                                recent_media: recent_rows,
-                                voted_rows: voted_rows,
-                                channels: channels,
-                                today: today
+                            
+                            async.map(recent_rows, findPlayCount, function() {
+                                async.map(top_rows, findPlayCount, function() {
+                                    async.map(voted_rows, findPlayCount, function() {
+                                        template.send(res, 'home/index', {
+                                            pageTitle: "upnext.fm - Music and Chat",
+                                            top_media: top_rows,
+                                            recent_media: recent_rows,
+                                            voted_rows: voted_rows,
+                                            channels: channels,
+                                            today: today
+                                        });
+                                    });
+                                });
                             });
                         });
                     });

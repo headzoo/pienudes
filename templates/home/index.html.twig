@@ -36,9 +36,6 @@
             <ul class="sidebar-list">
                 {% for m in recent_media %}
                     <div class="card card-media">
-                        <div class="card-media-time">
-                            {{ m.time|fromNow }}{% if m.channel %}{% endif %}
-                        </div>
                         {{ links.thumbnail(m, "card-media-thumbnail") }}
                         {{ links.media(m, "card-media-title smaller") }}
                         {% if m.user %}
@@ -46,6 +43,9 @@
                                 <a href="/tracks/{{ m.media_id }}/{{ m.title|urlencode }}">{{ m.user }}</a>
                             </div>
                         {% endif %}
+                        <div class="card-play-count">
+                            {{ m.play_count }} plays &middot; {{ m.time|fromNow }} ago
+                        </div>
                     </div>
                 {% endfor %}
             </ul>
