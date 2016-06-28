@@ -67,7 +67,7 @@
                                 </div>
                             {% endif %}
                             <div class="card-play-count">
-                                {{ m.play_count }} plays &middot; {{ m.time|fromNow }} ago
+                                {{ m.play_count }} plays
                             </div>
                         </div>
                     {% endfor %}
@@ -83,9 +83,6 @@
                 <ul class="sidebar-list">
                     {% for m in voted_rows %}
                         <div class="card card-media">
-                            <div class="card-media-time">
-                                {{ m.vote_count|comma }} votes
-                            </div>
                             {{ links.thumbnail(m, "card-media-thumbnail") }}
                             {{ links.media(m, "card-media-title smaller") }}
                             {% if m.user %}
@@ -93,6 +90,9 @@
                                     <a href="/user/{{ m.user }}">{{ m.user }}</a>
                                 </div>
                             {% endif %}
+                            <div class="card-play-count">
+                                {{ m.play_count }} plays &middot; {{ m.vote_count|comma }} votes
+                            </div>
                         </div>
                     {% endfor %}
                 </ul>
