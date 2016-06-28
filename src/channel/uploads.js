@@ -440,6 +440,7 @@ UploadModule.prototype.handleAttachment = function(user, data) {
         Key: filename,
         Body: data.data,
         ContentType: data.type,
+        ContentDisposition: 'attachment; filename=' + data.name,
         ACL: 'public-read'
     });
 };

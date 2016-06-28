@@ -260,6 +260,7 @@ $(function() {
                 type: file.type,
                 data: fr.result
             });
+            chat_attachment_file.val("");
         });
         fr.readAsArrayBuffer(file);
     });
