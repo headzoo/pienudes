@@ -1179,6 +1179,8 @@ PlaylistModule.prototype._delete = function (uid, is_clean) {
     if (!item) {
         return false;
     }
+    
+    var time_played = item.media.currentTime;
     var next = item.next || this.items.first;
 
     var success = self.items.remove(uid);
@@ -1199,12 +1201,14 @@ PlaylistModule.prototype._delete = function (uid, is_clean) {
             var queueby = self.current.queueby;
             
             db_media.insertIgnore(media.id, media.type, media.title, media.seconds, function (err, media_id) {
-                if (!err && media_id != 4291 && media_id != 9562) {
-                    db_playlist.fetchLast(function(err, last_play) {
-                        if (last_play && last_play.media_id != media_id) {
-                            db_playlist.insert(media_id, self.channel.name, queueby);
-                        }
-                    });
+                if (!err) {
+                    if (time_played > 60) {
+                        db_playlist.fetchLast(function (err, last_play) {
+                            if (last_play && last_play.media_id != media_id) {
+                                db_playlist.insert(media_id, self.channel.name, queueby);
+                            }
+                        });
+                    }
                 }
             });
         }
@@ -1403,7 +1407,7 @@ PlaylistModule.prototype.startPlayback = function (time) {
     if (!self.current || !self.current.media) {
         return false;
     }
-
+    
     var media = self.current.media;
     media.reset();
 
