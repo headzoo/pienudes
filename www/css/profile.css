@@ -318,6 +318,7 @@
   font-size: 16px;
   margin-right: 120px;
   margin-top: 4px;
+  margin-bottom: 2px;
   display: block;
   max-height: 22px;
   overflow: hidden;
@@ -325,9 +326,9 @@
   text-overflow: ellipsis;
 }
 .card-media-title.smaller {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 14px;
-  margin-right: 62px;
+  margin-right: 25px;
   max-height: 80px;
 }
 .card-media-time {
@@ -338,6 +339,9 @@
   overflow: hidden;
   margin-right: 6px;
   margin-top: 2px;
+}
+.card-channel-name {
+  font-size: 12px;
 }
 .card-media-common {
   font-size: 12px;
