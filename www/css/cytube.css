@@ -801,6 +801,8 @@ input:focus {
 .homepage .sidebar-widget,
 .homepage .card {
   background-color: rgba(27, 27, 27, 0.8);
+  border-radius: 0;
+  padding: 0;
 }
 .thumbnail:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
@@ -822,17 +824,18 @@ input:focus {
 }
 .thumbnail-channel-users {
   position: absolute;
-  font-size: 12px;
-  right: 20px;
+  font-size: 10px;
+  right: 12px;
+  bottom: 2px;
 }
 .thumbnail-channel-users .glyphicon {
-  font-size: 10px;
+  font-size: 8px;
   vertical-align: top;
   display: inline-block;
   margin-top: 1px;
 }
 .thumbnail-channel-playing {
-  font-size: 12px;
+  font-size: 10px;
   max-height: 32px;
   overflow: hidden;
 }
