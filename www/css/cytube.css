@@ -800,7 +800,7 @@ input:focus {
 .homepage .thumbnail,
 .homepage .sidebar-widget,
 .homepage .card {
-  background-color: rgba(27, 27, 27, 0.8);
+  background-color: rgba(27, 27, 27, 0.9);
   border-radius: 0;
 }
 .homepage .thumbnail {
