@@ -12,6 +12,8 @@ var crypto         = require('crypto');
 var db_uploads     = require('../database/uploads');
 var db_emotes      = require('../database/emotes');
 var db_attachments = require('../database/attachments');
+var db_chat_logs   = require('../database/chat_logs');
+var db_channels    = require('../database/channels');
 
 function UploadModule(channel) {
     ChannelModule.apply(this, arguments);
@@ -418,11 +420,16 @@ UploadModule.prototype.handleAttachment = function(user, data) {
                 } else {
                     msg = '[#CC9B31]File Attachment:[/#] <a href="' + url + '" target="_blank">(' + data.type + ') ' + data.name + '</a>';
                 }
-                this.channel.broadcastAll("chatAttachment", {
+                
+                var msgobj = {
                     username: user.account.name,
                     msg: msg,
                     meta: {},
                     time: Date.now()
+                };
+                this.channel.broadcastAll("chatAttachment", msgobj);
+                db_channels.lookup(this.channel.name, function(err, chan) {
+                    db_chat_logs.insert(chan.id, user.getName(), 'message', msg, JSON.stringify(msgobj.meta));
                 });
             }.bind(this));
         }.bind(this));
