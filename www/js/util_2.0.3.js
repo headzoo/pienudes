@@ -1055,6 +1055,7 @@ function handlePermissionChange() {
     
     setVisible("#us-scripting-tab", hasPermission("scripting"));
     setVisible("#us-scripting", hasPermission("scripting"));
+    setVisible("#chat-attachment-btn", hasPermission("attachment"));
 
     setVisible("#newpollbtn", hasPermission("pollctl"));
     $("#voteskip").attr("disabled", !hasPermission("voteskip") ||
@@ -2186,6 +2187,7 @@ function genPermissionsEditor() {
     makeOption("Clear Chat", "chatclear", modleader, CHANNEL.perms.chatclear+"");
     makeOption("User Scripting", "scripting", standard, CHANNEL.perms.scripting+"");
     makeOption("Chat Commands", "chat_commands", noanon, CHANNEL.perms.chat_commands+"");
+    makeOption("Chat Attachment", "attachment", noanon, CHANNEL.perms.attachment+"");
 
     var sgroup = $("<div/>").addClass("form-group").appendTo(form);
     var sgroupinner = $("<div/>").addClass("col-sm-8 col-sm-offset-4").appendTo(sgroup);

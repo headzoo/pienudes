@@ -35,7 +35,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.3.1";
+    var API_VERSION        = "1.3.2";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 5000;
@@ -1153,6 +1153,7 @@ var $each = function(obj, cb) {
                 reloading: [],
                 loaded: [],
                 receive: [],
+                attachment: [],
                 send: [],
                 notice: [],
                 whisper: [],

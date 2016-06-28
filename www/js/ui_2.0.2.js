@@ -236,6 +236,36 @@ $(function() {
             data.textarea.focus();
         }, 250);
     });
+    
+    var chat_attachment_btn  = $("#chat-attachment-btn");
+    var chat_attachment_file = $("#chat-attachment-file");
+    chat_attachment_file.on("change", function() {
+        if (this.files.length == 0 || !hasPermission("attachment")) {
+            return;
+        }
+        
+        var file = this.files[0];
+        var fr   = new FileReader();
+        if (file.size > 1048576) {
+            alert("Attachments exceeds 10MB limit.");
+            return;
+        }
+    
+        chat_attachment_btn
+            .empty()
+            .append('<img src="/img/spinner2.gif" />');
+        fr.addEventListener("loadend", function() {
+            socket.emit("chatAttachment", {
+                name: file.name,
+                type: file.type,
+                data: fr.result
+            });
+        });
+        fr.readAsArrayBuffer(file);
+    });
+    chat_attachment_btn.on("click", function() {
+        chat_attachment_file.click();
+    });
 });
 
 

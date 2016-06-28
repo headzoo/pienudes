@@ -867,6 +867,14 @@ input:focus {
 .sp-dd {
   color: #fff;
 }
+#chat-attachment-btn {
+  background-color: #34393D !important;
+  background-image: none;
+}
+#chat-attachment-btn img {
+  width: 14px;
+  height: 14px;
+}
 .requeue-icon {
   font-size: 12px;
   vertical-align: middle;

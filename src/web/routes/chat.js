@@ -21,7 +21,7 @@ function handleLogsIndex(req, res) {
         });
         template.send(res, 'chat/logs', {
             pageTitle: "Chat Logs",
-            pageScripts: ["/js/data_2.0.1.js", "/js/util_2.0.2.js", "/js/bbq.js", "/js/chat_logs.js"],
+            pageScripts: ["/js/data_2.0.2.js", "/js/util_2.0.3.js", "/js/bbq.js", "/js/chat_logs.js"],
             channels: channels
         });
     });

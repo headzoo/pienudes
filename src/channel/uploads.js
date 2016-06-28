@@ -1,15 +1,17 @@
 "use strict";
-var ChannelModule = require("./module");
-var Config        = require('../config');
-var XSS           = require("../xss");
-var AWS           = require('aws-sdk');
-var fs            = require('fs');
-var url           = require("url");
-var path          = require("path");
-var emotes        = require('./emotes');
-var request       = require('request');
-var db_uploads    = require('../database/uploads');
-var db_emotes     = require('../database/emotes');
+var ChannelModule  = require("./module");
+var Config         = require('../config');
+var XSS            = require("../xss");
+var AWS            = require('aws-sdk');
+var fs             = require('fs');
+var url            = require("url");
+var path           = require("path");
+var emotes         = require('./emotes');
+var request        = require('request');
+var crypto         = require('crypto');
+var db_uploads     = require('../database/uploads');
+var db_emotes      = require('../database/emotes');
+var db_attachments = require('../database/attachments');
 
 function UploadModule(channel) {
     ChannelModule.apply(this, arguments);
@@ -23,6 +25,7 @@ UploadModule.prototype.onUserPostJoin = function (user) {
     user.socket.on("removeUpload", this.handleRemove.bind(this, user));
     user.socket.on("userEmoteUpload", this.handleUploadEmote.bind(this, user));
     user.socket.on("userEmoteRemove", this.handleRemoveEmote.bind(this, user));
+    user.socket.on("chatAttachment", this.handleAttachment.bind(this, user));
     this.sendUploads([user]);
     this.sendEmotes(user);
 };
@@ -371,11 +374,75 @@ UploadModule.prototype.handleRemoveEmote = function(user, data) {
     });
 };
 
-function makeRandom() {
+UploadModule.prototype.handleAttachment = function(user, data) {
+    if (!this.channel || typeof data !== "object") {
+        return;
+    }
+    if (!this.channel.modules.permissions.canAttachment(user)) {
+        return;
+    }
+    
+    if (data.data.length > Config.get("attachments.bytes_per_file")) {
+        user.socket.emit("errorMsg", {
+            msg: "File exceeds max byte value of " + Config.get("attachments.bytes_per_file") + " bytes.",
+            alert: true
+        });
+        return;
+    }
+    
+    var md5    = crypto.createHash("md5").update(data.data).digest("hex");
+    var bucket = new AWS.S3({params: {Bucket: Config.get("attachments.s3_bucket")}});
+    var upload = function(filename, params) {
+        bucket.upload(params, function(err) {
+            if (err) {
+                user.socket.emit("errorMsg", {
+                    msg: "Error uploading file. Try again in a minute.",
+                    alert: true
+                });
+                return;
+            }
+            
+            db_attachments.insert(user.account.id, this.channel.name, filename, data.data.length, data.type, md5, function(err) {
+                if (err) {
+                    user.socket.emit("errorMsg", {
+                        msg: "Error uploading file. Try again in a minute.",
+                        alert: true
+                    });
+                    return;
+                }
+                
+                var url = Config.get("attachments.uploads_url") + filename;
+                var msg = "";
+                if (data.type.indexOf("image") !== -1) {
+                    msg = '<a href="' + url + '" target="_blank"><img src="' + url + '" /></a>';
+                } else {
+                    msg = '[#CC9B31]File Attachment:[/#] <a href="' + url + '" target="_blank">(' + data.type + ') ' + data.name + '</a>';
+                }
+                this.channel.broadcastAll("chatAttachment", {
+                    username: user.account.name,
+                    msg: msg,
+                    meta: {},
+                    time: Date.now()
+                });
+            }.bind(this));
+        }.bind(this));
+    }.bind(this);
+    
+    var filename = user.account.name + "/" + md5 + "_" + data.name;
+    upload(filename, {
+        Key: filename,
+        Body: data.data,
+        ContentType: data.type,
+        ACL: 'public-read'
+    });
+};
+
+function makeRandom(len) {
+    len = len || 8;
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     
-    for( var i=0; i < 8; i++ )
+    for( var i = 0; i < len; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     
     return text;

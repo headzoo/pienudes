@@ -140,12 +140,26 @@ mail:
 uploads:
   # Max bytes of uploads allowed per channel.
   bytes_per_channel: 1073741824
+  
   # Max bytes per file.
   bytes_per_file: 5242880
+  
   # Name of the bucket where the files are stored.
   s3_bucket: uploads.pienudes.com
+  
   # Must contain a trailing slash.
   uploads_url: 'https://uploads.pienudes.com/'
+  
+# Chat attachment settings.
+attachments:
+  # Max bytes per file.
+  bytes_per_file: 1048576
+  
+  # Name of the bucket where the files are stored.
+  s3_bucket: attachments.upnext.fm
+  
+  # Must contain a trailing slash.
+  uploads_url: 'https://attachments.upnext.fm/'
   
 # User emote settings.
 emotes:

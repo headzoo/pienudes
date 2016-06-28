@@ -169,6 +169,19 @@ const TBL_EMOTES = "" +
     "PRIMARY KEY (`id`)," +
     "UNIQUE INDEX(`user_id`, `text`) " +
     ") CHARACTER SET utf8";
+
+const TBL_ATTACHMENTS = "" +
+    "CREATE TABLE IF NOT EXISTS `attachments` (" +
+    "`id` INT NOT NULL AUTO_INCREMENT," +
+    "`user_id` VARCHAR(30) NOT NULL," +
+    "`channel` VARCHAR(30) NOT NULL," +
+    "`path` VARCHAR(255) NOT NULL," +
+    "`size` INT NOT NULL," +
+    "`type` VARCHAR(20) NOT NULL, " +
+    "`md5` CHAR(32) NOT NULL, " +
+    "`time` BIGINT NOT NULL," +
+    "PRIMARY KEY (`id`)" +
+    ") CHARACTER SET utf8";
     
 const TBL_CHAT_LOGS = "" +
     "CREATE TABLE IF NOT EXISTS `chat_logs` (" +
@@ -274,6 +287,7 @@ module.exports.init = function (queryfn, cb) {
         playlist_history: TBL_PLAYLIST_HISTORY,
         uploads: TBL_UPLOADS,
         emotes: TBL_EMOTES,
+        attachments: TBL_ATTACHMENTS,
         chat_logs: TBL_CHAT_LOGS,
         votes: TBL_VOTES,
         favorites: TBL_FAVORITES,

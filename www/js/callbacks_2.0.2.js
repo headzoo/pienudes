@@ -1450,6 +1450,15 @@ Callbacks = {
         ue.find("button:first").prop("disabled", false).html("Upload");
         errDialog(data.msg);
     },
+    
+    chatAttachment: function(data) {
+        $("#chat-attachment-btn")
+            .empty()
+            .append('<span class="glyphicon glyphicon-paperclip"></span>');
+        if (!ChatAPI.trigger("attachment", data).isCancelled()) {
+            addChatMessage(data);
+        }
+    },
 
     warnLargeChandump: function (data) {
         function toHumanReadable(size) {
@@ -1473,7 +1482,7 @@ Callbacks = {
             "will not be saved until the size is reduced to under the limit.")
             .attr("id", "chandumptoobig");
     }
-}
+};
 
 var SOCKET_DEBUG = localStorage.getItem('cytube_socket_debug') === 'true';
 setupCallbacks = function() {

@@ -10,7 +10,7 @@ module.exports = {
     /**
      * Returns the emotes for the given user
      */
-     fetchByUserId: function(user_id, callback) {
+    fetchByUserId: function(user_id, callback) {
         callback = callback || noop;
         
         db.query(
