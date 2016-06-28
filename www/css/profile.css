@@ -318,6 +318,7 @@
   font-size: 16px;
   margin-top: 6px;
   margin-bottom: 2px;
+  margin-right: 4px;
   display: block;
   max-height: 22px;
   overflow: hidden;
@@ -328,6 +329,7 @@
   font-size: 14px;
   line-height: 15px;
   max-height: 80px;
+  margin-right: 4px;
 }
 .card-media-time {
   font-size: 12px;
