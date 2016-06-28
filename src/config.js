@@ -78,7 +78,7 @@ var defaults = {
         uploads_url: "https://uploads.upnext.fm/"
     },
     attachments: {
-        bytes_per_file: 1048576,
+        bytes_per_file: 10485760,
         s3_bucket: "attachments.upnext.fm",
         uploads_url: "https://attachments.upnext.fm/"
     },

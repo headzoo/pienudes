@@ -246,7 +246,7 @@ $(function() {
         
         var file = this.files[0];
         var fr   = new FileReader();
-        if (file.size > 1048576) {
+        if (file.size > 10485760) {
             alert("Attachments exceeds 10MB limit.");
             return;
         }
