@@ -365,7 +365,7 @@ Channel.prototype.installUserScript = function(user, data) {
                     var checksum = crypto.createHash("md5").update(body).digest("hex");
                     if (meta[id].checksum !== checksum) {
                         return user.socket.emit("errorMsg", {
-                            msg: "Script failed checksum test. Cannot install."
+                            msg: "Unable to download and install script. Try again in a minute."
                         });
                     }
                     
@@ -702,11 +702,6 @@ Channel.prototype.joinUser = function (user, data) {
 
 Channel.prototype.acceptUser = function (user) {
     user.channel = this;
-    
-    if (!this.is(Flags.C_REGISTERED)) {
-        user.socket.emit("channelNotRegistered");
-        return;
-    }
     
     this.sendUserScripts(user, function() {
         user.setFlag(Flags.U_IN_CHANNEL);

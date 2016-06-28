@@ -131,8 +131,6 @@ Callbacks = {
     },
     
     channelNotRegistered: function () {
-        document.location = "/";
-        return;
         var div = $("<div/>").addClass("alert alert-info")
             .appendTo($("<div/>").addClass("col-md-12").appendTo($("#announcements")));
         

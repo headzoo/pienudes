@@ -249,13 +249,7 @@ function handleNewChannel(req, res) {
         res.send(400);
         return;
     }
-    template.send(res, "account/channels", {
-        pageTitle: "New Channel",
-        channels: [],
-        newChannelError: "Channel registration is disabled."
-    });
-    return;
-    
+
     if (!req.user) {
         return template.send(res, "account/channels", {
             pageTitle: "New Channel",
