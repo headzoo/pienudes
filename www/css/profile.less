@@ -293,10 +293,10 @@
 .card {
   background: @color-card-bg;
   display: block;
-  min-height: 102px;
+  min-height: 92px;
   position: relative;
   width: 100%;
-  padding: 6px;
+  padding: 0;
   border-bottom: 1px solid @color-card-border;
   border-left: 1px solid @color-card-border;
   border-right: 1px solid @color-card-border;
@@ -317,16 +317,12 @@
     .card-media-remove-btn {
       opacity: 1.0;
     }
-
-    .card-media-thumbnail {
-      border: 1px solid lighten(@color-card-border-lite, 5%);
-    }
   }
 
   .card-media-remove-btn {
     position: absolute;
-    top: 74px;
-    left: 132px;
+    top: 66px;
+    left: 122px;
     cursor: pointer;
     color: @color-card-bg;
     opacity: 0;
@@ -349,6 +345,7 @@
 .card-media-title {
   font-size: 16px;
   margin-right: 120px;
+  margin-top: 4px;
   display: block;
   max-height: 22px;
   overflow: hidden;
@@ -369,12 +366,13 @@
   text-align: right;
   max-width: 60px;
   overflow: hidden;
+  margin-right: 6px;
+  margin-top: 2px;
 }
 
 .card-media-common {
   font-size: 12px;
   color: #DF9C2F;
-  margin-top: 6px;
   
   a {
     color: #DF9C2F;
