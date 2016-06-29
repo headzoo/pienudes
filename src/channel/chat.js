@@ -57,6 +57,7 @@ function ChatModule(channel) {
     this.registerCommand("/unmute", this.handleCmdUnmute.bind(this));
     this.registerCommand("/unsmute", this.handleCmdUnmute.bind(this));
     this.registerCommand("/announce", this.handleCmdAnnounce.bind(this));
+    this.registerCommand("/reload", this.handleCmdReload.bind(this));
     this.registerCommand("/w", this.handleCmdWhisper.bind(this));
 }
 
@@ -771,6 +772,16 @@ ChatModule.prototype.handleCmdAnnounce = function(user, msg) {
             msg: message,
             type: "info"
         });
+    });
+};
+
+ChatModule.prototype.handleCmdReload = function(user) {
+    if (user.account.globalRank < 256) {
+        return;
+    }
+    
+    Server.getServer().channels.forEach(function(channel) {
+        channel.broadcastAll("reload");
     });
 };
 

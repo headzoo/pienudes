@@ -1459,6 +1459,10 @@ Callbacks = {
             addCard(data);
         }
     },
+    
+    reload: function() {
+        location.reload(true);
+    },
 
     warnLargeChandump: function (data) {
         function toHumanReadable(size) {
