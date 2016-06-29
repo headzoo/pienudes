@@ -892,7 +892,12 @@ Callbacks = {
 
     queue: function(data) {
         data.item.media.uid = data.item.media.id;
+        
+        // @deprecated
         if (ChatAPI.trigger("queue", data).isCancelled()) {
+            return;
+        }
+        if (ChatPlaylist.trigger("queue", data).isCancelled()) {
             return;
         }
         
@@ -1011,7 +1016,14 @@ Callbacks = {
             MEDIA_INIT = true;
             return;
         }
+        
+        // @deprecated
         if (ChatAPI.trigger("media_change", data).isCancelled()) {
+            if (!MEDIA_INIT) ChatAPI._pushPageReady();
+            MEDIA_INIT = true;
+            return;
+        }
+        if (ChatPlaylist.trigger("media_change", data).isCancelled()) {
             if (!MEDIA_INIT) ChatAPI._pushPageReady();
             MEDIA_INIT = true;
             return;
@@ -1072,7 +1084,7 @@ Callbacks = {
         }
 
         if (PLAYER) {
-            if (!ChatAPI.trigger("media_update", data).isCancelled()) {
+            if (!ChatPlaylist.trigger("media_update", data).isCancelled()) {
                 handleMediaUpdate(data);
             }
         }
@@ -1150,14 +1162,21 @@ Callbacks = {
     },
     
     changeVotes: function(data) {
+        // @deprecated
         if (!ChatAPI.trigger("votes", data).isCancelled()) {
-            $("#voteupvalue").text(data.up);
-            $("#votedownvalue").text(data.down);
+            if (!ChatPlaylist.trigger("votes", data).isCancelled()) {
+                $("#voteupvalue").text(data.up);
+                $("#votedownvalue").text(data.down);
+            }
         }
     },
     
     changeUserVideoVote: function(data) {
+        // @deprecated
         if (ChatAPI.trigger("vote_value", data).isCancelled()) {
+            return;
+        }
+        if (ChatPlaylist.trigger("vote_value", data).isCancelled()) {
             return;
         }
         
@@ -1172,7 +1191,11 @@ Callbacks = {
     },
     
     favoriteAdded: function(data) {
+        // @deprecated
         if (ChatAPI.trigger("favorite_add", data).isCancelled()) {
+            return;
+        }
+        if (ChatPlaylist.trigger("favorite_add", data).isCancelled()) {
             return;
         }
         formatFavorites([data.media], true);
@@ -1186,7 +1209,11 @@ Callbacks = {
     },
     
     favoritesGet: function(favorites) {
+        // @deprecated
         if (ChatAPI.trigger("favorites", favorites).isCancelled()) {
+            return;
+        }
+        if (ChatPlaylist.trigger("favorites", favorites).isCancelled()) {
             return;
         }
         var list = $("#favorites-thumbs");
@@ -1213,7 +1240,11 @@ Callbacks = {
     },
     
     userTagsGet: function(tags) {
+        // @deprecated
         if (ChatAPI.trigger("tags", tags).isCancelled()) {
+            return;
+        }
+        if (ChatPlaylist.trigger("tags", tags).isCancelled()) {
             return;
         }
         var list = $("#favorites-tag-list");
