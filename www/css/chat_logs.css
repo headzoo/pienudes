@@ -31,6 +31,9 @@
   font-size: 14px;
   margin-right: 150px;
 }
+#chat-log-box .chat-msg-card-line {
+  margin: 5px 0 !important;
+}
 #chat-log-box .card-media {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;

@@ -1456,7 +1456,7 @@ Callbacks = {
             .empty()
             .append('<span class="glyphicon glyphicon-paperclip"></span>');
         if (!ChatAPI.trigger("attachment", data).isCancelled()) {
-            addChatMessage(data);
+            addCard(data);
         }
     },
 

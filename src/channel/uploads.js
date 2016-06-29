@@ -392,6 +392,7 @@ UploadModule.prototype.handleAttachment = function(user, data) {
         return;
     }
     
+    var is_img = (data.type.indexOf("image") !== -1);
     var md5    = crypto.createHash("md5").update(data.data).digest("hex");
     var bucket = new AWS.S3({params: {Bucket: Config.get("attachments.s3_bucket")}});
     var upload = function(filename, params) {
@@ -413,36 +414,38 @@ UploadModule.prototype.handleAttachment = function(user, data) {
                     return;
                 }
                 
-                var url = Config.get("attachments.uploads_url") + filename;
-                var msg = "";
-                if (data.type.indexOf("image") !== -1) {
-                    msg = '<a href="' + url + '" target="_blank"><img src="' + url + '" class="embedded-image" /></a>';
-                } else {
-                    msg = '[#CC9B31]File Attachment:[/#] <a href="' + url + '" target="_blank">(' + data.type + ') ' + data.name + '</a>';
-                }
-                
                 var msgobj = {
                     username: user.account.name,
-                    msg: msg,
-                    meta: {},
+                    msg: Config.get("attachments.uploads_url") + filename,
+                    card: {
+                        is_inline_image: is_img,
+                        title: data.name,
+                        size: data.data.length,
+                        type: data.type,
+                        icon: ""
+                    },
                     time: Date.now()
                 };
+                
                 this.channel.broadcastAll("chatAttachment", msgobj);
                 db_channels.lookup(this.channel.name, function(err, chan) {
-                    db_chat_logs.insert(chan.id, user.getName(), 'message', msg, JSON.stringify(msgobj.meta));
+                    db_chat_logs.insert(chan.id, user.getName(), 'card', msgobj.msg, JSON.stringify(msgobj.card));
                 });
             }.bind(this));
         }.bind(this));
     }.bind(this);
     
     var filename = user.account.name + "/" + md5 + "_" + data.name;
-    upload(filename, {
+    var params = {
         Key: filename,
         Body: data.data,
         ContentType: data.type,
-        ContentDisposition: 'attachment; filename=' + data.name,
         ACL: 'public-read'
-    });
+    };
+    if (!is_img) {
+        params.ContentDisposition = 'attachment; filename=' + data.name;
+    }
+    upload(filename, params);
 };
 
 function makeRandom(len) {

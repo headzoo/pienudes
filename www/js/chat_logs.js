@@ -96,8 +96,19 @@
                     meta: log.meta,
                     time: log.time
                 };
-                
+    
                 div = formatChatMessage(obj, {name: ""}, "/chat/logs#c=" + channel + "&i=" + log.id);
+                div.attr("data-log-id", log.id);
+                new_box.append(div);
+            } else if (log.type == "card") {
+                var obj = {
+                    username: log.user,
+                    msg: log.msg,
+                    card: log.meta,
+                    time: log.time
+                };
+                
+                div = formatChatCard(obj, "/chat/logs#c=" + channel + "&i=" + log.id);
                 div.attr("data-log-id", log.id);
                 new_box.append(div);
             } else {

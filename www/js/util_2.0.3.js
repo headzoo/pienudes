@@ -1758,6 +1758,104 @@ function addWhisper(data) {
     addNotice(data);
 }
 
+function formatChatCard(data, permalink) {
+    var card = data.card;
+    var div  = $("<div/>", {
+        "class": "chat-msg chat-msg-card chat-msg-" + data.username.replace(/[^\w-]/g, '\\$')
+    });
+    
+    if (USEROPTS.show_timestamps && data.username !== "chmod") {
+        var time_title = "";
+        if (CHAT_WRAP_MEDIA != null && CHAT_WRAP_MEDIA.title !== undefined) {
+            time_title = CHAT_WRAP_MEDIA.title;
+        }
+    
+        if (permalink) {
+            var time = $("<a/>")
+                .data("time", data.time)
+                .addClass("timestamp")
+                .attr("href", permalink)
+                .appendTo(div);
+        } else {
+            var time = $("<span/>")
+                .data("time", data.time)
+                .addClass("timestamp")
+                .appendTo(div);
+        }
+
+        var timestamp = formatTimestamp(data.time);
+        time.text("[" + timestamp + "] ");
+        time.attr("title", time_title);
+    }
+    
+    var name = $("<span/>").appendTo(div);
+    $('<strong/>', {
+        "class": "username",
+        "text": data.username + ": "
+    }).appendTo(name);
+    
+    if (card.is_inline_image) {
+        var anchor = $('<a/>', {
+            "href": data.msg,
+            "target": "_blank"
+        }).appendTo(div);
+        $('<img/>', {
+            "src": data.msg,
+            "class": "embedded-image"
+        }).appendTo(anchor);
+    } else {
+        var message = $("<span/>", {
+            "class": "chat-msg-card-line card"
+        }).appendTo(div);
+        $('<a/>', {
+            "href": data.msg,
+            "target": "_blank",
+            "class": "chat-msg-card-icon glyphicon glyphicon-file"
+        }).appendTo(message);
+        
+        var details = $('<div/>', {
+            "class": "chat-msg-card-details"
+        }).appendTo(message);
+        $('<a/>', {
+            "href": data.msg,
+            "target": "_blank",
+            "class": "chat-msg-card-title",
+            "text": card.title
+        }).appendTo(details);
+        $('<span/>', {
+            "class": "chat-msg-card-type",
+            "text": card.type
+        }).appendTo(details);
+        $('<span/>', {
+            "class": "chat-msg-card-size",
+            "text": humanFileSize(card.size)
+        }).appendTo(details);
+    }
+    
+    return div;
+}
+
+function addCard(data) {
+    if (IGNORED.indexOf(data.username) !== -1) {
+        return;
+    }
+    
+    var div = formatChatCard(data);
+    var buffer = $("#messagebuffer");
+    buffer.append(div);
+    if (SCROLLCHAT) {
+        scrollChat();
+    }
+    
+    div.find("img").load(function () {
+        if (SCROLLCHAT) {
+            scrollChat();
+        } else if ($(this).position().top < 0) {
+            scrollAndIgnoreEvent(buffer.scrollTop() + $(this).height());
+        }
+    });  
+}
+
 function parseBBCodes(msg) {
     msg = msg.replace(/\[color (#[a-f0-9]{3,6})\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>');
     msg = msg.replace(/\[(#[a-f0-9]{3,6})\](.*?)\[\/#\]/gi, '<span style="color: $1">$2</span>');
