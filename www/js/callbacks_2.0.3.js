@@ -857,7 +857,12 @@ Callbacks = {
         for(var i = 0; i < data.length; i++) {
             data[i].media.uid = data[i].media.id;
         }
+        
+        // @deprecated
         if (ChatAPI.trigger("playlist", data).isCancelled()) {
+            return;
+        }
+        if (ChatPlaylist.trigger("loaded", data).isCancelled()) {
             return;
         }
         

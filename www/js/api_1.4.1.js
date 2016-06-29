@@ -1,4 +1,5 @@
 var ChatAPI         = null;
+var ChatPlaylist    = null;
 var ChatOptions     = null;
 var ChatProxy       = null;
 var ChatStore       = null;
@@ -35,7 +36,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.4";
+    var API_VERSION        = "1.4.1";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 5000;
@@ -886,6 +887,129 @@ var $each = function(obj, cb) {
         return this.input(id).val("");
     };
     
+    ChatPlaylist = {
+        _callbacks: {},
+    
+        /**
+         * Registers a callback with the named event
+         *
+         * @param event
+         * @param callback
+         */
+        on: function(event, callback) {
+            var events = event.split(' ');
+            events = events.filter(function(e){return e});
+            $each(events, function(e) {
+                if (this._callbacks[e] == undefined) {
+                    this._callbacks[e] = [];
+                }
+                this._callbacks[e].push(callback);
+            }.bind(this));
+        },
+    
+        /**
+         * Triggers the named event
+         *
+         * @param name
+         * @param data
+         * @returns {ChatEvent}
+         */
+        trigger: function(name, data) {
+            var event = new ChatEvent(name);
+            if (this._callbacks[name] == undefined || this._callbacks[name].length == 0) {
+                return event;
+            }
+        
+            try {
+                var callbacks = this._callbacks[name];
+                for (var i = 0; i < callbacks.length; i++) {
+                    callbacks[i].call(this, event, data);
+                    if (event.isStopped()) {
+                        break;
+                    }
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        
+            return event;
+        },
+        
+        queue: function(url) {
+            if (typeof url == "object" && url.uid != undefined) {
+                socket.emit("queue", {
+                    id: url.uid,
+                    title: url.title,
+                    pos: "end",
+                    type: url.type,
+                    temp: $(".add-temp").prop("checked")
+                });
+            } else {
+                $("#mediaurl").val(url);
+                queue("end", "src");
+            }
+        },
+        
+        dequeueByName: function(name) {
+            $(".queue_entry_by_" + name).each(function(i, item) {
+                socket.emit("delete", $(item).data("pluid"));
+            });
+        },
+        
+        skip: function() {
+            $("#voteskip").trigger("click");
+        },
+        
+        vote: function(value) {
+            if (value != -1 && value != 1) {
+                throw "Vote value invalid. Must -1, or 1.";
+            }
+            socket.emit("voteVideo", value);
+        },
+        
+        clear: function() {
+            socket.emit("clearPlaylist");
+        },
+        
+        shuffle: function() {
+            socket.emit("shufflePlaylist");
+        },
+        
+        lock: function() {
+            socket.emit("togglePlaylistLock");
+        },
+    
+        search: function(query, type) {
+            if (type != undefined && type != "yt") {
+                throw "Type must be value 'yt'.";
+            }
+            socket.emit("searchMedia", {
+                source: type,
+                query: query
+            });
+        },
+    
+        /**
+         * Resets the api state
+         *
+         * @private
+         */
+        _reset: function() {
+            this._callbacks = {
+                playlist: [],
+                queue: [],
+                media_change: [],
+                media_update: [],
+                favorites: [],
+                favorite_add: [],
+                tags: [],
+                votes: [],
+                vote_value: [],
+                search_results: []
+            };
+        }
+    };
+    
     ChatAPI = {
         version: API_VERSION,
         _scripts: {},
@@ -915,6 +1039,34 @@ var $each = function(obj, cb) {
                     callback();
                 }
             }.bind(this));
+        },
+    
+        /**
+         * Triggers the named event
+         *
+         * @param name
+         * @param data
+         * @returns {ChatEvent}
+         */
+        trigger: function(name, data) {
+            var event = new ChatEvent(name);
+            if (this._callbacks[name] == undefined || this._callbacks[name].length == 0) {
+                return event;
+            }
+        
+            try {
+                var callbacks = this._callbacks[name];
+                for (var i = 0; i < callbacks.length; i++) {
+                    callbacks[i].call(this, event, data);
+                    if (event.isStopped()) {
+                        break;
+                    }
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        
+            return event;
         },
     
         /**
@@ -1009,6 +1161,7 @@ var $each = function(obj, cb) {
          * Adds a video to the playlist
          * 
          * @param url
+         * @deprecated
          */
         queue: function(url) {
             if (typeof url == "object" && url.uid != undefined) {
@@ -1029,6 +1182,7 @@ var $each = function(obj, cb) {
          * Removes videos from the playlist that have been queued by the given user
          * 
          * @param name
+         * @deprecated
          */
         dequeueByName: function(name) {
             $(".queue_entry_by_" + name).each(function(i, item) {
@@ -1038,6 +1192,8 @@ var $each = function(obj, cb) {
     
         /**
          * Vote skips the currently playing video
+         * 
+         * @deprecated
          */
         skip: function() {
             $("#voteskip").trigger("click");
@@ -1047,6 +1203,7 @@ var $each = function(obj, cb) {
          * Votes for the currently playing video
          * 
          * @param value
+         * @deprecated
          */
         vote: function(value) {
             if (value != -1 && value != 1) {
@@ -1057,6 +1214,8 @@ var $each = function(obj, cb) {
     
         /**
          * Clears the playlist
+         * 
+         * @deprecated
          */
         playlistClear: function() {
             socket.emit("clearPlaylist");
@@ -1064,6 +1223,8 @@ var $each = function(obj, cb) {
     
         /**
          * Shuffles the playlist
+         * 
+         * @deprecated
          */
         playlistShuffle: function() {
             socket.emit("shufflePlaylist");
@@ -1071,6 +1232,8 @@ var $each = function(obj, cb) {
     
         /**
          * Toggles the playlist lock
+         * 
+         * @deprecated
          */
         playlistLock: function() {
             socket.emit("togglePlaylistLock");
@@ -1081,6 +1244,7 @@ var $each = function(obj, cb) {
          * 
          * @param query
          * @param type
+         * @deprecated
          */
         search: function(query, type) {
             if (type != undefined && type != "yt") {
@@ -1219,34 +1383,6 @@ var $each = function(obj, cb) {
         },
     
         /**
-         * Triggers the named event
-         * 
-         * @param name
-         * @param data
-         * @returns {ChatEvent}
-         */
-        trigger: function(name, data) {
-            var event = new ChatEvent(name);
-            if (this._callbacks[name] == undefined || this._callbacks[name].length == 0) {
-                return event;
-            }
-            
-            try {
-                var callbacks = this._callbacks[name];
-                for (var i = 0; i < callbacks.length; i++) {
-                    callbacks[i].call(this, event, data);
-                    if (event.isStopped()) {
-                        break;
-                    }
-                }
-            } catch (e) {
-                console.log(e);
-            }
-            
-            return event;
-        },
-    
-        /**
          * Sets the user scripts to be appended to the page
          * 
          * @param scripts
@@ -1360,10 +1496,10 @@ var $each = function(obj, cb) {
                 
                 script = "" +
                     "" +
-                        "(function($api, $chat, $options, $user, $channel, $proxy, $store, $timer, $stylesheet, $script) { \n" +
+                        "(function($api, $chat, $playlist, $options, $user, $channel, $proxy, $store, $timer, $stylesheet, $script) { \n" +
                             script +
                         "\nChatAPI._pushReady();" +
-                        "\n})(ChatAPI, ChatAPI, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, new ChatTimer(), ChatStylesheet, " + JSON.stringify(info) + "); " +
+                        "\n})(ChatAPI, ChatAPI, ChatPlaylist, ChatOptions, CLIENT, CHANNEL, ChatProxy, ChatStore, new ChatTimer(), ChatStylesheet, " + JSON.stringify(info) + "); " +
                     "";
     
                 $("<script/>").attr("type", "text/javascript")
