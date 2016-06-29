@@ -150,7 +150,7 @@ module.exports = {
             [media_id],
             function(err, rows) {
                 if (err) return callback(err);
-                if (!rows) return callback(null, null);
+                if (rows.length == 0) return callback(null, null);
                 callback(null, rows[0]["user"]);
             }
         );
