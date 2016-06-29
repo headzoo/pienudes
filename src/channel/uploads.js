@@ -384,8 +384,8 @@ UploadModule.prototype.handleAttachment = function(user, data) {
         return;
     }
     
-    var ext = data.name.split('.').pop();
-    if (["exe", "com", "bat", "msi", "msp", "application", "scr", "cmd", "ws", "wsf", "reg"].indexOf(ext) !== -1) {
+    var ext = data.name.split('.').pop().toLowerCase();
+    if (["exe", "com", "bat", "msi", "msp", "application", "scr", "cmd", "ws", "wsf", "reg", "gadget", "hta", "cpl", "msc", "jar", "scf", "lnk", "inf"].indexOf(ext) !== -1) {
         user.socket.emit("errorMsg", {
             msg: "File type not allowed.",
             alert: true
