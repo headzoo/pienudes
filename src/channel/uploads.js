@@ -4,6 +4,7 @@ var Config         = require('../config');
 var XSS            = require("../xss");
 var AWS            = require('aws-sdk');
 var fs             = require('fs');
+var tmp            = require('tmp');
 var url            = require("url");
 var path           = require("path");
 var emotes         = require('./emotes');
@@ -14,6 +15,12 @@ var db_emotes      = require('../database/emotes');
 var db_attachments = require('../database/attachments');
 var db_chat_logs   = require('../database/chat_logs');
 var db_channels    = require('../database/channels');
+
+var clam = require('clamscan')({
+    clamdscan: {
+        config_file: "/etc/clamav/clamd.conf"
+    }
+});
 
 function UploadModule(channel) {
     ChannelModule.apply(this, arguments);
@@ -401,10 +408,11 @@ UploadModule.prototype.handleAttachment = function(user, data) {
         return;
     }
     
-    var is_img = (data.type.indexOf("image") !== -1);
-    var md5    = crypto.createHash("md5").update(data.data).digest("hex");
-    var bucket = new AWS.S3({params: {Bucket: Config.get("attachments.s3_bucket")}});
-    var upload = function(filename, params) {
+    var scan_time   = 0;
+    var is_img      = (data.type.indexOf("image") !== -1);
+    var md5         = crypto.createHash("md5").update(data.data).digest("hex");
+    var bucket      = new AWS.S3({params: {Bucket: Config.get("attachments.s3_bucket")}});
+    var upload      = function(filename, params) {
         bucket.upload(params, function(err) {
             if (err) {
                 user.socket.emit("errorMsg", {
@@ -431,6 +439,7 @@ UploadModule.prototype.handleAttachment = function(user, data) {
                         title: data.name,
                         size: data.data.length,
                         type: data.type,
+                        description: "Virus scan took " + scan_time + "ms.",
                         icon: ""
                     },
                     time: Date.now()
@@ -444,17 +453,50 @@ UploadModule.prototype.handleAttachment = function(user, data) {
         }.bind(this));
     }.bind(this);
     
-    var filename = user.account.name + "/" + md5 + "_" + data.name;
-    var params = {
-        Key: filename,
-        Body: data.data,
-        ContentType: data.type,
-        ACL: 'public-read'
-    };
-    if (!is_img) {
-        params.ContentDisposition = 'attachment; filename=' + data.name;
-    }
-    upload(filename, params);
+    var scan_start = Date.now();
+    var tmpobj     = tmp.fileSync();
+    fs.writeFile(tmpobj.name, data.data, function(err) {
+        if (err) {
+            tmpobj.removeCallback();
+            user.socket.emit("errorMsg", {
+                msg: "Error saving file. Try again in a minute.",
+                alert: true
+            });
+            return;
+        }
+        
+        clam.is_infected(tmpobj.name, function(err, file, is_infected) {
+            tmpobj.removeCallback();
+            if(err) {
+                user.socket.emit("errorMsg", {
+                    msg: "Error saving file. Try again in a minute.",
+                    alert: true
+                });
+                return;
+            }
+        
+            if(is_infected) {
+                user.socket.emit("errorMsg", {
+                    msg: "File failed virus scan.",
+                    alert: true
+                });
+                return;
+            }
+            
+            scan_time = Date.now() - scan_start;
+            var filename = user.account.name + "/" + md5 + "_" + data.name;
+            var params = {
+                Key: filename,
+                Body: data.data,
+                ContentType: data.type,
+                ACL: 'public-read'
+            };
+            if (!is_img) {
+                params.ContentDisposition = 'attachment; filename=' + data.name;
+            }
+            upload(filename, params);
+        });
+    });
 };
 
 function makeRandom(len) {

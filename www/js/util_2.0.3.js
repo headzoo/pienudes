@@ -1822,6 +1822,12 @@ function formatChatCard(data, permalink) {
             "class": "chat-msg-card-title",
             "text": card.title
         }).appendTo(details);
+        if (card.description) {
+            $('<span/>', {
+                "class": "chat-msg-card-description",
+                "text": card.description
+            }).appendTo(details);
+        }
         $('<span/>', {
             "class": "chat-msg-card-type",
             "text": card.type

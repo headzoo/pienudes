@@ -1493,6 +1493,7 @@ Callbacks = {
     },
     
     chatAttachment: function(data) {
+        console.log(data);
         $("#chat-attachment-btn")
             .empty()
             .append('<span class="glyphicon glyphicon-paperclip"></span>');

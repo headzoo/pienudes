@@ -31,6 +31,7 @@
     "bluebird": "^2.10.1",
     "body-parser": "^1.14.0",
     "cheerio": "^0.19.0",
+    "clamscan": "^0.8.4",
     "clone": "^1.0.2",
     "compression": "^1.5.2",
     "cookie-parser": "^1.4.0",
@@ -64,6 +65,7 @@
     "source-map-support": "^0.4.0",
     "status-message-polyfill": "calzoneman/status-message-polyfill",
     "striptags": "^2.1.1",
+    "tmp": "0.0.28",
     "uuid": "^2.0.1",
     "yamljs": "^0.1.6"
   },
