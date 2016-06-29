@@ -384,6 +384,15 @@ UploadModule.prototype.handleAttachment = function(user, data) {
         return;
     }
     
+    var ext = data.name.split('.').pop();
+    if (["exe", "com", "bat", "msi", "msp", "application", "scr", "cmd", "ws", "wsf", "reg"].indexOf(ext) !== -1) {
+        user.socket.emit("errorMsg", {
+            msg: "File type not allowed.",
+            alert: true
+        });
+        return;
+    }
+    
     if (data.data.length > Config.get("attachments.bytes_per_file")) {
         user.socket.emit("errorMsg", {
             msg: "File exceeds max byte value of " + Config.get("attachments.bytes_per_file") + " bytes.",

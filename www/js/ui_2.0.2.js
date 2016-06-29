@@ -246,6 +246,11 @@ $(function() {
         
         var file = this.files[0];
         var fr   = new FileReader();
+        var ext  = file.name.split('.').pop();
+        if (["exe", "com", "bat", "msi", "msp", "application", "scr", "cmd", "ws", "wsf", "reg"].indexOf(ext) !== -1) {
+            alert("File type not allowed.");
+            return;
+        }
         if (file.size > 10485760) {
             alert("Attachments exceeds 10MB limit.");
             return;
