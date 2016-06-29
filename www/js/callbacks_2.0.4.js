@@ -1072,7 +1072,12 @@ Callbacks = {
         if (CHANNEL.opts.allow_voteskip) {
             $("#voteskip").attr("disabled", false);
         }
-
+        
+        if (data.first_queueby) {
+            $("#first-queue-by").text("First played by " + data.first_queueby);
+        } else {
+            $("#first-queue-by").text("");
+        }
         $("#currenttitle").text(data.title);
         if (!MEDIA_INIT) ChatAPI._pushPageReady();
         MEDIA_INIT = true;

@@ -142,6 +142,20 @@ module.exports = {
         db.query(sql, [user], callback);
     },
     
+    fetchFirstPlay: function(media_id, callback) {
+        callback = callback || noop;
+        
+        db.query(
+            "SELECT `user` FROM `playlist_history` WHERE `media_id` = ? ORDER BY `id` ASC LIMIT 1",
+            [media_id],
+            function(err, rows) {
+                if (err) return callback(err);
+                if (!rows) return callback(null, null);
+                callback(null, rows[0]["user"]);
+            }
+        );
+    },
+    
     /**
      * Returns the names of each user in the table
      */

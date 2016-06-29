@@ -313,29 +313,45 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     
     var update = this.current.media.getFullUpdate();
     update.queueby = this.current.queueby;
-    this.sendVideoVotes();
-    this.sendUserVideoVotes(users);
     
-    db_channels.lookup(this.channel.name, function(err, chan) {
-        if (!err && chan && this.current.queueby != undefined) {
-            db_chat_logs.insert(chan.id, this.current.queueby, 'media', this.current.media.title, JSON.stringify(this.current.media));
+    var sendUpdate = function() {
+        this.sendVideoVotes();
+        this.sendUserVideoVotes(users);
+        
+        db_channels.lookup(this.channel.name, function(err, chan) {
+            if (!err && chan && this.current.queueby != undefined) {
+                db_chat_logs.insert(chan.id, this.current.queueby, 'media', this.current.media.title, JSON.stringify(this.current.media));
+            }
+        }.bind(this));
+        
+        var uid = this.current.uid;
+        if (users === this.channel.users) {
+            this.channel.broadcastAll("setCurrent", uid);
+            this.channel.broadcastAll("changeMedia", update);
+            
+            var m = this.current.media;
+            this.channel.logger.log("[playlist] Now playing: " + m.title +
+                " (" + m.type + ":" + m.id + ")");
+        } else {
+            users.forEach(function (u) {
+                u.socket.emit("setCurrent", uid);
+                u.socket.emit("changeMedia", update);
+            });
+        }
+    }.bind(this);
+    
+    db_media.fetchByUidAndType(update.id, update.type, function(err, row) {
+        if (!err && row) {
+            db_playlist.fetchFirstPlay(row.id, function(err, first_queueby) {
+                if (!err && first_queueby) {
+                    update.first_queueby = first_queueby;
+                }
+                sendUpdate();
+            });
+        } else {
+            sendUpdate();
         }
     }.bind(this));
-    
-    var uid = this.current.uid;
-    if (users === this.channel.users) {
-        this.channel.broadcastAll("setCurrent", uid);
-        this.channel.broadcastAll("changeMedia", update);
-
-        var m = this.current.media;
-        this.channel.logger.log("[playlist] Now playing: " + m.title +
-                                " (" + m.type + ":" + m.id + ")");
-    } else {
-        users.forEach(function (u) {
-            u.socket.emit("setCurrent", uid);
-            u.socket.emit("changeMedia", update);
-        });
-    }
 };
 
 PlaylistModule.prototype.sendMediaUpdate = function (users) {
