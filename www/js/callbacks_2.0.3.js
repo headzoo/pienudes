@@ -1103,7 +1103,12 @@ Callbacks = {
         for(var i = 0; i < data.results.length; i++) {
             data.results[i].uid = data.results[i].id;
         }
+        
+        // @deprecated
         if (ChatAPI.trigger("search_results", data).isCancelled()) {
+            return;
+        }
+        if (ChatPlaylist.trigger("search_results", data).isCancelled()) {
             return;
         }
         
