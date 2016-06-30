@@ -336,8 +336,7 @@ li.ui-sortable-placeholder + li.queue_entry {
 .profile-box {
   z-index: 9999;
   position: fixed;
-  border: 1px solid #aaaaaa;
-  border-radius: 5px;
+  border: 1px solid #444;
   padding: 5px;
   max-width: 200px;
   max-height: 300px;
@@ -353,8 +352,9 @@ li.ui-sortable-placeholder + li.queue_entry {
   padding: 5px;
 }
 .profile-image {
-  max-width: 80px;
-  max-height: 80px;
+  max-width: 100px;
+  max-height: 100px;
+  display: block;
 }
 #togglemotd .glyphicon {
   font-size: 10pt;

@@ -128,7 +128,7 @@ function formatUserlistItem(div) {
             .appendTo(div);
 
         if(data.profile.image) {
-            $("<img/>").addClass("profile-image")
+            $("<img/>").addClass("profile-image profile-avatar")
                 .attr("src", data.profile.image)
                 .appendTo(profile);
         }
@@ -1537,7 +1537,6 @@ function formatChatMessage(data, last, permalink) {
         name.on("click", function() {
             $("#chatline").val(data.username + ": ").focus();
         });
-        console.log(skip);
         if (!skip) {
             name.appendTo(div);
         }
