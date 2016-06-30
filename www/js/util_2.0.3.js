@@ -1534,6 +1534,10 @@ function formatChatMessage(data, last, permalink) {
     // Add username
     if (data.pm !== true) {
         var name = $("<span/>");
+        name.on("click", function() {
+            $("#chatline").val(data.username + ": ").focus();
+        });
+        console.log(skip);
         if (!skip) {
             name.appendTo(div);
         }
@@ -1789,6 +1793,9 @@ function formatChatCard(data, permalink) {
     }
     
     var name = $("<span/>").appendTo(div);
+    name.on("click", function() {
+        $("#chatline").val(data.username + ": ").focus();
+    });
     $('<strong/>', {
         "class": "username",
         "text": data.username + ": "

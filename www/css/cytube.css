@@ -1265,6 +1265,9 @@ input:focus {
   font-size: 12px;
   color: #FFF;
 }
+.chat-msg .username {
+  cursor: pointer;
+}
 #orlando {
   text-align: center;
   margin-bottom: 20px;
