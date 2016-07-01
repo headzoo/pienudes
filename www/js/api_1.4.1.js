@@ -91,8 +91,13 @@ var $each = function(obj, cb) {
     /**
      * @constructor
      */
-    ChatTimer = function() {
+    ChatTimer = function(clear_on_reload) {
         this.timers = {};
+        if (clear_on_reload === undefined || clear_on_reload) {
+            ChatAPI.on("reloading", function () {
+                this.clearAll();
+            }.bind(this));
+        }
     };
     
     ChatTimer.prototype.interval = function(name, time, callback) {
