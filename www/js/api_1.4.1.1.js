@@ -36,7 +36,7 @@ var $each = function(obj, cb) {
 (function() {
     'use strict';
     
-    var API_VERSION        = "1.4.1";
+    var API_VERSION        = "1.4.1.1";
     var USER_SCRIPTS_INIT  = false;
     var DATABASE_MAX_KEY   = 150;
     var DATABASE_MAX_VALUE = 5000;
@@ -1147,8 +1147,7 @@ var $each = function(obj, cb) {
             toastr.options.preventDuplicates = true;
             toastr.options.closeButton = true;
             toastr.options.timeOut = (time_out || 1500);
-    
-            msg = jQuery(msg).text();
+            
             switch(type) {
                 case "warning":
                     toastr.warning(msg);
