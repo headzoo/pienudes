@@ -42,4 +42,22 @@ $(function() {
             $(this).parents(".alt-speak-form:first").find(".alt-speak-submit:first").trigger("click");
         }
     });
+    
+    $(".btn-delete-play").on("click", function() {
+        var target  = $(this),
+            parent  = target.parents("tr:first"),
+            play_id = parent.data("play-id");
+            
+        $.ajax({
+            url: "/admin/playlist/play",
+            type: "delete",
+            data: {
+                play_id: play_id
+            }
+        }).done(function() {
+            parent.fadeOut();
+        }).fail(function() {
+            alert("There was an error. Try again in a minute.");
+        });
+    });
 });

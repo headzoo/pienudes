@@ -182,6 +182,7 @@ module.exports = {
         require('./routes/admin/index').init(app, channelIndex);
         require('./routes/admin/users').init(app);
         require('./routes/admin/alts').init(app);
+        require('./routes/admin/playlist').init(app);
         
         require('../google2vtt').attach(app);
         app.get('/sioconfig(.json)?', handleLegacySocketConfig);
