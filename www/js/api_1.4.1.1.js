@@ -1147,7 +1147,10 @@ var $each = function(obj, cb) {
             toastr.options.preventDuplicates = true;
             toastr.options.closeButton = true;
             toastr.options.timeOut = (time_out || 1500);
-            
+    
+            var tmp = document.createElement("DIV");
+            tmp.innerHTML = msg;
+            msg = (tmp.textContent || tmp.innerText || "");
             switch(type) {
                 case "warning":
                     toastr.warning(msg);
