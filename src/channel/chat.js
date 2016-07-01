@@ -445,10 +445,6 @@ ChatModule.prototype.sendMessage = function (msgobj) {
     if (this.buffer.length > 15) {
         this.buffer.shift();
     }
-
-    this.channel.logger.log("<" + msgobj.username + (msgobj.meta.addClass ?
-                            "." + msgobj.meta.addClass : "") +
-                            "> " + XSS.decodeText(msgobj.msg));
 };
 
 ChatModule.prototype.registerCommand = function (cmd, cb) {
