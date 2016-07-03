@@ -601,8 +601,8 @@ $("#mediarefresh").click(function() {
 });
 
 /* playlist controls */
-/*
-$("#queue").sortable({
+
+$("#video-playlist").find("tbody").sortable({
     start: function(ev, ui) {
         PL_FROM = ui.item.data("uid");
     },
@@ -618,9 +618,8 @@ $("#queue").sortable({
         });
         $("#queue").sortable("cancel");
     }
-});
-$("#queue").disableSelection();
-*/
+}).disableSelection();
+
 
 function queue(pos, src) {
     if (!src) {

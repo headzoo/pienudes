@@ -470,14 +470,14 @@ function sortUserlist() {
 /* queue stuff */
 
 function scrollQueue() {
-    var li = playlistFind(PL_CURRENT);
-    if(!li)
+    var row = playlistFind(PL_CURRENT);
+    if(!row)
         return;
-
-    li = $(li);
-    $("#queue").find("tbody").scrollTop(0);
-    var scroll = li.position().top - $("#queue").find("tbody").position().top;
-    $("#queue").find("tbody").scrollTop(scroll);
+    
+    var tbody = $("#video-playlist").find("tbody");
+    tbody.scrollTop(0);
+    var scroll = row.position().top - tbody.position().top;
+    tbody.scrollTop(scroll);
 }
 
 function makePlaylistRow(item) {
@@ -521,8 +521,6 @@ function makePlaylistRow(item) {
     $("<span/>", {
         "text": item.queueby
     }).appendTo(td);
-    
-
     
     return row;
 }
@@ -612,7 +610,7 @@ function makeSearchEntry(video) {
 function addQueueButtons(li) {
     li.find(".btn-group").remove();
     var menu = $("<div/>").addClass("btn-group").appendTo(li);
-    /*
+    
     if(hasPermission("playlistjump")) {
         $("<button/>").addClass("btn btn-xs btn-default qbtn-play")
             .html("Play")
@@ -655,7 +653,7 @@ function addQueueButtons(li) {
             })
             .appendTo(menu);
     }
-    */
+    
     if(USEROPTS.qbtn_hide && !USEROPTS.qbtn_idontlikechange
         || menu.find(".btn").length == 0)
         menu.hide();
@@ -690,25 +688,27 @@ function addQueueButtons(li) {
 }
 
 function rebuildPlaylist() {
-    var qli = $("#queue li");
-    if(qli.length == 0)
+    var rows = $("#video-playlist").find("tbody").find("tr");
+    if (rows.length == 0) {
         return;
+    }
+        
     REBUILDING = Math.random() + "";
     var r = REBUILDING;
     var i = 0;
-    qli.each(function() {
-        var li = $(this);
+    rows.each(function() {
+        var row = $(this);
         (function(i, r) {
             setTimeout(function() {
                 // Stop if another rebuild is running
                 if(REBUILDING != r)
                     return;
-                addQueueButtons(li);
-                if(i == qli.length - 1) {
+                //addQueueButtons(li);
+                if(i == row.length - 1) {
                     scrollQueue();
                     REBUILDING = false;
                 }
-            }, 10*i);
+            }, 10 * i);
         })(i, r);
         i++;
     });
@@ -1279,14 +1279,18 @@ var PL_ACTION_QUEUE = new AsyncQueue();
 
 // Because jQuery UI does weird things
 function playlistFind(uid) {
-    var children = document.getElementById("queue").children;
-    for(var i in children) {
-        if(typeof children[i].getAttribute != "function")
-            continue;
-        if(children[i].getAttribute("class").indexOf("pluid-" + uid) != -1)
-            return children[i];
-    }
-    return false;
+    var found    = false;
+    var children = $("#video-playlist")
+        .find("tbody")
+        .children();
+    children.each(function(i, child) {
+        child = $(child);
+        if (child.hasClass("pluid-" + uid)) {
+            found = child;
+        }
+    });
+    
+    return found;
 }
 
 function playlistMove(from, after, cb) {

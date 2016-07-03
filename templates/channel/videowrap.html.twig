@@ -16,18 +16,21 @@
                 </div>
             </div>
             <div id="video-header-controls">
-                <button id="showfavorites" class="btn btn-sm btn-default" title="Add to favorites" data-toggle="collapse" data-target="#favorites">
+                <button id="showfavorites" class="btn btn-sm btn-default" data-toggle="collapse" data-target="#favorites">
                     <span class="glyphicon glyphicon-star"></span> Add to Favorites
                 </button>
-                <button id="voteskip" class="btn btn-sm btn-default" title="Voteskip">
+                <button id="voteskip" class="btn btn-sm btn-default">
                     <span class="glyphicon glyphicon-step-forward"></span> Vote Skip
+                </button>
+                <button id="deletecurrent" class="btn btn-sm btn-default">
+                    <span class="glyphicon glyphicon-remove"></span> Remove
                 </button>
 
                 <div id="videovotes" class="btn-group pull-right">
-                    <button id="voteup" class="btn btn-sm btn-default btn-vote" title="Upvote">
+                    <button id="voteup" class="btn btn-sm btn-default btn-vote" title="Up vote">
                         <span class="glyphicon glyphicon-chevron-up"></span> <span id="voteupvalue">0</span>
                     </button>
-                    <button id="votedown" class="btn btn-sm btn-default btn-vote" title="Downvote">
+                    <button id="votedown" class="btn btn-sm btn-default btn-vote" title="Down vote" style="padding-right:0;">
                         <span class="glyphicon glyphicon-chevron-down"></span> <span id="votedownvalue">0</span>
                     </button>
                 </div>

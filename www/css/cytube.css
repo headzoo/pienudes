@@ -871,8 +871,8 @@ input:focus {
   color: red;
 }
 .sp-replacer {
-  background: #1B1B1B !important;
-  border: solid 1px #161A20 !important;
+  background: #222 !important;
+  border: none !important;
 }
 .sp-dd {
   color: #fff;

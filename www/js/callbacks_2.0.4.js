@@ -870,22 +870,13 @@ Callbacks = {
         var q = $("#video-playlist")
             .find("tbody")
             .empty();
-
+        
         for(var i = 0; i < data.length; i++) {
             makePlaylistRow(data[i])
                 .appendTo(q);
         }
 
         rebuildPlaylist();
-    },
-
-    setPlaylistMeta: function(data) {
-        data.count = data.count - 1;
-        var c = data.count + " item";
-        if(data.count != 1)
-            c += "s";
-        $("#plcount").text(c);
-        $("#pllength").text(data.time);
     },
 
     queue: function(data) {
@@ -898,40 +889,37 @@ Callbacks = {
         if (ChatPlaylist.trigger("queue", data).isCancelled()) {
             return;
         }
-    
+        if (data.item.uid === PL_CURRENT) {
+            return;
+        }
+        
         var q = $("#queue").find("tbody");
         PL_ACTION_QUEUE.queue(function (plq) {
-            /*
-            var li = makeQueueEntry(data.item, true);
-            if (data.item.uid === PL_CURRENT)
-                li.addClass("queue_active");
-            li.hide();
-            li.attr("title", data.item.queueby
-                                ? ("Added by: " + data.item.queueby)
-                                : "Added by: Unknown");
+            var row = makePlaylistRow(data.item);
+            row.hide();
             
             if (data.after === "prepend") {
-                li.prependTo(q);
-                li.show("fade", function () {
+                row.prependTo(q);
+                row.show("fade", function () {
                     plq.release();
                 });
             } else if (data.after === "append") {
-                li.appendTo(q);
-                li.show("fade", function () {
+                row.appendTo(q);
+                row.show("fade", function () {
                     plq.release();
                 });
             } else {
-                var liafter = playlistFind(data.after);
-                if (!liafter) {
+                var row_after = playlistFind(data.after);
+                if (!row_after) {
                     plq.release();
                     return;
                 }
-                li.insertAfter(liafter);
-                li.show("fade", function () {
+                row.insertAfter(row_after);
+                row.show("fade", function () {
                     plq.release();
                 });
             }
-            */
+            
             plq.release();
         });
     },
@@ -990,7 +978,6 @@ Callbacks = {
 
     setCurrent: function(uid) {
         PL_CURRENT = uid;
-        $("#video-playlist").find(".queue_active").removeClass("queue_active");
         var li = $(".pluid-" + uid);
         if (li.length !== 0) {
             li.remove();
@@ -1078,6 +1065,12 @@ Callbacks = {
         $("#video-header-title").text(data.title);
         $("#video-header-queueby").text("Queued by " + data.queueby);
         $("#video-header-play-count").text(data.play_count + " plays");
+        
+        if((hasPermission("playlistdelete")) || (CLIENT.name === data.queueby)) {
+            $("#deletecurrent").show();
+        } else {
+            $("#deletecurrent").hide();
+        }
          
         if (!MEDIA_INIT) ChatAPI._pushPageReady();
         MEDIA_INIT = true;
