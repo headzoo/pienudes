@@ -867,16 +867,13 @@ Callbacks = {
         }
         
         PL_QUEUED_ACTIONS = [];
-        // Clear the playlist first
-        var q = $("#queue").find("tbody");
-        q.html("");
+        var q = $("#video-playlist")
+            .find("tbody")
+            .empty();
 
         for(var i = 0; i < data.length; i++) {
-            var li = makeQueueEntry(data[i], false);
-            li.attr("title", data[i].queueby
-                                ? ("Added by: " + data[i].queueby)
-                                : "Added by: Unknown");
-            li.appendTo(q);
+            makePlaylistRow(data[i])
+                .appendTo(q);
         }
 
         rebuildPlaylist();
@@ -901,16 +898,18 @@ Callbacks = {
         if (ChatPlaylist.trigger("queue", data).isCancelled()) {
             return;
         }
-        
+    
+        var q = $("#queue").find("tbody");
         PL_ACTION_QUEUE.queue(function (plq) {
+            /*
             var li = makeQueueEntry(data.item, true);
             if (data.item.uid === PL_CURRENT)
                 li.addClass("queue_active");
             li.hide();
-            var q = $("#queue").find("tbody");
             li.attr("title", data.item.queueby
                                 ? ("Added by: " + data.item.queueby)
                                 : "Added by: Unknown");
+            
             if (data.after === "prepend") {
                 li.prependTo(q);
                 li.show("fade", function () {
@@ -932,6 +931,8 @@ Callbacks = {
                     plq.release();
                 });
             }
+            */
+            plq.release();
         });
     },
 
@@ -989,16 +990,10 @@ Callbacks = {
 
     setCurrent: function(uid) {
         PL_CURRENT = uid;
-        $("#queue li").removeClass("queue_active");
+        $("#video-playlist").find(".queue_active").removeClass("queue_active");
         var li = $(".pluid-" + uid);
         if (li.length !== 0) {
-            li.addClass("queue_active");
-            var tmr = setInterval(function () {
-                if (!PL_WAIT_SCROLL) {
-                    scrollQueue();
-                    clearInterval(tmr);
-                }
-            }, 100);
+            li.remove();
         }
     },
 

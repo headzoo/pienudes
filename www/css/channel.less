@@ -47,8 +47,54 @@
   }
 }
 
-#queue {
+#video-playlist {
   padding: 12px;
+  font-size: 12px;
+  
+  table {
+    width: 100%;
+    background-color: transparent;
+    
+    thead tr th {
+      padding-bottom: 12px;
+    }
+    
+    tbody {
+    
+      tr {
+        &:nth-child(even) {
+          background-color: #262626;
+        }
+        
+        td {
+          padding: 4px 0;
+        }
+      }
+    }
+    
+    td {
+      white-space: nowrap;
+      overflow: hidden;
+      max-height: 16px;
+      text-overflow: ellipsis;
+    }
+    
+    .video-playlist-actions {
+      width: 3%;
+    }
+    
+    .video-playlist-title {
+      width: 50%;
+    }
+    
+    .video-playlist-queueby {
+      text-align: right;
+    }
+    
+    .video-playlist-time {
+      text-align: right;
+    }
+  }
 }
 
 #video-header-title {

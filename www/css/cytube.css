@@ -74,7 +74,7 @@ body {
 #userlist {
   height: 329px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin-bottom: 0;
 }
 #messagebuffer .embedded-image,

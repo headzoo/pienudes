@@ -601,7 +601,7 @@ $("#mediarefresh").click(function() {
 });
 
 /* playlist controls */
-
+/*
 $("#queue").sortable({
     start: function(ev, ui) {
         PL_FROM = ui.item.data("uid");
@@ -620,6 +620,7 @@ $("#queue").sortable({
     }
 });
 $("#queue").disableSelection();
+*/
 
 function queue(pos, src) {
     if (!src) {

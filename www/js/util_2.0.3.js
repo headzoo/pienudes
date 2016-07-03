@@ -475,9 +475,56 @@ function scrollQueue() {
         return;
 
     li = $(li);
-    $("#queue").scrollTop(0);
-    var scroll = li.position().top - $("#queue").position().top;
-    $("#queue").scrollTop(scroll);
+    $("#queue").find("tbody").scrollTop(0);
+    var scroll = li.position().top - $("#queue").find("tbody").position().top;
+    $("#queue").find("tbody").scrollTop(scroll);
+}
+
+function makePlaylistRow(item) {
+    var video = item.media;
+    var row = $("<tr/>", {
+        "class": "playlist-row pluid-" + item.uid + " queue_entry_by_" + item.queueby.replace("@", "")
+    });
+    row.data("pluid", item.uid);
+    row.data("uid", item.uid);
+    row.data("media", video);
+    row.data("temp", item.temp);
+    row.data("queueby", item.queueby);
+    
+    var td = $('<td/>', {
+        "class": "video-playlist-actions"
+    }).appendTo(row);
+    $('<span/>', {
+        "class": "glyphicon glyphicon-remove"
+    }).appendTo(td);
+    
+    td = $('<td/>', {
+        "class": "video-playlist-title"
+    }).appendTo(row);
+    $("<a/>")
+        .addClass("qe_title")
+        .text(video.title)
+        .attr("href", formatURL(video))
+        .attr("target", "_blank")
+        .appendTo(td);
+    
+    td = $('<td/>', {
+        "class": "video-playlist-time"
+    }).appendTo(row);
+    $("<span/>", {
+        "text": video.duration
+    }).appendTo(td);
+    
+    td = $('<td/>', {
+        "class": "video-playlist-queueby"
+    }).appendTo(row);
+    $("<span/>", {
+        "text": item.queueby
+    }).appendTo(td);
+    
+
+    
+    return row;
 }
 
 function makeQueueEntry(item, addbtns) {
@@ -1051,6 +1098,7 @@ function handlePermissionChange() {
         }
     }
 
+    /*
     if(hasPermission("playlistmove")) {
         $("#queue").sortable("enable");
         $("#queue").addClass("queue_sortable");
@@ -1059,6 +1107,7 @@ function handlePermissionChange() {
         $("#queue").sortable("disable");
         $("#queue").removeClass("queue_sortable");
     }
+    */
 
     setVisible("#clearplaylist", hasPermission("playlistclear"));
     setVisible("#shuffleplaylist", hasPermission("playlistshuffle"));
@@ -1989,7 +2038,7 @@ function undoHDLayout() {
 
     $("nav").addClass("navbar-fixed-top");
     $("#mainpage").css("padding-top", "60px");
-    $("#queue").css("max-height", "500px");
+    $("#queue").find("tbody").css("max-height", "500px");
     $("#messagebuffer, #userlist").css("max-height", "");
 }
 
@@ -2069,7 +2118,7 @@ function hdLayout() {
     var ch = "320px";
     $("#messagebuffer").css("max-height", ch);
     $("#userlist").css("max-height", ch);
-    $("#queue").css("max-height", "312px");
+    $("#queue").find("tbody").css("max-height", "312px");
 
     $("#leftcontrols").detach()
         .insertAfter(chatwrap)
