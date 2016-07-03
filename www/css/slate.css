@@ -1056,10 +1056,10 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Roboto, arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #c8c8c8;
+  color: #FFF;
   background-color: #000;
 }
 button,

@@ -883,7 +883,8 @@ Callbacks = {
     },
 
     setPlaylistMeta: function(data) {
-        var c = data.count + " item";
+        data.count = data.count - 1;
+        var c = "Upnext: " + data.count + " item";
         if(data.count != 1)
             c += "s";
         $("#plcount").text(c);
@@ -1074,11 +1075,15 @@ Callbacks = {
         }
         
         if (data.first_queueby) {
-            $("#first-queue-by").text("First played by " + data.first_queueby);
+            $("#video-header-first-play").text("First played by " + data.first_queueby);
         } else {
-            $("#first-queue-by").text("");
+            $("#video-header-first-play").text("First played by " + data.queueby);
         }
-        $("#currenttitle").text(data.title);
+        console.log(data);
+        $("#video-header-title").text(data.title);
+        $("#video-header-queueby").text("Queued by " + data.queueby);
+        $("#video-header-play-count").text(data.play_count + " plays");
+         
         if (!MEDIA_INIT) ChatAPI._pushPageReady();
         MEDIA_INIT = true;
     },

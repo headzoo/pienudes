@@ -25,10 +25,12 @@
                 
                 <div id="main" class="row">
                     <div id="chatwrap" class="col-lg-7 col-md-7">
+                        <!--
                         <div id="chatheader">
                             <i id="userlisttoggle" class="glyphicon glyphicon-chevron-down pull-left.pointer" title="Show/Hide Userlist"></i>
                             <span id="usercount" class="pointer">Not Connected</span>
                         </div>
+                        -->
                         <div id="userlist"></div>
                         <div id="messagebuffer" class="linewrap"></div>
                         <input id="chatline" class="form-control" type="text" maxlength="240" style="display: none" />
@@ -54,11 +56,33 @@
 
                     <div id="videowrap-mount">
                         <div id="videowrap" class="col-lg-5 col-md-5" style="padding-left: 0;">
-                            <div id="first-queue-by" class="pull-right"></div>
-                            <div id="currenttitle">Nothing Playing</div>
+                        
+                            <!-- Video player -->
                             <div class="embed-responsive embed-responsive-16by9">
                                 <div id="ytapiplayer" class="embed-responsive-item"></div>
                             </div>
+                            <!-- End video player -->
+                            
+                            <!-- Video controls -->
+                            <div id="video-header" class="card">
+                                <!--<div id="first-queue-by" class="pull-right"></div>-->
+                                <div id="video-header-title">Nothing Playing</div>
+                                <div id="video-header-info">
+                                    <div id="video-header-play-count"></div>
+                                    <img class="avatar" src="https://uploads.pienudes.com/profiles/avatars/headzoo-1461701049048.png" />
+                                    <div id="video-header-user-info">
+                                        <div id="video-header-queueby"></div>
+                                        <div id="video-header-first-play"></div>
+                                    </div>
+                                </div>
+                                <div id="video-header-controls">
+                                    <button id="showfavorites" class="btn btn-sm btn-default" title="Add to favorites" data-toggle="collapse" data-target="#favorites">
+                                        <span class="glyphicon glyphicon-star"></span> Add to Favorites
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- 
                             <div class="row">
                                 <div class="col-sm-5">
                                     <div id="plcontrol" class="btn-group chatbuttons">
@@ -112,11 +136,15 @@
                                     </div>
                                 </div>
                             </div>
+                            -->
+                            <!-- End video controls -->
+                            
                         </div>
                     </div>
                 </div>
                 
                 <div id="playlistrow" class="row">
+                
                     <div id="leftpane" class="col-lg-7 col-md-7">
                         <div id="leftpane-inner" class="row">
                             <div id="biowrap" class="col-lg-12 col-md-12">
@@ -126,6 +154,7 @@
                             <div id="playlistmanagerwrap" class="col-lg-12 col-md-12"></div>
                         </div>
                     </div>
+                    
                     <div id="rightpane" class="col-lg-5 col-md-5" style="padding-left: 0;">
                         <div id="rightpane-inner" class="row">
                             <div id="searchcontrol" class="collapse plcontrol-collapse col-lg-12 col-md-12">

@@ -312,7 +312,8 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     }
     
     var update = this.current.media.getFullUpdate();
-    update.queueby = this.current.queueby;
+    update.queueby    = this.current.queueby;
+    update.play_count = 0;
     
     var sendUpdate = function() {
         this.sendVideoVotes();
@@ -346,7 +347,10 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
                 if (!err && first_queueby) {
                     update.first_queueby = first_queueby;
                 }
-                sendUpdate();
+                db_playlist.countByMediaID(row.id, function(err, count) {
+                    update.play_count = count;
+                    sendUpdate();
+                });
             });
         } else {
             sendUpdate();
