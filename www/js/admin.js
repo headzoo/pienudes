@@ -60,4 +60,9 @@ $(function() {
             alert("There was an error. Try again in a minute.");
         });
     });
+    
+    $("#btn-playlist-filter-reset").on("click", function() {
+        document.location = "/admin/playlist";
+        return false;
+    });
 });

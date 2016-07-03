@@ -10,7 +10,7 @@ module.exports = {
     /**
      * Adds a row to the table
      */
-     insert(uid, type, title, seconds, callback) {
+     insert: function(uid, type, title, seconds, callback) {
         callback = callback || noop;
         
         db.query(
@@ -23,7 +23,7 @@ module.exports = {
     /**
      * Inserts a row if not already found
      */
-    insertIgnore(uid, type, title, seconds, callback) {
+    insertIgnore: function(uid, type, title, seconds, callback) {
         callback = callback || noop;
         
         this.fetchByUidAndType(uid, type, function(err, row) {
@@ -44,7 +44,7 @@ module.exports = {
         }.bind(this));
     },
     
-    fetchById(mid, callback) {
+    fetchById: function(mid, callback) {
         callback = callback || noop;
     
         db.query(
@@ -55,6 +55,16 @@ module.exports = {
                 if (rows.length == 0) return callback(null, null);
                 callback(null, rows[0])
             }
+        );
+    },
+    
+    fetchByTitle: function(title, callback) {
+        callback = callback || noop;
+        
+        db.query(
+            "SELECT * FROM `media` WHERE `title` LIKE ?",
+            ['%' + title + '%'],
+            callback
         );
     },
     

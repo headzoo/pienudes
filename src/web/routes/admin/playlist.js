@@ -6,7 +6,9 @@ import security from './security';
 import db_playlist from '../../../database/playlist.js';
 
 function handleIndex(req, res) {
-    var page  = req.params.page;
+    var username = req.query.username || "";
+    var title    = req.query.title || "";
+    var page     = parseInt(req.params.page);
     if (page == undefined) {
         page = 1;
     }
@@ -14,24 +16,63 @@ function handleIndex(req, res) {
         page = 1;
     }
     
-    db_playlist.count(function(err, count) {
-        var limit  = 200;
-        var pages  = Math.ceil(count / limit);
-        if (page > pages) {
-            page = pages;
-        }
-        var offset = (page - 1) * limit;
-        
-        db_playlist.fetch(limit, offset, function(err, rows) {
-            template.send(res, 'admin/playlist/index', {
-                pageTitle: "Playlist",
-                rows: rows,
-                count: count,
-                page: page,
-                pages: pages
+    function send(rows, page, pages) {
+        template.send(res, 'admin/playlist/index', {
+            pageTitle: "Playlist",
+            rows: rows,
+            page: page,
+            pages: pages,
+            username: username,
+            title: title
+        });
+    }
+    
+    var limit  = 200;
+    if (username.length > 0 && title.length > 0) {
+        db_playlist.countByUserAndMediaTitle(username, title, function (err, count) {
+            var pages = Math.ceil(parseInt(count) / limit);
+            if (page > pages) {
+                page = pages;
+            }
+            var offset = (page - 1) * limit;
+            db_playlist.fetchByUserAndMediaTitle(username, title, limit, offset, function (err, rows) {
+                send(rows, page, pages);
             });
         });
-    });
+    } else if (username.length > 0) {
+        db_playlist.countByUser(username, function (err, count) {
+            var pages = Math.ceil(parseInt(count) / limit);
+            if (page > pages) {
+                page = pages;
+            }
+            var offset = (page - 1) * limit;
+            db_playlist.fetchByUser(username, limit, offset, function (err, rows) {
+                send(rows, page, pages);
+            });
+        });
+    } else if (title.length > 0) {
+        db_playlist.countByMediaTitle(title, function (err, count) {
+            var pages = Math.ceil(parseInt(count) / limit);
+            if (page > pages) {
+                page = pages;
+            }
+            var offset = (page - 1) * limit;
+            db_playlist.fetchByMediaTitle(title, limit, offset, function (err, rows) {
+                send(rows, page, pages);
+            });
+        });
+    } else {
+        db_playlist.count(function(err, count) {
+            var pages  = Math.ceil(parseInt(count) / limit);
+            if (page > pages) {
+                page = pages;
+            }
+            var offset = (page - 1) * limit;
+            db_playlist.fetch(limit, offset, function(err, rows) {
+                send(rows, page, pages);
+            });
+        });
+    }
 }
 
 function handleDeletePlay(req, res) {

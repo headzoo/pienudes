@@ -84,9 +84,9 @@ module.exports = {
             offset = 0;
         }
         
-        var sql = "SELECT *, `playlist_history`.`time`, `playlist_history`.`id` AS `play_id` FROM `playlist_history` " +
+        var sql = "SELECT *, `playlist_history`.`time`, `playlist_history`.`id` AS `pid` FROM `playlist_history` " +
         "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
-        "ORDER BY `play_id` DESC " +
+        "ORDER BY `pid` DESC " +
         "LIMIT " + offset + ", " + limit;
         db.query(sql, [], callback);
     },
@@ -140,6 +140,42 @@ module.exports = {
     
         var sql = "SELECT *, `playlist_history`.`id` AS `pid`, `playlist_history`.`time` AS `time` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `user` = ? ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
         db.query(sql, [user], callback);
+    },
+    
+    fetchByMediaTitle: function(title, limit, offset, callback) {
+        callback = callback || noop;
+    
+        limit  = limit || 20;
+        offset = offset || 0;
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 20;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+    
+        var sql = "SELECT *, `playlist_history`.`id` AS `pid`, `playlist_history`.`time` AS `time` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `media`.`title` LIKE ? ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
+        db.query(sql, ['%' + title + '%'], callback);
+    },
+    
+    fetchByUserAndMediaTitle: function(user, title, limit, offset, callback) {
+        callback = callback || noop;
+    
+        limit  = limit || 20;
+        offset = offset || 0;
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if (isNaN(limit)) {
+            limit = 20;
+        }
+        if (isNaN(offset)) {
+            offset = 0;
+        }
+    
+        var sql = "SELECT *, `playlist_history`.`id` AS `pid`, `playlist_history`.`time` AS `time` FROM `playlist_history` INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` WHERE `playlist_history`.`user` = ? AND `media`.`title` LIKE ? ORDER BY `playlist_history`.`id` DESC LIMIT " + offset + ", " + limit;
+        db.query(sql, [user, '%' + title + '%'], callback);
     },
     
     fetchFirstPlay: function(media_id, callback) {
@@ -370,6 +406,19 @@ module.exports = {
         });
     },
     
+    countByMediaTitle: function(title, callback) {
+        callback = callback || noop;
+        
+        var sql = "SELECT COUNT(*) AS `c` " +
+            "FROM `playlist_history` " +
+            "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+            "WHERE `media`.`title` LIKE ?";
+        db.query(sql, ['%' + title + '%'], function(err, rows) {
+            if (err) return callback(err);
+            callback(null, rows[0]["c"]);
+        });
+    },
+    
     countByUser: function(user, callback) {
         callback = callback || noop;
         db.query("SELECT COUNT(*) AS `c` FROM `playlist_history` WHERE `user` = ?", [user], function(err, rows) {
@@ -377,6 +426,20 @@ module.exports = {
                 callback(err, []);
                 return;
             }
+            callback(null, rows[0]["c"]);
+        });
+    },
+    
+    countByUserAndMediaTitle: function(user, title, callback) {
+        callback = callback || noop;
+    
+        var sql = "SELECT COUNT(*) AS `c` " +
+            "FROM `playlist_history` " +
+            "INNER JOIN `media` ON `media`.`id` = `playlist_history`.`media_id` " +
+            "WHERE `playlist_history`.`user` = ? " +
+            "AND `media`.`title` LIKE ?";
+        db.query(sql, [user, '%' + title + '%'], function(err, rows) {
+            if (err) return callback(err);
             callback(null, rows[0]["c"]);
         });
     },

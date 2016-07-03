@@ -2,6 +2,12 @@
 {% block content %}
     <div>
         <h1>Playlist History</h1>
+        <form method="get" class="form-inline" style="margin-bottom: 20px;">
+            <input class="form-control" name="username" value="{{ username }}" placeholder="Username..." />
+            <input class="form-control" name="title" value="{{ title }}" placeholder="Media Title..." />
+            <button class="btn btn-default">Filter</button>
+            <button id="btn-playlist-filter-reset" class="btn btn-default">Reset</button>
+        </form>
         <table class="table">
             <thead>
             <tr>
@@ -16,13 +22,13 @@
             </thead>
             <tbody>
                 {% for row in rows %}
-                    <tr data-play-id="{{ row.play_id }}">
+                    <tr data-play-id="{{ row.pid }}">
                         <td>
                             <button class="btn btn-xs btn-danger btn-delete-play">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </td>
-                        <td>{{ row.play_id }}</td>
+                        <td>{{ row.pid }}</td>
                         <td>{{ row.media_id }}</td>
                         <td>{{ row.user }}</td>
                         <td>{{ row.title }}</td>
