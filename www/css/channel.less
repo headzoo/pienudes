@@ -1,5 +1,22 @@
 @import "variables";
 
+.channel-page {
+  .card {
+    background: #222;
+  }
+
+  .btn {
+    background: transparent !important;
+    background-image: none !important;
+    border: none;
+    font-size: 12px;
+
+    &:hover {
+      z-index: 0;
+    }
+  }
+}
+
 #video-header {
   margin-top: 12px;
   padding: 12px;
@@ -8,49 +25,38 @@
 
 #queue-header {
   padding: 12px;
+  margin-bottom: 12px;
   .channel-card-drop-shadow;
 }
 
-#queue {
-  padding-top: 6px;
-}
-
 #plmeta {
-  padding-bottom: 12px;
   
   .input-group {
-    margin-top: 12px;
     
     input {
       background-color: #1B1B1B;
+      border: 1px solid #333;
       color: #FFFFFF;
       font-size: 14px;
       height: 34px;
     }
-    
-    .btn {
-      background: #1B1B1B !important;
-      background-image: none !important;
-      border: none;
-      font-size: 12px;
-      padding-right: 0;
-      
-      &:hover {
-        z-index: 0;
-      }
-    }
+  }
+  
+  .plbuttons {
+    padding-top: 12px;
   }
 }
 
-#chatwrap {
-  background: #1B1B1B !important;
-  padding-left: 2px;
-  padding-right: 2px;
+#queue {
+  padding: 12px;
 }
 
 #video-header-title {
   line-height: normal;
-  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  max-height: 24px;
+  text-overflow: ellipsis;
   font-size: 20px;
   font-weight: normal;
   margin-bottom: 12px;
@@ -80,12 +86,6 @@
 #video-header-controls {
   padding-top: 12px;
   border-top: 1px solid #333;
-  
-  .btn {
-    background-image: none;
-    background-color: transparent;
-    border: none;
-  }
 
   .btn-vote {
   
@@ -96,13 +96,9 @@
 }
 
 .chatbuttons {
-  padding: 4px 0;
-  
-  .btn {
-    background: transparent !important;
-    background-image: none !important;
-    border: none;
-  }
+  padding: 12px !important;
+  margin-top: 12px;
+  min-height: 20px !important;
 }
 
 .queue_active {

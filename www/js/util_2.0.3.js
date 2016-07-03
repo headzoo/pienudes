@@ -482,26 +482,40 @@ function scrollQueue() {
 
 function makeQueueEntry(item, addbtns) {
     var video = item.media;
-    var li = $("<li/>");
-    li.addClass("queue_entry");
-    li.addClass("pluid-" + item.uid);
+    var li = $("<tr/>", {
+        "class": "queue_entry pluid-" + item.uid + " queue_entry_by_" + item.queueby.replace("@", "")
+    });
+    
     li.data("pluid", item.uid);
-    li.addClass("queue_entry_by_" + item.queueby.replace("@", ""));
     li.data("uid", item.uid);
     li.data("media", video);
     li.data("temp", item.temp);
 	li.data("queueby", item.queueby);
-    if(video.thumb) {
-        $("<img/>").attr("src", video.thumb.url)
-            .css("float", "left")
-            .css("clear", "both")
-            .appendTo(li);
-    }
-    var title = $("<a/>").addClass("qe_title").appendTo(li)
+	
+    //if(video.thumb) {
+    //    $("<img/>").attr("src", video.thumb.url)
+    //        .css("float", "left")
+    //        .css("clear", "both")
+    //        .appendTo(li);
+    //}
+    
+    var td = $('<td/>')
+        .appendTo(li);
+    var title = $("<a/>")
+        .addClass("qe_title")
         .text(video.title)
         .attr("href", formatURL(video))
-        .attr("target", "_blank");
-    var time = $("<span/>").addClass("qe_time").appendTo(li);
+        .attr("target", "_blank")
+        .appendTo(td);
+        
+    td = $('<td/>')
+        .appendTo(li);
+    var time = $("<span/>", {
+        "class": "qe_time",
+        "html": video.duration
+    }).appendTo(td);
+        
+    /*
     if (item.queueby) {
         if (item.queueby[0] == "@") {
             item.queueby = item.queueby.substring(1);
@@ -512,6 +526,9 @@ function makeQueueEntry(item, addbtns) {
     } else {
         time.html(video.duration);
     }
+    */
+    
+    /*
     var clear = $("<div/>").addClass("qe_clear").appendTo(li);
     if(item.temp) {
         li.addClass("queue_temp");
@@ -520,6 +537,7 @@ function makeQueueEntry(item, addbtns) {
 		addbtns = true;
     if(addbtns)
         addQueueButtons(li);
+    */
     return li;
 }
 
@@ -547,7 +565,7 @@ function makeSearchEntry(video) {
 function addQueueButtons(li) {
     li.find(".btn-group").remove();
     var menu = $("<div/>").addClass("btn-group").appendTo(li);
-    // Play
+    /*
     if(hasPermission("playlistjump")) {
         $("<button/>").addClass("btn btn-xs btn-default qbtn-play")
             .html("Play")
@@ -590,7 +608,7 @@ function addQueueButtons(li) {
             })
             .appendTo(menu);
     }
-
+    */
     if(USEROPTS.qbtn_hide && !USEROPTS.qbtn_idontlikechange
         || menu.find(".btn").length == 0)
         menu.hide();
@@ -2134,7 +2152,7 @@ function handleVideoResize() {
         var responsiveFrame = $("#ytapiplayer").parent();
         
         // messagebuffer height
-        var height = (responsiveFrame.outerHeight() + video_header.outerHeight() + 12) - ($("#chatline").outerHeight() + $(".chatbuttons").outerHeight()) - 4;
+        var height = (responsiveFrame.outerHeight() + video_header.outerHeight() + 12) - ($("#chatline").outerHeight() + $(".chatbuttons").outerHeight()) - 14;
         $("#messagebuffer").height(height);
         $("#userlist").height(height - 10);
 

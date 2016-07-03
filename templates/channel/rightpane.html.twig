@@ -1,0 +1,125 @@
+<div id="rightpane" class="col-sm-5 col-video-side" >
+    
+    <div id="rightpane-inner" class="row">
+        <!--
+        <div id="searchcontrol" class="collapse plcontrol-collapse col-lg-12 col-md-12">
+            <div class="vertical-spacer"></div>
+            <div class="input-group">
+                <input id="library_query" class="form-control" type="text" placeholder="Search Query" />
+                <span class="input-group-btn">
+                    <button id="library_search" class="btn btn-default">Library</button>
+                </span>
+                <span class="input-group-btn">
+                    <button id="youtube_search" class="btn btn-default">Youtube</button>
+                </span>
+            </div>
+            <ul id="library" class="videolist col-lg-12 col-md-12"></ul>
+        </div>
+        <div id="customembed" class="collapse plcontrol-collapse col-lg-12 col-md-12">
+            <div class="vertical-spacer"></div>
+            <div class="input-group">
+                <input id="customembed-title" class="form-control" type="text" placeholder="Title (optional)" />
+                <span class="input-group-btn">
+                    <button id="ce_queue_next" class="btn btn-default">Next</button>
+                </span>
+                <span class="input-group-btn">
+                    <button id="ce_queue_end" class="btn btn-default">At End</button>
+                </span>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input class="add-temp" type="checkbox" />
+                    Add as temporary
+                    Paste the embed code below and click Next or At End.
+                    Acceptable embed codes are <code>&lt;iframe&gt;</code> and <code>&lt;object&gt;</code> tags.
+                    <strong>CUSTOM EMBEDS CANNOT BE SYNCHRONIZED.</strong>
+                </label>
+            </div>
+            <textarea id="customembed-content" class="input-block-level form-control" rows="3"></textarea>
+        </div>
+        <div id="playlistmanager" class="collpse plcontrol-collapse col-lg-12 col-md-12">
+            <div class="vertical-spacer"></div>
+            <div class="input-group">
+                <input id="userpl_name" class="form-control" type="text" placeholder="Playlist Name" />
+                <span class="input-group-btn">
+                    <button id="userpl_save" class="btn btn-default">Save</button>
+                </span>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input class="add-temp" type="checkbox" />
+                    Add as temporary
+                </label>
+            </div>
+            <ul id="userpl_list" class="videolist"></ul>
+        </div>
+
+        <div id="favorites" class="collapse plcontrol-collapse col-lg-12 col-md-12">
+            <div class="vertical-spacer"></div>
+            <div class="input-group">
+                <input id="favorites-tags" class="form-control" type="text" value="" data-default-value="{{ channelName }}" data-role="tagsinput" />
+                <span class="input-group-btn">
+                    <button id="favorites-add" class="btn btn-default" type="button">Favorite</button>
+                </span>
+            </div>
+            <p class="text-muted">
+                Optional tags need to be space " " separated.
+            </p>
+            <div class="vertical-spacer"></div>
+            <ul id="favorites-tag-list"></ul>
+            <div id="favorites-thumbs" class="row"></div>
+        </div>
+
+        <div id="queuefail" class="col-lg-12 col-md-12">
+            <div class="vertical-spacer"></div>
+        </div>
+        -->
+        <div class="col-lg-12 col-md-12">
+
+            <div id="queue-header" class="card">
+                <div id="plmeta">
+                    <div class="input-group">
+                        <input id="mediaurl" class="form-control" type="text" placeholder="Play something... (Links from YouTube, SoundCloud)" />
+                        <span class="input-group-btn">
+                            <button id="queue_end" class="btn btn-default" style="padding-right: 0;">
+                                <span class="glyphicon glyphicon-plus"></span> Add
+                            </button>
+                        </span>
+                    </div>
+                    <div class="plbuttons">
+                        <button id="showsearch" class="btn btn-sm btn-default" title="Search for a video" data-toggle="collapse" data-target="#searchcontrol">
+                            <span class="glyphicon glyphicon-search"></span> Search
+                        </button>
+                        <button id="clearplaylist" class="btn btn-sm btn-default" title="Clear the playlist">
+                            <span class="glyphicon glyphicon-trash"></span> Clear
+                        </button>
+                        <button id="shuffleplaylist" class="btn btn-sm btn-default" title="Shuffle the playlist">
+                            <span class="glyphicon glyphicon-sort"></span> Shuffle
+                        </button>
+                        <button id="qlockbtn" class="btn btn-sm btn-default" title="Playlist locked">
+                            <span class="glyphicon glyphicon-lock"></span> Lock
+                        </button>
+                        <button id="showcustomembed" class="btn btn-sm btn-default" title="Embed a custom frame" data-toggle="collapse" data-target="#playlistmanager">
+                            <span class="glyphicon glyphicon-th-large"></span> IFrame
+                        </button>
+                    </div>
+                    <!--
+                    <span id="plcount">0 items</span>
+                    <span id="pllength">00:00:00</span>
+                    -->
+                </div>
+            </div>
+            <table id="queue" class="videolist card">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

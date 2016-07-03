@@ -686,8 +686,7 @@ function queue(pos, src) {
                 $("#addfromurl-title").remove();
                 return;
             }
-
-            var link = data.link;
+            
             delete data.link;
 
             socket.emit("queue", data);

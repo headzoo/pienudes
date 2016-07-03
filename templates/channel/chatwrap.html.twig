@@ -1,0 +1,44 @@
+<div id="chatwrap" class="col-sm-7 col-chat-side">
+    <!--
+    <div id="chatheader">
+        <i id="userlisttoggle" class="glyphicon glyphicon-chevron-down pull-left.pointer" title="Show/Hide Userlist"></i>
+        <span id="usercount" class="pointer">Not Connected</span>
+    </div>
+    -->
+    <div id="userlist"></div>
+    <div id="messagebuffer" class="linewrap"></div>
+    <input id="chatline" class="form-control" type="text" maxlength="240" style="display: none" />
+    <div id="guestlogin" class="input-group" style="display: none;">
+        <span class="input-group-addon">Guest Login</span>
+        <input id="guestname" class="form-control" type="text" placeholder="Enter nickname and hit enter." />
+    </div>
+    <div class="chatbuttons card">
+        <div class="btn-group">
+            <button id="modflair" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-tint"></span>
+                Name Color
+            </button>
+            <button id="biobtn" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-book"></span>
+                Information
+            </button>
+            <button id="newpollbtn" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-signal"></span>
+                Poll
+            </button>
+            <button id="emotelistbtn" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-sunglasses"></span>
+                Emotes
+            </button>
+            <button id="clearbtn" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-erase"></span>
+                Clear
+            </button>
+        </div>
+        <button id="chat-attachment-btn" class="btn btn-sm btn-default pull-right" title="Attach file (10MB limit)" style="display: none;">
+            <span class="glyphicon glyphicon-paperclip"></span>
+        </button>
+        <input id="chatcolor" type="color" />
+        <input type="file" id="chat-attachment-file" style="display: none" />
+    </div>
+</div>

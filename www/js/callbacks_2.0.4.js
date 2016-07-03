@@ -430,7 +430,7 @@ Callbacks = {
         if (data.count > 0) {
             $("#voteskip").text(" (" + data.count + "/" + data.need + ")");
         } else {
-            $("#voteskip").text("");
+            $("#voteskip").text("Vote Skip");
         }
         
         icon.prependTo($("#voteskip"));
@@ -868,7 +868,7 @@ Callbacks = {
         
         PL_QUEUED_ACTIONS = [];
         // Clear the playlist first
-        var q = $("#queue");
+        var q = $("#queue").find("tbody");
         q.html("");
 
         for(var i = 0; i < data.length; i++) {
@@ -907,7 +907,7 @@ Callbacks = {
             if (data.item.uid === PL_CURRENT)
                 li.addClass("queue_active");
             li.hide();
-            var q = $("#queue");
+            var q = $("#queue").find("tbody");
             li.attr("title", data.item.queueby
                                 ? ("Added by: " + data.item.queueby)
                                 : "Added by: Unknown");

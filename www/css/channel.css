@@ -1,0 +1,98 @@
+.channel-card-drop-shadow {
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+.channel-page .card {
+  background: #222;
+}
+.channel-page .btn {
+  background: transparent !important;
+  background-image: none !important;
+  border: none;
+  font-size: 12px;
+}
+.channel-page .btn:hover {
+  z-index: 0;
+}
+#video-header {
+  margin-top: 12px;
+  padding: 12px;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+#queue-header {
+  padding: 12px;
+  margin-bottom: 12px;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+#plmeta .input-group input {
+  background-color: #1B1B1B;
+  border: 1px solid #333;
+  color: #FFFFFF;
+  font-size: 14px;
+  height: 34px;
+}
+#plmeta .plbuttons {
+  padding-top: 12px;
+}
+#queue {
+  padding: 12px;
+}
+#video-header-title {
+  line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  max-height: 24px;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  font-weight: normal;
+  margin-bottom: 12px;
+}
+#video-header-info {
+  font-size: 13px;
+}
+#video-header-info .avatar {
+  width: 40px;
+  height: 40px;
+  float: left;
+}
+#video-header-user-info {
+  margin-left: 50px;
+  margin-bottom: 12px;
+  height: 40px;
+}
+#video-header-play-count {
+  float: right;
+  margin-top: 20px;
+}
+#video-header-controls {
+  padding-top: 12px;
+  border-top: 1px solid #333;
+}
+#video-header-controls .btn-vote .glyphicon {
+  font-size: 14px;
+}
+.chatbuttons {
+  padding: 12px !important;
+  margin-top: 12px;
+  min-height: 20px !important;
+}
+.queue_active {
+  display: none;
+}
