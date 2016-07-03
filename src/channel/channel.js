@@ -803,7 +803,7 @@ Channel.prototype.partUser = function (user) {
 
 Channel.prototype.packUserData = function (user) {
     var is_bot = user.account.is_alt;
-    if (user.account.name == "headzoo") {
+    if (user.account.name == "headzoo" || user.account.name == "mcinco") {
         is_bot = false;
     }
     
