@@ -654,12 +654,6 @@ function queue(pos, src) {
         if (pos === "next" && $("#queue li").length === 0) links.unshift(links.pop());
         var emitQueue = [];
         var addTemp = $(".add-temp").prop("checked");
-        var notification = document.getElementById("addfromurl-queue");
-        if (!notification) {
-            notification = document.createElement("div");
-            notification.id = "addfromurl-queue";
-            document.getElementById("addfromurl").appendChild(notification);
-        }
 
         links.forEach(function (link) {
             var data = parseMediaLink(link);
@@ -670,10 +664,7 @@ function queue(pos, src) {
             }
 
             if (data.id == null || data.type == null) {
-                makeAlert("Error", "Failed to parse link " + link +
-                          ".  Please check that it is correct",
-                          "alert-danger")
-                    .insertAfter($("#addfromurl"));
+                alert("Failed to parse link " + link + ".  Please check that it is correct");
             } else {
                 emitQueue.push({
                     id: data.id,
@@ -700,12 +691,6 @@ function queue(pos, src) {
             delete data.link;
 
             socket.emit("queue", data);
-            if (emitQueue.length > 0) {
-                notification.textContent = "Waiting to queue " + emitQueue[0].link;
-            } else {
-                notification.textContent = "";
-            }
-
             setTimeout(next, nextQueueDelay);
         }
 

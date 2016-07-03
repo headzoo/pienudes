@@ -1,3 +1,12 @@
+.channel-card-drop-shadow {
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+}
 .profile-mainpage {
   padding-top: 50px !important;
 }

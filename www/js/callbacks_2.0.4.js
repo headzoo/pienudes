@@ -884,7 +884,7 @@ Callbacks = {
 
     setPlaylistMeta: function(data) {
         data.count = data.count - 1;
-        var c = "Upnext: " + data.count + " item";
+        var c = data.count + " item";
         if(data.count != 1)
             c += "s";
         $("#plcount").text(c);
@@ -1079,7 +1079,7 @@ Callbacks = {
         } else {
             $("#video-header-first-play").text("First played by " + data.queueby);
         }
-        console.log(data);
+        
         $("#video-header-title").text(data.title);
         $("#video-header-queueby").text("Queued by " + data.queueby);
         $("#video-header-play-count").text(data.play_count + " plays");

@@ -1,15 +1,51 @@
+@import "variables";
+
 #video-header {
   margin-top: 12px;
   padding: 12px;
-  -webkit-box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
-  -moz-box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
-  box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+  .channel-card-drop-shadow;
+}
+
+#queue-header {
+  padding: 12px;
+  .channel-card-drop-shadow;
 }
 
 #queue {
-  -webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,0.75);
-  -moz-box-shadow: 0 0 3px 0 rgba(0,0,0,0.75);
-  box-shadow: 0 0 3px 0 rgba(0,0,0,0.75);
+  padding-top: 6px;
+}
+
+#plmeta {
+  padding-bottom: 12px;
+  
+  .input-group {
+    margin-top: 12px;
+    
+    input {
+      background-color: #1B1B1B;
+      color: #FFFFFF;
+      font-size: 14px;
+      height: 34px;
+    }
+    
+    .btn {
+      background: #1B1B1B !important;
+      background-image: none !important;
+      border: none;
+      font-size: 12px;
+      padding-right: 0;
+      
+      &:hover {
+        z-index: 0;
+      }
+    }
+  }
+}
+
+#chatwrap {
+  background: #1B1B1B !important;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 #video-header-title {
@@ -26,9 +62,6 @@
   .avatar {
     width: 40px;
     height: 40px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 50%;
     float: left;
   }
 }
@@ -51,6 +84,23 @@
   .btn {
     background-image: none;
     background-color: transparent;
+    border: none;
+  }
+
+  .btn-vote {
+  
+    .glyphicon {
+      font-size: 14px;
+    }
+  }
+}
+
+.chatbuttons {
+  padding: 4px 0;
+  
+  .btn {
+    background: transparent !important;
+    background-image: none !important;
     border: none;
   }
 }

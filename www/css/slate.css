@@ -1,3 +1,12 @@
+.channel-card-drop-shadow {
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+}
 /**!
  * bootswatch v3.3.1+1
  * Homepage: http://bootswatch.com
@@ -5405,7 +5414,13 @@ a.list-group-item-danger.active:hover {
   padding: 0;
   overflow: hidden;
   background-color: #161A20;
-  border: 1px solid #353535;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 .embed-responsive .embed-responsive-item,
 .embed-responsive embed,

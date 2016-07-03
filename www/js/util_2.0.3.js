@@ -2130,8 +2130,11 @@ function handleVideoResize() {
         if ($("#ytapiplayer").parent().outerHeight() <= 0) return;
         clearInterval(intv);
 
+        var video_header    = $("#video-header");
         var responsiveFrame = $("#ytapiplayer").parent();
-        var height = responsiveFrame.outerHeight() - $("#chatline").outerHeight() - 2;
+        
+        // messagebuffer height
+        var height = (responsiveFrame.outerHeight() + video_header.outerHeight() + 12) - ($("#chatline").outerHeight() + $(".chatbuttons").outerHeight()) - 4;
         $("#messagebuffer").height(height);
         $("#userlist").height(height - 10);
 
