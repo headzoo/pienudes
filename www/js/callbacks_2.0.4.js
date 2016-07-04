@@ -650,6 +650,9 @@ Callbacks = {
     },
     
     chatCommand: function (data) {
+        if (IGNORED.indexOf(data.from) !== -1) {
+            return;
+        }
         ChatAPI.trigger("command", data)
     },
 
