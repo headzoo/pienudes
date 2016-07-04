@@ -983,7 +983,8 @@ Callbacks = {
         PL_CURRENT = uid;
         var li = $(".pluid-" + uid);
         if (li.length !== 0) {
-            li.remove();
+            li.addClass("playing");
+            //li.remove();
         }
     },
 

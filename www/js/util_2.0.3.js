@@ -510,7 +510,6 @@ function makePlaylistRow(item) {
         "class": "video-playlist-title"
     }).appendTo(row);
     $("<a/>")
-        .addClass("qe_title")
         .text(video.title)
         .attr("href", formatURL(video))
         .attr("target", "_blank")

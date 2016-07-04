@@ -20,6 +20,9 @@
   z-index: 0;
   color: #E2A630;
 }
+.channel-page .btn .glyphicon {
+  margin-right: 4px;
+}
 #video-header {
   margin-top: 12px;
   padding: 12px;
@@ -62,6 +65,7 @@
 }
 #video-playlist table thead tr th {
   padding-bottom: 12px;
+  text-transform: uppercase;
 }
 #video-playlist table tbody tr:nth-child(even) {
   background-color: #262626;
@@ -134,7 +138,7 @@
   border-top: 1px solid #333;
 }
 #video-header-controls .btn-vote .glyphicon {
-  font-size: 14px;
+  font-size: 18px;
 }
 .chatbuttons {
   padding: 12px !important;
