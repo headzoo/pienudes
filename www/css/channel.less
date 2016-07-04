@@ -2,7 +2,7 @@
 
 .channel-page {
   .card {
-    background: #242424;
+    background: #212121;
   }
 
   .btn {
@@ -13,6 +13,7 @@
 
     &:hover {
       z-index: 0;
+      color: #E2A630;
     }
   }
 }
@@ -81,6 +82,23 @@
     
     .video-playlist-actions {
       width: 3%;
+      
+      .glyphicon-remove {
+        cursor: pointer;
+        
+        &:hover {
+          color: #E2A630;
+        }
+        
+        &.disabled {
+          cursor: default;
+          color: #434343;
+
+          &:hover {
+            color: #434343;
+          }
+        }
+      }
     }
     
     .video-playlist-title {
@@ -89,10 +107,12 @@
     
     .video-playlist-queueby {
       text-align: right;
+      width: 22%;
     }
     
     .video-playlist-time {
       text-align: right;
+      width: 25%;
     }
   }
 }

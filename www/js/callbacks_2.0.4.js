@@ -1062,7 +1062,12 @@ Callbacks = {
             $("#video-header-first-play").text("First played by " + data.queueby);
         }
         
-        $("#video-header-title").text(data.title);
+        var title = $('<a/>', {
+            "href": formatURL(data),
+            "target": "_blank",
+            "text": data.title
+        });
+        $("#video-header-title").html(title);
         $("#video-header-queueby").text("Queued by " + data.queueby);
         $("#video-header-play-count").text(data.play_count + " plays");
         

@@ -608,15 +608,18 @@ $("#video-playlist").find("tbody").sortable({
     },
     update: function(ev, ui) {
         var prev = ui.item.prevAll();
-        if(prev.length == 0)
+        if(prev.length == 0) {
             PL_AFTER = "prepend";
-        else
+        } else {
             PL_AFTER = $(prev[0]).data("uid");
+        }
         socket.emit("moveMedia", {
             from: PL_FROM,
             after: PL_AFTER
         });
-        $("#queue").sortable("cancel");
+        $("#video-playlist")
+            .find("tbody")
+            .sortable("cancel");
     }
 }).disableSelection();
 
@@ -638,7 +641,7 @@ function queue(pos, src) {
             title: title,
             pos: pos,
             type: "cu",
-            temp: $(".add-temp").prop("checked")
+            temp: true
         });
     } else {
         var linkList = $("#mediaurl").val();
@@ -653,7 +656,6 @@ function queue(pos, src) {
         if (pos === "next") links = links.reverse();
         if (pos === "next" && $("#queue li").length === 0) links.unshift(links.pop());
         var emitQueue = [];
-        var addTemp = $(".add-temp").prop("checked");
 
         links.forEach(function (link) {
             var data = parseMediaLink(link);
@@ -672,7 +674,7 @@ function queue(pos, src) {
                     pos: pos,
                     duration: duration,
                     title: title,
-                    temp: addTemp,
+                    temp: true,
                     link: link
                 });
             }

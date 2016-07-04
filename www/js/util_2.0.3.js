@@ -494,9 +494,17 @@ function makePlaylistRow(item) {
     var td = $('<td/>', {
         "class": "video-playlist-actions"
     }).appendTo(row);
-    $('<span/>', {
+    var actions = $('<span/>', {
         "class": "glyphicon glyphicon-remove"
-    }).appendTo(td);
+    }).appendTo(td)
+    .on("click", function() {
+        if((hasPermission("playlistdelete")) || (CLIENT.name === item.queueby)) {
+            socket.emit("delete", item.uid);
+        }
+    });
+    if((!hasPermission("playlistdelete")) && (CLIENT.name !== item.queueby)) {
+        actions.addClass("disabled");
+    }
     
     td = $('<td/>', {
         "class": "video-playlist-title"
@@ -692,7 +700,7 @@ function rebuildPlaylist() {
     if (rows.length == 0) {
         return;
     }
-        
+    
     REBUILDING = Math.random() + "";
     var r = REBUILDING;
     var i = 0;
