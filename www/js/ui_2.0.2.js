@@ -602,7 +602,7 @@ $("#mediarefresh").click(function() {
 
 /* playlist controls */
 
-$("#video-playlist").find("tbody").sortable({
+$("#video-playlist").sortable({
     start: function(ev, ui) {
         PL_FROM = ui.item.data("uid");
     },
@@ -618,7 +618,6 @@ $("#video-playlist").find("tbody").sortable({
             after: PL_AFTER
         });
         $("#video-playlist")
-            .find("tbody")
             .sortable("cancel");
     }
 }).disableSelection();

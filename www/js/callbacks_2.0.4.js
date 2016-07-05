@@ -871,9 +871,7 @@ Callbacks = {
         
         PL_QUEUED_ACTIONS = [];
         var q = $("#video-playlist")
-            .find("tbody")
             .empty();
-        
         for(var i = 0; i < data.length; i++) {
             makePlaylistRow(data[i])
                 .appendTo(q);
@@ -896,7 +894,7 @@ Callbacks = {
             return;
         }
         
-        var q = $("#queue").find("tbody");
+        var q = $("#video-playlist");
         PL_ACTION_QUEUE.queue(function (plq) {
             var row = makePlaylistRow(data.item);
             row.hide();
@@ -981,10 +979,10 @@ Callbacks = {
 
     setCurrent: function(uid) {
         PL_CURRENT = uid;
+        $(".playlist-row").removeClass("playing");
         var li = $(".pluid-" + uid);
         if (li.length !== 0) {
             li.addClass("playing");
-            //li.remove();
         }
     },
 
@@ -1074,12 +1072,6 @@ Callbacks = {
         $("#video-header-title").html(title);
         $("#video-header-queueby").text("Queued by " + data.queueby);
         $("#video-header-play-count").text(data.play_count + " plays");
-        
-        if((hasPermission("playlistdelete")) || (CLIENT.name === data.queueby)) {
-            $("#deletecurrent").show();
-        } else {
-            $("#deletecurrent").hide();
-        }
          
         if (!MEDIA_INIT) ChatAPI._pushPageReady();
         MEDIA_INIT = true;

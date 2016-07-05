@@ -4,7 +4,7 @@
         <img src="/img/logo.png" />
     </a>
     <ul id="navbar-primary" class="nav navbar-nav">
-        <li class="dropdown">
+        <li class="dropdown hidden-xs hidden-sm">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Charts <span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
@@ -21,7 +21,7 @@
         <li class="hidden-xs hidden-sm">
             <a href="/chat/logs"{% if channelName %} target="_blank"{% endif %}>Chat Logs</a>
         </li>
-        <li>
+        <li class="hidden-xs hidden-sm">
             <a href="/users"{% if channelName %} target="_blank"{% endif %}>Users</a>
         </li>
         {% if channelName %}

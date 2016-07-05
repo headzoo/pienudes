@@ -1,4 +1,4 @@
-<div id="chatwrap" class="col-sm-7 col-chat-side">
+<div id="chatwrap" class="col-sm-6 col-md-6 col-chat-side">
     <!--
     <div id="chatheader">
         <i id="userlisttoggle" class="glyphicon glyphicon-chevron-down pull-left.pointer" title="Show/Hide Userlist"></i>
@@ -22,7 +22,7 @@
                 <span class="glyphicon glyphicon-book"></span>
                 Information
             </button>
-            <button id="newpollbtn" class="btn btn-sm btn-default">
+            <button id="newpollbtn" class="btn btn-sm btn-default hidden-xs hidden-sm">
                 <span class="glyphicon glyphicon-signal"></span>
                 Poll
             </button>
@@ -34,11 +34,13 @@
                 <span class="glyphicon glyphicon-erase"></span>
                 Clear
             </button>
+
+            <button id="chat-attachment-btn" class="btn btn-sm btn-default pull-right" title="Attach file (10MB limit)" style="display: none;">
+                <span class="glyphicon glyphicon-paperclip"></span>
+            </button>
+            <input id="chatcolor" type="color" />
+            <input type="file" id="chat-attachment-file" style="display: none" />
         </div>
-        <button id="chat-attachment-btn" class="btn btn-sm btn-default pull-right" title="Attach file (10MB limit)" style="display: none;">
-            <span class="glyphicon glyphicon-paperclip"></span>
-        </button>
-        <input id="chatcolor" type="color" />
-        <input type="file" id="chat-attachment-file" style="display: none" />
+
     </div>
 </div>

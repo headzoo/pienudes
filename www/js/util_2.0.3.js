@@ -474,15 +474,15 @@ function scrollQueue() {
     if(!row)
         return;
     
-    var tbody = $("#video-playlist").find("tbody");
-    tbody.scrollTop(0);
-    var scroll = row.position().top - tbody.position().top;
-    tbody.scrollTop(scroll);
+    var playlist = $("#video-playlist");
+    playlist.scrollTop(0);
+    var scroll = row.position().top - playlist.position().top;
+    playlist.scrollTop(scroll);
 }
 
 function makePlaylistRow(item) {
     var video = item.media;
-    var row = $("<tr/>", {
+    var row = $("<div/>", {
         "class": "playlist-row pluid-" + item.uid + " queue_entry_by_" + item.queueby.replace("@", "")
     });
     row.data("pluid", item.uid);
@@ -491,43 +491,57 @@ function makePlaylistRow(item) {
     row.data("temp", item.temp);
     row.data("queueby", item.queueby);
     
-    var td = $('<td/>', {
-        "class": "video-playlist-actions"
+    var thumb_container = $("<a/>", {
+        "class": "video-playlist-thumbnail-container",
+        "href": formatURL(video),
+        "target": "_blank"
     }).appendTo(row);
-    var actions = $('<span/>', {
-        "class": "glyphicon glyphicon-remove"
-    }).appendTo(td)
-    .on("click", function() {
-        if((hasPermission("playlistdelete")) || (CLIENT.name === item.queueby)) {
-            socket.emit("delete", item.uid);
-        }
-    });
-    if((!hasPermission("playlistdelete")) && (CLIENT.name !== item.queueby)) {
-        actions.addClass("disabled");
-    }
     
-    td = $('<td/>', {
-        "class": "video-playlist-title"
-    }).appendTo(row);
-    $("<a/>")
-        .text(video.title)
-        .attr("href", formatURL(video))
-        .attr("target", "_blank")
-        .appendTo(td);
+    // Thumbnail.
+    $("<img/>", {
+        "src": thumbnailUrl(video)
+    }).appendTo(thumb_container);
     
-    td = $('<td/>', {
-        "class": "video-playlist-time"
+    var meta_container = $("<div/>", {
+        "class": "video-playlist-meta-container"
     }).appendTo(row);
+    
+    // Duration.
     $("<span/>", {
+        "class": "video-playlist-time",
         "text": video.duration
-    }).appendTo(td);
+    }).appendTo(meta_container);
     
-    td = $('<td/>', {
-        "class": "video-playlist-queueby"
-    }).appendTo(row);
+    // Title.
+    var title = $("<a/>", {
+        "class": "video-playlist-title",
+        "text": video.title,
+        "href": formatURL(video),
+        "target": "_blank"
+    }).appendTo(meta_container);
+    $("<img/>", {
+        "src": "/img/equalizer.gif",
+        "class": "video-playlist-eq"
+    }).prependTo(title);
+
+    // Queued by.
+    var queuedby = (item.queueby[0] == "@")
+        ? '<a href="/help#rngmod" target="_blank">RNGMod</a> [' + item.queueby.substring(1) + ']'
+        : item.queueby;
     $("<span/>", {
-        "text": item.queueby
-    }).appendTo(td);
+        "class": "video-playlist-queueby",
+        "html": "Queued by " + queuedby
+    }).appendTo(meta_container);
+    
+    // Delete button.
+    if((hasPermission("playlistdelete")) || (CLIENT.name === item.queueby)) {
+        $('<span/>', {
+            "class": "glyphicon glyphicon-remove video-playlist-delete-btn"
+        }).appendTo(meta_container)
+            .on("click", function() {
+                socket.emit("delete", item.uid);
+            });
+    }
     
     return row;
 }
@@ -695,7 +709,7 @@ function addQueueButtons(li) {
 }
 
 function rebuildPlaylist() {
-    var rows = $("#video-playlist").find("tbody").find("tr");
+    var rows = $("#video-playlist").find(".playlist-row");
     if (rows.length == 0) {
         return;
     }
@@ -1287,9 +1301,7 @@ var PL_ACTION_QUEUE = new AsyncQueue();
 // Because jQuery UI does weird things
 function playlistFind(uid) {
     var found    = false;
-    var children = $("#video-playlist")
-        .find("tbody")
-        .children();
+    var children = $("#video-playlist").children();
     children.each(function(i, child) {
         child = $(child);
         if (child.hasClass("pluid-" + uid)) {
