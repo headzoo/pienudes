@@ -2213,7 +2213,17 @@ function handleWindowResize() {
 
 function handleVideoResize() {
     if ($("#ytapiplayer").length === 0) return;
-
+    
+    var winq = $(window);
+    if (winq.width() < 768) {
+        $("#chatwrap").css("padding-left", "0");
+        $("#mainpage").css("padding-top", "50px");
+        $("#messagebuffer").height(winq.outerHeight() - 90);
+        $("#userlist").height(winq.outerHeight() - 10);
+        $(".btn-vote").find(".glyphicon").css("font-size", "14px");
+        return;
+    }
+    
     var intv, ticks = 0;
     var resize = function () {
         if (++ticks > 10) clearInterval(intv);

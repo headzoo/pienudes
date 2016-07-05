@@ -1070,8 +1070,13 @@ Callbacks = {
             "text": data.title
         });
         $("#video-header-title").html(title);
-        $("#video-header-queueby").text("Queued by " + data.queueby);
+    
+        var queuedby = (data.queueby[0] == "@")
+            ? 'Queued by <a href="/help#rngmod" target="_blank">RNGMod</a> [' + data.queueby.substring(1) + ']'
+            : "Queued by " + data.queueby;
+        $("#video-header-queueby").html(queuedby);
         $("#video-header-play-count").text(data.play_count + " plays");
+        $("#video-header-avatar").attr("src", data.queueby_avatar);
          
         if (!MEDIA_INIT) ChatAPI._pushPageReady();
         MEDIA_INIT = true;

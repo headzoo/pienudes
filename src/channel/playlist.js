@@ -311,8 +311,9 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     }
     
     var update = this.current.media.getFullUpdate();
-    update.queueby    = this.current.queueby;
     update.play_count = 0;
+    update.queueby = this.current.queueby;
+    
     
     var sendUpdate = function() {
         this.sendVideoVotes();
@@ -340,20 +341,28 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
         }
     }.bind(this);
     
-    db_media.fetchByUidAndType(update.id, update.type, function(err, row) {
-        if (!err && row) {
-            db_playlist.fetchFirstPlay(row.id, function(err, first_queueby) {
-                if (!err && first_queueby) {
-                    update.first_queueby = first_queueby;
-                }
-                db_playlist.countByMediaID(row.id, function(err, count) {
-                    update.play_count = count;
-                    sendUpdate();
-                });
-            });
+    db_accounts.getProfile(this.current.queueby.replace("@", ""), function(err, profile) {
+        if (profile.image !== undefined && profile.image.length > 0) {
+            update.queueby_avatar = profile.image;
         } else {
-            sendUpdate();
+            update.queueby_avatar = db_accounts.getRandomAvatar();
         }
+    
+        db_media.fetchByUidAndType(update.id, update.type, function(err, row) {
+            if (!err && row) {
+                db_playlist.fetchFirstPlay(row.id, function(err, first_queueby) {
+                    if (!err && first_queueby) {
+                        update.first_queueby = first_queueby;
+                    }
+                    db_playlist.countByMediaID(row.id, function(err, count) {
+                        update.play_count = count;
+                        sendUpdate();
+                    });
+                });
+            } else {
+                sendUpdate();
+            }
+        }.bind(this));
     }.bind(this));
 };
 
