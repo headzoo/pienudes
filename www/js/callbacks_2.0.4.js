@@ -1267,7 +1267,7 @@ Callbacks = {
             .appendTo($("#messagebuffer"));
         scrollChat();
 
-        var poll = $("<div/>").addClass("well active").prependTo($("#pollwrap"));
+        var poll = $("<div/>").addClass("card active").prependTo($("#pollwrap"));
         $("<button/>").addClass("close pull-right").html("&times;")
             .appendTo(poll)
             .click(function() { poll.remove(); });

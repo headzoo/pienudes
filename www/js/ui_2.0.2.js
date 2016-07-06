@@ -312,23 +312,12 @@ $(function() {
 
 $("#modflair").click(function () {
     var m = $("#modflair");
-    if (m.hasClass("btn-success")) {
+    if (USEROPTS.modhat) {
         USEROPTS.modhat = false;
-        m.removeClass("btn-success");
-        if (SUPERADMIN) {
-            USEROPTS.adminhat = true;
-            m.addClass("btn-danger");
-        } else {
-            m.addClass("btn-default");
-        }
-    } else if (m.hasClass("btn-danger")) {
-        USEROPTS.adminhat = false;
-        m.removeClass("btn-danger")
-            .addClass("btn-default");
+        m.removeClass("active");
     } else {
         USEROPTS.modhat = true;
-        m.removeClass("btn-default")
-            .addClass("btn-success");
+        m.addClass("active");
     }
 });
 

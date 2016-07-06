@@ -22,7 +22,8 @@
   border: none;
   font-size: 12px;
 }
-.channel-page .btn:hover {
+.channel-page .btn:hover,
+.channel-page .btn.active {
   z-index: 0;
   color: #E2A630;
 }

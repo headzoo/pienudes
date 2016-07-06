@@ -900,7 +900,7 @@ function showBio() {
 
 function showPollMenu() {
     $("#pollwrap .poll-menu").remove();
-    var menu = $("<div/>").addClass("well poll-menu")
+    var menu = $("<div/>").addClass("card poll-menu")
         .prependTo($("#pollwrap"));
 
     $("<button/>").addClass("btn btn-sm btn-danger pull-right")
