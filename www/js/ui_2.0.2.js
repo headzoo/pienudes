@@ -1157,10 +1157,7 @@ var toggleUserlist = function () {
     scrollChat();
 };
 
-$("#usercount").click(toggleUserlist);
-$("#userlisttoggle").click(toggleUserlist);
-
-if ($(window).width() < 700) {
+if ($(window).width() < 768) {
     toggleUserlist();
 }
 
