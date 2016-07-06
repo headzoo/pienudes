@@ -635,6 +635,13 @@ function makeSearchEntry(video) {
     var btn_end = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add</button>');
     btn_group.append(btn_end);
     btn_end.on("click", function() {
+        btn_end.prop("disabled", true);
+        btn_end.html('<span class="glyphicon glyphicon-plus"></span> Added!');
+        setTimeout(function() {
+            btn_end.html('<span class="glyphicon glyphicon-plus"></span> Add');
+            btn_end.prop("disabled", false);
+        }, 2000);
+        
         socket.emit("queue", {
             id: video.uid,
             pos: "end",
@@ -3113,6 +3120,13 @@ function formatFavorites(favorites, prepend) {
             var btn_end = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add</button>');
             btn_group.append(btn_end);
             btn_end.on("click", function() {
+                btn_end.prop("disabled", true);
+                btn_end.html('<span class="glyphicon glyphicon-plus"></span> Added!');
+                setTimeout(function() {
+                    btn_end.html('<span class="glyphicon glyphicon-plus"></span> Add');
+                    btn_end.prop("disabled", false);
+                }, 2000);
+                
                 socket.emit("queue", {
                     id: fav.uid,
                     pos: "end",

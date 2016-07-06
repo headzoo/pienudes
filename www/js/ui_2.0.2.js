@@ -870,21 +870,29 @@ $("#cs-chanranks-mod").click(chanrankSubmit.bind(this, 2));
 $("#cs-chanranks-adm").click(chanrankSubmit.bind(this, 3));
 $("#cs-chanranks-owner").click(chanrankSubmit.bind(this, 4));
 
-["#showsearch", "#showfavorites"]
-    .forEach(function (id) {
-    $(id).click(function () {
-        var wasActive = $(id).hasClass("active");
-        $(".plcontrol-collapse").collapse("hide");
-        $("#plcontrol button.active").button("toggle");
-        if (!wasActive) {
-            $(id).button("toggle");
-        }
-    });
+var favorites_wrapper = $("#favorites");
+favorites_wrapper.find(".close").on("click", function() {
+    $("#showfavorites").click();
 });
-$("#plcontrol button").button();
-$("#plcontrol button").button("hide");
-$(".plcontrol-collapse").collapse();
-$(".plcontrol-collapse").collapse("hide");
+$("#showfavorites").on("click", function() {
+    if (favorites_wrapper.is(":visible")) {
+        favorites_wrapper.hide();
+    } else {
+        favorites_wrapper.show();
+    }
+});
+
+var search_wrapper = $("#searchcontrol");
+search_wrapper.find(".close").on("click", function() {
+    $("#showsearch").click();
+});
+$("#showsearch").on("click", function() {
+    if (search_wrapper.is(":visible")) {
+        search_wrapper.hide();
+    } else {
+        search_wrapper.show();
+    }
+});
 
 $(".cs-checkbox").change(function () {
     var box = $(this);

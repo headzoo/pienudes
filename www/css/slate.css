@@ -5483,10 +5483,12 @@ a.list-group-item-danger.active:hover {
 }
 button.close {
   padding: 0;
+  color: #FFF;
   cursor: pointer;
   background: 0 0;
   border: 0;
   -webkit-appearance: none;
+  margin-top: -6px;
 }
 .modal-open {
   overflow: hidden;

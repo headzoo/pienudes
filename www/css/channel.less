@@ -247,10 +247,59 @@
 #searchcontrol, #favorites {
   padding: 12px;
   margin-top: 4px;
+
+  .input-group {
+    margin-top: 18px;
+  }
+  
+  .text-muted {
+    font-size: 12px;
+    padding-top: 2px;
+  }
 }
 
 #searchcontrol {
   margin-bottom: 4px;
+}
+
+#library {
+  min-height: auto;
+}
+
+#library_query {
+  background-color: #1B1B1B;
+  border: 1px solid #333;
+  color: #FFFFFF;
+  font-size: 14px;
+  height: 34px;
+
+  &::-webkit-input-placeholder {
+    color:    #555;
+  }
+  &:-moz-placeholder {
+    color:    #555;
+    opacity:  1;
+  }
+  &::-moz-placeholder {
+    color:    #555;
+    opacity:  1;
+  }
+  &:-ms-input-placeholder {
+    color:    #555;
+  }
+}
+
+.bootstrap-tagsinput {
+  background-color: #1B1B1B;
+  border: 1px solid #333;
+  color: #FFFFFF;
+  font-size: 14px;
+  height: 38px;
+}
+
+#favorites-tag-list {
+  border-top: 1px solid #2B2B2B;
+  padding-top: 16px !important;
 }
 
 #qlockbtn.btn-danger {

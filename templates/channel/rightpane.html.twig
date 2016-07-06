@@ -2,7 +2,7 @@
     <div id="queue-header" class="card">
         <div id="plmeta">
             <div class="input-group">
-                <input id="mediaurl" class="form-control" type="text" placeholder="Play something... (Links from YouTube and SoundCloud)" />
+                <input id="mediaurl" class="form-control" type="text" placeholder="Play something... (Links from YouTube, SoundCloud, Vimeo, and others)" />
                 <span class="input-group-btn">
                     <button id="queue_end" class="btn btn-default" style="padding-right: 0;">
                         <span class="glyphicon glyphicon-plus"></span> Add
@@ -29,8 +29,8 @@
         </div>
     </div>
     
-    <div id="searchcontrol" class="collapse plcontrol-collapse card">
-        <div class="vertical-spacer"></div>
+    <div id="searchcontrol" class="card" style="display: none;">
+        <button class="close pull-right">×</button>
         <div class="input-group">
             <input id="library_query" class="form-control" type="text" placeholder="Search term..." />
             <span class="input-group-btn">
