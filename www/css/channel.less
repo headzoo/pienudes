@@ -77,11 +77,10 @@
 #video-playlist {
   padding: 0 12px;
   font-size: 12px;
-  //height: 400px;
   max-height: 700px;
   overflow-x: hidden;
   overflow-y: auto;
-  min-height: auto;
+  min-height: 0 !important;
   .channel-card-drop-shadow;
   
   .playlist-row {
@@ -263,7 +262,7 @@
 }
 
 #library {
-  min-height: auto;
+  min-height: 0 !important;
 }
 
 #library_query {
@@ -304,4 +303,17 @@
 
 #qlockbtn.btn-danger {
   color: #EC4D49;
+}
+
+#chat-user-details {
+  padding: 12px;
+  margin-top: 8px;
+  min-height: 0 !important;
+  list-style-type: none;
+  font-size: 12px;
+  
+  li {
+    display: inline-block;
+    margin-right: 16px;
+  }
 }

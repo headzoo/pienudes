@@ -509,20 +509,8 @@ Callbacks = {
     
     /* REGION Chat */
     usercount: function (count) {
-        var obj = {
-            count: count
-        };
-        if (ChatAPI.trigger("user_count", obj).isCancelled()) {
-            return;
-        }
-        count = obj.count;
-        
         CHANNEL.usercount = count;
-        var text          = count + " connected user";
-        if (count != 1) {
-            text += "s";
-        }
-        $("#usercount").text(text);
+        updateUserDetails();
     },
     
     chatMsg: function (data) {
@@ -626,6 +614,7 @@ Callbacks = {
     
     userJoin: function (data) {
         addUserJoinMessage(data);
+        updateUserDetails();
     },
     
     notice: function (data) {
@@ -803,6 +792,8 @@ Callbacks = {
         if (USEROPTS.sort_rank) {
             sortUserlist();
         }
+    
+        updateUserDetails();
     },
 
     setUserIcon: function (data) {
@@ -834,8 +825,10 @@ Callbacks = {
             return;
         }
         var user = findUserlistItem(data.name);
-        if(user !== null)
+        if(user !== null) {
             user.remove();
+        }
+        updateUserDetails();
     },
 
     drinkCount: function(count) {

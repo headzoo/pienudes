@@ -1107,6 +1107,7 @@ function handlePermissionChange() {
     setVisible("#chatline", CLIENT.rank >= 0);
     setVisible("#queue", hasPermission("seeplaylist"));
     setVisible("#plmeta", hasPermission("seeplaylist"));
+    setVisible("#chat-user-details", hasPermission("seeuserdetails"));
     $("#getplaylist").attr("disabled", !hasPermission("seeplaylist"));
 
     setVisible("#showplaylistmanager", hasPermission("seeplaylist"));
@@ -2358,6 +2359,7 @@ function genPermissionsEditor() {
     makeOption("View voteskip results", "viewvoteskip", standard, CHANNEL.perms.viewvoteskip+"");
     
     addDivider("Moderation");
+    makeOption("View user breakdown", "seeuserdetails", standard, CHANNEL.perms.seeuserdetails+"");
     makeOption("Assign/Remove leader", "leaderctl", modplus, CHANNEL.perms.leaderctl+"");
     makeOption("Mute users", "mute", modleader, CHANNEL.perms.mute+"");
     makeOption("Kick users", "kick", modleader, CHANNEL.perms.kick+"");
@@ -3198,6 +3200,17 @@ function formatTime(sec) {
         return [m, s].join(":");
     } else {
         return [h, m, s].join(":");
+    }
+}
+
+function updateUserDetails() {
+    var bd = calcUserBreakdown();
+    var details = $("#chat-user-details");
+    details.empty();
+    for(var key in bd) {
+        $('<li/>', {
+            "html": key + ":&nbsp;" + bd[key]
+        }).appendTo(details);
     }
 }
 

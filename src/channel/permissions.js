@@ -21,6 +21,7 @@ const DEFAULT_PERMISSIONS = {
     exceedmaxlength: 2,       // Add a video longer than the maximum length set
     addnontemp: 2,            // Add a permanent video to the playlist
     settemp: 2,               // Toggle temporary status of a playlist item
+    seeuserdetails: 2,        // See the breakdown of users in a channel
     playlistshuffle: 2,       // Shuffle the playlist
     playlistclear: 2,         // Clear the playlist
     pollctl: 1.5,             // Open/close polls
@@ -288,6 +289,10 @@ PermissionsModule.prototype.canBan = function (actor) {
 
 PermissionsModule.prototype.canEditMotd = function (actor) {
     return this.hasPermission(actor, "motdedit");
+};
+
+PermissionsModule.prototype.canSeeUserDetails = function(actor) {
+    return this.hasPermission(actor, "seeuserdetails");
 };
 
 PermissionsModule.prototype.canEditBio = function (actor) {

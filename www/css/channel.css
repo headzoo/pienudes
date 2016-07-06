@@ -83,7 +83,7 @@
   max-height: 700px;
   overflow-x: hidden;
   overflow-y: auto;
-  min-height: auto;
+  min-height: 0 !important;
   border-bottom: none;
   border-left: none;
   border-right: none;
@@ -242,7 +242,7 @@
   margin-bottom: 4px;
 }
 #library {
-  min-height: auto;
+  min-height: 0 !important;
 }
 #library_query {
   background-color: #1B1B1B;
@@ -278,4 +278,15 @@
 }
 #qlockbtn.btn-danger {
   color: #EC4D49;
+}
+#chat-user-details {
+  padding: 12px;
+  margin-top: 8px;
+  min-height: 0 !important;
+  list-style-type: none;
+  font-size: 12px;
+}
+#chat-user-details li {
+  display: inline-block;
+  margin-right: 16px;
 }
