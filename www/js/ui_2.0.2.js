@@ -272,6 +272,41 @@ $(function() {
     chat_attachment_btn.on("click", function() {
         chat_attachment_file.click();
     });
+    
+    var wider_layout = $("#widerlayout");
+    wider_layout.on("click", function() {
+        var target = $(this);
+        if (target.data("size") == "small") {
+            target.data("size", "big");
+            target.html('<span class="glyphicon glyphicon-resize-small"></span> Smaller');
+            
+            $(".col-video-side")
+                .removeClass("col-sm-6")
+                .addClass("col-sm-7");
+            $(".col-chat-side")
+                .removeClass("col-sm-6")
+                .addClass("col-sm-5");
+    
+        } else {
+            target.data("size", "small");
+            target.html('<span class="glyphicon glyphicon-resize-full"></span> Bigger');
+            
+            $(".col-video-side")
+                .addClass("col-sm-6")
+                .removeClass("col-sm-7");
+            $(".col-chat-side")
+                .addClass("col-sm-6")
+                .removeClass("col-sm-5");
+        }
+    
+        ChatStore.local.set("widerlayout", target.data("size"));
+        handleWindowResize();
+    });
+    
+    var layout = ChatStore.local.get("widerlayout", null);
+    if (layout != null) {
+        wider_layout.data("size", layout == "small" ? "big" : "small").click();
+    }
 });
 
 
