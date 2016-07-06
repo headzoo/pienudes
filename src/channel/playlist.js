@@ -1068,7 +1068,7 @@ PlaylistModule.prototype.handleFavoritesGet = function(user, tag_name) {
             return user.socket.emit("favoritesGet", []);
         }
     
-        db_favorites.fetchByUser(u.id, tag_name, 40, 0, function(err, rows) {
+        db_favorites.fetchByUser(u.id, tag_name, 100, 0, function(err, rows) {
             if (err) {
                 return user.socket.emit("favoritesGet", []);
             }

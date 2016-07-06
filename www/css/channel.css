@@ -23,7 +23,7 @@
   font-size: 12px;
 }
 .channel-page .btn:hover,
-.channel-page .btn.active {
+.channel-page .btn.activated {
   z-index: 0;
   color: #E2A630;
 }
@@ -223,4 +223,15 @@
 }
 #video-container {
   border: 1px solid #222 !important;
+}
+#searchcontrol,
+#favorites {
+  padding: 12px;
+  margin-top: 4px;
+}
+#searchcontrol {
+  margin-bottom: 4px;
+}
+#qlockbtn.btn-danger {
+  color: #EC4D49;
 }

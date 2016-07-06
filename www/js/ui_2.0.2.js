@@ -314,10 +314,10 @@ $("#modflair").click(function () {
     var m = $("#modflair");
     if (USEROPTS.modhat) {
         USEROPTS.modhat = false;
-        m.removeClass("active");
+        m.removeClass("activated");
     } else {
         USEROPTS.modhat = true;
-        m.addClass("active");
+        m.addClass("activated");
     }
 });
 
@@ -870,7 +870,7 @@ $("#cs-chanranks-mod").click(chanrankSubmit.bind(this, 2));
 $("#cs-chanranks-adm").click(chanrankSubmit.bind(this, 3));
 $("#cs-chanranks-owner").click(chanrankSubmit.bind(this, 4));
 
-["#showmediaurl", "#showsearch", "#showcustomembed", "#showplaylistmanager", "#showfavorites"]
+["#showsearch", "#showfavorites"]
     .forEach(function (id) {
     $(id).click(function () {
         var wasActive = $(id).hasClass("active");
@@ -1151,10 +1151,6 @@ var toggleUserlist = function () {
 
 $("#usercount").click(toggleUserlist);
 $("#userlisttoggle").click(toggleUserlist);
-
-$(".add-temp").change(function () {
-    $(".add-temp").prop("checked", $(this).prop("checked"));
-});
 
 if ($(window).width() < 700) {
     toggleUserlist();

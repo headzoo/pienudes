@@ -609,24 +609,41 @@ function makeQueueEntry(item, addbtns) {
 }
 
 function makeSearchEntry(video) {
-    var li = $("<li/>");
-    li.addClass("queue_entry");
-    li.data("media", video);
-    if(video.thumb) {
-        $("<img/>").attr("src", video.thumb.url)
-            .css("float", "left")
-            .css("clear", "both")
-            .appendTo(li);
-    }
-    var title = $("<a/>").addClass("qe_title").appendTo(li)
-        .text(video.title)
-        .attr("href", formatURL(video))
-        .attr("target", "_blank");
-    var time = $("<span/>").addClass("qe_time").appendTo(li);
-    time.text(video.duration);
-    var clear = $("<div/>").addClass("qe_clear").appendTo(li);
-
-    return li;
+    var col = $('<div class="col-xs-3">');
+    var thumb = $('<div class="thumbnail">');
+    col.append(thumb);
+    
+    var a_img = $('<a target="_blank">');
+    a_img.attr("href", mediaUrl(video));
+    thumb.append(a_img);
+    
+    var img = $('<img />');
+    img.attr("src", thumbnailUrl(video, "mq"));
+    a_img.append(img);
+    
+    var title = $('<h4/>');
+    thumb.append(title);
+    
+    var a_title = $('<a target="_blank"/>');
+    a_title.attr("href", mediaUrl(video));
+    a_title.text(video.title);
+    title.append(a_title);
+    
+    var btn_group = $('<div class="btn-group">');
+    thumb.append(btn_group);
+    
+    var btn_end = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add</button>');
+    btn_group.append(btn_end);
+    btn_end.on("click", function() {
+        socket.emit("queue", {
+            id: video.uid,
+            pos: "end",
+            type: video.type,
+            temp: true
+        });
+    });
+    
+    return col;
 }
 
 function addQueueButtons(li) {
@@ -1075,7 +1092,7 @@ function handlePermissionChange() {
         handleModPermissions();
     }
     
-    setVisible("#qlockbtn", hasPermission("playlistlock"));
+    $("#qlockbtn").attr("disabled", !hasPermission("playlistlock"));
     setVisible("#showchansettings", CLIENT.rank >= 2);
     setVisible("#playlistmanagerwrap", CLIENT.rank >= 1);
     setVisible("#modflair", CLIENT.rank >= 2);
@@ -1089,36 +1106,6 @@ function handlePermissionChange() {
     setVisible("#showmediaurl", hasPermission("playlistadd"));
     setVisible("#showcustomembed", hasPermission("playlistaddcustom"));
     $("#queue_next").attr("disabled", !hasPermission("playlistnext"));
-
-    if(hasPermission("playlistadd") ||
-        hasPermission("playlistmove") ||
-        hasPermission("playlistjump") ||
-        hasPermission("playlistdelete") ||
-        hasPermission("settemp")) {
-        if(USEROPTS.first_visit && $("#plonotification").length == 0) {
-            var al = makeAlert("Playlist Options", [
-                "From the Options menu, you can choose to automatically",
-                " hide the buttons on each entry (and show them when",
-                " you right click).  You can also choose to use the old",
-                " style of playlist buttons.",
-                "<br>"].join(""))
-                .attr("id", "plonotification")
-                .insertAfter($("#queuefail"));
-
-            al.find(".close").remove();
-
-            $("<button/>").addClass("btn btn-primary")
-                .text("Dismiss")
-                .appendTo(al.find(".alert"))
-                .click(function() {
-                    USEROPTS.first_visit = false;
-                    storeOpts();
-                    al.hide("fade", function() {
-                        al.remove();
-                    });
-                });
-        }
-    }
     
     if(hasPermission("playlistmove")) {
         $("#video-playlist").sortable("enable");
@@ -1131,12 +1118,6 @@ function handlePermissionChange() {
 
     setVisible("#clearplaylist", hasPermission("playlistclear"));
     setVisible("#shuffleplaylist", hasPermission("playlistshuffle"));
-    if (!hasPermission("addnontemp")) {
-        $(".add-temp").prop("checked", true);
-        $(".add-temp").attr("disabled", true);
-    } else {
-        $(".add-temp").attr("disabled", false);
-    }
 
     fixWeirdButtonAlignmentIssue();
     
@@ -1195,13 +1176,15 @@ function clearSearchResults() {
 }
 
 function addLibraryButtons(li, id, source) {
-    var btns = $("<div/>").addClass("btn-group")
+    var btns = $("<div/>")
+        .addClass("btn-group")
         .addClass("pull-left")
         .prependTo(li);
 
     var type = (source === "library") ? "lib" : source;
 
     if(hasPermission("playlistadd")) {
+        /*
         if(hasPermission("playlistnext")) {
             $("<button/>").addClass("btn btn-xs btn-default")
                 .text("Next")
@@ -1210,32 +1193,20 @@ function addLibraryButtons(li, id, source) {
                         id: id,
                         pos: "next",
                         type: type,
-                        temp: $(".add-temp").prop("checked")
+                        temp: true
                     });
                 })
                 .appendTo(btns);
         }
+        */
         $("<button/>").addClass("btn btn-xs btn-default")
-            .text("End")
+            .html('<span class="glyphicon glyphicon-plus"></span> Add')
             .click(function() {
                 socket.emit("queue", {
                     id: id,
                     pos: "end",
                     type: type,
-                    temp: $(".add-temp").prop("checked")
-                });
-            })
-            .appendTo(btns);
-    }
-    if(CLIENT.rank >= 2 && source === "library") {
-        $("<button/>").addClass("btn btn-xs btn-danger")
-            .html("<span class='glyphicon glyphicon-trash'></span>")
-            .click(function() {
-                socket.emit("uncache", {
-                    id: id
-                });
-                li.hide("fade", function() {
-                    li.remove();
+                    temp: true
                 });
             })
             .appendTo(btns);
@@ -3124,7 +3095,7 @@ function formatFavorites(favorites, prepend) {
             
             var btn_group = $('<div class="btn-group">');
             thumb.append(btn_group);
-            
+            /*
             if(hasPermission("playlistnext")) {
                 var btn_next = $('<button class="btn btn-xs btn-default">Next</button>');
                 btn_group.append(btn_next);
@@ -3137,15 +3108,16 @@ function formatFavorites(favorites, prepend) {
                     });
                 });
             }
+            */
             
-            var btn_end = $('<button class="btn btn-xs btn-default">End</button>');
+            var btn_end = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add</button>');
             btn_group.append(btn_end);
             btn_end.on("click", function() {
                 socket.emit("queue", {
                     id: fav.uid,
                     pos: "end",
                     type: fav.type,
-                    temp: $(".add-temp").prop("checked")
+                    temp: true
                 });
             });
         })(favorites[i]);
@@ -3241,7 +3213,7 @@ function formatUserPlaylistList() {
                     socket.emit("queuePlaylist", {
                         name: pl.name,
                         pos: "end",
-                        temp: $(".add-temp").prop("checked")
+                        temp: true
                     });
                 });
         }
@@ -3254,7 +3226,7 @@ function formatUserPlaylistList() {
                     socket.emit("queuePlaylist", {
                         name: pl.name,
                         pos: "next",
-                        temp: $(".add-temp").prop("checked")
+                        temp: true
                     });
                 });
         }

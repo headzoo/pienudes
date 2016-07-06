@@ -1133,7 +1133,9 @@ Callbacks = {
         
         $("#search_clear").remove();
         clearSearchResults();
-        $("#library").data("entries", data.results);
+        
+        var library = $("#library");
+        library.data("entries", data.results);
         $("<button/>").addClass("btn btn-default btn-sm btn-block")
             .css("margin-left", "0")
             .attr("id", "search_clear")
@@ -1142,8 +1144,16 @@ Callbacks = {
                 clearSearchResults();
             })
             .insertBefore($("#library"));
+            
+        for(var i = 0; i < data.results.length; i++) {
+            var col = makeSearchEntry(data.results[i], false);
+            //if(hasPermission("playlistadd")) {
+            //    addLibraryButtons(col, item.id, data.source);
+            //}
+            library.append(col);
+        }
 
-
+        return;
         $("#search_pagination").remove();
         var opts = {
             preLoadPage: function () {
@@ -1151,21 +1161,21 @@ Callbacks = {
             },
 
             generator: function (item, page, index) {
-                var li = makeSearchEntry(item, false);
-                if(hasPermission("playlistadd")) {
-                    addLibraryButtons(li, item.id, data.source);
-                }
-                $(li).appendTo($("#library"));
+                var col = makeSearchEntry(item, false);
+                //if(hasPermission("playlistadd")) {
+                //    addLibraryButtons(col, item.id, data.source);
+                //}
+                library.append(col);
             },
 
             itemsPerPage: 100
         };
 
         var p = Paginate(data.results, opts);
-        p.paginator.insertAfter($("#library"))
+        p.paginator.insertAfter(library)
             .addClass("pull-right")
             .attr("id", "search_pagination");
-        $("#library").data("paginator", p);
+        library.data("paginator", p);
     },
     
     changeVotes: function(data) {
@@ -1212,7 +1222,7 @@ Callbacks = {
         toastr.options.closeButton = true;
         toastr.options.timeOut = 1500;
         toastr.success('Favorite completed!');
-        $("#favorites-add").text("Update");
+        $("#favorites-add").html('<span class="glyphicon glyphicon-heart"></span> Update');
     },
     
     favoritesGet: function(favorites) {
@@ -1240,9 +1250,9 @@ Callbacks = {
         }
         
         if (data.favorited) {
-            $("#favorites-add").text("Update");
+            $("#favorites-add").html('<span class="glyphicon glyphicon-heart"></span> Update');
         } else {
-            $("#favorites-add").text("Favorite");
+            $("#favorites-add").html('<span class="glyphicon glyphicon-heart"></span> Favorite');
         }
     },
     

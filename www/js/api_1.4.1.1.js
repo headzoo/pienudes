@@ -947,7 +947,7 @@ var $each = function(obj, cb) {
                     title: url.title,
                     pos: "end",
                     type: url.type,
-                    temp: $(".add-temp").prop("checked")
+                    temp: true
                 });
             } else {
                 $("#mediaurl").val(url);
@@ -1177,7 +1177,7 @@ var $each = function(obj, cb) {
                     title: url.title,
                     pos: "end",
                     type: url.type,
-                    temp: $(".add-temp").prop("checked")
+                    temp: true
                 });
             } else {
                 $("#mediaurl").val(url);

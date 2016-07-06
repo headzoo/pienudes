@@ -185,7 +185,7 @@ body {
 .videolist {
   list-style: none outside none;
   margin-left: 0;
-  height: 500px;
+  height: 350px;
   overflow-y: auto;
 }
 #pllength {
@@ -1116,7 +1116,8 @@ input:focus {
 .list-style-type-none li {
   margin: 0;
 }
-#favorites .thumbnail h4 {
+#favorites .thumbnail h4,
+#library .thumbnail h4 {
   font-size: 75%;
   font-weight: 700;
   line-height: 1;
