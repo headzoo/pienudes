@@ -972,11 +972,13 @@ Callbacks = {
 
     setCurrent: function(uid) {
         PL_CURRENT = uid;
-        $(".playlist-row").removeClass("playing");
-        var li = $(".pluid-" + uid);
-        if (li.length !== 0) {
-            li.addClass("playing");
-        }
+        setTimeout(function() {
+            $(".playlist-row").removeClass("playing");
+            var li = $(".pluid-" + uid);
+            if (li.length !== 0) {
+                li.addClass("playing");
+            }
+        }, 2000);
     },
 
     changeMedia: function(data) {
