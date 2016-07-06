@@ -1059,9 +1059,11 @@ Callbacks = {
         }
         
         if (data.first_queueby) {
-            $("#video-header-first-play").text("First played by " + data.first_queueby);
+            $("#video-header-first-play")
+                .html('First played by <a href="/user/' + data.first_queueby + '" target="_blank">' + data.first_queueby + '</a>');
         } else {
-            $("#video-header-first-play").text("First played by " + data.queueby);
+            $("#video-header-first-play")
+                .html('First played by <a href="/user/' + data.queueby + '" target="_blank">' + data.queueby + '</a>');
         }
         
         var title = $('<a/>', {
@@ -1071,9 +1073,10 @@ Callbacks = {
         });
         $("#video-header-title").html(title);
     
-        var queuedby = (data.queueby[0] == "@")
-            ? 'Queued by <a href="/help#rngmod" target="_blank">RNGMod</a> [' + data.queueby.substring(1) + ']'
-            : "Queued by " + data.queueby;
+        var clean_name = data.queueby.substring(1);
+        var queuedby   = (data.queueby[0] == "@")
+            ? 'Queued by <a href="/help#rngmod" target="_blank">RNGMod</a> via <a href="/user/' + clean_name + '" target="_blank">' + clean_name + '</a>'
+            : 'Queued by <a href="/user/' + data.queueby + '" target="_blank">' + data.queueby + '</a>';
         $("#video-header-queueby").html(queuedby);
         $("#video-header-play-count").text(data.play_count + " plays");
         $("#video-header-avatar").attr("src", data.queueby_avatar);

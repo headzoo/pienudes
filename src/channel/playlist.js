@@ -342,7 +342,7 @@ PlaylistModule.prototype.sendChangeMedia = function (users) {
     }.bind(this);
     
     db_accounts.getProfile(this.current.queueby.replace("@", ""), function(err, profile) {
-        if (profile.image !== undefined && profile.image.length > 0) {
+        if (profile && profile.image !== undefined && profile.image.length > 0) {
             update.queueby_avatar = profile.image;
         } else {
             update.queueby_avatar = db_accounts.getRandomAvatar();

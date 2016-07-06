@@ -525,9 +525,10 @@ function makePlaylistRow(item) {
     }).prependTo(title);
 
     // Queued by.
-    var queuedby = (item.queueby[0] == "@")
-        ? '<a href="/help#rngmod" target="_blank">RNGMod</a> [' + item.queueby.substring(1) + ']'
-        : item.queueby;
+    var clean_name = item.queueby.substring(1);
+    var queuedby   = (item.queueby[0] == "@")
+        ? '<a href="/help#rngmod" target="_blank">RNGMod</a> via <a href="/user/' + clean_name + '" target="_blank">' + clean_name + '</a>'
+        : '<a href="/user/' + item.queueby + '" target="_blank">' + item.queueby + '<a/>';
     $("<span/>", {
         "class": "video-playlist-queueby",
         "html": "Queued by " + queuedby
@@ -1073,8 +1074,8 @@ function handlePermissionChange() {
     if(CLIENT.rank >= 2) {
         handleModPermissions();
     }
-
-    $("#qlockbtn").attr("disabled", !hasPermission("playlistlock"));
+    
+    setVisible("#qlockbtn", hasPermission("playlistlock"));
     setVisible("#showchansettings", CLIENT.rank >= 2);
     setVisible("#playlistmanagerwrap", CLIENT.rank >= 1);
     setVisible("#modflair", CLIENT.rank >= 2);
@@ -1118,17 +1119,15 @@ function handlePermissionChange() {
                 });
         }
     }
-
-    /*
+    
     if(hasPermission("playlistmove")) {
-        $("#queue").sortable("enable");
-        $("#queue").addClass("queue_sortable");
+        $("#video-playlist").sortable("enable");
+        $("#video-playlist").addClass("queue_sortable");
     }
     else {
-        $("#queue").sortable("disable");
-        $("#queue").removeClass("queue_sortable");
+        $("#video-playlist").sortable("disable");
+        $("#video-playlist").removeClass("queue_sortable");
     }
-    */
 
     setVisible("#clearplaylist", hasPermission("playlistclear"));
     setVisible("#shuffleplaylist", hasPermission("playlistshuffle"));

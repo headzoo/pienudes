@@ -3,9 +3,9 @@
   border-left: none;
   border-right: none;
   border-top: none;
-  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 html,
 body {
@@ -872,6 +872,7 @@ input:focus {
 }
 .sp-replacer {
   background: #222 !important;
+  margin-right: 4px !important;
   border: none !important;
 }
 .sp-dd {

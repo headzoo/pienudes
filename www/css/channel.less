@@ -2,7 +2,11 @@
 
 .channel-page {
   .card {
-    background: #212121;
+    background: #222;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
   }
 
   .btn {
@@ -25,14 +29,15 @@
 }
 
 #video-header {
-  margin-top: 12px;
+  margin-top: 4px;
   padding: 12px;
   .channel-card-drop-shadow;
 }
 
 #queue-header {
   padding: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
+  margin-top: 8px;
   .channel-card-drop-shadow;
 }
 
@@ -46,6 +51,21 @@
       color: #FFFFFF;
       font-size: 14px;
       height: 34px;
+
+      &::-webkit-input-placeholder {
+        color:    #555;
+      }
+      &:-moz-placeholder {
+        color:    #555;
+        opacity:  1;
+      }
+      &::-moz-placeholder {
+        color:    #555;
+        opacity:  1;
+      }
+      &:-ms-input-placeholder {
+        color:    #555;
+      }
     }
   }
   
@@ -57,16 +77,19 @@
 #video-playlist {
   padding: 0 12px;
   font-size: 12px;
-  height: 400px;
+  //height: 400px;
+  max-height: 700px;
   overflow-x: hidden;
   overflow-y: auto;
+  min-height: auto;
+  .channel-card-drop-shadow;
   
   .playlist-row {
     width: 100%;
     margin: 12px 0;
     height: 50px;
-    background-color: #212121;
-    border-bottom: 1px solid #333;
+    background-color: #222;
+    border-bottom: 1px solid #2B2B2B;
     
     &:last-child {
       border-bottom: none;
@@ -168,6 +191,10 @@
   height: 40px;
 }
 
+#video-header-first-play {
+  font-size: 10px;
+}
+
 #video-header-play-count {
   float: right;
   margin-top: 20px;
@@ -175,7 +202,7 @@
 
 #video-header-controls {
   padding-top: 12px;
-  border-top: 1px solid #333;
+  border-top: 1px solid #2B2B2B;
 
   .btn-vote {
   
@@ -185,9 +212,15 @@
   }
 }
 
+#chatline {
+  &:focus {
+    border-color: #212121 !important;
+  }
+}
+
 .chatbuttons {
   padding: 12px !important;
-  margin-top: 12px;
+  margin-top: 4px;
   min-height: 20px !important;
   
   .btn-group {
@@ -197,4 +230,12 @@
 
 .queue_active {
   display: none;
+}
+
+#videowrap, #chatwrap {
+  margin-bottom: -4px !important;
+}
+
+#chat-container, #video-container {
+  .channel-card-drop-shadow;
 }

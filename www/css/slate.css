@@ -3,9 +3,9 @@
   border-left: none;
   border-right: none;
   border-top: none;
-  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 /**!
  * bootswatch v3.3.1+1
@@ -5418,9 +5418,10 @@ a.list-group-item-danger.active:hover {
   border-left: none;
   border-right: none;
   border-top: none;
-  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
+  border: 1px solid #212121;
 }
 .embed-responsive .embed-responsive-item,
 .embed-responsive embed,
@@ -6795,9 +6796,9 @@ textarea.form-control {
 }
 #userlist,
 #messagebuffer {
-  border-right: 1px solid #353535;
-  border-top: 1px solid #353535;
-  border-left: 1px solid #353535;
+  border-right: 1px solid #212121;
+  border-top: 1px solid #212121;
+  border-left: 1px solid #212121;
   background-color: #000;
 }
 #chatline,
@@ -6806,7 +6807,7 @@ textarea.form-control {
   color: #c8c8c8;
 }
 #chatline {
-  border: 1px solid #353535;
+  border: 1px solid #212121;
 }
 .queue_entry {
   border-color: #4A4949;
