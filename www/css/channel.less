@@ -1,8 +1,36 @@
 @import "variables";
+@standard-padding: 12px;
+@standard-font-size: 12px;
+@card-background-color: #222;
+@card-divider-color: #2B2B2B;
+
+.channel-input {
+  background-color: #1B1B1B;
+  border: 1px solid @card-divider-color;
+  color: #FFFFFF;
+  font-size: 14px;
+  height: 34px;
+
+  &::-webkit-input-placeholder {
+    color:    #555;
+  }
+  &:-moz-placeholder {
+    color:    #555;
+    opacity:  1;
+  }
+  &::-moz-placeholder {
+    color:    #555;
+    opacity:  1;
+  }
+  &:-ms-input-placeholder {
+    color:    #555;
+  }
+}
 
 .channel-page {
   .card {
-    background: #222;
+    padding: @standard-padding;
+    background: @card-background-color;
     border-left: none !important;
     border-right: none !important;
     border-top: none !important;
@@ -15,7 +43,7 @@
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
     border: none;
-    font-size: 12px;
+    font-size: @standard-font-size;
 
     &:hover, &.activated {
       z-index: 0;
@@ -30,53 +58,28 @@
 
 #video-header {
   margin-top: 4px;
-  padding: 12px;
   .channel-card-drop-shadow;
 }
 
 #queue-header {
-  padding: 12px;
   margin-bottom: 4px;
   margin-top: 8px;
   .channel-card-drop-shadow;
 }
 
 #plmeta {
-  
-  .input-group {
-    
-    input {
-      background-color: #1B1B1B;
-      border: 1px solid #333;
-      color: #FFFFFF;
-      font-size: 14px;
-      height: 34px;
-
-      &::-webkit-input-placeholder {
-        color:    #555;
-      }
-      &:-moz-placeholder {
-        color:    #555;
-        opacity:  1;
-      }
-      &::-moz-placeholder {
-        color:    #555;
-        opacity:  1;
-      }
-      &:-ms-input-placeholder {
-        color:    #555;
-      }
-    }
+  input {
+    .channel-input;
   }
   
   .plbuttons {
-    padding-top: 12px;
+    padding-top: @standard-padding;
   }
 }
 
 #video-playlist {
-  padding: 0 12px;
-  font-size: 12px;
+  padding: 0 @standard-padding;
+  font-size: @standard-font-size;
   max-height: 700px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -85,10 +88,10 @@
   
   .playlist-row {
     width: 100%;
-    margin: 12px 0;
+    margin: @standard-padding 0;
     height: 50px;
-    background-color: #222;
-    border-bottom: 1px solid #2B2B2B;
+    background-color: @card-background-color;
+    border-bottom: 1px solid @card-divider-color;
     
     &:last-child {
       border-bottom: none;
@@ -171,7 +174,7 @@
   text-overflow: ellipsis;
   font-size: 20px;
   font-weight: normal;
-  margin-bottom: 12px;
+  margin-bottom: @standard-padding;
 }
 
 #video-header-info {
@@ -186,7 +189,7 @@
 
 #video-header-user-info {
   margin-left: 50px;
-  margin-bottom: 12px;
+  margin-bottom: @standard-padding;
   height: 40px;
 }
 
@@ -200,8 +203,8 @@
 }
 
 #video-header-controls {
-  padding-top: 12px;
-  border-top: 1px solid #2B2B2B;
+  padding-top: @standard-padding;
+  border-top: 1px solid @card-divider-color;
 
   .btn-vote {
   
@@ -218,17 +221,12 @@
 }
 
 .chatbuttons {
-  padding: 12px !important;
   margin-top: 4px;
   min-height: 20px !important;
   
   .btn-group {
     width: 100%;
   }
-}
-
-.queue_active {
-  display: none;
 }
 
 #videowrap, #chatwrap {
@@ -240,11 +238,10 @@
 }
 
 #video-container {
-  border: 1px solid #222 !important;
+  border: 1px solid #212121 !important;
 }
 
 #searchcontrol, #favorites {
-  padding: 12px;
   margin-top: 4px;
 
   .input-group {
@@ -252,7 +249,7 @@
   }
   
   .text-muted {
-    font-size: 12px;
+    font-size: @standard-font-size;
     padding-top: 2px;
   }
 }
@@ -266,38 +263,16 @@
 }
 
 #library_query {
-  background-color: #1B1B1B;
-  border: 1px solid #333;
-  color: #FFFFFF;
-  font-size: 14px;
-  height: 34px;
-
-  &::-webkit-input-placeholder {
-    color:    #555;
-  }
-  &:-moz-placeholder {
-    color:    #555;
-    opacity:  1;
-  }
-  &::-moz-placeholder {
-    color:    #555;
-    opacity:  1;
-  }
-  &:-ms-input-placeholder {
-    color:    #555;
-  }
+  .channel-input;
 }
 
 .bootstrap-tagsinput {
-  background-color: #1B1B1B;
-  border: 1px solid #333;
-  color: #FFFFFF;
-  font-size: 14px;
+  .channel-input;
   height: 38px;
 }
 
 #favorites-tag-list {
-  border-top: 1px solid #2B2B2B;
+  border-top: 1px solid @card-divider-color;
   padding-top: 16px !important;
 }
 
@@ -306,11 +281,10 @@
 }
 
 #chat-user-details {
-  padding: 12px;
   margin-top: 8px;
   min-height: 0 !important;
   list-style-type: none;
-  font-size: 12px;
+  font-size: @standard-font-size;
   
   li {
     display: inline-block;

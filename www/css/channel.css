@@ -7,8 +7,30 @@
   -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
 }
+.channel-input {
+  background-color: #1B1B1B;
+  border: 1px solid #2b2b2b;
+  color: #FFFFFF;
+  font-size: 14px;
+  height: 34px;
+}
+.channel-input::-webkit-input-placeholder {
+  color: #555;
+}
+.channel-input:-moz-placeholder {
+  color: #555;
+  opacity: 1;
+}
+.channel-input::-moz-placeholder {
+  color: #555;
+  opacity: 1;
+}
+.channel-input:-ms-input-placeholder {
+  color: #555;
+}
 .channel-page .card {
-  background: #222;
+  padding: 12px;
+  background: #222222;
   border-left: none !important;
   border-right: none !important;
   border-top: none !important;
@@ -32,7 +54,6 @@
 }
 #video-header {
   margin-top: 4px;
-  padding: 12px;
   border-bottom: none;
   border-left: none;
   border-right: none;
@@ -42,7 +63,6 @@
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 #queue-header {
-  padding: 12px;
   margin-bottom: 4px;
   margin-top: 8px;
   border-bottom: none;
@@ -53,25 +73,25 @@
   -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
 }
-#plmeta .input-group input {
+#plmeta input {
   background-color: #1B1B1B;
-  border: 1px solid #333;
+  border: 1px solid #2b2b2b;
   color: #FFFFFF;
   font-size: 14px;
   height: 34px;
 }
-#plmeta .input-group input::-webkit-input-placeholder {
+#plmeta input::-webkit-input-placeholder {
   color: #555;
 }
-#plmeta .input-group input:-moz-placeholder {
-  color: #555;
-  opacity: 1;
-}
-#plmeta .input-group input::-moz-placeholder {
+#plmeta input:-moz-placeholder {
   color: #555;
   opacity: 1;
 }
-#plmeta .input-group input:-ms-input-placeholder {
+#plmeta input::-moz-placeholder {
+  color: #555;
+  opacity: 1;
+}
+#plmeta input:-ms-input-placeholder {
   color: #555;
 }
 #plmeta .plbuttons {
@@ -96,8 +116,8 @@
   width: 100%;
   margin: 12px 0;
   height: 50px;
-  background-color: #222;
-  border-bottom: 1px solid #2B2B2B;
+  background-color: #222222;
+  border-bottom: 1px solid #2b2b2b;
 }
 #video-playlist .playlist-row:last-child {
   border-bottom: none;
@@ -188,7 +208,7 @@
 }
 #video-header-controls {
   padding-top: 12px;
-  border-top: 1px solid #2B2B2B;
+  border-top: 1px solid #2b2b2b;
 }
 #video-header-controls .btn-vote .glyphicon {
   font-size: 18px;
@@ -197,15 +217,11 @@
   border-color: #212121 !important;
 }
 .chatbuttons {
-  padding: 12px !important;
   margin-top: 4px;
   min-height: 20px !important;
 }
 .chatbuttons .btn-group {
   width: 100%;
-}
-.queue_active {
-  display: none;
 }
 #videowrap,
 #chatwrap {
@@ -222,11 +238,10 @@
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 #video-container {
-  border: 1px solid #222 !important;
+  border: 1px solid #212121 !important;
 }
 #searchcontrol,
 #favorites {
-  padding: 12px;
   margin-top: 4px;
 }
 #searchcontrol .input-group,
@@ -246,7 +261,7 @@
 }
 #library_query {
   background-color: #1B1B1B;
-  border: 1px solid #333;
+  border: 1px solid #2b2b2b;
   color: #FFFFFF;
   font-size: 14px;
   height: 34px;
@@ -267,20 +282,34 @@
 }
 .bootstrap-tagsinput {
   background-color: #1B1B1B;
-  border: 1px solid #333;
+  border: 1px solid #2b2b2b;
   color: #FFFFFF;
   font-size: 14px;
+  height: 34px;
   height: 38px;
 }
+.bootstrap-tagsinput::-webkit-input-placeholder {
+  color: #555;
+}
+.bootstrap-tagsinput:-moz-placeholder {
+  color: #555;
+  opacity: 1;
+}
+.bootstrap-tagsinput::-moz-placeholder {
+  color: #555;
+  opacity: 1;
+}
+.bootstrap-tagsinput:-ms-input-placeholder {
+  color: #555;
+}
 #favorites-tag-list {
-  border-top: 1px solid #2B2B2B;
+  border-top: 1px solid #2b2b2b;
   padding-top: 16px !important;
 }
 #qlockbtn.btn-danger {
   color: #EC4D49;
 }
 #chat-user-details {
-  padding: 12px;
   margin-top: 8px;
   min-height: 0 !important;
   list-style-type: none;
