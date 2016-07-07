@@ -131,7 +131,7 @@
 
   .video-playlist-time {
     float: right;
-    color: #999;
+    color: #716F6F;
   }
 
   .video-playlist-title {
@@ -146,10 +146,10 @@
   }
   
   .video-playlist-queueby {
-    color: #999;
+    color: #716F6F;
     
     a {
-      color: #999;
+      color: #716F6F;
     }
   }
   
@@ -158,7 +158,7 @@
     right: 0;
     top: 20px;
     cursor: pointer;
-    color: #999;
+    color: #716F6F;
     
     &:hover {
       color: #E2A630;
@@ -255,6 +255,28 @@
 #favorites-tags-list-container {
   .channel-card-drop-shadow;
   margin-top: 4px;
+}
+
+.videolist {
+  .thumbnail {
+    padding: 2px;
+    background-color: #313131 !important;
+    
+    h4 {
+      font-size: @standard-font-size !important;
+      margin-bottom: 2px;
+      padding: 0 6px;
+    }
+    .time {
+      font-size: @standard-font-size - 2px;
+      color: #D4D4D4;
+      padding: 0 6px;
+    }
+    .btn-group {
+      width: 100%;
+      padding: 0 6px 6px 6px;
+    }
+  }
 }
 
 #searchcontrol {

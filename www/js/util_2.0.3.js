@@ -629,6 +629,12 @@ function makeSearchEntry(video) {
     a_title.text(video.title);
     title.append(a_title);
     
+    var time = $('<div/>', {
+        "class": "time",
+        "text": secondsToTime(video.seconds)
+    });
+    thumb.append(time);
+    
     var btn_group = $('<div class="btn-group">');
     thumb.append(btn_group);
     
@@ -3101,6 +3107,12 @@ function formatFavorites(favorites, prepend) {
             a_title.attr("href", mediaUrl(fav));
             a_title.text(fav.title);
             title.append(a_title);
+            
+            var time = $('<div/>', {
+                "class": "time",
+                "text": secondsToTime(fav.seconds)
+            });
+            thumb.append(time);
             
             var btn_group = $('<div class="btn-group">');
             thumb.append(btn_group);

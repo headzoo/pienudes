@@ -148,7 +148,7 @@
 }
 #video-playlist .video-playlist-time {
   float: right;
-  color: #999;
+  color: #716F6F;
 }
 #video-playlist .video-playlist-title {
   display: block;
@@ -161,17 +161,17 @@
   text-overflow: ellipsis;
 }
 #video-playlist .video-playlist-queueby {
-  color: #999;
+  color: #716F6F;
 }
 #video-playlist .video-playlist-queueby a {
-  color: #999;
+  color: #716F6F;
 }
 #video-playlist .video-playlist-delete-btn {
   position: absolute;
   right: 0;
   top: 20px;
   cursor: pointer;
-  color: #999;
+  color: #716F6F;
 }
 #video-playlist .video-playlist-delete-btn:hover {
   color: #E2A630;
@@ -260,6 +260,24 @@
   -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
   margin-top: 4px;
+}
+.videolist .thumbnail {
+  padding: 2px;
+  background-color: #313131 !important;
+}
+.videolist .thumbnail h4 {
+  font-size: 12px !important;
+  margin-bottom: 2px;
+  padding: 0 6px;
+}
+.videolist .thumbnail .time {
+  font-size: 10px;
+  color: #D4D4D4;
+  padding: 0 6px;
+}
+.videolist .thumbnail .btn-group {
+  width: 100%;
+  padding: 0 6px 6px 6px;
 }
 #searchcontrol {
   margin-bottom: 4px;
