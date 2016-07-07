@@ -13,7 +13,7 @@
                 <div class="vertical-spacer"></div>
             </div>
             <div class="plbuttons">
-                <button id="showsearch" class="btn btn-sm btn-default" title="Search for a video" data-toggle="collapse" data-target="#searchcontrol">
+                <button id="showsearch" class="btn btn-sm btn-default" title="Search for a video">
                     <span class="glyphicon glyphicon-search"></span> Search
                 </button>
                 <button id="clearplaylist" class="btn btn-sm btn-default" title="Clear the playlist">
@@ -29,18 +29,21 @@
         </div>
     </div>
     
-    <div id="searchcontrol" class="card" style="display: none;">
-        <button class="close pull-right">×</button>
-        <div class="input-group">
-            <input id="library_query" class="form-control" type="text" placeholder="Search term..." />
-            <span class="input-group-btn">
-                <button id="youtube_search" class="btn btn-default" style="padding-right: 0;">
-                    <span class="glyphicon glyphicon-search"></span>
-                    Youtube
-                </button>
-            </span>
+    <div id="searchcontrol-container" style="display: none">
+        <div id="searchcontrol" class="card">
+            <div class="input-group">
+                <input id="library_query" class="form-control" type="text" placeholder="Search term..." />
+                <span class="input-group-btn">
+                    <button id="youtube_search" class="btn btn-default" style="padding-right: 0;">
+                        <span class="glyphicon glyphicon-search"></span>
+                        Youtube
+                    </button>
+                </span>
+            </div>
+            
         </div>
-        <div id="library" class="videolist card"></div>
+    
+        <div id="library" class="videolist card" style="display: none;"></div>
     </div>
     
     <div id="video-playlist" class="card"></div>

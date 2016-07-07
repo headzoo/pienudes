@@ -2,7 +2,7 @@
 @standard-padding: 12px;
 @standard-font-size: 12px;
 @card-background-color: #222;
-@card-divider-color: #2B2B2B;
+@card-divider-color: #000;
 
 .channel-input {
   background-color: #1B1B1B;
@@ -243,15 +243,18 @@
 
 #searchcontrol, #favorites {
   margin-top: 4px;
-
-  .input-group {
-    margin-top: 18px;
-  }
+  min-height: 0 !important;
   
   .text-muted {
     font-size: @standard-font-size;
     padding-top: 2px;
+    margin-bottom: 0;
   }
+}
+
+#favorites-tags-list-container {
+  .channel-card-drop-shadow;
+  margin-top: 4px;
 }
 
 #searchcontrol {
@@ -269,11 +272,6 @@
 .bootstrap-tagsinput {
   .channel-input;
   height: 38px;
-}
-
-#favorites-tag-list {
-  border-top: 1px solid @card-divider-color;
-  padding-top: 16px !important;
 }
 
 #qlockbtn.btn-danger {

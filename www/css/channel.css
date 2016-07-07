@@ -9,7 +9,7 @@
 }
 .channel-input {
   background-color: #1B1B1B;
-  border: 1px solid #2b2b2b;
+  border: 1px solid #000000;
   color: #FFFFFF;
   font-size: 14px;
   height: 34px;
@@ -75,7 +75,7 @@
 }
 #plmeta input {
   background-color: #1B1B1B;
-  border: 1px solid #2b2b2b;
+  border: 1px solid #000000;
   color: #FFFFFF;
   font-size: 14px;
   height: 34px;
@@ -117,7 +117,7 @@
   margin: 12px 0;
   height: 50px;
   background-color: #222222;
-  border-bottom: 1px solid #2b2b2b;
+  border-bottom: 1px solid #000000;
 }
 #video-playlist .playlist-row:last-child {
   border-bottom: none;
@@ -208,7 +208,7 @@
 }
 #video-header-controls {
   padding-top: 12px;
-  border-top: 1px solid #2b2b2b;
+  border-top: 1px solid #000000;
 }
 #video-header-controls .btn-vote .glyphicon {
   font-size: 18px;
@@ -243,15 +243,23 @@
 #searchcontrol,
 #favorites {
   margin-top: 4px;
-}
-#searchcontrol .input-group,
-#favorites .input-group {
-  margin-top: 18px;
+  min-height: 0 !important;
 }
 #searchcontrol .text-muted,
 #favorites .text-muted {
   font-size: 12px;
   padding-top: 2px;
+  margin-bottom: 0;
+}
+#favorites-tags-list-container {
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
+  margin-top: 4px;
 }
 #searchcontrol {
   margin-bottom: 4px;
@@ -261,7 +269,7 @@
 }
 #library_query {
   background-color: #1B1B1B;
-  border: 1px solid #2b2b2b;
+  border: 1px solid #000000;
   color: #FFFFFF;
   font-size: 14px;
   height: 34px;
@@ -282,7 +290,7 @@
 }
 .bootstrap-tagsinput {
   background-color: #1B1B1B;
-  border: 1px solid #2b2b2b;
+  border: 1px solid #000000;
   color: #FFFFFF;
   font-size: 14px;
   height: 34px;
@@ -301,10 +309,6 @@
 }
 .bootstrap-tagsinput:-ms-input-placeholder {
   color: #555;
-}
-#favorites-tag-list {
-  border-top: 1px solid #2b2b2b;
-  padding-top: 16px !important;
 }
 #qlockbtn.btn-danger {
   color: #EC4D49;

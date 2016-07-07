@@ -1175,7 +1175,7 @@ function fixWeirdButtonAlignmentIssue() {
 /* search stuff */
 
 function clearSearchResults() {
-    $("#library").html("");
+    $("#library").hide().html("");
     $("#search_clear").remove();
     var p = $("#library").data("paginator");
     if(p) {

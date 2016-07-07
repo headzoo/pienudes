@@ -870,27 +870,27 @@ $("#cs-chanranks-mod").click(chanrankSubmit.bind(this, 2));
 $("#cs-chanranks-adm").click(chanrankSubmit.bind(this, 3));
 $("#cs-chanranks-owner").click(chanrankSubmit.bind(this, 4));
 
-var favorites_wrapper = $("#favorites");
-favorites_wrapper.find(".close").on("click", function() {
-    $("#showfavorites").click();
-});
-$("#showfavorites").on("click", function() {
+var favorites_wrapper = $("#favorites-container");
+var show_favorites    = $("#showfavorites");
+show_favorites.on("click", function() {
     if (favorites_wrapper.is(":visible")) {
-        favorites_wrapper.hide();
+        favorites_wrapper.slideUp();
+        show_favorites.removeClass("activated");
     } else {
-        favorites_wrapper.show();
+        favorites_wrapper.slideDown();
+        show_favorites.addClass("activated");
     }
 });
 
-var search_wrapper = $("#searchcontrol");
-search_wrapper.find(".close").on("click", function() {
-    $("#showsearch").click();
-});
-$("#showsearch").on("click", function() {
+var search_wrapper = $("#searchcontrol-container");
+var show_search    = $("#showsearch");
+show_search.on("click", function() {
     if (search_wrapper.is(":visible")) {
         search_wrapper.hide();
+        show_search.removeClass("activated");
     } else {
         search_wrapper.show();
+        show_search.addClass("activated");
     }
 });
 

@@ -185,7 +185,7 @@ body {
 .videolist {
   list-style: none outside none;
   margin-left: 0;
-  max-height: 350px;
+  max-height: 420px;
   overflow-y: auto;
 }
 #pllength {
@@ -376,7 +376,7 @@ li.ui-sortable-placeholder + li.queue_entry {
   margin-top: 10px;
 }
 #search_clear {
-  margin-top: 10px;
+  margin-bottom: 12px;
 }
 #qualitywrap {
   margin-right: 5px;
@@ -1116,7 +1116,13 @@ input:focus {
 .list-style-type-none li {
   margin: 0;
 }
+#favorites .thumbnail,
+#favorites-container .thumbnail,
+#library .thumbnail {
+  background-color: #424242;
+}
 #favorites .thumbnail h4,
+#favorites-container .thumbnail h4,
 #library .thumbnail h4 {
   font-size: 75%;
   font-weight: 700;

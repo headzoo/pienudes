@@ -199,7 +199,7 @@ body {
 .videolist {
     list-style: none outside none;
     margin-left: 0;
-    max-height: 350px;
+    max-height: 420px;
     overflow-y: auto;
 }
 
@@ -421,7 +421,7 @@ li.ui-sortable-helper, li.ui-sortable-placeholder + li.queue_entry {
 }
 
 #search_clear {
-    margin-top: 10px;
+    margin-bottom: 12px;
 }
 
 #qualitywrap {
@@ -1298,9 +1298,10 @@ textarea:focus, input:focus{
     }
 }
 
-#favorites, #library {
+#favorites, #favorites-container, #library {
 
     .thumbnail {
+        background-color: #424242;
         
         h4 {
             font-size: 75%;
@@ -1311,6 +1312,7 @@ textarea:focus, input:focus{
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            
         }
     }
 }

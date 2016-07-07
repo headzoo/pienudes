@@ -1130,15 +1130,16 @@ Callbacks = {
         clearSearchResults();
         
         var library = $("#library");
+        library.show();
         library.data("entries", data.results);
         $("<button/>").addClass("btn btn-default btn-sm btn-block")
             .css("margin-left", "0")
             .attr("id", "search_clear")
-            .text("Clear Results")
+            .html('<span class="glyphicon glyphicon-erase"></span> Clear Results')
             .click(function() {
                 clearSearchResults();
             })
-            .insertBefore($("#library"));
+            .prependTo($("#library"));
             
         for(var i = 0; i < data.results.length; i++) {
             var col = makeSearchEntry(data.results[i], false);

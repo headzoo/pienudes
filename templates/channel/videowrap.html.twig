@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div id="video-header-controls">
-                <button id="showfavorites" class="btn btn-sm btn-default" data-toggle="collapse" data-target="#favorites">
+                <button id="showfavorites" class="btn btn-sm btn-default" data-target="#favorites">
                     <span class="glyphicon glyphicon-heart"></span> Favorite
                 </button>
                 <button id="voteskip" class="btn btn-sm btn-default">
@@ -37,19 +37,23 @@
             </div>
         </div>
 
-        <div id="favorites" class="card" style="display: none;">
-            <button class="close pull-right">×</button>
-            <div class="input-group">
-                <input id="favorites-tags" class="form-control" type="text" value="" data-default-value="{{ channelName }}" data-role="tagsinput" />
-                <span class="input-group-btn">
-                    <button id="favorites-add" class="btn btn-default" type="button" style="padding-right:0;">Favorite</button>
-                </span>
+        <div id="favorites-container" style="display: none;">
+            <div id="favorites" class="card">
+                <div class="input-group">
+                    <input id="favorites-tags" class="form-control" type="text" value="" data-default-value="{{ channelName }}" data-role="tagsinput" />
+                    <span class="input-group-btn">
+                        <button id="favorites-add" class="btn btn-default" type="button" style="padding-right:0;">Favorite</button>
+                    </span>
+                </div>
+                <p class="text-muted">
+                    Optional tags need to be space " " separated.
+                </p>
             </div>
-            <p class="text-muted">
-                Optional tags need to be space " " separated.
-            </p>
-            <ul id="favorites-tag-list"></ul>
-            <div id="favorites-thumbs" class="row videolist"></div>
+    
+            <div id="favorites-tags-list-container" class="card">
+                <ul id="favorites-tag-list"></ul>
+                <div id="favorites-thumbs" class="row videolist"></div>
+            </div>
         </div>
     </div>
 </div>
