@@ -948,11 +948,19 @@ textarea:focus, input:focus{
     .thumbnail, .sidebar-widget, .card {
         background-color: @color-card-bg-home;
         border-radius: 0;
-        
     }
     
     .thumbnail {
-        padding: 0;
+        padding: 2px;
+        
+        &.thumbnail-short {
+            height: 262px;
+
+            .thumbnail-channel-playing {
+                margin-top: 8px;
+                padding: 0 2px;
+            }
+        }
     }
 }
 

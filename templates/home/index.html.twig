@@ -5,6 +5,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h3 class="sidebar-widget-title">Music Channels</h3>
+                <p>Click to join a channel.</p>
             </div>
             {% for chan in channels %}
                 <div class="col-xs-12 col-sm-6 col-md-4 thumbnail-channel">
@@ -20,6 +21,38 @@
                         <div class="thumbnail-channel-users">
                             <span class="glyphicon glyphicon-user"></span>
                             {{ chan.usercount }}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="sidebar-widget-title">Most Played in Lobby</h3>
+            </div>
+            {% for video in most_watched.lobby %}
+                <div class="col-xs-12 col-sm-6 col-md-4 thumbnail-channel">
+                    <a href="/r/lobby" class="thumbnail thumbnail-short card">
+                        <img src="{{ video|thumbnail_url("hqdefault") }}" alt="Thumbnail">
+                        <div class="thumbnail-channel-playing center">
+                            {{ video.title|truncate(75) }}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="sidebar-widget-title">Most Played in K-Pop</h3>
+            </div>
+            {% for video in most_watched.kpop %}
+                <div class="col-xs-12 col-sm-6 col-md-4 thumbnail-channel">
+                    <a href="/r/kpop" class="thumbnail thumbnail-short card">
+                        <img src="{{ video|thumbnail_url("hqdefault") }}" alt="Thumbnail">
+                        <div class="thumbnail-channel-playing center">
+                            {{ video.title|truncate(75) }}
                         </div>
                     </a>
                 </div>

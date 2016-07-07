@@ -818,11 +818,18 @@ input:focus {
 .homepage .thumbnail,
 .homepage .sidebar-widget,
 .homepage .card {
-  background-color: rgba(27, 27, 27, 0.9);
+  background-color: rgba(36, 36, 36, 0.9);
   border-radius: 0;
 }
 .homepage .thumbnail {
-  padding: 0;
+  padding: 2px;
+}
+.homepage .thumbnail.thumbnail-short {
+  height: 262px;
+}
+.homepage .thumbnail.thumbnail-short .thumbnail-channel-playing {
+  margin-top: 8px;
+  padding: 0 2px;
 }
 .thumbnail:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);

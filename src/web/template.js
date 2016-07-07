@@ -59,10 +59,12 @@ env.addFilter('media_url', function(media) {
     }
 });
 
-env.addFilter('thumbnail_url', function(media) {
+env.addFilter('thumbnail_url', function(media, size) {
+    size = size || "default";
+    
     switch(media.type) {
         case "yt":
-            return "https://i.ytimg.com/vi/" + media.uid + "/default.jpg";
+            return "https://i.ytimg.com/vi/" + media.uid + "/" + size + ".jpg";
             break;
         case "sc":
             return "/img/thumbs/sc.png";
