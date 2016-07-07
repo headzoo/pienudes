@@ -321,37 +321,6 @@ $("#modflair").click(function () {
     }
 });
 
-$("#usercount").mouseenter(function (ev) {
-    var breakdown = calcUserBreakdown();
-    // re-using profile-box class for convenience
-    var popup = $("<div/>")
-        .addClass("profile-box")
-        .css("top", (ev.clientY + 5) + "px")
-        .css("left", (ev.clientX) + "px")
-        .appendTo($("#usercount"));
-
-    var contents = "";
-    for(var key in breakdown) {
-        contents += "<strong>" + key + ":&nbsp;</strong>" + breakdown[key];
-        contents += "<br>"
-    }
-
-    popup.html(contents);
-});
-
-$("#usercount").mousemove(function (ev) {
-    var popup = $("#usercount").find(".profile-box");
-    if(popup.length == 0)
-        return;
-
-    popup.css("top", (ev.clientY + 5) + "px");
-    popup.css("left", (ev.clientX) + "px");
-});
-
-$("#usercount").mouseleave(function () {
-    $("#usercount").find(".profile-box").remove();
-});
-
 $("#messagebuffer").scroll(function (ev) {
     if (IGNORE_SCROLL_EVENT) {
         // Skip event, this was triggered by scrollChat() and not by a user action.

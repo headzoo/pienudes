@@ -242,7 +242,6 @@
 }
 #searchcontrol,
 #favorites {
-  margin-top: 4px;
   min-height: 0 !important;
 }
 #searchcontrol .text-muted,
@@ -250,6 +249,9 @@
   font-size: 12px;
   padding-top: 2px;
   margin-bottom: 0;
+}
+#favorites {
+  margin-top: 4px;
 }
 #favorites-tags-list-container {
   border-bottom: none;
