@@ -330,6 +330,9 @@
 .bootstrap-tagsinput:-ms-input-placeholder {
   color: #555;
 }
+.bootstrap-tagsinput input {
+  color: #FFF;
+}
 #qlockbtn.btn-danger {
   color: #EC4D49;
 }
