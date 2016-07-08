@@ -151,10 +151,10 @@ function handleIndex(req, res) {
                 return Q.nfcall(db_votes.fetchMostUpvotedByDate, today, 3);
             }).then(function(rows) {
                 voted_rows = rows;
-                return Q.nfcall(db_playlists.fetchMostWatchedByChannel, "lobby", 6);
+                return Q.nfcall(db_playlists.fetchMostWatchedByChannel, "lobby", 8);
             }).then(function(rows) {
                 most_watched.lobby = rows;
-                return Q.nfcall(db_playlists.fetchMostWatchedByChannel, "kpop", 6);
+                return Q.nfcall(db_playlists.fetchMostWatchedByChannel, "kpop", 8);
             }).then(function(rows) {
                 most_watched.kpop = rows;
                 
