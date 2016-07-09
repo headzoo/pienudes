@@ -307,6 +307,33 @@ $(function() {
     if (layout != null) {
         wider_layout.data("size", layout == "small" ? "big" : "small").click();
     }
+    
+    $("#search_clear").on("click", clearSearchResults);
+    
+    var btn_grid = $(".btn-grid");
+    var btn_rows = $(".btn-rows");
+    btn_grid.on("click", function() {
+        btn_grid.addClass("activated");
+        btn_rows.removeClass("activated");
+        USEROPTS.thumb_layout = "grid";
+    
+        var list = $("#favorites-thumbs");
+        list.empty();
+        formatFavorites();
+        formatSearchResults();
+        setOpt("thumb_layout", "grid");
+    });
+    btn_rows.on("click", function() {
+        btn_grid.removeClass("activated");
+        btn_rows.addClass("activated");
+        USEROPTS.thumb_layout = "rows";
+    
+        var list = $("#favorites-thumbs");
+        list.empty();
+        formatFavorites();
+        formatSearchResults();
+        setOpt("thumb_layout", "rows");
+    });
 });
 
 

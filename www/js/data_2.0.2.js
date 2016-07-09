@@ -130,6 +130,7 @@ var USEROPTS = {
     emotelist_sort       : getOrDefault("emotelist_sort", true),
     no_emotes            : getOrDefault("no_emotes", false),
     highlight            : getOrDefault("highlight", ""),
+    thumb_layout         : getOrDefault("thumb_layout", "rows"),
     highlight_regex      : null
 };
 

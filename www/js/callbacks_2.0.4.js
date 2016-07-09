@@ -1121,52 +1121,11 @@ Callbacks = {
             return;
         }
         
-        $("#search_clear").remove();
-        clearSearchResults();
-        
         var library = $("#library");
-        library.show();
-        library.data("entries", data.results);
-        $("<button/>").addClass("btn btn-default btn-sm btn-block")
-            .css("margin-left", "0")
-            .attr("id", "search_clear")
-            .html('<span class="glyphicon glyphicon-erase"></span> Clear Results')
-            .click(function() {
-                clearSearchResults();
-            })
-            .prependTo($("#library"));
-            
-        for(var i = 0; i < data.results.length; i++) {
-            var col = makeSearchEntry(data.results[i], false);
-            //if(hasPermission("playlistadd")) {
-            //    addLibraryButtons(col, item.id, data.source);
-            //}
-            library.append(col);
-        }
-
-        return;
-        $("#search_pagination").remove();
-        var opts = {
-            preLoadPage: function () {
-                $("#library").html("");
-            },
-
-            generator: function (item, page, index) {
-                var col = makeSearchEntry(item, false);
-                //if(hasPermission("playlistadd")) {
-                //    addLibraryButtons(col, item.id, data.source);
-                //}
-                library.append(col);
-            },
-
-            itemsPerPage: 100
-        };
-
-        var p = Paginate(data.results, opts);
-        p.paginator.insertAfter(library)
-            .addClass("pull-right")
-            .attr("id", "search_pagination");
-        library.data("paginator", p);
+        library.data("entities", data.results);
+        formatSearchResults();
+        var lib_container = $("#library-container");
+        lib_container.show();
     },
     
     changeVotes: function(data) {
@@ -1206,7 +1165,16 @@ Callbacks = {
         if (ChatPlaylist.trigger("favorite_add", data).isCancelled()) {
             return;
         }
-        formatFavorites([data.media], true);
+    
+        var list     = $("#favorites-thumbs");
+        var entities = list.data("entities");
+        if (!entities) {
+            entities = [];
+        }
+        entities.unshift(data.media);
+        list.data("entities", entities);
+        
+        formatFavorites();
         formatTags(data.tags);
         
         toastr.options.preventDuplicates = true;
@@ -1226,7 +1194,8 @@ Callbacks = {
         }
         var list = $("#favorites-thumbs");
         list.empty();
-        formatFavorites(favorites);
+        list.data("entities", favorites);
+        formatFavorites();
     },
     
     userTags: function(data) {

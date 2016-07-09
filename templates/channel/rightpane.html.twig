@@ -40,10 +40,24 @@
                     </button>
                 </span>
             </div>
-            
         </div>
-    
-        <div id="library" class="videolist card" style="display: none;"></div>
+
+        <div id="library-container" class="card" style="display: none;">
+            <div class="thumb-btn-group-container">
+                <button class="btn btn-default btn-sm pull-left" id="search_clear">
+                    <span class="glyphicon glyphicon-erase"></span> Clear Results
+                </button>
+                <div class="btn-group">
+                    <button class="btn bt-default btn-grid">
+                        <span class="glyphicon glyphicon-th-large"></span>
+                    </button>
+                    <button class="btn bt-default btn-rows">
+                        <span class="glyphicon glyphicon-th-list"></span>
+                    </button>
+                </div>
+            </div>
+            <div id="library" class="videolist"></div>
+        </div>
     </div>
     
     <div id="video-playlist" class="card"></div>

@@ -610,35 +610,81 @@ function makeQueueEntry(item, addbtns) {
     return li;
 }
 
+function formatSearchResults() {
+    var library  = $("#library");
+    var entities = library.data("entities");
+    if (!entities) {
+        entities = [];
+    }
+    
+    library.empty();
+    for(var i = 0; i < entities.length; i++) {
+        var col = makeSearchEntry(entities[i], false);
+        library.append(col);
+    }
+}
+
 function makeSearchEntry(video) {
-    var col = $('<div class="col-xs-3">');
-    var thumb = $('<div class="thumbnail">');
-    col.append(thumb);
-    
-    var a_img = $('<a target="_blank">');
-    a_img.attr("href", mediaUrl(video));
-    thumb.append(a_img);
-    
-    var img = $('<img />');
-    img.attr("src", thumbnailUrl(video, "mq"));
-    a_img.append(img);
-    
-    var title = $('<h4/>');
-    thumb.append(title);
-    
-    var a_title = $('<a target="_blank"/>');
-    a_title.attr("href", mediaUrl(video));
-    a_title.text(video.title);
-    title.append(a_title);
-    
-    var time = $('<div/>', {
-        "class": "time",
-        "text": secondsToTime(video.seconds)
-    });
-    thumb.append(time);
-    
     var btn_group = $('<div class="btn-group">');
-    thumb.append(btn_group);
+    var col;
+    
+    if (USEROPTS.thumb_layout == "grid") {
+        col = $('<div class="col-xs-3">');
+        var thumb = $('<div class="thumbnail">');
+        col.append(thumb);
+    
+        var a_img = $('<a target="_blank">');
+        a_img.attr("href", mediaUrl(video));
+        thumb.append(a_img);
+    
+        var img = $('<img />');
+        img.attr("src", thumbnailUrl(video, "mq"));
+        a_img.append(img);
+    
+        var title = $('<h4/>');
+        thumb.append(title);
+    
+        var a_title = $('<a target="_blank"/>');
+        a_title.attr("href", mediaUrl(video));
+        a_title.text(video.title);
+        title.append(a_title);
+    
+        var time = $('<div/>', {
+            "class": "time",
+            "text": secondsToTime(video.seconds)
+        });
+        thumb.append(time);
+        thumb.append(btn_group);
+    } else {
+        col = $('<div class="playlist-row">');
+    
+        var a_img = $('<a/>', {
+            "class": "video-playlist-thumbnail-container",
+            "href": mediaUrl(video),
+            "target": "_blank"
+        }).appendTo(col);
+    
+        $('<img />', {
+            "src": thumbnailUrl(video, "mq")
+        }).appendTo(a_img);
+    
+        var meta = $('<div/>', {
+            "class": "video-playlist-meta-container"
+        }).appendTo(col);
+        meta.append(btn_group);
+    
+        $('<a/>', {
+            "class": "video-playlist-title",
+            "href": mediaUrl(video),
+            "target": "_blank",
+            "text": video.title
+        }).appendTo(meta);
+    
+        $('<span/>', {
+            "class": "video-playlist-time time-under-title",
+            "text": secondsToTime(video.seconds)
+        }).appendTo(meta);
+    }
     
     var btn_end = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add</button>');
     btn_group.append(btn_end);
@@ -1070,6 +1116,12 @@ function handleModPermissions() {
     $("#cs-torbanned").prop("checked", CHANNEL.opts.torbanned);
     $("#cs-allow_ascii_control").prop("checked", CHANNEL.opts.allow_ascii_control);
     $("#cs-playlist_max_per_user").val(CHANNEL.opts.playlist_max_per_user || 0);
+    if (USEROPTS.thumb_layout == "grid") {
+        $(".btn-grid").addClass("activated");
+    } else {
+        $(".btn-rows").addClass("activated");
+    }
+    
     (function() {
         if(typeof CHANNEL.opts.maxlength != "number") {
             $("#cs-maxlength").val("");
@@ -1183,12 +1235,8 @@ function fixWeirdButtonAlignmentIssue() {
 /* search stuff */
 
 function clearSearchResults() {
-    $("#library").hide().html("");
-    $("#search_clear").remove();
-    var p = $("#library").data("paginator");
-    if(p) {
-        p.paginator.html("");
-    }
+    $("#library-container").hide();
+    $("#library").html("");
 }
 
 function addLibraryButtons(li, id, source) {
@@ -3072,10 +3120,10 @@ function formatUserEmotesList(tbl) {
     });
 }
 
-function formatFavorites(favorites, prepend) {
-    var list = $("#favorites-thumbs");
-    var items = list.find("div.col-xs-3");
-    prepend = prepend || false;
+function formatFavorites() {
+    var list      = $("#favorites-thumbs");
+    var items     = list.find("div.col-xs-3");
+    var favorites = list.data("entities");
     
     for(var i = 0; i < favorites.length; i++) {
         (function(fav) {
@@ -3083,41 +3131,70 @@ function formatFavorites(favorites, prepend) {
                 return;
             }
             
-            var col = $('<div class="col-xs-3">');
-            col.data("tid", fav.type + fav.uid);
-            if (prepend) {
-                list.prepend(col);
-            } else {
+            var btn_group = $('<div class="btn-group">');
+            
+            if (USEROPTS.thumb_layout == "grid") {
+                var col = $('<div class="col-xs-3">');
+                col.data("tid", fav.type + fav.uid);
                 list.append(col);
+                thumb = $('<div class="thumbnail">');
+                col.append(thumb);
+    
+                var a_img = $('<a/>', {
+                    "href": mediaUrl(fav),
+                    "target": "_blank"
+                }).appendTo(thumb);
+    
+                var img = $('<img />');
+                img.attr("src", thumbnailUrl(fav, "mq"));
+                a_img.append(img);
+    
+                var title = $('<h4/>');
+                thumb.append(title);
+    
+                var a_title = $('<a target="_blank"/>');
+                a_title.attr("href", mediaUrl(fav));
+                a_title.text(fav.title);
+                title.append(a_title);
+    
+                var time = $('<div/>', {
+                    "class": "time",
+                    "text": secondsToTime(fav.seconds)
+                });
+                thumb.append(time);
+                thumb.append(btn_group);
+            } else {
+                var thumb = $('<div class="playlist-row">');
+                list.append(thumb);
+    
+                var a_img = $('<a/>', {
+                    "class": "video-playlist-thumbnail-container",
+                    "href": mediaUrl(fav),
+                    "target": "_blank"
+                }).appendTo(thumb);
+    
+                $('<img />', {
+                    "src": thumbnailUrl(fav, "mq")
+                }).appendTo(a_img);
+    
+                var meta = $('<div/>', {
+                    "class": "video-playlist-meta-container"
+                }).appendTo(thumb);
+                meta.append(btn_group);
+                
+                $('<a/>', {
+                    "class": "video-playlist-title",
+                    "href": mediaUrl(fav),
+                    "target": "_blank",
+                    "text": fav.title
+                }).appendTo(meta);
+    
+                $('<span/>', {
+                    "class": "video-playlist-time time-under-title",
+                    "text": secondsToTime(fav.seconds)
+                }).appendTo(meta);
             }
             
-            var thumb = $('<div class="thumbnail">');
-            col.append(thumb);
-            
-            var a_img = $('<a target="_blank">');
-            a_img.attr("href", mediaUrl(fav));
-            thumb.append(a_img);
-            
-            var img = $('<img />');
-            img.attr("src", thumbnailUrl(fav, "mq"));
-            a_img.append(img);
-            
-            var title = $('<h4/>');
-            thumb.append(title);
-            
-            var a_title = $('<a target="_blank"/>');
-            a_title.attr("href", mediaUrl(fav));
-            a_title.text(fav.title);
-            title.append(a_title);
-            
-            var time = $('<div/>', {
-                "class": "time",
-                "text": secondsToTime(fav.seconds)
-            });
-            thumb.append(time);
-            
-            var btn_group = $('<div class="btn-group">');
-            thumb.append(btn_group);
             /*
             if(hasPermission("playlistnext")) {
                 var btn_next = $('<button class="btn btn-xs btn-default">Next</button>');
