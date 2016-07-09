@@ -312,7 +312,7 @@ module.exports = {
                 "INNER JOIN `votes` ON `votes`.`media_id` = `media`.`id` " +
                 "WHERE `channel` = ? " +
                 "GROUP BY `media`.`id` " +
-                "HAVING SUM(`votes`.`value`) > 1 " +
+                "HAVING SUM(`votes`.`value`) > 0 " +
                 "ORDER BY RAND() " +
                 "LIMIT " + limit;
         } else {
@@ -322,7 +322,7 @@ module.exports = {
                 "WHERE `channel` = ? " +
                 "AND FROM_UNIXTIME(`playlist_history`.`time` / 1000) > DATE_SUB(NOW(), INTERVAL 2 WEEK)" +
                 "GROUP BY `media`.`id` " +
-                "HAVING SUM(`votes`.`value`) > 1 " +
+                "HAVING SUM(`votes`.`value`) > 0 " +
                 "ORDER BY RAND() " +
                 "LIMIT " + limit;
         }
