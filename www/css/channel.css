@@ -169,12 +169,12 @@
 #video-playlist .video-playlist-delete-btn {
   position: absolute;
   right: 0;
-  top: 20px;
+  top: 24px;
   cursor: pointer;
   color: #BBB;
 }
 #video-playlist .video-playlist-delete-btn:hover {
-  color: #E2A630;
+  color: #D64651;
 }
 #video-header-title {
   line-height: normal;
@@ -201,6 +201,7 @@
 }
 #video-header-first-play {
   font-size: 10px;
+  margin-top: 2px;
 }
 #video-header-play-count {
   float: right;

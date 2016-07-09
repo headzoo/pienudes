@@ -525,13 +525,9 @@ function makePlaylistRow(item) {
     }).prependTo(title);
 
     // Queued by.
-    var clean_name = item.queueby.substring(1);
-    var queuedby   = (item.queueby[0] == "@")
-        ? '<a href="/help#rngmod" target="_blank">RNGMod</a> via <a href="/user/' + clean_name + '" target="_blank">' + clean_name + '</a>'
-        : '<a href="/user/' + item.queueby + '" target="_blank">' + item.queueby + '<a/>';
     $("<span/>", {
         "class": "video-playlist-queueby",
-        "html": "Queued by " + queuedby
+        "html": getQueuedByHTML(item)
     }).appendTo(meta_container);
     
     // Delete button.
@@ -545,6 +541,12 @@ function makePlaylistRow(item) {
     }
     
     return row;
+}
+
+function getQueuedByHTML(data) {
+    return (data.queueby[0] == "@")
+        ? "Originally queued by " + data.queueby.substring(1)
+        : "Queued by " + data.queueby;
 }
 
 function makeQueueEntry(item, addbtns) {

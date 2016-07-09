@@ -1067,12 +1067,7 @@ Callbacks = {
             "text": data.title
         });
         $("#video-header-title").html(title);
-    
-        var clean_name = data.queueby.substring(1);
-        var queuedby   = (data.queueby[0] == "@")
-            ? 'Queued by <a href="/help#rngmod" target="_blank">RNGMod</a> via <a href="/user/' + clean_name + '" target="_blank">' + clean_name + '</a>'
-            : 'Queued by <a href="/user/' + data.queueby + '" target="_blank">' + data.queueby + '</a>';
-        $("#video-header-queueby").html(queuedby);
+        $("#video-header-queueby").html(getQueuedByHTML(data));
         $("#video-header-play-count").text(data.play_count + " plays");
         $("#video-header-avatar").attr("src", data.queueby_avatar);
          
