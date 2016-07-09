@@ -180,9 +180,9 @@
   color: #bbbbbb;
 }
 .video-playlist-delete-btn {
-  position: absolute;
+  position: absolute !important;
   right: 0;
-  top: 24px;
+  top: 24px !important;
   cursor: pointer;
   color: #bbbbbb;
 }
