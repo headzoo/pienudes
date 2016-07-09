@@ -148,7 +148,7 @@
 }
 #video-playlist .video-playlist-time {
   float: right;
-  color: #716F6F;
+  color: #BBB;
 }
 #video-playlist .video-playlist-title {
   display: block;
@@ -161,17 +161,17 @@
   text-overflow: ellipsis;
 }
 #video-playlist .video-playlist-queueby {
-  color: #716F6F;
+  color: #BBB;
 }
 #video-playlist .video-playlist-queueby a {
-  color: #716F6F;
+  color: #BBB;
 }
 #video-playlist .video-playlist-delete-btn {
   position: absolute;
   right: 0;
   top: 20px;
   cursor: pointer;
-  color: #716F6F;
+  color: #BBB;
 }
 #video-playlist .video-playlist-delete-btn:hover {
   color: #E2A630;
