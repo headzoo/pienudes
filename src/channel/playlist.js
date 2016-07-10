@@ -292,6 +292,7 @@ PlaylistModule.prototype.sendPlaylist = function (users) {
     var perms = this.channel.modules.permissions;
     var self = this;
     users.forEach(function (u) {
+        u.socket.emit("setPlaylistMeta", self.meta);
         if (!perms.canSeePlaylist(u)) {
             return;
         }
@@ -751,6 +752,7 @@ PlaylistModule.prototype.handleClear = function (user) {
     };
 
     this.channel.broadcastAll("playlist", []);
+    this.channel.broadcastAll("setPlaylistMeta", this.meta);
 };
 
 PlaylistModule.prototype.handleShuffle = function (user) {
@@ -1220,6 +1222,7 @@ PlaylistModule.prototype._delete = function (uid, is_clean) {
             if (perms.canSeePlaylist(u)) {
                 u.socket.emit("delete", { uid: uid });
             }
+            u.socket.emit("setPlaylistMeta", self.meta);
         });
         
         if (!is_clean && self.current && self.current.queueby && self.current.queueby[0] != "@") {
@@ -1350,6 +1353,7 @@ PlaylistModule.prototype._addItem = function (media, data, user, cb) {
             if (perms.canSeePlaylist(u)) {
                 u.socket.emit("queue", packet);
             }
+            u.socket.emit("setPlaylistMeta", self.meta);
         });
 
         if (data.shouldAddToLibrary && !util.isLive(media.type)) {

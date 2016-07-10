@@ -872,6 +872,10 @@ Callbacks = {
 
         rebuildPlaylist();
     },
+    
+    setPlaylistMeta: function(data) {
+        $("#pllength").text(data.time);
+    },
 
     queue: function(data) {
         data.item.media.uid = data.item.media.id;
