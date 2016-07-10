@@ -65,4 +65,22 @@ $(function() {
         document.location = "/admin/playlist";
         return false;
     });
+    
+    $(".btn-remove-channel").on("click", function() {
+        var target = $(this),
+            parent = target.parents("tr:first"),
+            chan_id = parent.data("chan-id");
+
+        $.ajax({
+            url: "/admin/channels/delete",
+            type: "post",
+            data: {
+                chan_id: chan_id
+            }
+        }).done(function() {
+            parent.fadeOut();
+        }).fail(function() {
+            alert("Error. Try again in a minute.");
+        });
+    });
 });

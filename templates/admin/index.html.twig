@@ -9,6 +9,7 @@
                     <th>Title</th>
                     <th>Name</th>
                     <th>Public</th>
+                    <th>Registered</th>
                     <th>Playing</th>
                 </tr>
             </thead>
@@ -23,9 +24,43 @@
                             </a>
                         </td>
                         <td>{% if ch.public %}Yes{% else %}No{% endif %}</td>
+                        <td>{% if ch.registered %}Yes{% else %}No{% endif %}</td>
                         <td>{{ ch.mediatitle }}</td>
                     </tr>
                 {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h1>Registered Channels</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="width: 50px;"></th>
+                <th>Owner</th>
+                <th>Title</th>
+                <th>Name</th>
+                <th>Public</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ch in registered %}
+                <tr data-chan-id="{{ ch.id }}">
+                    <td>
+                        <button class="btn btn-danger btn-xs btn-remove-channel">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
+                    <td>{{ ch.owner }}</td>
+                    <td>{{ ch.pagetitle }}</td>
+                    <td>
+                        <a href="/r/{{ ch.name }}" target="_blank">
+                            /r/{{ ch.name }}
+                        </a>
+                    </td>
+                    <td>{% if ch.public %}Yes{% else %}No{% endif %}</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

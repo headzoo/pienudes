@@ -648,5 +648,21 @@ module.exports = {
             [],
             callback
         );
+    },
+    
+    fetchById: function(id, callback) {
+        if (typeof callback !== "function") {
+            callback = blackHole;
+        }
+    
+        db.query(
+            "SELECT * FROM `channels` INNER JOIN `channel_data` ON `channel_data`.`channel_id` = `channels`.`id` WHERE `channels`.`id` = ? AND `channel_data`.`key` = 'opts'",
+            [id],
+            function(err, rows) {
+                if (err) return callback(err);
+                if (rows.length == 0) return callback(null, null);
+                callback(null, rows[0]);
+            }
+        );
     }
 };
