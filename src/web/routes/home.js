@@ -134,7 +134,6 @@ function handleIndex(req, res) {
             if (a.usercount === b.usercount) {
                 return a.uniqueName > b.uniqueName ? -1 : 1;
             }
-            
             return b.usercount - a.usercount;
         });
         
@@ -142,48 +141,33 @@ function handleIndex(req, res) {
         var recent_rows, top_rows, voted_rows;
         var most_watched = {};
         
-        Q.nfcall(db_playlists.fetch, 3, 0)
+        Q.nfcall(db_playlists.fetch, 8, 0)
             .then(function(rows) {
                 recent_rows = rows;
-                return Q.nfcall(db_playlists.fetchMostWatchedByDate, today, 3);
+                return Q.nfcall(db_playlists.fetchMostWatchedByDate, today, 8);
             }).then(function(rows) {
                 top_rows = rows;
-                return Q.nfcall(db_votes.fetchMostUpvotedByDate, today, 3);
+                return Q.nfcall(db_votes.fetchMostUpvotedByDate, today, 8);
             }).then(function(rows) {
                 voted_rows = rows;
-                return Q.nfcall(db_playlists.fetchMostWatchedByChannel, "lobby", 8);
+                return Q.nfcall(db_playlists.fetchMostWatchedByChannel, "lobby", 12);
             }).then(function(rows) {
                 most_watched.lobby = rows;
-                return Q.nfcall(db_playlists.fetchMostWatchedByChannel, "kpop", 8);
+                return Q.nfcall(db_playlists.fetchMostWatchedByChannel, "kpop", 12);
             }).then(function(rows) {
                 most_watched.kpop = rows;
-                
-                async.map(recent_rows, findPlayCount, function() {
-                    async.map(top_rows, findPlayCount, function() {
-                        async.map(voted_rows, findPlayCount, function() {
-                            template.send(res, 'home/index', {
-                                pageTitle: "upnext.fm - Music and Chat",
-                                top_media: top_rows,
-                                recent_media: recent_rows,
-                                voted_rows: voted_rows,
-                                most_watched: most_watched,
-                                channels: channels,
-                                today: today
-                            });
-                        });
-                    });
+                template.send(res, 'home/index', {
+                    pageTitle: "upnext.fm - Music and Chat",
+                    top_media: top_rows,
+                    recent_media: recent_rows,
+                    voted_rows: voted_rows,
+                    most_watched: most_watched,
+                    channels: channels,
+                    today: today
                 });
             }).catch(function() {
                 res.sendStatus(500);
             }).done();
-    });
-}
-
-function findPlayCount(row, callback) {
-    db_playlists.countByMediaID(row.media_id, function(err, count) {
-        if (err) return callback(err);
-        row.play_count = count;
-        callback(null, row);
     });
 }
 

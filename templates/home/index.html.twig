@@ -1,14 +1,41 @@
 {% import "macros/links.html.twig" as links %}
+{% macro video_block(title, videos, title_url) %}
+    {% if videos|length >= 6 %}
+        <div class="row thumbnails-row">
+            <div class="col-sm-12">
+                {% if title_url %}
+                    <h4 class="sidebar-widget-title">
+                        <a href="{{ title_url }}">{{ title }}</a>
+                    </h4>
+                {% else %}
+                    <h4 class="sidebar-widget-title">{{ title }}</h4>
+                {% endif %}
+            </div>
+            {% for video in videos %}
+                <div class="col-xs-6 col-sm-4 col-md-3 thumbnail-channel">
+                    <a href="{{ video|media_url }}" class="thumbnail thumbnail-short card">
+                        <div class="crop">
+                            <img src="{{ video|thumbnail_url("hqdefault") }}" alt="Thumbnail">
+                        </div>
+                        <div class="thumbnail-channel-playing">
+                            {{ video.title|truncate(75) }}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}
 {% extends "layout_home.html.twig" %}
 {% block content %}
-    <div class="col-lg-8 col-md-8">
+    <div class="col-lg-12 col-md-12" style="margin-top: 20px;">
         <div class="row" style="margin-bottom: 40px;">
             <div class="col-sm-12">
                 <h1 class="sidebar-widget-title">Music Channels</h1>
-                <p>Click to join a channel.</p>
+                <p>Click to join other users in a channel.</p>
             </div>
             {% for chan in channels %}
-                <div class="col-xs-12 col-sm-6 col-md-4 thumbnail-channel">
+                <div class="col-xs-12 col-sm-4 col-md-3 thumbnail-channel">
                     <a href="/r/{{ chan.name }}" class="thumbnail card">
                         <img src="{{ chan.thumbnail }}" alt="Thumbnail">
 
@@ -26,116 +53,11 @@
                 </div>
             {% endfor %}
         </div>
-        
-        <div class="row">
-            <div class="col-sm-12">
-                <h4 class="sidebar-widget-title">Most Played in Lobby</h4>
-            </div>
-            {% for video in most_watched.lobby %}
-                <div class="col-xs-6 col-sm-4 col-md-3 thumbnail-channel">
-                    <a href="/r/lobby" class="thumbnail thumbnail-short card">
-                        <div class="crop">
-                            <img src="{{ video|thumbnail_url("hqdefault") }}" alt="Thumbnail">
-                        </div>
-                        <div class="thumbnail-channel-playing center">
-                            {{ video.title|truncate(75) }}
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-        
-        <div class="row">
-            <div class="col-sm-12">
-                <h2 class="sidebar-widget-title">Most Played in K-Pop</h2>
-            </div>
-            {% for video in most_watched.kpop %}
-                <div class="col-xs-6 col-sm-4 col-md-3 thumbnail-channel">
-                    <a href="/r/kpop" class="thumbnail thumbnail-short card">
-                        <div class="crop">
-                            <img src="{{ video|thumbnail_url("hqdefault") }}" alt="Thumbnail">
-                        </div>
-                        <div class="thumbnail-channel-playing center">
-                            {{ video.title|truncate(75) }}
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-    
-    <div id="homepage-sidebar" class="col-lg-4 col-md-4">
 
-        <div class="sidebar-widget-empty">
-            <h3 class="sidebar-widget-title">
-                <a href="/charts/history">Recently Played</a>
-            </h3>
-            <ul class="sidebar-list">
-                {% for m in recent_media %}
-                    <div class="card card-media">
-                        {{ links.thumbnail(m, "card-media-thumbnail") }}
-                        {{ links.media(m, "card-media-title smaller") }}
-                        <div class="card-play-count">
-                            {{ m.play_count }} plays
-                        </div>
-                    </div>
-                {% endfor %}
-            </ul>
-        </div>
-
-        {% if top_media|length > 0 %}
-            <div class="sidebar-widget-empty">
-                <h3 class="sidebar-widget-title">
-                    <a href="/charts/top/date/{{ today }}">Most Played Today</a>
-                </h3>
-                <ul class="sidebar-list">
-                    {% for m in top_media %}
-                        <div class="card card-media">
-                            {{ links.thumbnail(m, "card-media-thumbnail") }}
-                            {{ links.media(m, "card-media-title smaller") }}
-                            <div class="card-play-count">
-                                {{ m.play_count }} plays
-                            </div>
-                        </div>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-
-        {% if voted_rows|length > 0 %}
-            <div class="sidebar-widget-empty">
-                <h3 class="sidebar-widget-title">
-                    <a href="/charts/upvoted/date/{{ today }}">Most Upvoted Today</a>
-                </h3>
-                <ul class="sidebar-list">
-                    {% for m in voted_rows %}
-                        <div class="card card-media">
-                            {{ links.thumbnail(m, "card-media-thumbnail") }}
-                            {{ links.media(m, "card-media-title smaller") }}
-                            {% if m.user %}
-                                <div class="card-media-common">
-                                    <a href="/user/{{ m.user }}">{{ m.user }}</a>
-                                </div>
-                            {% endif %}
-                            <div class="card-play-count">
-                                {{ m.play_count }} plays &middot; {{ m.vote_count|comma }} votes
-                            </div>
-                        </div>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-
-        <div class="sidebar-widget">
-            <h3>Notable Quotes</h3>
-            <ul class="sidebar-list">
-                <li>
-                    JacobDicky: if i wa s lockm smtih, hw eaxtaly wwpuld i make the ke to ouru heeat?
-                </li>
-                <li>
-                    SalmonBaconator: i just always pictured Toto as like a black Freddie Mercury
-                </li>
-            </ul>
-        </div>
+        {{ video_block("Recently Played", recent_media, "/charts/history") }}
+        {{ video_block("Most Played Today", top_media, "/charts/top/date/" + today) }}
+        {{ video_block("Most Upvoted Today", voted_rows, "/charts/upvoted/date/" + today) }}
+        {{ video_block("Most Played in Lobby", most_watched.lobby, "/r/lobby") }}
+        {{ video_block("Most Played in K-Pop", most_watched.kpop, "/r/kpop") }}
     </div>
 {% endblock %}
