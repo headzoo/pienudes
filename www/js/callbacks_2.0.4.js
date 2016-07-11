@@ -280,9 +280,6 @@ Callbacks = {
             background_url_wrap
                 .css("background-image", "url(" + opts.background_url + ")")
                 .css("background-repeat", opts.background_repeat);
-            if (opts.background_repeat == "no-repeat") {
-                background_url_wrap.css("background-size", "100% 100%");
-            }
         }
         handlePermissionChange();
     },
