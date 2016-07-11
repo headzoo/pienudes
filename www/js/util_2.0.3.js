@@ -686,6 +686,26 @@ function makeSearchEntry(video) {
         }).appendTo(meta);
     }
     
+    if(hasPermission("playlistnext")) {
+        var btn_next = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Next</button>');
+        btn_group.append(btn_next);
+        btn_next.on("click", function() {
+            btn_next.prop("disabled", true);
+            btn_next.html('<span class="glyphicon glyphicon-plus"></span> Added!');
+            setTimeout(function() {
+                btn_next.html('<span class="glyphicon glyphicon-plus"></span> Next');
+                btn_next.prop("disabled", false);
+            }, 2000);
+            
+            socket.emit("queue", {
+                id: video.uid,
+                pos: "next",
+                type: video.type,
+                temp: true
+            });
+        });
+    }
+    
     var btn_end = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add</button>');
     btn_group.append(btn_end);
     btn_end.on("click", function() {
@@ -1173,7 +1193,7 @@ function handlePermissionChange() {
     setVisible("#showplaylistmanager", hasPermission("seeplaylist"));
     setVisible("#showmediaurl", hasPermission("playlistadd"));
     setVisible("#showcustomembed", hasPermission("playlistaddcustom"));
-    $("#queue_next").attr("disabled", !hasPermission("playlistnext"));
+    setVisible("#queue_next", hasPermission("playlistnext"));
     
     if(hasPermission("playlistmove")) {
         $("#video-playlist").sortable("enable");
@@ -3194,21 +3214,26 @@ function formatFavorites() {
                     "text": secondsToTime(fav.seconds)
                 }).appendTo(meta);
             }
-            
-            /*
+    
             if(hasPermission("playlistnext")) {
-                var btn_next = $('<button class="btn btn-xs btn-default">Next</button>');
+                var btn_next = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Next</button>');
                 btn_group.append(btn_next);
                 btn_next.on("click", function() {
+                    btn_next.prop("disabled", true);
+                    btn_next.html('<span class="glyphicon glyphicon-plus"></span> Added!');
+                    setTimeout(function() {
+                        btn_next.html('<span class="glyphicon glyphicon-plus"></span> Next');
+                        btn_next.prop("disabled", false);
+                    }, 2000);
+            
                     socket.emit("queue", {
                         id: fav.uid,
                         pos: "next",
                         type: fav.type,
-                        temp: $(".add-temp").prop("checked")
+                        temp: true
                     });
                 });
             }
-            */
             
             var btn_end = $('<button class="btn btn-xs btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add</button>');
             btn_group.append(btn_end);
