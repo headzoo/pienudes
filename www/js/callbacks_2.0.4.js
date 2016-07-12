@@ -995,7 +995,7 @@ Callbacks = {
         
         data.uid = data.id;
         CHAT_WRAP_MEDIA = data;
-        if ($("body").hasClass("chatOnly") || $("#videowrap").length === 0) {
+        if ($("body").hasClass("chatOnly")) {
             if (!MEDIA_INIT) ChatAPI._pushPageReady();
             MEDIA_INIT = true;
             return;
@@ -1080,7 +1080,7 @@ Callbacks = {
     },
 
     mediaUpdate: function(data) {
-        if ($("body").hasClass("chatOnly") || $("#videowrap").length === 0) {
+        if ($("body").hasClass("chatOnly")) {
             return;
         }
 

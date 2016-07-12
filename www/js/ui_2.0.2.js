@@ -1172,7 +1172,7 @@ $("#channeloptions li > a[data-toggle='tab']").on("shown.bs.tab", function () {
 applyOpts();
 
 (function () {
-    var embed = document.querySelector("#videowrap .embed-responsive");
+    var embed = document.querySelector(".embed-responsive");
     if (!embed) {
         return;
     }
@@ -1213,7 +1213,7 @@ EMOTELISTMODAL.find(".emotelist-alphabetical").change(function () {
 EMOTELISTMODAL.find(".emotelist-alphabetical").prop("checked", USEROPTS.emotelist_sort);
 
 $("#fullscreenbtn").click(function () {
-    var elem = document.querySelector("#videowrap .embed-responsive");
+    var elem = document.querySelector(".embed-responsive");
     // this shit is why frontend web development sucks
     var fn = elem.requestFullscreen ||
         elem.mozRequestFullScreen || // Mozilla has to be different and use a capital 'S'

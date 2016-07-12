@@ -67,7 +67,7 @@
 
 #queue-header {
   margin-bottom: 4px;
-  margin-top: 8px;
+  margin-top: 4px;
   .channel-card-drop-shadow;
 }
 
@@ -288,17 +288,12 @@
 }
 
 .thumb-btn-group-container {
-  margin-bottom: 12px;
   text-align: right;
-  padding-right: 6px;
+  margin-bottom: 2px;
   
   .btn {
     padding: 8px 0;
   }
-}
-
-#search_clear {
-  margin-left: 16px;
 }
 
 .videolist {
@@ -328,8 +323,21 @@
   margin-bottom: 4px;
 }
 
-#library {
+#library, #favorites-thumbs {
   min-height: 0 !important;
+  overflow-x: hidden;
+  padding: 12px 0 0 0;
+  background-color: #1B1B1B;
+  border: 1px solid #000;
+  
+  .playlist-row {
+    background-color: transparent;
+    padding: 0 12px;
+    
+    &:first-child, &:last-child {
+      margin: 0;
+    }
+  }
 }
 
 #library_query {
@@ -338,6 +346,7 @@
 
 #library-container {
   margin-bottom: 4px;
+  padding: 6px 12px 12px 12px;
 }
 
 .bootstrap-tagsinput {
@@ -354,7 +363,7 @@
 }
 
 #chat-user-details {
-  margin-top: 8px;
+  margin-top: 4px;
   min-height: 0 !important;
   list-style-type: none;
   font-size: @standard-font-size;

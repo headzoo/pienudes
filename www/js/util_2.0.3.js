@@ -2278,25 +2278,31 @@ function handleVideoResize() {
         return;
     }
     
+    if (ChatAPI.trigger("video_resize").isCancelled()) {
+        return;
+    }
+    
+    // messagebuffer height
+    var player = $("#ytapiplayer");
     var intv, ticks = 0;
     var resize = function () {
         if (++ticks > 10) clearInterval(intv);
-        if ($("#ytapiplayer").parent().outerHeight() <= 0) return;
+        if (player.parent().outerHeight() <= 0) return;
         clearInterval(intv);
-
-        var video_header    = $("#video-header");
-        var responsiveFrame = $("#ytapiplayer").parent();
         
-        // messagebuffer height
-        var height = (responsiveFrame.outerHeight() + video_header.outerHeight() + 12) - ($("#chatline").outerHeight() + $(".chatbuttons").outerHeight()) - 14;
+        var video_header    = $("#video-header");
+        var video_frame     = player.parent();
+        var queue_header    = $("#queue-header");
+        var height = (video_frame.outerHeight() + video_header.outerHeight() + queue_header.outerHeight()  + 16)
+            - ($("#chatline").outerHeight() + $(".chatbuttons").outerHeight()) - 14;
         $("#messagebuffer").height(height);
         $("#userlist").height(height - 10);
-
-        $("#ytapiplayer").attr("height", VHEIGHT = responsiveFrame.outerHeight());
-        $("#ytapiplayer").attr("width", VWIDTH = responsiveFrame.outerWidth());
+    
+        player.attr("height", VHEIGHT = video_frame.outerHeight());
+        player.attr("width", VWIDTH = video_frame.outerWidth());
     };
 
-    if ($("#ytapiplayer").height() > 0) resize();
+    if (player.height() > 0) resize();
     else intv = setInterval(resize, 500);
 }
 
