@@ -1072,7 +1072,7 @@ Callbacks = {
         });
         $("#video-header-title").html(title);
         $("#video-header-queueby").html(getQueuedByHTML(data));
-        $("#video-header-play-count").text(data.play_count + " plays");
+        $("#video-header-play-count").text(data.play_count + ((data.play_count == 1) ? " play" : " plays"));
         $("#video-header-avatar").attr("src", data.queueby_avatar);
          
         if (!MEDIA_INIT) ChatAPI._pushPageReady();
