@@ -1152,8 +1152,10 @@ Callbacks = {
         }
         
         if (data == 1) {
+            $("#votedown").removeClass("active");
             $("#voteup").addClass("active");
         } else if (data == -1) {
+            $("#voteup").removeClass("active");
             $("#votedown").addClass("active");
         } else {
             $("#voteup").removeClass("active");
