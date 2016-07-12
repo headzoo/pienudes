@@ -301,6 +301,7 @@ $(function() {
     
         ChatStore.local.set("widerlayout", target.data("size"));
         handleWindowResize();
+        scrollChat();
     });
     
     var layout = ChatStore.local.get("widerlayout", null);
