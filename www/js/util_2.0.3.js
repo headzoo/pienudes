@@ -2266,7 +2266,8 @@ function handleWindowResize() {
 }
 
 function handleVideoResize() {
-    if ($("#ytapiplayer").length === 0) return;
+    var player = $("#ytapiplayer");
+    if (player.length === 0) return;
     
     var winq = $(window);
     if (winq.width() < 768) {
@@ -2283,7 +2284,6 @@ function handleVideoResize() {
     }
     
     // messagebuffer height
-    var player = $("#ytapiplayer");
     var intv, ticks = 0;
     var resize = function () {
         if (++ticks > 10) clearInterval(intv);
