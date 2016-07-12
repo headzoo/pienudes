@@ -883,10 +883,10 @@ var search_wrapper = $("#searchcontrol-container");
 var show_search    = $("#showsearch");
 show_search.on("click", function() {
     if (search_wrapper.is(":visible")) {
-        search_wrapper.slideUp();
+        search_wrapper.slideUp("fast");
         show_search.removeClass("activated");
     } else {
-        search_wrapper.slideDown();
+        search_wrapper.slideDown("fast");
         show_search.addClass("activated");
     }
 });
