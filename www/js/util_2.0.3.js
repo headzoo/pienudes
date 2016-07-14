@@ -2233,7 +2233,7 @@ function hdLayout() {
 }
 
 function chatOnly() {
-    var chat = $("#chatwrap").detach();
+    var chat = $(".col-chat-side").detach();
     removeVideo();
     $("#wrap").remove();
     $("footer").remove();
