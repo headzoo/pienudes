@@ -2253,6 +2253,29 @@ function chatOnly() {
     handleWindowResize();
 }
 
+function videoOnly() {
+    var chat = $(".col-video-side").detach();
+    var wrapper = $('<div class="channel-page"/>');
+    wrapper.append(chat);
+    $("#wrap").remove();
+    $("footer").remove();
+    wrapper.prependTo($("body"));
+    chat.css({
+        "min-height": "100%",
+        "min-width": "100%",
+        margin: "0",
+        padding: "0 10px 10px 0"
+    });
+    wrapper.css({
+        "min-height": "100%",
+        "min-width": "100%",
+        margin: "0",
+        padding: "0"
+    });
+    setVisible("#showchansettings", CLIENT.rank >= 2);
+    handleWindowResize();
+}
+
 function handleWindowResize() {
     if ($("body").hasClass("chatOnly")) {
         var h = $("body").outerHeight() - $("#chatline").outerHeight() -
