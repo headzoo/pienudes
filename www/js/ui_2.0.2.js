@@ -624,6 +624,8 @@ $("#mediarefresh").click(function() {
 /* playlist controls */
 
 $("#video-playlist").sortable({
+    items: '.playlist-row:not(.playing)',
+    axis: "y",
     start: function(ev, ui) {
         PL_FROM = ui.item.data("uid");
     },
