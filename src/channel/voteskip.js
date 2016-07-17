@@ -77,6 +77,9 @@ VoteskipModule.prototype.update = function () {
 
     var max = this.calcVoteskipMax();
     var need = Math.ceil(max * this.channel.modules.options.get("voteskip_ratio"));
+    if (need <= 1) {
+        need = 2;
+    }
     if (this.poll.counts[0] >= need) {
         this.channel.logger.log("[playlist] Voteskip passed.");
         this.channel.modules.playlist._playNext();
@@ -92,6 +95,9 @@ VoteskipModule.prototype.sendVoteskipData = function (users) {
         need: this.poll ? Math.ceil(max * this.channel.modules.options.get("voteskip_ratio"))
                         : 0
     };
+    if (data.need <= 1) {
+        data.need = 2;
+    }
 
     var perms = this.channel.modules.permissions;
 
